@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain.csproj", "{BE37BAE8-5C47-4D4B-BBB4-0146F44F0601}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDominio", "TestDominio\TestDominio.csproj", "{71A127DB-BAFE-4AB6-93EE-5522D2FA912D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominio", "Dominio\Dominio.csproj", "{D20E4DB5-B5A0-4BB8-972E-BD35FE4CB91F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE37BAE8-5C47-4D4B-BBB4-0146F44F0601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE37BAE8-5C47-4D4B-BBB4-0146F44F0601}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE37BAE8-5C47-4D4B-BBB4-0146F44F0601}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE37BAE8-5C47-4D4B-BBB4-0146F44F0601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71A127DB-BAFE-4AB6-93EE-5522D2FA912D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A127DB-BAFE-4AB6-93EE-5522D2FA912D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A127DB-BAFE-4AB6-93EE-5522D2FA912D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A127DB-BAFE-4AB6-93EE-5522D2FA912D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D20E4DB5-B5A0-4BB8-972E-BD35FE4CB91F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D20E4DB5-B5A0-4BB8-972E-BD35FE4CB91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D20E4DB5-B5A0-4BB8-972E-BD35FE4CB91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D20E4DB5-B5A0-4BB8-972E-BD35FE4CB91F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
