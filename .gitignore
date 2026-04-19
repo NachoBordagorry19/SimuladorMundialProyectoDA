@@ -53,6 +53,11 @@ Generated\ Files/
 TestResult.xml
 nunit-*.xml
 
+.DS_Store
+**/.DS_Store
+.idea/
+**/.idea/
+
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/
