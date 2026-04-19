@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ignac\\.nuget\\packages\\": {}
+    "C:\\Users\\fpero\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ignac\\Obl1_DA1_2026\\318093_255865_328149\\WorldCupPlanner\\Domain.csproj",
+      "projectUniqueName": "C:\\Users\\fpero\\Desktop\\Facultad\\Materias\\Diseño de aplicaciones 1\\318093_255865_328149\\WorldCupPlanner\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "C:\\Users\\ignac\\Obl1_DA1_2026\\318093_255865_328149\\WorldCupPlanner\\Domain.csproj",
-      "packagesPath": "C:\\Users\\ignac\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ignac\\Obl1_DA1_2026\\318093_255865_328149\\WorldCupPlanner\\obj\\",
+      "projectPath": "C:\\Users\\fpero\\Desktop\\Facultad\\Materias\\Diseño de aplicaciones 1\\318093_255865_328149\\WorldCupPlanner\\Domain.csproj",
+      "packagesPath": "C:\\Users\\fpero\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\fpero\\Desktop\\Facultad\\Materias\\Diseño de aplicaciones 1\\318093_255865_328149\\WorldCupPlanner\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ignac\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\fpero\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -64,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\ignac\\.dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.419/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
