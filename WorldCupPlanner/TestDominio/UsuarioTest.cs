@@ -26,4 +26,11 @@ public class UsuarioTest
     {
         Usuario user = new Usuario("Federico", "", "a@gmail.com", new DateTime(2005, 05 ,20), "23456abbbbAA.");
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void InsertoEmail_SiEmailEsVacio_TiroExcepcion()
+    {
+        Usuario user = new Usuario("Federico", "Gonzalez", "", new DateTime(2005 , 05 , 20), "23456abbbbAA.");
+    }
 }
