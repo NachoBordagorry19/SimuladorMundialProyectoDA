@@ -10,4 +10,11 @@ public class UsuarioTest
     {
         Usuario usuarioPrueba = new Usuario("Fede", "Gonzales", "a@gmail.com", new DateTime(2003, 08, 23), "ave123");
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NuevoUsuario_SiNombreEsInvalido_TiroExcepcion()
+    {
+        Usuario usuarioPrueba = new Usuario("", "Gonzales", "a@gmail.com", new DateTime(2003, 08, 23), "ave123");
+    }
 }
