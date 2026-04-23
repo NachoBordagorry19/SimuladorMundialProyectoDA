@@ -35,6 +35,19 @@ public class Usuario
         }
     }
 
+    public string Email
+    {
+        get => _email;
+        set
+        {
+            if (EsVacio(value))
+            {
+                throw new ArgumentException("Email no debe ser vacio");
+            }
+            _email = value;
+        }
+    }
+
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;
@@ -49,7 +62,7 @@ public class Usuario
     {
         Nombre = nombre;
         Apellido = apellido;
-        _email = email;
+        Email = email;
         _fechaNacimiento = fechaNacimiento;
         _contraseña = contraseña;
     }
