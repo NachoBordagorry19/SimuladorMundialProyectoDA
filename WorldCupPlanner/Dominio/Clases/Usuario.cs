@@ -48,6 +48,27 @@ public class Usuario
         }
     }
 
+    public DateTime FechaNacimiento
+    {
+        get => _fechaNacimiento;
+        set
+        {
+            if (value == DateTime.MinValue)
+            {
+                throw new ArgumentException("Fecha de nacimiento debe ser real");
+            }
+            if (value.Year < 1900)
+            {
+                throw new ArgumentException("Fecha de nacimiento debe ser posterior al año 1900");
+            }
+            if (value > DateTime.Today)
+            {
+                throw new ArgumentException("Fecha de nacimiento no puede ser en el futuro");
+            }
+            _fechaNacimiento = value;
+        }
+    }
+
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;
@@ -63,7 +84,7 @@ public class Usuario
         Nombre = nombre;
         Apellido = apellido;
         Email = email;
-        _fechaNacimiento = fechaNacimiento;
+        FechaNacimiento = fechaNacimiento;
         _contraseña = contraseña;
     }
 }
