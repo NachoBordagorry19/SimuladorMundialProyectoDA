@@ -21,7 +21,7 @@ public class Usuario
             _nombre = value;
         }
     }
-
+    
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;
