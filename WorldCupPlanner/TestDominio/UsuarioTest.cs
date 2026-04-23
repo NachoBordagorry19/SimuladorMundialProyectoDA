@@ -33,4 +33,11 @@ public class UsuarioTest
     {
         Usuario user = new Usuario("Federico", "Gonzalez", "", new DateTime(2005 , 05 , 20), "23456abbbbAA.");
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void InsertoFecha_SiFechaVieneVacia_TiroExcepcion()
+    {
+        Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", DateTime.MinValue, "23456abbbbAA.");
+    }
 }
