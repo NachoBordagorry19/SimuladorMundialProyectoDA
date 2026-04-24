@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using Dominio.Enums;
 
 namespace Dominio.Clases;
+
 
 public class Usuario
 {
@@ -10,6 +12,7 @@ public class Usuario
     private  string _email;
     private  DateTime _fechaNacimiento;
     private string _contraseña;
+    private readonly List<Rol> _roles = new();
 
     public string Nombre
     {
@@ -109,12 +112,13 @@ public class Usuario
         return vacio;
     }
 
-    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña)
+    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, Rol rol)
     {
         Nombre = nombre;
         Apellido = apellido;
         Email = email;
         FechaNacimiento = fechaNacimiento;
         Contraseña = contraseña;
+        _roles.Add(rol);
     }
 }
