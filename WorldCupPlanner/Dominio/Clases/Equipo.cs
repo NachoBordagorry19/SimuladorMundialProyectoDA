@@ -52,7 +52,12 @@ public class Equipo
             if (EsVacio(value))
             {
                 throw new ArgumentException("El ranking fifa no puede ser vacio");
-            }
+            } 
+            if (!int.TryParse(value, out var entero))
+                throw new ArgumentException("El ranking fifa debe ser un número entero", nameof(RankingFifa));
+            if (entero < 0)
+                throw new ArgumentException("El ranking fifa debe ser un número no negativo", nameof(RankingFifa));
+            _rankingFifa = value;
         }
     }
 
