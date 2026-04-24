@@ -21,7 +21,20 @@ public class Equipo
             _nombre = value;
         }
     }
-    
+
+    public string Confederacion
+    {
+        get => _confederacion;
+        set
+        {
+            if (EsVacio(value))
+            {
+                throw new ArgumentException("El nombre de la confederacion no puede ser vacio");
+            }
+            _confederacion = value;
+        }
+    }
+
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;
@@ -34,7 +47,7 @@ public class Equipo
     public Equipo(string nombre, string condeferacion, int rankingFifa)
     {
         Nombre = nombre;
-        _confederacion = condeferacion;
+        Confederacion = condeferacion;
         _rankingFifa = rankingFifa;
     }
 }
