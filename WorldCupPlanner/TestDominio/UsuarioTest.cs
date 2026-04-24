@@ -40,11 +40,17 @@ public class UsuarioTest
     {
         Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", DateTime.MinValue, "23456abbbbAA.");
     }
+
+    [TestMethod] [ExpectedException(typeof(ArgumentException))]
+    public void InsertoContraseña_SiContraseñaEsVacia_TiroExcepcion()
+    {
+        Usuario usuario = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 03 , 20), "");
+    }
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContra_SiContraseñaEsVacia_TiroExcepcion()
+    public void InsertoContraseña_SiContraseñaNoTieneMayuscula_TiroExcepcion()
     {
-        Usuario usuario = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 03 , 20), "");
+        Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 05 , 20), "asdfg23455.");
     }
 }
