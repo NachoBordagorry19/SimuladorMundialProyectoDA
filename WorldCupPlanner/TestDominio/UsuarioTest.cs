@@ -67,4 +67,10 @@ public class UsuarioTest
     {
         Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 05 , 20), "AASDSAasddsa.");
     }
+
+    [TestMethod] [ExpectedException(typeof(ArgumentException))]
+    public void InsertoContraseña_SiContraseñaNoTieneCaracterEspecial_TiroExcepcion()
+    {
+        Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 05 , 20), "ADDSSSDSAsdsa23");
+    }
 }
