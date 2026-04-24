@@ -38,4 +38,10 @@ public class EstadioTest
     {
         Estadio estadioPrueba = new Estadio("Allianz Arena", "CiudadPruebaConExactamenteSesentaYUnCaracteres12345ABCDEFGHIJ", "El mejor estadio del mundo", 75024);
     }
+
+    [TestMethod]
+    public void CreoEstadio_ConDescripcionVacia_YSeCrea()
+    {
+        Estadio estadioPrueba = new Estadio("Allianz Arena", "Munich", null, 75024);
+    }
 }
