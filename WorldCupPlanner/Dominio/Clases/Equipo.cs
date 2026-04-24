@@ -4,7 +4,7 @@ using Dominio.Enums;
 public class Equipo
 {
     private string _nombre;
-    private string _confederacion;
+    private Confederacion _confederacion;
     private int _rankingFifa;
 
     public String Nombre
@@ -23,21 +23,11 @@ public class Equipo
         }
     }
 
-    public string Confederacion
+    public Confederacion Confederacion
     {
         get => _confederacion;
         set
         {
-            if (EsVacio(value))
-            {
-                throw new ArgumentException("El nombre de la confederacion no puede ser vacio");
-            }
-            var confederacionesValidas = Enum.GetNames(typeof(Confederacion));
-            if (!confederacionesValidas.Contains(value, StringComparer.OrdinalIgnoreCase))
-            {
-                throw new ArgumentException("El nombre de la confederacion debe ser de los reconocidos: AFC, CAF, CONCACAF, CONMEBOL, OFC, UEFA");
-            }
-            
             _confederacion = value;
         }
     }
@@ -62,10 +52,10 @@ public class Equipo
         }
         return vacio;
     }
-    public Equipo(string nombre, string condeferacion, int rankingFifa)
+    public Equipo(string nombre, Confederacion confederacion, int rankingFifa)
     {
         Nombre = nombre;
-        Confederacion = condeferacion;
+        Confederacion = confederacion;
         RankingFifa = rankingFifa;
     }
 }
