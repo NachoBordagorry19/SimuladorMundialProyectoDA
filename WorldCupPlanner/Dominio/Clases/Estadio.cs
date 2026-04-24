@@ -42,6 +42,19 @@ public class Estadio
             _ciudad = value;
         }
     }
+
+    public string Descripcion
+    {
+        get => _descripcion;
+        set
+        {
+            if (value.Length > 400)
+            {
+                throw new ArgumentException("La descripcion no puede contener más de 400 caracteres");
+            }
+            _descripcion = value;
+        }
+    }
     
     public bool EsVacio(string textoATestear)
     {
@@ -56,7 +69,7 @@ public class Estadio
     {
         Nombre = nombre;
         Ciudad = ciudad;
-        _descripcion = descripcion;
+        Descripcion = descripcion;
         _capacidadLocativa = capacidadLocativa;
     }
 }
