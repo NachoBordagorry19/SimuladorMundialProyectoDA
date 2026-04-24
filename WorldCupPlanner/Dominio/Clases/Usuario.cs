@@ -93,8 +93,9 @@ public class Usuario
                 throw new ArgumentException("Contraseña debe contener al menos un número");
             else if (!value.Any(c => !char.IsLetterOrDigit(c)))
                 throw new ArgumentException("Contraseña debe contener al menos un carácter especial", nameof(value));
-
-        _contraseña = value;
+            else if (value.Length < 8)
+                throw new ArgumentException("Contraseña debe tener al menos 8 caracteres");
+            _contraseña = value;
         } 
     }
 
