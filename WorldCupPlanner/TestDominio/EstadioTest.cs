@@ -31,4 +31,11 @@ public class EstadioTest
     {
         Estadio estadioPrueba = new Estadio("Allianz Arena", "", "El mejor estadio del mundo", 75024);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreoEstadio_ConCiudadMayorA60Caracteres_LanzoExcepcion()
+    {
+        Estadio estadioPrueba = new Estadio("Allianz Arena", "CiudadPruebaConExactamenteSesentaYUnCaracteres12345ABCDEFGHIJ", "El mejor estadio del mundo", 75024);
+    }
 }
