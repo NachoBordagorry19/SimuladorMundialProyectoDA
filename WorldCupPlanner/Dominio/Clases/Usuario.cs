@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+
 namespace Dominio.Clases;
 
 public class Usuario
@@ -78,8 +81,10 @@ public class Usuario
             {
                 throw new ArgumentException("Contraseña no debe ser vacio");
             }
-
-            
+            else if (!value.Any(char.IsUpper))
+            {
+                throw new ArgumentException("Contraseña debe contener al menos una letra mayúscula");
+            }
             _contraseña = value;
         } 
     }
