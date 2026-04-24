@@ -59,4 +59,11 @@ public class EstadioTest
     {
         Estadio estadioPrueba = new Estadio("Allianz Arena", "Munich", "Desc", null);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreoEstadio_ConCapacidadMenorA0_LanzoExcepcion()
+    {
+        Estadio estadioPrueba = new Estadio("Allianz Arena", "Munich", "Desc", -5);
+    }
 }
