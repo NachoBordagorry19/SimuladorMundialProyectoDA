@@ -34,6 +34,11 @@ public class Estadio
             {
                 throw new ArgumentException("El nombre de la ciudad no puede ser vacio");
             }
+
+            if (value.Length > 60)
+            {
+                throw new ArgumentException("El nombre de la ciudad no puede ser mayor a 60 caracteres");
+            }
             _ciudad = value;
         }
     }
