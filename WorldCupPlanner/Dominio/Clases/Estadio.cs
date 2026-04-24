@@ -24,6 +24,19 @@ public class Estadio
             _nombre = value;
         }
     }
+
+    public string Ciudad
+    {
+        get => _ciudad;
+        set
+        {
+            if (EsVacio(value))
+            {
+                throw new ArgumentException("El nombre de la ciudad no puede ser vacio");
+            }
+            _ciudad = value;
+        }
+    }
     
     public bool EsVacio(string textoATestear)
     {
@@ -37,7 +50,7 @@ public class Estadio
     public Estadio(string nombre, string ciudad, string descripcion, int capacidadLocativa)
     {
         Nombre = nombre;
-        _ciudad = ciudad;
+        Ciudad = ciudad;
         _descripcion = descripcion;
         _capacidadLocativa = capacidadLocativa;
     }
