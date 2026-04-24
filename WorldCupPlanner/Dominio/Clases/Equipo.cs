@@ -5,7 +5,7 @@ public class Equipo
 {
     private string _nombre;
     private string _confederacion;
-    private string _rankingFifa;
+    private int _rankingFifa;
 
     public String Nombre
     {
@@ -45,19 +45,13 @@ public class Equipo
         }
     }
 
-    public string RankingFifa
+    public int RankingFifa
     {
         get => _rankingFifa;
         set
         {
-            if (EsVacio(value))
-            {
-                throw new ArgumentException("El ranking fifa no puede ser vacio");
-            } 
-            if (!int.TryParse(value, out var entero))
-                throw new ArgumentException("El ranking fifa debe ser un número entero", nameof(RankingFifa));
-            if (entero < 0)
-                throw new ArgumentException("El ranking fifa debe ser un número no negativo", nameof(RankingFifa));
+            if (value <= 0)
+                throw new ArgumentException("El ranking fifa debe ser un número positivo mayor a 0");
             _rankingFifa = value;
         }
     }
@@ -71,7 +65,7 @@ public class Equipo
         }
         return vacio;
     }
-    public Equipo(string nombre, string condeferacion, string rankingFifa)
+    public Equipo(string nombre, string condeferacion, int rankingFifa)
     {
         Nombre = nombre;
         Confederacion = condeferacion;
