@@ -31,4 +31,12 @@ public class EquipoTest
     {
         Equipo equipoPrueba = new Equipo("Nacional", "", 400);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearEquipo_ConConfederacionDesconocida_LanzoExcepcion()
+    {
+        Equipo equipoPrueba = new Equipo("Nacional", "Australiana", 400);
+    }
+    
 }
