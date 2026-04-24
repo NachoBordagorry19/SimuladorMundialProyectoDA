@@ -31,16 +31,13 @@ public class Equipo
             if (EsVacio(value))
             {
                 throw new ArgumentException("El nombre de la confederacion no puede ser vacio");
-            } else if (!string.Equals(value, "AFC", StringComparison.OrdinalIgnoreCase)
-                       && !string.Equals(value, "CAF", StringComparison.OrdinalIgnoreCase)
-                       && !string.Equals(value, "CONCACAF", StringComparison.OrdinalIgnoreCase)
-                       && !string.Equals(value, "CONMEBOL", StringComparison.OrdinalIgnoreCase)
-                       && !string.Equals(value, "OFC", StringComparison.OrdinalIgnoreCase)
-                       && !string.Equals(value, "UEFA", StringComparison.OrdinalIgnoreCase))
-            {
-                throw new ArgumentException(
-                    "El nombre de la confederacion debe ser de los reconocidos: AFC, CAF, CONCACAF, CONMEBOL, OFC, UEFA");
             }
+            var confederacionesValidas = Enum.GetNames(typeof(Confederacion));
+            if (!confederacionesValidas.Contains(value, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("El nombre de la confederacion debe ser de los reconocidos: AFC, CAF, CONCACAF, CONMEBOL, OFC, UEFA");
+            }
+            
             _confederacion = value;
         }
     }
