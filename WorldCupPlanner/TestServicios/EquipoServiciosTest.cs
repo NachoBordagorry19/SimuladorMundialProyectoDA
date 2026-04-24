@@ -4,7 +4,7 @@ namespace TestServicios;
 public class EquipoServiciosTest
 {
     [TestMethod]
-    public void TestMethod1()
+    public void CompletarEquipo_DebeCompletarHasta48()
     {
     }
 }
