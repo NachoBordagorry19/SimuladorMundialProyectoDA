@@ -45,4 +45,11 @@ public class EquipoTest
     {
         Equipo equipoPrueba = new Equipo("Nacional", "UEFA", "");
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearEquipo_ConRankingFifaDecimal_LanzoExcepcion()
+    {
+        Equipo equipoPrueba = new Equipo("Nacional", "UEFA", "2,3");
+    }
 }
