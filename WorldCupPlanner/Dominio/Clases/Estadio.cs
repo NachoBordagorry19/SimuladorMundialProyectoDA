@@ -48,10 +48,14 @@ public class Estadio
         get => _descripcion;
         set
         {
-            if (value.Length > 400)
+            if (!EsVacio(value))
             {
-                throw new ArgumentException("La descripcion no puede contener más de 400 caracteres");
+                if (value.Length > 400)
+                {
+                    throw new ArgumentException("La descripcion no puede contener más de 400 caracteres");
+                }
             }
+
             _descripcion = value;
         }
     }

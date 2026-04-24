@@ -1,4 +1,5 @@
 namespace Dominio.Clases;
+using Dominio.Enums;
 
 public class Equipo
 {
