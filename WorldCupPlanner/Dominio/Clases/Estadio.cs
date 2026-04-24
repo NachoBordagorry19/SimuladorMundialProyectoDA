@@ -5,7 +5,7 @@ public class Estadio
     private string _nombre;
     private string _ciudad;
     private string _descripcion;
-    private int _capacidadLocativa;
+    private int? _capacidadLocativa;
 
     public string Nombre
     {
@@ -65,7 +65,7 @@ public class Estadio
         }
         return vacio;
     }
-    public Estadio(string nombre, string ciudad, string descripcion, int capacidadLocativa)
+    public Estadio(string nombre, string ciudad, string descripcion, int? capacidadLocativa)
     {
         Nombre = nombre;
         Ciudad = ciudad;

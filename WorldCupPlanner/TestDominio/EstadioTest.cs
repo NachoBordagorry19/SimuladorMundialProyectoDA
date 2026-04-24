@@ -52,4 +52,11 @@ public class EstadioTest
         var descripcion401 = new string('a', 401);
         Estadio estadioPrueba = new Estadio("Allianz Arena", "Munich", descripcion401, 75024);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreoEstadio_ConCapacidadLocativaVacia_LanzoExcepcion()
+    {
+        Estadio estadioPrueba = new Estadio("Allianz Arena", "Munich", "Desc", null);
+    }
 }
