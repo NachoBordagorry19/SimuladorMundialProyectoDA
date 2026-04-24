@@ -44,6 +44,18 @@ public class Equipo
         }
     }
 
+    public string RankingFifa
+    {
+        get => _rankingFifa;
+        set
+        {
+            if (EsVacio(value))
+            {
+                throw new ArgumentException("El ranking fifa no puede ser vacio");
+            }
+        }
+    }
+
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;
@@ -57,6 +69,6 @@ public class Equipo
     {
         Nombre = nombre;
         Confederacion = condeferacion;
-        _rankingFifa = rankingFifa;
+        RankingFifa = rankingFifa;
     }
 }
