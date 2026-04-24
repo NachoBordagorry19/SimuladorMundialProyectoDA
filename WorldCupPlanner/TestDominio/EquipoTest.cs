@@ -24,4 +24,11 @@ public class EquipoTest
     {
         Equipo equipoPrueba = new Equipo("Esta cadena tiene exactamente sesenta y un caracteres ahora!!", "UEFA", 400);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearEquipo_SinConfederacion_LanzoExcepcion()
+    {
+        Equipo equipoPrueba = new Equipo("Nacional", "", 400);
+    }
 }
