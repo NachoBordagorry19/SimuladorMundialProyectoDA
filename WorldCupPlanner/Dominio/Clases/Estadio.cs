@@ -16,6 +16,11 @@ public class Estadio
             {
                 throw new ArgumentException("El nombre no puede ser vacio");
             }
+
+            if (value.Length > 80)
+            {
+                throw new ArgumentException("El nombre del estadio no puede superar los 81 caracteres");
+            }
             _nombre = value;
         }
     }
