@@ -14,6 +14,9 @@ public class Equipo
             if (EsVacio(value))
             {
                 throw new ArgumentException("El nombre del equipo no puede ser vacio");
+            } else if (value.Length > 60)
+            {
+                throw new ArgumentException("El nombre no puede superar los 60 caracteres");
             }
             _nombre = value;
         }
