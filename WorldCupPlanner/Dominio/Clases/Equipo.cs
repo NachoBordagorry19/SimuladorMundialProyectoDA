@@ -4,7 +4,7 @@ public class Equipo
 {
     private string _nombre;
     private string _confederacion;
-    private int _rankingFifa;
+    private string _rankingFifa;
 
     public String Nombre
     {
@@ -53,7 +53,7 @@ public class Equipo
         }
         return vacio;
     }
-    public Equipo(string nombre, string condeferacion, int rankingFifa)
+    public Equipo(string nombre, string condeferacion, string rankingFifa)
     {
         Nombre = nombre;
         Confederacion = condeferacion;
