@@ -10,7 +10,7 @@ public class UsuarioTest
     [TestMethod]
     public void CrearUsuario()
     {
-        Usuario usuarioPrueba = new Usuario("Fede", "Gonzales", "a@gmail.com", new DateTime(2003, 08, 23), "ave123");
+        Usuario usuarioPrueba = new Usuario("Fede", "Gonzales", "a@gmail.com", new DateTime(2003, 08, 23), "aveAA@e123");
     }
 
     [TestMethod]
