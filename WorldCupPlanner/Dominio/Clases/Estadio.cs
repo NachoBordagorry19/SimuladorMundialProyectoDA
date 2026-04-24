@@ -55,6 +55,19 @@ public class Estadio
             _descripcion = value;
         }
     }
+
+    public int? CapacidadLocativa
+    {
+        get => _capacidadLocativa;
+        set
+        {
+            if (!value.HasValue)
+            {
+                throw new ArgumentException("La capacidad del estadio no puede ser vacia");
+            }
+            _capacidadLocativa = value;
+        }
+    }
     
     public bool EsVacio(string textoATestear)
     {
@@ -70,6 +83,6 @@ public class Estadio
         Nombre = nombre;
         Ciudad = ciudad;
         Descripcion = descripcion;
-        _capacidadLocativa = capacidadLocativa;
+        CapacidadLocativa = capacidadLocativa;
     }
 }
