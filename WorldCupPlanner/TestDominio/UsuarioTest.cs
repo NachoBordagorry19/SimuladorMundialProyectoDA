@@ -56,8 +56,15 @@ public class UsuarioTest
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContra_SiContraseñaNoTieneMinuscula_TiroExcepcion()
+    public void InsertoContraseña_SiContraseñaNoTieneMinuscula_TiroExcepcion()
     {
         Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 05 , 20), "ASDFGDS2344.");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void InsertoContraseña_SiContraseñaNoTieneNumero_TiroExcepcion()
+    {
+        Usuario user = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005 , 05 , 20), "AASDSAasddsa.");
     }
 }
