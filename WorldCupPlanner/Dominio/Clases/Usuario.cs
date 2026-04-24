@@ -69,6 +69,19 @@ public class Usuario
         }
     }
 
+    public string Contraseña
+    {
+        get => _contraseña;
+        set
+        {
+            if (EsVacio(value))
+            {
+                throw new ArgumentException("Contraseña no debe ser vacio");
+            }
+            _contraseña = value;
+        } 
+    }
+
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;
@@ -85,6 +98,6 @@ public class Usuario
         Apellido = apellido;
         Email = email;
         FechaNacimiento = fechaNacimiento;
-        _contraseña = contraseña;
+        Contraseña = contraseña;
     }
 }
