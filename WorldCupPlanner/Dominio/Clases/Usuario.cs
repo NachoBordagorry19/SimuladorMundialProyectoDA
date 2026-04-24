@@ -84,6 +84,9 @@ public class Usuario
             else if (!value.Any(char.IsUpper))
             {
                 throw new ArgumentException("Contraseña debe contener al menos una letra mayúscula");
+            } else if (!value.Any(char.IsLower))
+            {
+                throw new ArgumentException("La contraseña debe contener una letra minusucla");
             }
             _contraseña = value;
         } 
