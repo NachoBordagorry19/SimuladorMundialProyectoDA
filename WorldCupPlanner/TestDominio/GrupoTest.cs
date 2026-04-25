@@ -16,6 +16,6 @@ public class GrupoTest
     [ExpectedException(typeof(ArgumentException))]
     public void CrearGrupo_NombreVacio_TiroException()
     {
-        Grupo grupo = new Grupo("A");
+        Grupo grupo = new Grupo("");
     }
 }
