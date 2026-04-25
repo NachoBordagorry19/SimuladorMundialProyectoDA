@@ -11,4 +11,11 @@ public class GrupoTest
     {
         Grupo grupo = new Grupo("A");
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearGrupo_NombreVacio_TiroException()
+    {
+        Grupo grupo = new Grupo("A");
+    }
 }
