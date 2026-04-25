@@ -33,4 +33,11 @@ public class GrupoTest
 
         Assert.IsNotNull(grupo.Equipos);
     }
+
+    [TestMethod]
+    public void ListaPartidos_NoPuedeSerVacio()
+    {
+        Grupo grupo = new Grupo("A");
+        Assert.IsNotNull(grupo.Partidos);
+    }
 }
