@@ -3,6 +3,7 @@ namespace Dominio.Clases;
 public class Grupo
 {
     private string _nombre;
+    private List<Equipo> _equipos;
 
     public string Nombre
     {
@@ -25,9 +26,16 @@ public class Grupo
     {
         return string.IsNullOrEmpty(textoATestear);
     }
+
+    public List<Equipo> Equipos
+    {
+        get => _equipos;
+        set => _equipos = value;
+    }
     
     public Grupo(string nombre)
     {
         Nombre = nombre;
+        Equipos = new List<Equipo>();
     }
 }
