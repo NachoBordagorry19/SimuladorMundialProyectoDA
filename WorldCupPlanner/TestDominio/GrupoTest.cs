@@ -25,4 +25,12 @@ public class GrupoTest
     {
         Grupo grupo = new Grupo("Z");
     }
+    
+    [TestMethod]
+    public void ListaEquipos_NoPuedeSerVacio()
+    {
+        Grupo grupo = new Grupo("A");
+
+        Assert.IsNotNull(grupo.Equipos);
+    }
 }
