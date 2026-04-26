@@ -72,4 +72,16 @@ public class UsuarioRepositorioTest
         Assert.AreEqual("Fede", actualizado.Nombre);
         Assert.AreEqual("Gonzales", actualizado.Apellido);
     }
+
+    [TestMethod]
+    public void BorrarUsuario_SiUsuarioExiste_DejoListaVacia()
+    {
+        var usuario = CrearUsuario();
+        _repositorioUsuario.AgregarUsuario(usuario);
+        Assert.AreEqual(1,_repositorioUsuario.ObtenerUsuarios().Count);
+        _repositorioUsuario.EliminarUsuario(usuario);
+        Assert.AreEqual(0, _repositorioUsuario.ObtenerUsuarios().Count);
+        var usuarioBorrado = _repositorioUsuario.ObtenerUsuario(u => u.Email == "a@gmail.com");
+        Assert.IsNull(usuarioBorrado);
+    }
 }
