@@ -35,4 +35,14 @@ public class UsuarioRepositorioTest
         Assert.IsNotNull(usuariosPrueba);
         Assert.AreEqual(0,usuariosPrueba.Count);
     }
+
+    [TestMethod]
+    public void ObtenerUsuarios_HayUsuarioAgregado()
+    {
+        var usuario = CrearUsuario();
+        _repositorioUsuario.AgregarUsuario(usuario);
+        var usuariosLista = _repositorioUsuario.ObtenerUsuarios();
+        Assert.IsNotNull(usuariosLista);
+        Assert.AreEqual(1,usuariosLista.Count);
+    }
 }
