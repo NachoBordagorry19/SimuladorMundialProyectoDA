@@ -63,4 +63,21 @@ public class EstadioRepositorioTest
         var encontrado = _repositorioEstadio.ObtenerEstadioPorNombre("Nombre Inexistente");
         Assert.IsNull(encontrado);
      }
+
+     [TestMethod]
+     public void ActualizarEstadio_ModificaDatosCorrectamente()
+     {
+         var estadio = CrearEstadio();
+         _repositorioEstadio.AgregarEstadio(estadio);
+         estadio.Nombre = "Nuevo Nombre";
+         estadio.Ciudad = "Nueva Ciudad";
+         estadio.Descripcion = "Nueva Descripcion";
+         estadio.CapacidadLocativa = 60000;
+         var actualizado = _repositorioEstadio.ObtenerEstadioPorNombre("Nuevo Nombre");
+         Assert.IsNotNull(actualizado);
+         Assert.AreEqual("Nuevo Nombre", actualizado.Nombre);
+         Assert.AreEqual("Nueva Ciudad", actualizado.Ciudad);
+         Assert.AreEqual("Nueva Descripcion", actualizado.Descripcion);
+         Assert.AreEqual(60000, actualizado.CapacidadLocativa);
+     }
 }
