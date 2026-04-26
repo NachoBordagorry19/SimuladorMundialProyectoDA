@@ -77,7 +77,7 @@ public class Estadio
             _capacidadLocativa = value;
         }
     }
-    
+
     public bool EsVacio(string textoATestear)
     {
         bool vacio = true;

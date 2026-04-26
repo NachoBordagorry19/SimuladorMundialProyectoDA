@@ -5,7 +5,7 @@ namespace TestDominio;
 
 [TestClass]
 public class GrupoTest
-{    
+{
     [TestMethod]
     public void CrearGrupo_Valido()
     {
@@ -18,14 +18,14 @@ public class GrupoTest
     {
         Grupo grupo = new Grupo("");
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearGrupo_NombreNoCumpleRango_TiroExcepcion()
     {
         Grupo grupo = new Grupo("Z");
     }
-    
+
     [TestMethod]
     public void ListaEquipos_NoPuedeSerVacio()
     {

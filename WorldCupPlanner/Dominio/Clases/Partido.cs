@@ -4,32 +4,92 @@ namespace Dominio.Clases;
 
 public class Partido
 {
-    public Equipo Local { get; }
-    public Equipo Visitante { get; }
-    public Estadio Estadio { get; }
+    private static int _contadorId = 0;
+    private int _id;
+    private DateTime _fecha;
+    private Estadio _estadio;
+    private Equipo _local;
+    private Equipo _visitante;
+    private Grupo _grupo;
 
-    public int GolesLocal { get; private set; }
-    public int GolesVisitante { get; private set; }
-    public EstadoPartido Estado { get; private set; }
-
-    public Partido(Equipo local, Equipo visitante, Estadio estadio)
+    public int Id
     {
-        Local = local;
-        Visitante = visitante;
-        Estadio = estadio;
-        Estado = EstadoPartido.Pendiente;
+        get => _id;
+        set => _id = value;
     }
 
-    public void RegistrarResultado(int golesLocal, int golesVisitante)
+    public DateTime Fecha
     {
-        if (Estado == EstadoPartido.Jugado)
-            throw new InvalidOperationException("El partido ya fue jugado");
+        get => _fecha;
+        set
+        {
+            if (value == DateTime.MinValue)
+                throw new ArgumentException("La fecha es invalida");
 
-        if (golesLocal < 0 || golesVisitante < 0)
-            throw new ArgumentException("Los goles no pueden ser negativos");
+            _fecha = value;
+        }
+    }
 
-        GolesLocal = golesLocal;
-        GolesVisitante = golesVisitante;
-        Estado = EstadoPartido.Jugado;
+    public Estadio Estadio
+    {
+        get => _estadio;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException("El estadio no puede ser null");
+            _estadio = value;
+        }
+    }
+
+    public Equipo Local
+    {
+        get => _local;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException("El equipo local es requerido");
+
+            _local = value;
+        }
+    }
+
+    public Equipo Visitante
+    {
+        get => _visitante;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException("El equipo visitante es requerido");
+
+            if (_local != null && value == _local)
+                throw new ArgumentException("Los equipos deben ser distintos");
+
+            _visitante = value;
+        }
+    }
+
+    public Grupo Grupo
+    {
+        get => _grupo;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException("Grupo  es requerido");
+
+            _grupo = value;
+        }
+    }
+
+
+    public Partido(DateTime fecha, Estadio estadio, Equipo local, Equipo visitante, Grupo grupo)
+    {
+        _contadorId++;
+        Id = _contadorId;
+
+        Fecha = fecha;
+        Estadio = estadio;
+        Local = local;
+        Visitante = visitante;
+        Grupo = grupo;
     }
 }
