@@ -44,13 +44,25 @@ public class Partido
     public Equipo Local
     {
         get => _local;
-        set => _local = value;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException();
+
+            _local = value;
+        }
     }
 
     public Equipo Visitante
     {
         get => _visitante;
-        set => _visitante = value;
+        set
+        {
+            if (value == _local)
+                throw new ArgumentException();
+
+            _visitante = value;
+        }
     }
 
     public Grupo Grupo
