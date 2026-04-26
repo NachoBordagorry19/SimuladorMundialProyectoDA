@@ -32,4 +32,14 @@ public class EstadioRepositorioTest
         Assert.IsNotNull(estadiosPrueba);
         Assert.AreEqual(0,estadiosPrueba.Count);
     }
+    
+    [TestMethod]
+    public void AgregarEstadio_CuandoSeAgregaUno_ApareceEnLaLista()
+    {
+        var estadio = CrearEstadio();
+        _repositorioEstadio.AgregarEstadio(estadio);
+        var lista = _repositorioEstadio.ObtenerEstadios();
+        Assert.AreEqual(1, lista.Count);
+        Assert.AreEqual(estadio.Nombre, lista[0].Nombre);
+    }
 }
