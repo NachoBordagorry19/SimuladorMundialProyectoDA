@@ -13,6 +13,7 @@ public class UsuarioRepositorioTest
     public void Inicializar()
     {
         BDenMemoria = new BaseDeDatosEnMemoria();
+        _repoUsuario = new RepositorioUsuario();
     }
 
     private static Usuario CrearUsuario(
@@ -24,5 +25,13 @@ public class UsuarioRepositorioTest
     {
         var nacimiento = DateTime.UtcNow.AddYears(-20);
         return new Usuario(nombre, apellido, email, nacimiento, contraseña, rol);
+    }
+
+    [TestMethod]
+    public void ObtenerUsuarios_CuandoNoHayUsuarios_RetornaListaVacia()
+    {
+        var usuariosPrueba = _repoUsuarios.ObtenerUsuarios();
+        Assert.IsNotNull(usuariosPrueba);
+        Assert.AreEqual(0,usuariosPrueba.Count);
     }
 }
