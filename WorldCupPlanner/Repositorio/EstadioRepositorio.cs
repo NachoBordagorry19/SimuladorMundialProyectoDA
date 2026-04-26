@@ -9,4 +9,9 @@ public class EstadioRepositorio
     {
         _BDEnMemoria = BDEnMemoria;
     }
+
+    public List<Estadio> ObtenerEstadios()
+    {
+        return _BDEnMemoria.ObtenerEstadios();
+    }
 }
