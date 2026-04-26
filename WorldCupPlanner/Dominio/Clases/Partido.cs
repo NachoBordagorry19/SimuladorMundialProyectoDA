@@ -47,7 +47,7 @@ public class Partido
         set
         {
             if (value == null)
-                throw new ArgumentException();
+                throw new ArgumentException("El equipo local es requerido");
 
             _local = value;
         }
@@ -58,8 +58,11 @@ public class Partido
         get => _visitante;
         set
         {
-            if (value == _local)
-                throw new ArgumentException();
+            if (value == null)
+                throw new ArgumentException("El equipo visitante es requerido");
+            
+            if (_local != null && value == _local)
+                throw new ArgumentException("Los equipos deben ser distintos");
 
             _visitante = value;
         }
