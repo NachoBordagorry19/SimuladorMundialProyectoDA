@@ -4,6 +4,7 @@ public class Grupo
 {
     private string _nombre;
     private List<Equipo> _equipos;
+    private List<Partido> _partidos;
 
     public string Nombre
     {
@@ -32,10 +33,17 @@ public class Grupo
         get => _equipos;
         set => _equipos = value;
     }
+
+    public List<Partido> Partidos
+    {
+        get => _partidos;
+        set => _partidos = value;
+    }
     
     public Grupo(string nombre)
     {
         Nombre = nombre;
         Equipos = new List<Equipo>();
+        Partidos = new List<Partido>();
     }
 }
