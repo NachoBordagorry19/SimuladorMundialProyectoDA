@@ -24,7 +24,7 @@ public class Partido
         set
         {
             if (value == DateTime.MinValue)
-                throw new ArgumentException();
+                throw new ArgumentException("La fecha es invalida");
 
             _fecha = value;
         }
