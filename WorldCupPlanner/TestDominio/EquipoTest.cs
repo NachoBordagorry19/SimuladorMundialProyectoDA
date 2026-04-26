@@ -25,7 +25,7 @@ public class EquipoTest
     {
         Equipo equipoPrueba = new Equipo("Esta cadena tiene exactamente sesenta y un caracteres ahora!!", Confederacion.UEFA, 400);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearEquipo_SinRankingFifa_LanzoExcepcion()

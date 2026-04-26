@@ -60,7 +60,7 @@ public class Partido
         {
             if (value == null)
                 throw new ArgumentException("El equipo visitante es requerido");
-            
+
             if (_local != null && value == _local)
                 throw new ArgumentException("Los equipos deben ser distintos");
 
@@ -79,13 +79,13 @@ public class Partido
             _grupo = value;
         }
     }
-    
-    
+
+
     public Partido(DateTime fecha, Estadio estadio, Equipo local, Equipo visitante, Grupo grupo)
     {
         _contadorId++;
         Id = _contadorId;
-        
+
         Fecha = fecha;
         Estadio = estadio;
         Local = local;

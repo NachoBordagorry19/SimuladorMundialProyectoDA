@@ -7,10 +7,10 @@ namespace Dominio.Clases;
 
 public class Usuario
 {
-    private  string _nombre;
-    private  string _apellido;
-    private  string _email;
-    private  DateTime _fechaNacimiento;
+    private string _nombre;
+    private string _apellido;
+    private string _email;
+    private DateTime _fechaNacimiento;
     private string _contraseña;
     private readonly List<Rol> _roles = new();
 
@@ -99,7 +99,7 @@ public class Usuario
             else if (value.Length < 8)
                 throw new ArgumentException("Contraseña debe tener al menos 8 caracteres");
             _contraseña = value;
-        } 
+        }
     }
 
     public bool EsVacio(string textoATestear)
