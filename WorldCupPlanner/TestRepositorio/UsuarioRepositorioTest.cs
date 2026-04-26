@@ -8,12 +8,13 @@ namespace TestRepositorio;
 public class UsuarioRepositorioTest
 {
     private BaseDeDatosEnMemoria BDenMemoria = null;
+    private UsuarioRepositorio _repositorioUsuario = null;
 
     [TestInitialize]
     public void Inicializar()
     {
         BDenMemoria = new BaseDeDatosEnMemoria();
-        _repoUsuario = new RepositorioUsuario();
+        _repositorioUsuario = new UsuarioRepositorio(BDenMemoria);
     }
 
     private static Usuario CrearUsuario(
@@ -30,7 +31,7 @@ public class UsuarioRepositorioTest
     [TestMethod]
     public void ObtenerUsuarios_CuandoNoHayUsuarios_RetornaListaVacia()
     {
-        var usuariosPrueba = _repoUsuarios.ObtenerUsuarios();
+        var usuariosPrueba = _repositorioUsuario.ObtenerUsuarios();
         Assert.IsNotNull(usuariosPrueba);
         Assert.AreEqual(0,usuariosPrueba.Count);
     }

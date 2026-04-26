@@ -34,6 +34,11 @@ public class BaseDeDatosEnMemoria
         _listaDeUsuarios[indiceUsuario] = usuario;
     }
 
+    public List<Usuario> ObtenerUsuarios()
+    {
+        return _listaDeUsuarios;
+    }
+
     public void AgregarEquipo(Equipo equipo)
     {
         _listaDeEquipos.Add(equipo);
