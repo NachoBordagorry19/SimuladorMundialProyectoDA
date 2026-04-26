@@ -54,4 +54,13 @@ public class EstadioRepositorioTest
         Assert.IsNotNull(encontrado);
         Assert.AreSame(estadio2, encontrado);
     }
+    
+     [TestMethod]
+        public void ObtenerEstadio_SiBuscoPorNombreInexistente_DevuelveNull()
+    {
+        var estadio = CrearEstadio();
+        _repositorioEstadio.AgregarEstadio(estadio);
+        var encontrado = _repositorioEstadio.ObtenerEstadioPorNombre("Nombre Inexistente");
+        Assert.IsNull(encontrado);
+     }
 }
