@@ -10,11 +10,25 @@ public class PartidoTest
     [TestMethod]
     public void CrearPartido()
     {
-        var local = new Equipo("A", Confederacion.CONMEBOL, 1000);
-        var visitante = new Equipo("B", Confederacion.UEFA, 1100);
-        var estadio = new Estadio("Campeon del Siglo", "Montevideo", "Decano", 60000);
-        var grupo = new Grupo("A");
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
+        Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Decano", 60000);
+        Grupo grupo = new Grupo("A");
 
-        Partido partido = new Partido(1, DateTime.Now, estadio, local, visitante, grupo);
+        Partido partido = new Partido(DateTime.Now, estadio, local, visitante, grupo);
+    }
+
+    [TestMethod]
+    public void Partido_IdEsIncremental()
+    {
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
+        Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Decano", 60000);
+        Grupo grupo = new Grupo("A");
+        
+        Partido p1 = new Partido(DateTime.Now, estadio, local, visitante, grupo);
+        Partido p2 = new Partido(DateTime.Now, estadio, local, visitante, grupo);
+        
+        Assert.AreEqual(p1.Id + 1, p2.Id);
     }
 }
