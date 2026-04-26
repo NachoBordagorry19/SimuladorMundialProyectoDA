@@ -36,7 +36,7 @@ public class Partido
         set
         {
             if (value == null)
-                throw new ArgumentException();
+                throw new ArgumentException("El estadio no puede ser null");
             _estadio = value;
         }
     }
