@@ -21,8 +21,8 @@ public class UsuarioServicioTest
         _usuarioDTO = new UsuarioDTO()
         {
             Nombre = "Fede",
-            Apeliido = "Rodriguez",
-            Email = "a@gmail.com"
+            Apellido = "Rodriguez",
+            Email = "a@gmail.com",
             FechaNacimiento = new DateTime(2000, 05, 15)
         };
     }
