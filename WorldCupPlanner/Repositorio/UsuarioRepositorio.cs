@@ -30,4 +30,9 @@ public class UsuarioRepositorio
     {
         _baseDeDatosEnMemoria.ActualizarUsuario(usuario);
     }
+
+    public void EliminarUsuario(Usuario usuario)
+    {
+        _baseDeDatosEnMemoria.BorrarUsuario(usuario);
+    }
 }
