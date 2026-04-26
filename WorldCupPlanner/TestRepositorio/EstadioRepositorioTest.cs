@@ -80,4 +80,16 @@ public class EstadioRepositorioTest
          Assert.AreEqual("Nueva Descripcion", actualizado.Descripcion);
          Assert.AreEqual(60000, actualizado.CapacidadLocativa);
      }
+     
+    [TestMethod]
+    public void BorrarUsuario_SiUsuarioExiste_DejoListaVacia()
+    {
+        var estadio = CrearEstadio();
+        _repositorioEstadio.AgregarEstadio(estadio);
+        Assert.AreEqual(1,_repositorioEstadio.ObtenerEstadios().Count);
+        _repositorioEstadio.BorrarEstadio(estadio);
+        Assert.AreEqual(0, _repositorioEstadio.ObtenerEstadios().Count);
+        var estadioBorrado = _repositorioEstadio.ObtenerEstadioPorNombre(estadio.Nombre);
+        Assert.IsNull(estadioBorrado);
+     }
 }

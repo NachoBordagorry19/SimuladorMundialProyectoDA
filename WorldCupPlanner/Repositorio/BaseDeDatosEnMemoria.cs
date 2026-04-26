@@ -93,23 +93,4 @@ Si hay usuarios duplicados con el mismo email, Find sólo encuentra el primero; 
     {
         _listaDePartidos.Remove(partido);
     }
-    
-    /*
-    public void BorrarUsuario(Usuario usuario)
-    {
-        _listaDeUsuarios.Remove(usuario);
-    }
-
-    public void ActualizarUsuario(Usuario usuario)
-    {
-        Usuario? usuarioParaActualizar = _listaDeUsuarios.Find(u => u.Email == usuario.Email);
-        var indiceUsuario = _listaDeUsuarios.IndexOf(usuarioParaActualizar);
-        _listaDeUsuarios[indiceUsuario] = usuario;
-    }
-
-    public List<Usuario> ObtenerUsuarios()
-    {
-        return _listaDeUsuarios;
-    }
-     */
 }
