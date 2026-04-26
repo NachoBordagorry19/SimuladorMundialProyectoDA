@@ -71,7 +71,13 @@ public class Partido
     public Grupo Grupo
     {
         get => _grupo;
-        set => _grupo = value;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException("Grupo  es requerido");
+
+            _grupo = value;
+        }
     }
     
     
