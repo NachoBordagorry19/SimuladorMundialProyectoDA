@@ -42,4 +42,16 @@ public class EstadioRepositorioTest
         Assert.AreEqual(1, lista.Count);
         Assert.AreEqual(estadio.Nombre, lista[0].Nombre);
     }
+    
+    [TestMethod]
+        public void ObtenerEstadio_SiBuscoPorNombre_DevuelveCoincidencia()
+    {
+        var estadio = CrearEstadio();
+        var estadio2 = CrearEstadio("Gran Parque Central", "Montevideo", "descripcion", 30000);
+        _repositorioEstadio.AgregarEstadio(estadio);
+        _repositorioEstadio.AgregarEstadio(estadio2);
+        var encontrado = _repositorioEstadio.ObtenerEstadioPorNombre("Gran Parque Central");
+        Assert.IsNotNull(encontrado);
+        Assert.AreSame(estadio2, encontrado);
+    }
 }

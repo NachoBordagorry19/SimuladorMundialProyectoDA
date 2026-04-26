@@ -1,3 +1,4 @@
+using System.Linq;
 using Dominio.Clases;
 namespace Repositorio;
 
@@ -18,5 +19,11 @@ public class EstadioRepositorio
     public void AgregarEstadio(Estadio estadio)
     {
         _BDEnMemoria.AgregarEstadio(estadio);
+    }
+
+    public Estadio? ObtenerEstadioPorNombre(string nombre)
+    {
+        if (string.IsNullOrEmpty(nombre)) return null;
+        return _BDEnMemoria.ObtenerEstadios().FirstOrDefault(e => e.Nombre == nombre);
     }
 }
