@@ -57,4 +57,19 @@ public class UsuarioRepositorioTest
         Assert.IsNotNull(encontrado);
         Assert.AreSame(usuario2, encontrado);
     }
+
+    [TestMethod]
+    public void ModificarUsuarioExitente_BuscadoPorEmial()
+    {
+        var usuario = CrearUsuario("Alfredo", "Martinez", "Alfredo@gmail.com");
+        _repositorioUsuario.AgregarUsuario(usuario);
+        usuario.Apellido = "Gonzales";
+        usuario.Nombre = "Fede";
+        usuario.Email = "a@gmail.com";
+        _repositorioUsuario.ActualizarUsuario(usuario);
+        var actualizado = _repositorioUsuario.ObtenerUsuario(u => u.Email == "a@gmail.com");
+        Assert.IsNotNull(actualizado);
+        Assert.AreEqual("Fede", actualizado.Nombre);
+        Assert.AreEqual("Gonzales", actualizado.Apellido);
+    }
 }
