@@ -66,4 +66,15 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, equipo, equipo, grupo);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearPartido_SiGrupoEsNull_TiraExcepcion()
+    {
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1200);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 10000);
+
+        new Partido(DateTime.Now, estadio, local, visitante, null);
+    }
 }
