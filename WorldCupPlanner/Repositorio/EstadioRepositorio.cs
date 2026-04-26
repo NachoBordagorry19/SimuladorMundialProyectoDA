@@ -14,4 +14,9 @@ public class EstadioRepositorio
     {
         return _BDEnMemoria.ObtenerEstadios();
     }
+
+    public void AgregarEstadio(Estadio estadio)
+    {
+        _BDEnMemoria.AgregarEstadio(estadio);
+    }
 }
