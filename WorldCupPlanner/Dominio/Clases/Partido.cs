@@ -33,7 +33,12 @@ public class Partido
     public Estadio Estadio
     {
         get => _estadio;
-        set => _estadio = value;
+        set
+        {
+            if (value == null)
+                throw new ArgumentException();
+            _estadio = value;
+        }
     }
 
     public Equipo Local
