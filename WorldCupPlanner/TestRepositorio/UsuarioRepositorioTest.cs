@@ -7,14 +7,14 @@ namespace TestRepositorio;
 [TestClass]
 public class UsuarioRepositorioTest
 {
-    private BaseDeDatosEnMemoria BDenMemoria = null;
+    private BaseDeDatosEnMemoria _BDenMemoria = null;
     private UsuarioRepositorio _repositorioUsuario = null;
 
     [TestInitialize]
     public void Inicializar()
     {
-        BDenMemoria = new BaseDeDatosEnMemoria();
-        _repositorioUsuario = new UsuarioRepositorio(BDenMemoria);
+        _BDenMemoria = new BaseDeDatosEnMemoria();
+        _repositorioUsuario = new UsuarioRepositorio(_BDenMemoria);
     }
 
     private static Usuario CrearUsuario(
