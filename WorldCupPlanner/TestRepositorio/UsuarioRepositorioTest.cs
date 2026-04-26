@@ -45,4 +45,16 @@ public class UsuarioRepositorioTest
         Assert.IsNotNull(usuariosLista);
         Assert.AreEqual(1,usuariosLista.Count);
     }
+
+    [TestMethod]
+    public void ObtenerUsuarios_SiBuscoPorEmail_DevuelveCoincidencia()
+    {
+        var usuario = CrearUsuario();
+        var usuario2 = CrearUsuario("Luis","Pedro","Pedro@gmail.com");
+        _repositorioUsuario.AgregarUsuario(usuario);
+        _repositorioUsuario.AgregarUsuario(usuario2);
+        var encontrado = _repositorioUsuario.ObtenerUsuario(u => u.Email == "Pedro@gmail.com");
+        Assert.IsNotNull(encontrado);
+        Assert.AreSame(usuario2, encontrado);
+    }
 }
