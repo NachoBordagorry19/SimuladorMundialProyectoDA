@@ -47,12 +47,23 @@ public class PartidoTest
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CrearPartido_SiEstadioEsNull_TiraExcepcion()
+    public void Partido_SiEstadioEsNull_TiraExcepcion()
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1200);
         Grupo grupo = new Grupo("A");
 
         new Partido(DateTime.Now, null, local, visitante, grupo);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearPartido_SiEquiposSonIguales_TiraExcepcion()
+    {
+        Equipo equipo = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 10000);
+        Grupo grupo = new Grupo("A");
+
+        new Partido(DateTime.Now, estadio, equipo, equipo, grupo);
     }
 }
