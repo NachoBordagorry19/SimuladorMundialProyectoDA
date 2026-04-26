@@ -31,4 +31,17 @@ public class PartidoTest
         
         Assert.AreEqual(p1.Id + 1, p2.Id);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void Partido_FechaNoPuedeSerInvalida_TiroExcepcion()
+    {
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1200);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Descripcion", 10000);
+        Grupo grupo = new Grupo("A");
+
+        new Partido(DateTime.MinValue, estadio, local, visitante, grupo);
+    }
+    
 }
