@@ -20,4 +20,9 @@ public class UsuarioRepositorio
     {
         _baseDeDatosEnMemoria.AgregarUsuario(usuario);
     }
+
+    public Usuario? ObtenerUsuario(Func<Usuario, bool> filter)
+    {
+        return _baseDeDatosEnMemoria.ObtenerUsuarios().Where(filter).FirstOrDefault();
+    }
 }
