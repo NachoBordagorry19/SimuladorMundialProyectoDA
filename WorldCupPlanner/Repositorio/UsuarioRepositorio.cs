@@ -15,4 +15,9 @@ public class UsuarioRepositorio
     {
         return _baseDeDatosEnMemoria.ObtenerUsuarios();
     }
+
+    public void AgregarUsuario(Usuario usuario)
+    {
+        _baseDeDatosEnMemoria.AgregarUsuario(usuario);
+    }
 }
