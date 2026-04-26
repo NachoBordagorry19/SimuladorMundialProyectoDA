@@ -87,7 +87,7 @@ public class EstadioRepositorioTest
         var estadio = CrearEstadio();
         _repositorioEstadio.AgregarEstadio(estadio);
         Assert.AreEqual(1,_repositorioEstadio.ObtenerEstadios().Count);
-        _repositorioEstadio.BorrarEstadio(estadio);
+        _repositorioEstadio.EliminarEstadio(estadio);
         Assert.AreEqual(0, _repositorioEstadio.ObtenerEstadios().Count);
         var estadioBorrado = _repositorioEstadio.ObtenerEstadioPorNombre(estadio.Nombre);
         Assert.IsNull(estadioBorrado);

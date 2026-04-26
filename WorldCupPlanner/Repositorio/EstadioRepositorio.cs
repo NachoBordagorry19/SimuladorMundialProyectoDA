@@ -26,4 +26,9 @@ public class EstadioRepositorio
         if (string.IsNullOrEmpty(nombre)) return null;
         return _BDEnMemoria.ObtenerEstadios().FirstOrDefault(e => e.Nombre == nombre);
     }
+
+    public void EliminarEstadio(Estadio estadio)
+    {
+        _BDEnMemoria.BorrarEstadio(estadio);
+    }
 }
