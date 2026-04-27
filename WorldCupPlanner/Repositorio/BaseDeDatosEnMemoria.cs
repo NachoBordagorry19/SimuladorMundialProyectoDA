@@ -34,11 +34,6 @@ public class BaseDeDatosEnMemoria
         var indiceUsuario = _listaDeUsuarios.IndexOf(usuarioParaActualizar);
         _listaDeUsuarios[indiceUsuario] = usuario;
     }
-    /*
-     Si usuario (el argumento) es null → se intenta acceder a usuario.Email y lanza NullReferenceException.
-Si no se encuentra ningún usuario con ese email, Find devuelve null. Entonces IndexOf(null) devuelve -1 y luego _listaDeUsuarios[-1] produce una excepción (ArgumentOutOfRangeException) al intentar acceder a la lista con índice inválido.
-Si hay usuarios duplicados con el mismo email, Find sólo encuentra el primero; tal vez quieras actualizar todos o uno específico.
-     */
 
     public List<Usuario> ObtenerUsuarios()
     {
@@ -55,6 +50,18 @@ Si hay usuarios duplicados con el mismo email, Find sólo encuentra el primero; 
         _listaDeEquipos.Remove(equipo);
     }
 
+    public void ActualizarEquipo(Equipo equipo)
+    {
+        Equipo? equipoParaActualizar = _listaDeEquipos.Find(e => e.Nombre == equipo.Nombre);
+        var indiceEquipo = _listaDeEquipos.IndexOf(equipoParaActualizar);
+        _listaDeEquipos[indiceEquipo] = equipo;
+    }
+
+    public List<Equipo> ObtenerEquipos()
+    {
+        return _listaDeEquipos;
+    }
+
     public void AgregarEstadio(Estadio estadio)
     {
         _listaDeEstadios.Add(estadio);
@@ -64,12 +71,8 @@ Si hay usuarios duplicados con el mismo email, Find sólo encuentra el primero; 
     {
         _listaDeEstadios.Remove(estadio);
     }
-    
-    /*
-     * Actualiza un estadio existente en la lista buscando por su nombre
-     * Devuelve true si se realizó la actualización, false si no se encontró ningún estadio con ese nombre
-     */
-    
+
+
     public bool ActualizarEstadio(Estadio estadio)
     {
         if (estadio == null) throw new ArgumentNullException(nameof(estadio));
@@ -83,7 +86,7 @@ Si hay usuarios duplicados con el mismo email, Find sólo encuentra el primero; 
     {
         return _listaDeEstadios;
     }
-    
+
     public void AgregarPartido(Partido partido)
     {
         _listaDePartidos.Add(partido);
@@ -92,5 +95,10 @@ Si hay usuarios duplicados con el mismo email, Find sólo encuentra el primero; 
     public void BorrarPartido(Partido partido)
     {
         _listaDePartidos.Remove(partido);
+    }
+
+    public List<Partido> ObtenerPartidos()
+    {
+        return _listaDePartidos;
     }
 }

@@ -33,7 +33,7 @@ public class UsuarioRepositorioTest
     {
         var usuariosPrueba = _repositorioUsuario.ObtenerUsuarios();
         Assert.IsNotNull(usuariosPrueba);
-        Assert.AreEqual(0,usuariosPrueba.Count);
+        Assert.AreEqual(0, usuariosPrueba.Count);
     }
 
     [TestMethod]
@@ -43,14 +43,14 @@ public class UsuarioRepositorioTest
         _repositorioUsuario.AgregarUsuario(usuario);
         var usuariosLista = _repositorioUsuario.ObtenerUsuarios();
         Assert.IsNotNull(usuariosLista);
-        Assert.AreEqual(1,usuariosLista.Count);
+        Assert.AreEqual(1, usuariosLista.Count);
     }
 
     [TestMethod]
     public void ObtenerUsuarios_SiBuscoPorEmail_DevuelveCoincidencia()
     {
         var usuario = CrearUsuario();
-        var usuario2 = CrearUsuario("Luis","Pedro","Pedro@gmail.com");
+        var usuario2 = CrearUsuario("Luis", "Pedro", "Pedro@gmail.com");
         _repositorioUsuario.AgregarUsuario(usuario);
         _repositorioUsuario.AgregarUsuario(usuario2);
         var encontrado = _repositorioUsuario.ObtenerUsuario(u => u.Email == "Pedro@gmail.com");
@@ -78,7 +78,7 @@ public class UsuarioRepositorioTest
     {
         var usuario = CrearUsuario();
         _repositorioUsuario.AgregarUsuario(usuario);
-        Assert.AreEqual(1,_repositorioUsuario.ObtenerUsuarios().Count);
+        Assert.AreEqual(1, _repositorioUsuario.ObtenerUsuarios().Count);
         _repositorioUsuario.EliminarUsuario(usuario);
         Assert.AreEqual(0, _repositorioUsuario.ObtenerUsuarios().Count);
         var usuarioBorrado = _repositorioUsuario.ObtenerUsuario(u => u.Email == "a@gmail.com");
