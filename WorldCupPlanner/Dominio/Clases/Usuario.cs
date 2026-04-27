@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using Dominio.Enums;
 
 namespace Dominio.Clases;
@@ -101,6 +102,7 @@ public class Usuario
             _contraseña = value;
         }
     }
+    
 
     public bool EsVacio(string textoATestear)
     {
@@ -112,6 +114,11 @@ public class Usuario
         return vacio;
     }
 
+    public Usuario()
+    {
+        
+    }
+
     public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, Rol rol)
     {
         Nombre = nombre;
@@ -121,4 +128,5 @@ public class Usuario
         Contraseña = contraseña;
         _roles.Add(rol);
     }
+    
 }
