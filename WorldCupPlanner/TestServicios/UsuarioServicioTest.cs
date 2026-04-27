@@ -97,4 +97,11 @@ public class UsuarioServicioTest
         var listaUsuarios = _servicioUsuario.ObtenerUsuarios();
         Assert.AreEqual(0, listaUsuarios.Count());
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarUsuario_SiNoExiste_LanzoExcepcion()
+    {
+        _servicioUsuario.EliminarUsuario(_usuarioDTO);
+    }
 }
