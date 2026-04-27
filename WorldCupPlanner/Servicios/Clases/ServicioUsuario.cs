@@ -22,7 +22,18 @@ public class ServicioUsuario:IServicioUsuario
         Usuario usuario = UsuarioDTOAEntidad(usuarioDto);
         string emailAVerificar = usuario.Email;
         ValidadEmail(emailAVerificar);
+        ValidarRoles(usuarioDto);
         _usuarioRepositorio.AgregarUsuario(usuario);
+    }
+
+    public void ValidarRoles(UsuarioDTO usuarioDto)
+    {
+        var roles = usuarioDto.Roles;
+        var duplicados = roles.GroupBy(r => r).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+        if (duplicados.Any())
+        {
+            throw new ArgumentException("El usuario no puede tener roles duplicados");
+        }
     }
 
     public void ValidadEmail(string email)
