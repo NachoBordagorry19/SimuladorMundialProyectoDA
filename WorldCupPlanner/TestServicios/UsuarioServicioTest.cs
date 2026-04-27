@@ -57,5 +57,16 @@ public class UsuarioServicioTest
         _usuarioDTO.Roles = new List<Rol> { Rol.Administrador, Rol.Administrador };
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
-    
+
+    [TestMethod]
+    public void ObtenerUsuarios_SeDevuelvenCorrectamente()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        UsuarioDTO usuario = new  UsuarioDTO();
+        usuario.Nombre = "Mateo";
+        usuario.Apellido = "Roo";
+        usuario.FechaNacimiento = new DateTime(2000, 05, 15);
+        var usuarios = _servicioUsuario.ObtenerUsuarios();
+        Assert.AreEqual(usuarios.Count(),2);
+    }
 }
