@@ -96,8 +96,7 @@ public class ServicioUsuario:IServicioUsuario
 
     public void EliminarUsuario(UsuarioDTO usuarioDto)
     {
-        if (usuarioDto == null) return; 
-
+        ValidarEmailNoExiste(usuarioDto.Email);
         var usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == usuarioDto.Email);
         if (usuarioExistente != null)
         {
