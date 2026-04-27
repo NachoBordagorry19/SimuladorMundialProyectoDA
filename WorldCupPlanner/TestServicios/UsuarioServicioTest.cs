@@ -72,4 +72,12 @@ public class UsuarioServicioTest
         var usuarios = _servicioUsuario.ObtenerUsuarios();
         Assert.AreEqual(usuarios.Count(),2);
     }
+    
+    [TestMethod]
+    public void ObtenerUsuario_SeDevuelveUsuarioCorrectamente()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        UsuarioDTO usuarioDtoPrueba = _servicioUsuario.ObtenerUsuario("a@gmail.com");
+        Assert.AreEqual(usuarioDtoPrueba.Nombre, "Fede");
+    }
 }
