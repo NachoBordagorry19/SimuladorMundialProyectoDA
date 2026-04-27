@@ -36,13 +36,14 @@ public class ServicioUsuario:IServicioUsuario
 
     private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
     {
-        return new Usuario()
+        var usuario = new Usuario()
         {
             Nombre = usuarioDto.Nombre,
             Apellido = usuarioDto.Apellido,
             Email = usuarioDto.Email,
             FechaNacimiento = usuarioDto.FechaNacimiento,
         };
+        return usuario;
     }
     
 }

@@ -3,6 +3,7 @@ using Repositorio.Interfaces;
 using Servicios.Interfaces;
 using Servicios.Modelo;
 using Servicios.Clases;
+using Dominio.Enums;
 
 namespace TestServicios;
 
@@ -26,7 +27,8 @@ public class UsuarioServicioTest
             Nombre = "Fede",
             Apellido = "Rodriguez",
             Email = "a@gmail.com",
-            FechaNacimiento = new DateTime(2000, 05, 15)
+            FechaNacimiento = new DateTime(2000, 05, 15),
+            Roles = new List<Rol> { Rol.Administrador }
         };
     }
 
@@ -47,4 +49,13 @@ public class UsuarioServicioTest
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiRolesDuplicados_LanzoExcepcion()
+    {
+        _usuarioDTO.Roles = new List<Rol> { Rol.Administrador, Rol.Administrador };
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+    
 }
