@@ -79,16 +79,20 @@ public class EstadioRepositorioTest
     {
         var estadio = CrearEstadio();
         _repositorioEstadio.AgregarEstadio(estadio);
-        estadio.Nombre = "Nuevo Nombre";
-        estadio.Ciudad = "Nueva Ciudad";
-        estadio.Descripcion = "Nueva Descripcion";
-        estadio.CapacidadLocativa = 60000;
-        var actualizado = _repositorioEstadio.ObtenerEstadioPorNombre("Nuevo Nombre");
-        Assert.IsNotNull(actualizado);
-        Assert.AreEqual("Nuevo Nombre", actualizado.Nombre);
-        Assert.AreEqual("Nueva Ciudad", actualizado.Ciudad);
-        Assert.AreEqual("Nueva Descripcion", actualizado.Descripcion);
-        Assert.AreEqual(60000, actualizado.CapacidadLocativa);
+
+        var estadioActualizado = CrearEstadio();
+        estadioActualizado.Ciudad = "Nueva Ciudad";
+        estadioActualizado.Descripcion = "Nueva Descripcion";
+        estadioActualizado.CapacidadLocativa = 60000;
+        
+        var actualizado = _repositorioEstadio.ActualizarEstadio(estadioActualizado);
+        var obtenido = _repositorioEstadio.ObtenerEstadioPorNombre(estadioActualizado.Nombre);
+        
+        Assert.IsTrue(actualizado);
+        Assert.IsNotNull(obtenido);
+        Assert.AreEqual("Nueva Ciudad", obtenido.Ciudad);
+        Assert.AreEqual("Nueva Descripcion", obtenido.Descripcion);
+        Assert.AreEqual(60000, obtenido.CapacidadLocativa);
     }
 
     [TestMethod]
