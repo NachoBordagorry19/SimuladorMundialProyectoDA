@@ -20,7 +20,18 @@ public class ServicioUsuario:IServicioUsuario
     public void AgregarUsuario(UsuarioDTO usuarioDto)
     {
         Usuario usuario = UsuarioDTOAEntidad(usuarioDto);
+        string emailAVerificar = usuario.Email;
+        ValidadEmail(emailAVerificar);
         _usuarioRepositorio.AgregarUsuario(usuario);
+    }
+
+    public void ValidadEmail(string email)
+    {
+        Usuario usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+        if (usuarioExistente != null)
+        {
+            throw new ArgumentException("El usuario ya existe, porfavor agrege un usuario que no exista");
+        }
     }
 
     private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
