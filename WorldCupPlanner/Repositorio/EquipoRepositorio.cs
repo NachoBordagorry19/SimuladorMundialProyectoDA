@@ -15,4 +15,9 @@ public class EquipoRepositorio
     {
         return _baseDeDatosEnMemoria.ObtenerEquipos();
     }
+    
+    public void AgregarEquipo(Equipo equipo)
+    {
+        _baseDeDatosEnMemoria.AgregarEquipo(equipo);
+    }
 }
