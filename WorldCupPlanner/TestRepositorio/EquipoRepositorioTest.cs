@@ -1,0 +1,36 @@
+using Dominio.Clases;
+using Dominio.Enums;
+using Repositorio;
+using System.Linq;
+
+namespace TestRepositorio;
+
+[TestClass]
+public class EquipoRepositorioTest
+{
+    private BaseDeDatosEnMemoria _BDenMemoria = null;
+    private EquipoRepositorio _repositorioEquipo = null;
+    
+    [TestInitialize]
+    public void Inicializar()
+    {
+        _BDenMemoria = new BaseDeDatosEnMemoria();
+        _repositorioEquipo = new EquipoRepositorio(_BDenMemoria);
+    }
+    
+    private static Equipo CrearEquipo(
+        string nombre = "Uruguay",
+        Confederacion confederacion = Confederacion.CONMEBOL,
+        int ranking = 1000)
+    {
+        return new Equipo(nombre, confederacion, ranking);
+    }
+    
+    [TestMethod]
+    public void ObtenerEquipos_EsVacio()
+    {
+        var equipos = _repositorioEquipo.ObtenerEquipos();
+        Assert.IsNotNull(equipos);
+        Assert.AreEqual(0,equipos.Count);
+    }
+}
