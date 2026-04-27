@@ -93,8 +93,19 @@ public class ServicioUsuario:IServicioUsuario
             throw new ArgumentException("El usuario no existe, porfavor ingrese un usuario que exista");
         }
     }
-    
-    
-    
-    
+
+    public void EliminarUsuario(UsuarioDTO usuarioDto)
+    {
+        if (usuarioDto == null) return; 
+
+        var usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == usuarioDto.Email);
+        if (usuarioExistente != null)
+        {
+            _usuarioRepositorio.EliminarUsuario(usuarioExistente);
+        }
+    }
+
+
+
+
 }
