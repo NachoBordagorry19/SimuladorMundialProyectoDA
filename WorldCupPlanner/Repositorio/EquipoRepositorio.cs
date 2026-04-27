@@ -20,4 +20,9 @@ public class EquipoRepositorio
     {
         _baseDeDatosEnMemoria.AgregarEquipo(equipo);
     }
+    
+    public Equipo? ObtenerEquipo(Func<Equipo, bool> filtro)
+    {
+        return _baseDeDatosEnMemoria.ObtenerEquipos().Where(filtro).FirstOrDefault();
+    }
 }

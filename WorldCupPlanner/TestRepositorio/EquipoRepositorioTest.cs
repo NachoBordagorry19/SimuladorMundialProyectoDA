@@ -44,16 +44,17 @@ public class EquipoRepositorioTest
     }
     
     [TestMethod]
-    public void ObtenerEquipo_ComparaPorFiltro()
+    public void ObtenerEquipo_SiBuscoPorNombre_DevuelveCoincidencia()
     {
-        var equipo1 = CrearEquipo("Uruguay");
-        var equipo2 = CrearEquipo("Uruguay2");
-        
+        var equipo1 = CrearEquipo("Peñarol");
+        var equipo2 = CrearEquipo("Manya");
+
         _repositorioEquipo.AgregarEquipo(equipo1);
         _repositorioEquipo.AgregarEquipo(equipo2);
-        
-        var encontrado = _repositorioEquipo.ObtenerEquipos(e => e.Nombre == "Uruguay2");
+
+        var encontrado = _repositorioEquipo.ObtenerEquipo(e => e.Nombre == "Manya");
+
         Assert.IsNotNull(encontrado);
-        Assert.AreEqual("Uruguay2", encontrado.Nombre);
+        Assert.AreEqual("Manya", encontrado.Nombre);
     }
 }
