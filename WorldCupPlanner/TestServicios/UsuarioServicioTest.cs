@@ -39,4 +39,12 @@ public class UsuarioServicioTest
         Assert.AreEqual("a@gmail.com", _usuarioDTO.Email);
         Assert.AreEqual(new DateTime(2000, 05, 15), _usuarioDTO.FechaNacimiento);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AregarUsuario_SiEmailExiste_LanzoExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
 }
