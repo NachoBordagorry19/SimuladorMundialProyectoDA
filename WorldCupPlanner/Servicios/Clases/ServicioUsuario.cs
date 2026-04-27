@@ -19,6 +19,19 @@ public class ServicioUsuario:IServicioUsuario
 
     public void AgregarUsuario(UsuarioDTO usuarioDto)
     {
-        
+        Usuario usuario = UsuarioDTOAEntidad(usuarioDto);
+        _usuarioRepositorio.AgregarUsuario(usuario);
     }
+
+    private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
+    {
+        return new Usuario()
+        {
+            Nombre = usuarioDto.Nombre,
+            Apellido = usuarioDto.Apellido,
+            Email = usuarioDto.Email,
+            FechaNacimiento = usuarioDto.FechaNacimiento,
+        };
+    }
+    
 }

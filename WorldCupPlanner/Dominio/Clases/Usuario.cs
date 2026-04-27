@@ -112,6 +112,11 @@ public class Usuario
         return vacio;
     }
 
+    public Usuario()
+    {
+        
+    }
+
     public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, Rol rol)
     {
         Nombre = nombre;

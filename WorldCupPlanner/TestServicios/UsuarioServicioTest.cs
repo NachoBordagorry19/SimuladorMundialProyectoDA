@@ -6,6 +6,7 @@ using Servicios.Clases;
 
 namespace TestServicios;
 
+[TestClass]
 public class UsuarioServicioTest
 {
     private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
@@ -30,7 +31,6 @@ public class UsuarioServicioTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void AgregoUsuario_SiEmailNoExiste()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
