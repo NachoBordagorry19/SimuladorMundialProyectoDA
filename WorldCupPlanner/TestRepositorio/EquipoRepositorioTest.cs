@@ -42,4 +42,18 @@ public class EquipoRepositorioTest
         var lista = _repositorioEquipo.ObtenerEquipos();
         Assert.AreEqual(1, lista.Count);
     }
+    
+    [TestMethod]
+    public void ObtenerEquipo_ComparaPorFiltro()
+    {
+        var equipo1 = CrearEquipo("Uruguay");
+        var equipo2 = CrearEquipo("Uruguay2");
+        
+        _repositorioEquipo.AgregarEquipo(equipo1);
+        _repositorioEquipo.AgregarEquipo(equipo2);
+        
+        var encontrado = _repositorioEquipo.ObtenerEquipos(e => e.Nombre == "Uruguay2");
+        Assert.IsNotNull(encontrado);
+        Assert.AreEqual("Uruguay2", encontrado.Nombre);
+    }
 }
