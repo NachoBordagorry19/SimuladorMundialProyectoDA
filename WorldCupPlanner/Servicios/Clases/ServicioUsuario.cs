@@ -21,7 +21,7 @@ public class ServicioUsuario:IServicioUsuario
     {
         Usuario usuario = UsuarioDTOAEntidad(usuarioDto);
         string emailAVerificar = usuario.Email;
-        ValidadEmail(emailAVerificar);
+        ValidarEmailExiste(emailAVerificar);
         ValidarRoles(usuarioDto);
         _usuarioRepositorio.AgregarUsuario(usuario);
     }
@@ -36,7 +36,7 @@ public class ServicioUsuario:IServicioUsuario
         }
     }
 
-    public void ValidadEmail(string email)
+    public void ValidarEmailExiste(string email)
     {
         Usuario usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
         if (usuarioExistente != null)
@@ -80,9 +80,21 @@ public class ServicioUsuario:IServicioUsuario
 
     public UsuarioDTO ObtenerUsuario(string email)
     {
+        ValidarEmailNoExiste(email);
         Usuario? usuario = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
         return desdeEntidad(usuario);
     }
+
+    public void ValidarEmailNoExiste(string email)
+    {
+        Usuario usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+        if (usuarioExistente == null)
+        {
+            throw new ArgumentException("El usuario no existe, porfavor ingrese un usuario que exista");
+        }
+    }
+    
+    
     
     
 }
