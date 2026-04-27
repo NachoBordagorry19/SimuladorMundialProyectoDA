@@ -80,4 +80,12 @@ public class UsuarioServicioTest
         UsuarioDTO usuarioDtoPrueba = _servicioUsuario.ObtenerUsuario("a@gmail.com");
         Assert.AreEqual(usuarioDtoPrueba.Nombre, "Fede");
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerUsuario_SiNoExiste_LanzaExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        UsuarioDTO usuarioDtoPrueba = _servicioUsuario.ObtenerUsuario("Roo");
+    }
 }
