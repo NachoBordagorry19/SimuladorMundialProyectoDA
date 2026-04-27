@@ -77,8 +77,12 @@ public class ServicioUsuario:IServicioUsuario
         }
         return usuarioDTO;
     }
-    
-    
+
+    public UsuarioDTO ObtenerUsuario(string email)
+    {
+        Usuario? usuario = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+        return desdeEntidad(usuario);
+    }
     
     
 }
