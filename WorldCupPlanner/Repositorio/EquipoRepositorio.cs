@@ -15,12 +15,12 @@ public class EquipoRepositorio
     {
         return _baseDeDatosEnMemoria.ObtenerEquipos();
     }
-    
+
     public void AgregarEquipo(Equipo equipo)
     {
         _baseDeDatosEnMemoria.AgregarEquipo(equipo);
     }
-    
+
     public Equipo? ObtenerEquipo(Func<Equipo, bool> filtro)
     {
         return _baseDeDatosEnMemoria.ObtenerEquipos().Where(filtro).FirstOrDefault();
@@ -30,7 +30,7 @@ public class EquipoRepositorio
     {
         _baseDeDatosEnMemoria.BorrarEquipo(equipo);
     }
-    
+
     public void ActualizarEquipo(Equipo equipo)
     {
         _baseDeDatosEnMemoria.ActualizarEquipo(equipo);

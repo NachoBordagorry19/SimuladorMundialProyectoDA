@@ -10,14 +10,14 @@ public class EquipoRepositorioTest
 {
     private BaseDeDatosEnMemoria _BDenMemoria = null;
     private EquipoRepositorio _repositorioEquipo = null;
-    
+
     [TestInitialize]
     public void Inicializar()
     {
         _BDenMemoria = new BaseDeDatosEnMemoria();
         _repositorioEquipo = new EquipoRepositorio(_BDenMemoria);
     }
-    
+
     private static Equipo CrearEquipo(
         string nombre = "Uruguay",
         Confederacion confederacion = Confederacion.CONMEBOL,
@@ -25,15 +25,15 @@ public class EquipoRepositorioTest
     {
         return new Equipo(nombre, confederacion, ranking);
     }
-    
+
     [TestMethod]
     public void ObtenerEquipos_EsVacio()
     {
         var equipos = _repositorioEquipo.ObtenerEquipos();
         Assert.IsNotNull(equipos);
-        Assert.AreEqual(0,equipos.Count);
+        Assert.AreEqual(0, equipos.Count);
     }
-    
+
     [TestMethod]
     public void ObtenerEquipos_TieneUnEquipo()
     {
@@ -42,7 +42,7 @@ public class EquipoRepositorioTest
         var lista = _repositorioEquipo.ObtenerEquipos();
         Assert.AreEqual(1, lista.Count);
     }
-    
+
     [TestMethod]
     public void ObtenerEquipo_SiBuscoPorNombre_DevuelveCoincidencia()
     {
@@ -76,9 +76,9 @@ public class EquipoRepositorioTest
         var equipo = CrearEquipo("Peñarol", Confederacion.CONMEBOL, 1000);
         _repositorioEquipo.AgregarEquipo(equipo);
         equipo.RankingFifa = 2000;
-        
+
         _repositorioEquipo.ActualizarEquipo(equipo);
-        
+
         var actualizado = _repositorioEquipo.ObtenerEquipo(e => e.Nombre == "Peñarol");
         Assert.IsNotNull(actualizado);
         Assert.AreEqual(2000, actualizado.RankingFifa);

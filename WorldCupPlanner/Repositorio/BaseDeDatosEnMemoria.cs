@@ -49,14 +49,14 @@ public class BaseDeDatosEnMemoria
     {
         _listaDeEquipos.Remove(equipo);
     }
-    
+
     public void ActualizarEquipo(Equipo equipo)
     {
         Equipo? equipoParaActualizar = _listaDeEquipos.Find(e => e.Nombre == equipo.Nombre);
         var indiceEquipo = _listaDeEquipos.IndexOf(equipoParaActualizar);
         _listaDeEquipos[indiceEquipo] = equipo;
     }
-    
+
     public List<Equipo> ObtenerEquipos()
     {
         return _listaDeEquipos;
@@ -71,8 +71,8 @@ public class BaseDeDatosEnMemoria
     {
         _listaDeEstadios.Remove(estadio);
     }
-    
-    
+
+
     public bool ActualizarEstadio(Estadio estadio)
     {
         if (estadio == null) throw new ArgumentNullException(nameof(estadio));
@@ -86,7 +86,7 @@ public class BaseDeDatosEnMemoria
     {
         return _listaDeEstadios;
     }
-    
+
     public void AgregarPartido(Partido partido)
     {
         _listaDePartidos.Add(partido);
