@@ -57,4 +57,16 @@ public class EquipoRepositorioTest
         Assert.IsNotNull(encontrado);
         Assert.AreEqual("Manya", encontrado.Nombre);
     }
+
+    [TestMethod]
+    public void BorrarEquipo_SiExiste_DejoListaVacia()
+    {
+        var equipo = CrearEquipo();
+        _repositorioEquipo.AgregarEquipo(equipo);
+        Assert.AreEqual(1, _repositorioEquipo.ObtenerEquipos().Count);
+        _repositorioEquipo.EliminarEquipo(equipo);
+        Assert.AreEqual(0, _repositorioEquipo.ObtenerEquipos().Count);
+        var encontrado = _repositorioEquipo.ObtenerEquipo(e => e.Nombre == equipo.Nombre);
+        Assert.IsNull(encontrado);
+    }
 }
