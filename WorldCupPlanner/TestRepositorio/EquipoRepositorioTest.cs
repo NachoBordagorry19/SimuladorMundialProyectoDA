@@ -69,4 +69,18 @@ public class EquipoRepositorioTest
         var encontrado = _repositorioEquipo.ObtenerEquipo(e => e.Nombre == equipo.Nombre);
         Assert.IsNull(encontrado);
     }
+
+    [TestMethod]
+    public void ActualizarEquipo_BuscoPorNombre()
+    {
+        var equipo = CrearEquipo("Peñarol", Confederacion.CONMEBOL, 1000);
+        _repositorioEquipo.AgregarEquipo(equipo);
+        equipo.RankingFifa = 2000;
+        
+        _repositorioEquipo.ActualizarEquipo(equipo);
+        
+        var actualizado = _repositorioEquipo.ObtenerEquipo(e => e.Nombre == "Peñarol");
+        Assert.IsNotNull(actualizado);
+        Assert.AreEqual(2000, actualizado.RankingFifa);
+    }
 }

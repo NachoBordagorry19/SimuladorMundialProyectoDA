@@ -30,4 +30,6 @@ public class EquipoRepositorio
     {
         _baseDeDatosEnMemoria.BorrarEquipo(equipo);
     }
+    
+    
 }
