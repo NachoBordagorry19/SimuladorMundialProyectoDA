@@ -66,6 +66,9 @@ public class UsuarioServicioTest
         usuario.Nombre = "Mateo";
         usuario.Apellido = "Roo";
         usuario.FechaNacimiento = new DateTime(2000, 05, 15);
+        usuario.Email = "b@gmail.com";
+        usuario.Roles = new List<Rol> { Rol.Editor };
+        _servicioUsuario.AgregarUsuario(usuario);
         var usuarios = _servicioUsuario.ObtenerUsuarios();
         Assert.AreEqual(usuarios.Count(),2);
     }

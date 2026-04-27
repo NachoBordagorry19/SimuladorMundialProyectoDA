@@ -56,5 +56,27 @@ public class ServicioUsuario:IServicioUsuario
         };
         return usuario;
     }
+
+    private static UsuarioDTO desdeEntidad(Usuario usuario)
+    {
+        return new UsuarioDTO()
+        {
+            Nombre = usuario.Nombre,
+            Apellido = usuario.Apellido,
+            Email = usuario.Email,
+            FechaNacimiento = usuario.FechaNacimiento,
+        };
+    }
+    
+    public List<UsuarioDTO> ObtenerUsuarios()
+    {
+        List<UsuarioDTO> usuarioDTO = new List<UsuarioDTO>();
+        foreach (var usuario in _usuarioRepositorio.ObtenerUsuarios())
+        {
+            usuarioDTO.Add(desdeEntidad(usuario));
+        }
+        return usuarioDTO;
+    }
+    
     
 }
