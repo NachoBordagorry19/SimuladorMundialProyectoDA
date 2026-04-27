@@ -18,7 +18,7 @@ public class UsuarioServicioTest
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _usuarioRepositorio = new UsuarioRepositorio(_baseDeDatosEnMemoria);
-        _servicioUsuario = new ServicioUsuario(_interfazServicioUsuario);
+        _servicioUsuario = new ServicioUsuario(_usuarioRepositorio);
 
         _usuarioDTO = new UsuarioDTO()
         {
@@ -30,6 +30,7 @@ public class UsuarioServicioTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void AgregoUsuario_SiEmailNoExiste()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
