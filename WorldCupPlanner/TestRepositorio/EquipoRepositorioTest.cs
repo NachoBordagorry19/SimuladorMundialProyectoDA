@@ -33,4 +33,13 @@ public class EquipoRepositorioTest
         Assert.IsNotNull(equipos);
         Assert.AreEqual(0,equipos.Count);
     }
+    
+    [TestMethod]
+    public void ObtenerEquipos_TieneUnEquipo()
+    {
+        var equipo = CrearEquipo();
+        _repositorioEquipo.AgregarEquipo(equipo);
+        var lista = _repositorioEquipo.ObtenerEquipos();
+        Assert.AreEqual(1, lista.Count);
+    }
 }
