@@ -25,4 +25,9 @@ public class EquipoRepositorio
     {
         return _baseDeDatosEnMemoria.ObtenerEquipos().Where(filtro).FirstOrDefault();
     }
+
+    public void EliminarEquipo(Equipo equipo)
+    {
+        _baseDeDatosEnMemoria.BorrarEquipo(equipo);
+    }
 }
