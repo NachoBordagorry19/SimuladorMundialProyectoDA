@@ -31,5 +31,8 @@ public class EquipoRepositorio
         _baseDeDatosEnMemoria.BorrarEquipo(equipo);
     }
     
-    
+    public void ActualizarEquipo(Equipo equipo)
+    {
+        _baseDeDatosEnMemoria.ActualizarEquipo(equipo);
+    }
 }
