@@ -88,4 +88,13 @@ public class UsuarioServicioTest
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
         UsuarioDTO usuarioDtoPrueba = _servicioUsuario.ObtenerUsuario("Roo");
     }
+
+    [TestMethod]
+    public void EliminarUsuario_SeEliminaCorrectamente()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        _servicioUsuario.EliminarUsuario(_usuarioDTO);
+        var listaUsuarios = _servicioUsuario.ObtenerUsuarios();
+        Assert.AreEqual(0, listaUsuarios.Count());
+    }
 }
