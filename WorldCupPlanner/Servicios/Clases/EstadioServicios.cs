@@ -54,6 +54,16 @@ public class EstadioServicios : IServicioEstadio
         }
         return estadiosDTO;
     }
+    
+    public EstadioDTO ObtenerEstadioPorNombre(string nombre)
+    {
+        Estadio? estadio = _estadioRepositorio.ObtenerEstadioPorNombre(nombre);
+        if (estadio == null)
+        {
+            throw new ArgumentException("El estadio no existe");
+        }
+        return DesdeEntidad(estadio);
+    }
 
     private EstadioDTO DesdeEntidad(Estadio estadio)
     {

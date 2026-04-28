@@ -86,4 +86,11 @@ public class EstadioServiciosTest
 
         Assert.AreEqual("Monumental", obtenido.Nombre);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerEstadioPorNombre_SiNoExiste_LanzaExcepcion()
+    {
+        _servicioEstadio.ObtenerEstadioPorNombre("NoExiste");
+    }
 }
