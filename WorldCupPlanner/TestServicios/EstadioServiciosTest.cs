@@ -66,4 +66,24 @@ public class EstadioServiciosTest
         var estadios = _servicioEstadio.ObtenerEstadios();
         Assert.AreEqual(2, estadios.Count);
     }
+    
+    [TestMethod]
+    public void ObtenerEstadioPorNombre_DevuelveCorrectamente()
+    {
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+
+        EstadioDTO estadio2 = new EstadioDTO()
+        {
+            Nombre = "Monumental",
+            Ciudad = "Ciudad",
+            Descripcion = "descripcion",
+            CapacidadLocativa = 30000
+        };
+
+        _servicioEstadio.AgregarEstadio(estadio2);
+
+        EstadioDTO obtenido = _servicioEstadio.ObtenerEstadioPorNombre("Monumental");
+
+        Assert.AreEqual("Monumental", obtenido.Nombre);
+    }
 }
