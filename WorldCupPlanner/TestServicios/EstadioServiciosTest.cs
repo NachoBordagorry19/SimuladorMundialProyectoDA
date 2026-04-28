@@ -39,4 +39,12 @@ public class EstadioServiciosTest
             Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
             Assert.AreEqual(50000, _estadioDTO.CapacidadLocativa);
         }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarEstadio_SiNombreExiste_LanzaExcepcion()
+    {
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+    }
 }
