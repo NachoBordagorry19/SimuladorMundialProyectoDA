@@ -65,6 +65,15 @@ public class EstadioServicios : IServicioEstadio
         return DesdeEntidad(estadio);
     }
 
+    public void EliminarEstadio(EstadioDTO estadioDTO)
+    {
+        Estadio? estadioExistente = _estadioRepositorio.ObtenerEstadioPorNombre(estadioDTO.Nombre);
+        if (estadioExistente == null)        {
+            throw new ArgumentException("El estadio no existe");
+        }
+        _estadioRepositorio.EliminarEstadio(estadioExistente);
+    }
+
     private EstadioDTO DesdeEntidad(Estadio estadio)
     {
         return new EstadioDTO()
