@@ -19,8 +19,8 @@ public class EstadioServiciosTest
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
-        _servicioEstadio = new ServicioEstadio(_estadioRepositorio);
-        
+        _servicioEstadio = new EstadioServicios(_estadioRepositorio);
+
         _estadioDTO = new EstadioDTO()
         {
             Nombre = "CDS",
@@ -28,9 +28,10 @@ public class EstadioServiciosTest
             Descripcion = "descripcion",
             CapacidadLocativa = 50000,
         };
+    }
 
-        [TestMethod]
-        public void AgregarEstadio_NombreUnicoEnSistema()
+    [TestMethod]
+    public void AgregarEstadio_NombreUnicoEnSistema()
         {
             _servicioEstadio.AgregarEstadio(_estadioDTO);
             Assert.AreEqual("CDS", _estadioDTO.Nombre);
@@ -38,5 +39,4 @@ public class EstadioServiciosTest
             Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
             Assert.AreEqual(50000, _estadioDTO.CapacidadLocativa);
         }
-    }
 }
