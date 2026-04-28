@@ -93,4 +93,13 @@ public class EstadioServiciosTest
     {
         _servicioEstadio.ObtenerEstadioPorNombre("NoExiste");
     }
+
+    [TestMethod]
+    public void EliminarEstadio_DevuelveCorrectamente()
+    {
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _servicioEstadio.EliminarEstadio(_estadioDTO);
+        var estadios = _servicioEstadio.ObtenerEstadios();
+        Assert.AreEqual(0, estadios.Count);
+    }
 }
