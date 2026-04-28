@@ -55,7 +55,7 @@ public class EstadioServiciosTest
 
         EstadioDTO estadio2 = new EstadioDTO()
         {
-            Nombre = "CDS",
+            Nombre = "Centenario",
             Ciudad = "Montevideo",
             Descripcion = "descripcion",
             CapacidadLocativa = 50000,

@@ -44,4 +44,25 @@ public class EstadioServicios : IServicioEstadio
 
         return estadio;
     }
+
+    public List<EstadioDTO> ObtenerEstadios()
+    {
+        List<EstadioDTO> estadiosDTO = new List<EstadioDTO>();
+        foreach (var estadio in _estadioRepositorio.ObtenerEstadios())
+        {
+            estadiosDTO.Add(DesdeEntidad(estadio));
+        }
+        return estadiosDTO;
+    }
+
+    private EstadioDTO DesdeEntidad(Estadio estadio)
+    {
+        return new EstadioDTO()
+        {
+            Nombre = estadio.Nombre,
+            Ciudad = estadio.Ciudad,
+            Descripcion = estadio.Descripcion,
+            CapacidadLocativa = estadio.CapacidadLocativa
+        };
+    }
 }
