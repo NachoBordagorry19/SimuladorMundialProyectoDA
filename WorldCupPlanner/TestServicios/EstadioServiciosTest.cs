@@ -28,5 +28,15 @@ public class EstadioServiciosTest
             Descripcion = "descripcion",
             CapacidadLocativa = 50000,
         };
+
+        [TestMethod]
+        public void AgregarEstadio_NombreUnicoEnSistema()
+        {
+            _servicioEstadio.AgregarEstadio(_estadioDTO);
+            Assert.AreEqual("CDS", _estadioDTO.Nombre);
+            Assert.AreEqual("Montevideo", _estadioDTO.Ciudad);
+            Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
+            Assert.AreEqual(50000, _estadioDTO.CapacidadLocativa);
+        }
     }
 }
