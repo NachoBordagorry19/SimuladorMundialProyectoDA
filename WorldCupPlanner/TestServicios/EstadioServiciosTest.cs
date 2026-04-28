@@ -47,4 +47,23 @@ public class EstadioServiciosTest
         _servicioEstadio.AgregarEstadio(_estadioDTO);
         _servicioEstadio.AgregarEstadio(_estadioDTO);
     }
+
+    [TestMethod]
+    public void ObtenerEstadio_DevuelveCorrectamente()
+    {
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+
+        EstadioDTO estadio2 = new EstadioDTO()
+        {
+            Nombre = "CDS",
+            Ciudad = "Montevideo",
+            Descripcion = "descripcion",
+            CapacidadLocativa = 50000,
+        };
+        
+        _servicioEstadio.AgregarEstadio(estadio2);
+        
+        var estadios = _servicioEstadio.ObtenerEstadios();
+        Assert.AreEqual(2, estadios.Count);
+    }
 }
