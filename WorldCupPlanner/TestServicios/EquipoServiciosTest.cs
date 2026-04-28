@@ -43,7 +43,9 @@ public class EquipoServiciosTest
     }
     
     [TestMethod]
-    public void CompletarEquipo_DebeCompletarHasta48()
+    public void AgregarEquipo()
     {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        Assert.AreEqual("Alianzz Arena", _equipoDTO.nombre);
     }
 }
