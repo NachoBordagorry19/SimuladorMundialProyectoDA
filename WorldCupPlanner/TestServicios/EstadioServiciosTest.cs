@@ -102,4 +102,11 @@ public class EstadioServiciosTest
         var estadios = _servicioEstadio.ObtenerEstadios();
         Assert.AreEqual(0, estadios.Count);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarEstadio_SiNoExiste_LanzaExcepcion()
+    {
+        _servicioEstadio.EliminarEstadio(_estadioDTO);
+    }
 }
