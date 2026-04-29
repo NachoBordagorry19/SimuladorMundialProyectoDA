@@ -3,14 +3,16 @@
 
 @using Dominio.Clases
 
+<PageTitle>Agregar Usuario</PageTitle>
+
 <h3>Agregar Usuario</h3>
 
 <EditForm Model="usuario" OnSubmit="OnSave">
-    <input type="text" @bind-value="usuario.Nombre" id="nombre" placeholder="Nombre">
+    <input type="text" @bind-value="@usuario.Nombre" id="nombre" placeholder="Nombre">
 </EditForm>
 
 @code {
-    public Usuario usuario { get; set; }
+    public Usuario usuario = new Usuario();
     
     public void OnSave()
     {
