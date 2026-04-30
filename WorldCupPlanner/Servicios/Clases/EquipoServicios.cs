@@ -74,6 +74,7 @@ public class EquipoServicios
 
     public void EliminarEquipo(EquipoDTO equipoDto)
     {
+        ValidarNombre(equipoDto.nombre);
         Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
         _equipoRepositorio.EliminarEquipo(equipoExistente);
     }
