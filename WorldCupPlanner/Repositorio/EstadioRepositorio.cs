@@ -1,8 +1,10 @@
 using System.Linq;
 using Dominio.Clases;
+using Repositorio.Interfaces;
+
 namespace Repositorio;
 
-public class EstadioRepositorio
+public class EstadioRepositorio : IEstadioRepositorio
 {
     private BaseDeDatosEnMemoria _BDEnMemoria;
 
