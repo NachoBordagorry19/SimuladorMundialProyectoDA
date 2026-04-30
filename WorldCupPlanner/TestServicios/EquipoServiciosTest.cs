@@ -194,4 +194,17 @@ public class EquipoServiciosTest
         
         Assert.AreEqual("Bravo", nombres[0]);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void RecibeNingunEquipo_LanzaExcepcion()
+    {
+        var equipos = new List<EquipoDTO>
+        {
+            null,
+            null
+        };
+        int semilla = 124;
+        var resultado = _equipoServicios.ResolverEmpatesYOrdenar(equipos, semilla);
+    }
 }

@@ -124,19 +124,19 @@ public class EquipoServicios
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
     {
-        var ordenado = equipos
+        var ordenBase = equipos
             .OrderBy(e => e.rankingFifa)
             .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
+        // Preparar resultado y auditoría
         var resultado = new ResultadoFixture
         {
             SemillaFixture = semillaFixture,
             FechaGeneracion = DateTime.UtcNow,
-            EquiposOrdenados = ordenado,
+            EquiposOrdenados = ordenBase,
             AuditoriaEmpates = new List<EntradaAuditoria>()
         };
-
         return resultado;
     }
 
