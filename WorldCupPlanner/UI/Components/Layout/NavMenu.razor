@@ -1,33 +1,25 @@
-﻿@using Microsoft.AspNetCore.Components.Routing
-
-<nav class="nav-menu">
+﻿<nav class="nav-menu">
     <ul class="nav-list">
         <li class="nav-item">
             <NavLink href="/home" class="nav-link" Match="NavLinkMatch.All">Inicio</NavLink>
         </li>
         <li class="nav-item">
-            <NavLink href="/usuarios" class="nav-link" Match="NavLinkMatch.Prefix">Usuarios</NavLink>
+            <NavLink href="/AgregarUsuario" class="nav-link">Usuarios</NavLink>
         </li>
         <li class="nav-item">
-            <NavLink href="/equipos" class="nav-link" Match="NavLinkMatch.Prefix">Equipos</NavLink>
+            <NavLink href="/equipos" class="nav-link">Equipos</NavLink>
         </li>
         <li class="nav-item">
-            <NavLink href="/partidos" class="nav-link" Match="NavLinkMatch.Prefix">Partidos</NavLink>
+            <NavLink href="/partidos" class="nav-link">Partidos</NavLink>
         </li>
         <li class="nav-item">
-            <NavLink href="/fixture" class="nav-link" Match="NavLinkMatch.Prefix">Fixture</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink href="/importar" class="nav-link" Match="NavLinkMatch.Prefix">Importar</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink href="/simulacion" class="nav-link" Match="NavLinkMatch.Prefix">Simulación</NavLink>
+            <NavLink href="/fixture" class="nav-link">Fixture</NavLink>
         </li>
     </ul>
 
     <ul class="nav-list auth">
         <li class="nav-item">
-            <NavLink href="/login" class="nav-link" Match="NavLinkMatch.Prefix">Login</NavLink>
+            <NavLink href="/login" class="nav-link">Login</NavLink>
         </li>
     </ul>
 </nav>
