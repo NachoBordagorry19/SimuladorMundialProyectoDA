@@ -110,4 +110,16 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, -1);
     }
+    
+    [TestMethod]
+    public void Partido_SiLocalTieneMasGoles_VencedorEsLocal()
+    {
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
+        Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
+
+        Partido partido = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 2, 1);
+
+        Assert.AreEqual(local, partido.Vencedor);
+    }
 }

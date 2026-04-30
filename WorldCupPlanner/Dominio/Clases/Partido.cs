@@ -114,7 +114,7 @@ public class Partido
         {
             if (value < 0)
             {
-                throw new ArgumentException("Los goles del visitante no pueden ser negativos");
+                throw new ArgumentException("Los goles no pueden ser negativos");
             }
 
             _golesVisitante = value;
