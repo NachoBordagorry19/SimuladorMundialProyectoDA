@@ -1,25 +1,42 @@
-﻿<nav class="nav-menu">
-    <ul class="nav-list">
-        <li class="nav-item">
-            <NavLink href="/home" class="nav-link" Match="NavLinkMatch.All">Inicio</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink href="/AgregarUsuario" class="nav-link">Usuarios</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink href="/equipos" class="nav-link">Equipos</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink href="/partidos" class="nav-link">Partidos</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink href="/fixture" class="nav-link">Fixture</NavLink>
-        </li>
-    </ul>
+﻿<div class="nav-header">
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon">☰</span>
+    </button>
+    <span class="nav-brand">WorldCupPlanner</span>
+</div>
 
-    <ul class="nav-list auth">
-        <li class="nav-item">
-            <NavLink href="/login" class="nav-link">Login</NavLink>
-        </li>
-    </ul>
-</nav>
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="nav-menu">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <NavLink href="/home" class="nav-link" Match="NavLinkMatch.All">Inicio</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="/AgregarUsuario" class="nav-link">Usuarios</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="/equipos" class="nav-link">Equipos</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="/partidos" class="nav-link">Partidos</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="/fixture" class="nav-link">Fixture</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="/login" class="nav-link">Login</NavLink>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
