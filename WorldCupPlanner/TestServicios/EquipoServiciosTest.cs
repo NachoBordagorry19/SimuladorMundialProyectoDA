@@ -82,7 +82,12 @@ public class EquipoServiciosTest
     public void EliminarEquipo_SiExiste()
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
+        List<EquipoDTO> equiposDtosIniciales = _equipoServicios.ObtenerEquipos();
+        Assert.AreEqual(1,equiposDtosIniciales.Count);
         _equipoServicios.EliminarEquipo(_equipoDTO);
+        List<EquipoDTO> equiposDtos = _equipoServicios.ObtenerEquipos();
+        Assert.AreEqual(0,equiposDtos.Count);
     }
-    
+
 }
+
