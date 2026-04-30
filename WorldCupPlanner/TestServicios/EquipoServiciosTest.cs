@@ -14,6 +14,7 @@ public class EquipoServiciosTest
     private IEquipoRepositorio _equipoRepositorio;
     private EquipoServicios _equipoServicios;
     private EquipoDTO _equipoDTO;
+    private EquipoDTO _equipoDTO2;
 
     [TestInitialize]
     public void Inicializar()
@@ -35,7 +36,7 @@ public class EquipoServiciosTest
         Confederacion _confederacion2 = new Confederacion();
         _confederacion2 = Confederacion.CONMEBOL;
         
-        EquipoDTO _equipoDTO2 = new EquipoDTO()
+        _equipoDTO2 = new EquipoDTO()
         {
             nombre = "Centenario",
             confederacion = _confederacion2,
@@ -49,4 +50,15 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         Assert.AreEqual("Alianzz Arena", _equipoDTO.nombre);
     }
+
+    [TestMethod]
+    public void ObtenerEquipos_DevuelveTodosLosEquipo()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.AgregarEquipo(_equipoDTO2);
+        List<Equipo> equipos = _equipoServicios.ObtenerEquipos();
+        Assert.AreEqual(2,equipos.Count);
+    }
+    
+    
 }

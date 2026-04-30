@@ -30,4 +30,5 @@ public class EquipoServicios
         return equipo;
     }
     
+    
 }
