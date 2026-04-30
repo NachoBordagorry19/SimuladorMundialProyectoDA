@@ -112,4 +112,18 @@ public class EquipoServiciosTest
         Assert.AreEqual(99, equipoObtenido.rankingFifa);
         Assert.AreEqual(Confederacion.CONMEBOL, equipoObtenido.confederacion);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarEquipo_SiNoExiste_LanzoExcepcion()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO2);
+        var equipoActualizadoDto = new EquipoDTO()
+        {
+            nombre = _equipoDTO.nombre, 
+            confederacion = Confederacion.CONMEBOL,
+            rankingFifa = 99
+        };
+        _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
+    }
 }
