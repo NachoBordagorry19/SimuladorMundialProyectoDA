@@ -55,7 +55,7 @@ public class Partido
         {
             if (value == null)
             {
-                throw new ArgumentException("El equipo local es requerido");
+                throw new ArgumentException("El equipo local es obligatorio");
             }
 
             _local = value;
@@ -65,7 +65,15 @@ public class Partido
     public Equipo Visitante
     {
         get => _visitante;
-        set => _visitante = value;
+        set
+        {
+            if (value == null)
+            {
+                throw new ArgumentException("El equipo visitante es obligatorio");
+            }
+
+            _visitante = value;
+        }
     }
 
     public Fase Fase
