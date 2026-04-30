@@ -58,6 +58,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, null, local, visitante, Fase.Grupos, 0, 0);
     }
+    
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Partido_SiLocalEsNull_TiraExcepcion()
@@ -77,6 +78,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, local, null, Fase.Grupos, 0, 0);
     }
+    
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearPartido_SiEquiposSonIguales_TiraExcepcion()
@@ -86,6 +88,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, equipo, equipo, Fase.Grupos, 0, 0);
     }
+    
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearPartido_SiGolesLocalEsNegativo_TiraExcepcion()
@@ -95,5 +98,16 @@ public class PartidoTest
         Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
 
         new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, -1, 0);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearPartido_SiGolesVisitanteEsNegativo_TiraExcepcion()
+    {
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
+        Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
+
+        new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, -1);
     }
 }
