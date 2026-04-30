@@ -136,7 +136,7 @@ public class PartidoTest
     }
     
     [TestMethod]
-    public void Partido_SiEmpatan_NoTieneVencedor()
+    public void Partido_MismosGoles_EsEmpate()
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
