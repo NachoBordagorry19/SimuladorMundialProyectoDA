@@ -1,21 +1,40 @@
-@page "/"
 @page "/AgregarUsuario"
-
 @using Dominio.Clases
+@using Dominio.Enums
 
-<PageTitle>Agregar Usuario</PageTitle>
+<div class="home-container">
+    <h3>Crear Nuevo Usuario</h3>
 
-<h3>Agregar Usuario</h3>
+    <EditForm Model="usuario" OnValidSubmit="OnSave">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-<EditForm Model="usuario" OnSubmit="OnSave">
-    <input type="text" @bind-value="@usuario.Nombre" id="nombre" placeholder="Nombre">
-</EditForm>
+        <div class="mb-3">
+            <label>Nombre:</label>
+            <InputText @bind-Value="usuario.Nombre" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Email:</label>
+            <InputText @bind-Value="usuario.Email" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Rol:</label>
+            <InputSelect @bind-Value="rolSeleccionado" class="form-select">
+                @foreach (var r in Enum.GetValues<Rol>()) {
+                    <option value="@r">@r</option>
+                }
+            </InputSelect>
+        </div>
+        
+        <button type="submit" class="btn">Guardar Usuario</button>
+    </EditForm>
+</div>
 
 @code {
-    public Usuario usuario = new Usuario();
+    public Usuario usuario = new Usuario("", "", "", DateTime.Today.AddYears(-18), "Pass123!", Rol.Editor);
+    private Rol rolSeleccionado = Rol.Editor;
     
-    public void OnSave()
-    {
-        Console.WriteLine("Usuario guardado");
+    public void OnSave() {
+        Console.WriteLine($"Usuario {usuario.Nombre} registrado con rol {rolSeleccionado}");
     }
 }
