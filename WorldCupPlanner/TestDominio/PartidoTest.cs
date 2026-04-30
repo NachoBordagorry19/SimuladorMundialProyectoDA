@@ -40,7 +40,7 @@ public class PartidoTest
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void Partido_FechaNoPuedeSerInvalida_TiraExcepcion()
+    public void Partido_FechaInvalida_TiraExcepcion()
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1200);

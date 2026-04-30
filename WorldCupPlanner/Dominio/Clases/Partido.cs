@@ -51,7 +51,15 @@ public class Partido
     public Equipo Local
     {
         get => _local;
-        set => _local = value;
+        set
+        {
+            if (value == null)
+            {
+                throw new ArgumentException("El equipo local es requerido");
+            }
+
+            _local = value;
+        }
     }
 
     public Equipo Visitante
