@@ -76,6 +76,11 @@ public class EstadioServicios : IServicioEstadio
 
     public void ActualizarEstadio(EstadioDTO estadioDTO)
     {
+        Estadio? existente = _estadioRepositorio.ObtenerEstadioPorNombre(estadioDTO.Nombre);
+        if (existente == null)
+        {
+            throw new ArgumentException("El estadio no existe");
+        }
         Estadio estadio = EstadioDTOAEntidad(estadioDTO);
         _estadioRepositorio.ActualizarEstadio(estadio);
     }
