@@ -59,6 +59,10 @@ public class EquipoServicios
     public EquipoDTO ObtenerEquipo(string nombre)
     {
         Equipo? equipo = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        if (equipo == null)
+        {
+            throw new ArgumentException($"No se encontró el equipo con nombre: {nombre}");
+        }
         return EquipoEntidadAEquipoDTO(equipo);
     }
 

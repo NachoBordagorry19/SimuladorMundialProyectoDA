@@ -69,5 +69,13 @@ public class EquipoServiciosTest
         Assert.AreEqual(equipoPrueba.confederacion,_equipoDTO.confederacion);
         Assert.AreEqual(equipoPrueba.rankingFifa,_equipoDTO.rankingFifa);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerEquipo_SiNoExiste_LanzaExcepcion()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.ObtenerEquipo(_equipoDTO2.nombre);
+    }
     
 }
