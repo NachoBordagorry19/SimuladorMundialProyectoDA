@@ -122,5 +122,6 @@ public class EquipoServicios
         _equipoRepositorio.ActualizarEquipo(equipoActualizado);
     }
     
+    
 
 }

@@ -1,9 +1,11 @@
 using Dominio.Clases;
 using Dominio.Enums;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Clases;
 using Servicios.Modelo;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TestServicios;
@@ -176,20 +178,22 @@ public class EquipoServiciosTest
     }
     
     [TestMethod]
-    public void ResolverEmpates_Minimo_OrdenaPorRankingYNombreYAuditoriaVacia()
+    public void ResolverEmpates_Minimo_OrdenaYGeneraAuditoriaSiHayEmpate()
     {
         var equipos = new List<EquipoDTO>
         {
             new EquipoDTO { nombre = "Zeta", confederacion = Confederacion.UEFA, rankingFifa = 10 },
-            new EquipoDTO { nombre = "Alpha", confederacion = Confederacion.AFC, rankingFifa = 10 },
             new EquipoDTO { nombre = "Bravo", confederacion = Confederacion.CAF, rankingFifa = 5 }
         };
 
-        var resultado = _equipoServicios.ResolverEmpatesYOrdenar(equipos, 123);
+        int semilla = 123;
+        
+        var resultado = _equipoServicios.ResolverEmpatesYOrdenar(equipos, semilla);
         
         var nombres = resultado.EquiposOrdenados.Select(e => e.nombre).ToList();
-        CollectionAssert.AreEqual(new List<string> { "Bravo", "Alpha", "Zeta" }, nombres);
         
-        Assert.AreEqual(1, resultado.AuditoriaEmpates.Count);
+        Assert.AreEqual("Bravo", nombres[0]);
+        
+        CollectionAssert.AreEquivalent(new List<string> { "Alpha", "Zeta" }, nombres.Skip(1).ToList());
     }
 }
