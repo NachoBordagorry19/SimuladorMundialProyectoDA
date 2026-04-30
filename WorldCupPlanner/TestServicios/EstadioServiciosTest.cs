@@ -109,4 +109,25 @@ public class EstadioServiciosTest
     {
         _servicioEstadio.EliminarEstadio(_estadioDTO);
     }
+
+    [TestMethod]
+    public void ActualizarEstadio_ModificaDatosCorrectamente()
+    {
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+
+        EstadioDTO estadioActualizado = new EstadioDTO()
+        {
+            Nombre = "CDS",
+            Ciudad = "Nueva Ciudad",
+            Descripcion = "Nueva Descripcion",
+            CapacidadLocativa = 60000
+        };
+
+        _servicioEstadio.ActualizarEstadio(estadioActualizado);
+        EstadioDTO obtenido = _servicioEstadio.ObtenerEstadioPorNombre("CDS");
+
+        Assert.AreEqual("Nueva Ciudad", obtenido.Ciudad);
+        Assert.AreEqual("Nueva Descripcion", obtenido.Descripcion);
+        Assert.AreEqual(60000, obtenido.CapacidadLocativa);
+    }
 }
