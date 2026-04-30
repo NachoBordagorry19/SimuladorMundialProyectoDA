@@ -72,6 +72,11 @@ public class Partido
                 throw new ArgumentException("El equipo visitante es obligatorio");
             }
 
+            if (_local != null && value == _local)
+            {
+                throw new ArgumentException("Los equipos no pueden ser los mismos");
+            }
+
             _visitante = value;
         }
     }
