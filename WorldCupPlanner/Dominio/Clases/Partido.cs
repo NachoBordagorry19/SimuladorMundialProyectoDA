@@ -37,7 +37,15 @@ public class Partido
     public Estadio Estadio
     {
         get => _estadio;
-        set => _estadio = value;
+        set
+        {
+            if (value == null)
+            {
+                throw new ArgumentException("El estadio no puede ser null");
+            }
+
+            _estadio = value;
+        }
     }
 
     public Equipo Local
