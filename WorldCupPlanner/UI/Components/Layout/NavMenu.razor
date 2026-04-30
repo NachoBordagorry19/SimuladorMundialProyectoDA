@@ -1,4 +1,6 @@
-﻿<div class="nav-header">
+﻿@rendermode InteractiveServer
+
+<div class="nav-header">
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon">☰</span>
     </button>
@@ -24,6 +26,9 @@
                 <NavLink href="/fixture" class="nav-link">Fixture</NavLink>
             </li>
             <li class="nav-item">
+                <NavLink href="/importar" class="nav-link">Importar</NavLink>
+            </li>
+            <li class="nav-item">
                 <NavLink href="/login" class="nav-link">Login</NavLink>
             </li>
         </ul>
@@ -33,7 +38,7 @@
 @code {
     private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : "show";
 
     private void ToggleNavMenu()
     {
