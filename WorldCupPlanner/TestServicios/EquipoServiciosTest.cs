@@ -1,3 +1,4 @@
+using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio;
 using Repositorio.Interfaces;
@@ -24,7 +25,7 @@ public class EquipoServiciosTest
         Confederacion _confederacion = new Confederacion();
         _confederacion = Confederacion.UEFA;
         
-        EquipoDTO _equipoDTO = new EquipoDTO()
+        _equipoDTO = new EquipoDTO()
         {
             nombre = "Alianzz Arena",
             confederacion = _confederacion,
