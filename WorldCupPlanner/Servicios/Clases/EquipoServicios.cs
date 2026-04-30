@@ -58,12 +58,18 @@ public class EquipoServicios
 
     public EquipoDTO ObtenerEquipo(string nombre)
     {
+        ValidarNombre(nombre);
         Equipo? equipo = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
-        if (equipo == null)
-        {
-            throw new ArgumentException($"No se encontró el equipo con nombre: {nombre}");
-        }
         return EquipoEntidadAEquipoDTO(equipo);
+    }
+
+    public void ValidarNombre(string nombre)
+    {
+        Equipo equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        if (equipoExistente == null)
+        {
+            throw new ArgumentException("El equipo a buscar no existe por favor ingrese uno que exista");
+        }
     }
 
 }
