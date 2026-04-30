@@ -38,7 +38,7 @@ public class PartidoTest
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1200);
-        Estadio estadio = new Estadio("Estadio", "Ciudad", "Descripcion", 10000);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Descripcion", 30000);
         Grupo grupo = new Grupo("A");
 
         new Partido(DateTime.MinValue, estadio, local, visitante, grupo);
@@ -61,7 +61,7 @@ public class PartidoTest
     public void CrearPartido_SiEquiposSonIguales_TiraExcepcion()
     {
         Equipo equipo = new Equipo("A", Confederacion.CONMEBOL, 1000);
-        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 10000);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 30000);
         Grupo grupo = new Grupo("A");
 
         new Partido(DateTime.Now, estadio, equipo, equipo, grupo);
@@ -73,7 +73,7 @@ public class PartidoTest
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1200);
-        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 10000);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 30000);
 
         new Partido(DateTime.Now, estadio, local, visitante, null);
     }

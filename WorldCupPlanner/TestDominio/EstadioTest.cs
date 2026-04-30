@@ -66,4 +66,11 @@ public class EstadioTest
     {
         Estadio estadioPrueba = new Estadio("Allianz Arena", "Munich", "Desc", -5);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void Estadio_CapacidadMenorA20000_TiraExcepcion()
+    {
+        new Estadio("Centenario", "Montevideo", "descripcion", 10000);
+    }
 }
