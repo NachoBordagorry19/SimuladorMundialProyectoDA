@@ -33,7 +33,7 @@ public class EquipoServicios
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
     }
-    
+
     private int ObtenerCupo(Confederacion confederacion)
     {
         switch (confederacion)
@@ -127,12 +127,12 @@ public class EquipoServicios
         VerificarListaDeEquiposSinNulo(equipos);
 
         var ordenBase = OrdenoPorRankinFifa(equipos);
-        
+
         var auditoria = new List<EntradaAuditoria>();
         var listaFinal = new List<EquipoDTO>();
-        
+
         var generadorDeNumerosPrincipal = new Random(semillaFixture);
-        
+
         var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderBy(g => g.Key);
 
         foreach (var grupo in grupos)
@@ -143,23 +143,23 @@ public class EquipoServicios
                 listaFinal.AddRange(listaGrupo);
                 continue;
             }
-            
+
             var ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
-            
+
             int semillaGrupo = generadorDeNumerosPrincipal.Next();
             var generadorDeNumerosGrupo = new Random(semillaGrupo);
-            
+
             var copiaGrupo = listaGrupo.ToList();
             for (int i = copiaGrupo.Count - 1; i > 0; i--)
             {
-                int j = generadorDeNumerosGrupo.Next(i + 1); 
+                int j = generadorDeNumerosGrupo.Next(i + 1);
                 var copiaTemporal = copiaGrupo[i];
                 copiaGrupo[i] = copiaGrupo[j];
                 copiaGrupo[j] = copiaTemporal;
             }
 
             var ordenResuelto = copiaGrupo.Select(x => x.nombre).ToList();
-            
+
             auditoria.Add(new EntradaAuditoria
             {
                 RankingFifa = grupo.Key,
@@ -168,7 +168,7 @@ public class EquipoServicios
                 SemillaUsada = semillaGrupo,
                 Nota = "Empate resuelto con Fisher–Yates derivando semilla desde SemillaFixture"
             });
-            
+
             listaFinal.AddRange(copiaGrupo);
         }
 

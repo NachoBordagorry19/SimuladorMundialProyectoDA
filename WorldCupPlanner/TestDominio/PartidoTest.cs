@@ -24,7 +24,7 @@ public class PartidoTest
         Assert.AreEqual(0, partido.GolesLocal);
         Assert.AreEqual(0, partido.GolesVisitante);
     }
-    
+
     [TestMethod]
     public void Partido_IdEsIncremental()
     {
@@ -37,7 +37,7 @@ public class PartidoTest
 
         Assert.AreEqual(p1.Id + 1, p2.Id);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Partido_FechaInvalida_TiraExcepcion()
@@ -48,7 +48,7 @@ public class PartidoTest
 
         new Partido(DateTime.MinValue, estadio, local, visitante, Fase.Grupos, 0, 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Partido_SiEstadioEsNull_TiraExcepcion()
@@ -58,7 +58,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, null, local, visitante, Fase.Grupos, 0, 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Partido_SiLocalEsNull_TiraExcepcion()
@@ -68,7 +68,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, null, visitante, Fase.Grupos, 0, 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Partido_SiVisitanteEsNull_TiraExcepcion()
@@ -78,7 +78,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, local, null, Fase.Grupos, 0, 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearPartido_SiEquiposSonIguales_TiraExcepcion()
@@ -88,7 +88,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, equipo, equipo, Fase.Grupos, 0, 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearPartido_SiGolesLocalEsNegativo_TiraExcepcion()
@@ -99,7 +99,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, -1, 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void CrearPartido_SiGolesVisitanteEsNegativo_TiraExcepcion()
@@ -110,7 +110,7 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, -1);
     }
-    
+
     [TestMethod]
     public void Partido_SiLocalTieneMasGoles_EsVencedor()
     {
@@ -122,7 +122,7 @@ public class PartidoTest
 
         Assert.AreEqual(local, partido.Vencedor);
     }
-    
+
     [TestMethod]
     public void Partido_SiVisitanteTieneMasGoles_EsVencedor()
     {
@@ -134,7 +134,7 @@ public class PartidoTest
 
         Assert.AreEqual(visitante, partido.Vencedor);
     }
-    
+
     [TestMethod]
     public void Partido_MismosGoles_EsEmpate()
     {
@@ -146,7 +146,7 @@ public class PartidoTest
 
         Assert.IsNull(partido.Vencedor);
     }
-    
+
     [TestMethod]
     public void Partido_MarcarComoJugado()
     {

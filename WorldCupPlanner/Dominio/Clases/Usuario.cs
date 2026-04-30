@@ -102,7 +102,7 @@ public class Usuario
             _contraseña = value;
         }
     }
-    
+
 
     public bool EsVacio(string textoATestear)
     {
@@ -116,7 +116,7 @@ public class Usuario
 
     public Usuario()
     {
-        
+
     }
 
     public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, Rol rol)
@@ -128,5 +128,5 @@ public class Usuario
         Contraseña = contraseña;
         _roles.Add(rol);
     }
-    
+
 }

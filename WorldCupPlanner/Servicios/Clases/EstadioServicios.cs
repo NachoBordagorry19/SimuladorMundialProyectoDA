@@ -54,7 +54,7 @@ public class EstadioServicios : IServicioEstadio
         }
         return estadiosDTO;
     }
-    
+
     public EstadioDTO ObtenerEstadioPorNombre(string nombre)
     {
         Estadio? estadio = _estadioRepositorio.ObtenerEstadioPorNombre(nombre);
@@ -68,7 +68,8 @@ public class EstadioServicios : IServicioEstadio
     public void EliminarEstadio(EstadioDTO estadioDTO)
     {
         Estadio? estadioExistente = _estadioRepositorio.ObtenerEstadioPorNombre(estadioDTO.Nombre);
-        if (estadioExistente == null)        {
+        if (estadioExistente == null)
+        {
             throw new ArgumentException("El estadio no existe");
         }
         _estadioRepositorio.EliminarEstadio(estadioExistente);

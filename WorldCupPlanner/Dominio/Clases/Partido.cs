@@ -98,7 +98,7 @@ public class Partido
             return null;
         }
     }
-    
+
     public Fase Fase
     {
         get => _fase;
@@ -110,7 +110,7 @@ public class Partido
         get => _estado;
         set => _estado = value;
     }
-    
+
     public void MarcarComoJugado()
     {
         Estado = EstadoPartido.Jugado;

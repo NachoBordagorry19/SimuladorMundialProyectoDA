@@ -74,10 +74,10 @@ public class EstadioRepositorioTest
         estadioActualizado.Ciudad = "Nueva Ciudad";
         estadioActualizado.Descripcion = "Nueva Descripcion";
         estadioActualizado.CapacidadLocativa = 60000;
-        
+
         var actualizado = _repositorioEstadio.ActualizarEstadio(estadioActualizado);
         var obtenido = _repositorioEstadio.ObtenerEstadioPorNombre(estadioActualizado.Nombre);
-        
+
         Assert.IsTrue(actualizado);
         Assert.IsNotNull(obtenido);
         Assert.AreEqual("Nueva Ciudad", obtenido.Ciudad);

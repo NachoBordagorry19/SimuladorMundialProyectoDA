@@ -9,5 +9,5 @@ public interface IServicioUsuario
     public List<UsuarioDTO> ObtenerUsuarios();
     public UsuarioDTO ObtenerUsuario(string email);
     public void EliminarUsuario(UsuarioDTO usuarioDto);
-    
+
 }
