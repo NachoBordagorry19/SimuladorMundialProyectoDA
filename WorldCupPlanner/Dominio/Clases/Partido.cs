@@ -24,7 +24,14 @@ public class Partido
     public DateTime Fecha
     {
         get => _fecha;
-        set => _fecha = value;
+        set
+        {
+            if (value == DateTime.MinValue)
+            {
+                throw new ArgumentException("La fecha es invalida");
+            }
+            _fecha = value;
+        }
     }
 
     public Estadio Estadio
