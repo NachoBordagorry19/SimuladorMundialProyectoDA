@@ -13,9 +13,16 @@ public class PartidoTest
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
         Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Decano", 60000);
-        Grupo grupo = new Grupo("A");
 
-        Partido partido = new Partido(DateTime.Now, estadio, local, visitante, grupo);
+        Partido partido = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, 0);
+
+        Assert.AreEqual(estadio, partido.Estadio);
+        Assert.AreEqual(local, partido.Local);
+        Assert.AreEqual(visitante, partido.Visitante);
+        Assert.AreEqual(Fase.Grupos, partido.Fase);
+        Assert.AreEqual(EstadoPartido.Pendiente, partido.Estado);
+        Assert.AreEqual(0, partido.GolesLocal);
+        Assert.AreEqual(0, partido.GolesVisitante);
     }
 
     [TestMethod]
