@@ -101,9 +101,15 @@ public class EquipoServiciosTest
     public void ActualizarEquipo_SiExiste_SeActualiza()
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
-        _equipoServicios.ActualizarEquipo(_equipoDTO);
-        
+        var equipoActualizadoDto = new EquipoDTO()
+        {
+            nombre = _equipoDTO.nombre, 
+            confederacion = Confederacion.CONMEBOL,
+            rankingFifa = 99
+        };
+        _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
+        var equipoObtenido = _equipoServicios.ObtenerEquipo(_equipoDTO.nombre);
+        Assert.AreEqual(99, equipoObtenido.rankingFifa);
+        Assert.AreEqual(Confederacion.CONMEBOL, equipoObtenido.confederacion);
     }
-
 }
-

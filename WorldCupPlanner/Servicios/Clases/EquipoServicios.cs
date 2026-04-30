@@ -79,4 +79,10 @@ public class EquipoServicios
         _equipoRepositorio.EliminarEquipo(equipoExistente);
     }
 
+    public void ActualizarEquipo(EquipoDTO equipoDto)
+    {
+        Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
+        _equipoRepositorio.ActualizarEquipo(equipoActualizado);
+    }
+
 }
