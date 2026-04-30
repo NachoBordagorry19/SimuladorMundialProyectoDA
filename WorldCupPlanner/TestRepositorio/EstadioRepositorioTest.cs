@@ -44,16 +44,6 @@ public class EstadioRepositorioTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
-    public void AgregarEstadio_NombreDuplicado_LanzaExcepcion()
-    {
-        var estadio1 = CrearEstadio("Centenario");
-        var estadio2 = CrearEstadio("Centenario");
-        _repositorioEstadio.AgregarEstadio(estadio1);
-        _repositorioEstadio.AgregarEstadio(estadio2);
-    }
-
-    [TestMethod]
     public void ObtenerEstadio_SiBuscoPorNombre_DevuelveCoincidencia()
     {
         var estadio = CrearEstadio();

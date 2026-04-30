@@ -18,11 +18,6 @@ public class EstadioRepositorio
 
     public void AgregarEstadio(Estadio estadio)
     {
-        var existe = _BDEnMemoria.ObtenerEstadios().Any(e => e.Nombre.Equals(estadio.Nombre, StringComparison.OrdinalIgnoreCase));
-        if (existe)
-        {
-            throw new InvalidOperationException("Ya existe un estadio con el nombre: " + estadio.Nombre);
-        }
         _BDEnMemoria.AgregarEstadio(estadio);
     }
 
