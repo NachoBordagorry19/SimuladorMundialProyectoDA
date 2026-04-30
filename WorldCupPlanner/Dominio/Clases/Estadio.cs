@@ -70,9 +70,9 @@ public class Estadio
                 throw new ArgumentException("La capacidad del estadio no puede ser vacia");
             }
 
-            if (value <= 0)
+            if (value <= 20000)
             {
-                throw new ArgumentException("La capacidad no puede ser nula ni por debajo de cero");
+                throw new ArgumentException("La capacidad no puede ser menor a 20000 espectadores");
             }
             _capacidadLocativa = value;
         }
