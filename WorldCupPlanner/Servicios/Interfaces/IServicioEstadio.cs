@@ -8,4 +8,5 @@ public interface IServicioEstadio
     List<EstadioDTO> ObtenerEstadios();
     EstadioDTO ObtenerEstadioPorNombre(string nombre);
     void EliminarEstadio(EstadioDTO estadioDTO);
+    void ActualizarEstadio(EstadioDTO estadioDTO);
 }
