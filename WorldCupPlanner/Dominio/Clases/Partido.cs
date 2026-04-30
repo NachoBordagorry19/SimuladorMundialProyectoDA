@@ -90,6 +90,11 @@ public class Partido
                 return Local;
             }
 
+            if (GolesVisitante > GolesLocal)
+            {
+                return Visitante;
+            }
+
             return null;
         }
     }

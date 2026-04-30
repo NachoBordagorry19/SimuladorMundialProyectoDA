@@ -112,7 +112,7 @@ public class PartidoTest
     }
     
     [TestMethod]
-    public void Partido_SiLocalTieneMasGoles_VencedorEsLocal()
+    public void Partido_SiLocalTieneMasGoles_EsVencedor()
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
@@ -124,7 +124,7 @@ public class PartidoTest
     }
     
     [TestMethod]
-    public void Partido_SiVisitanteTieneMasGoles_VencedorEsVisitante()
+    public void Partido_SiVisitanteTieneMasGoles_EsVencedor()
     {
         Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
