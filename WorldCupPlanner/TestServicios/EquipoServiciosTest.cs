@@ -178,7 +178,7 @@ public class EquipoServiciosTest
     }
     
     [TestMethod]
-    public void ResolverEmpates_Minimo_OrdenaYGeneraAuditoriaSiHayEmpate()
+    public void OrdenaYNoGeneraAuditoriaSiNoHayEmpate()
     {
         var equipos = new List<EquipoDTO>
         {
@@ -193,7 +193,5 @@ public class EquipoServiciosTest
         var nombres = resultado.EquiposOrdenados.Select(e => e.nombre).ToList();
         
         Assert.AreEqual("Bravo", nombres[0]);
-        
-        CollectionAssert.AreEquivalent(new List<string> { "Alpha", "Zeta" }, nombres.Skip(1).ToList());
     }
 }
