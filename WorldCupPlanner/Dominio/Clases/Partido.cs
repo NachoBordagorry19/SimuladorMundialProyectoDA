@@ -81,6 +81,19 @@ public class Partido
         }
     }
 
+    public Equipo? Vencedor
+    {
+        get
+        {
+            if (GolesLocal > GolesVisitante)
+            {
+                return Local;
+            }
+
+            return null;
+        }
+    }
+    
     public Fase Fase
     {
         get => _fase;
