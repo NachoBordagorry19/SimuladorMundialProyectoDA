@@ -77,5 +77,12 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.ObtenerEquipo(_equipoDTO2.nombre);
     }
+
+    [TestMethod]
+    public void EliminarEquipo_SiExiste()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.EliminarEquipo(_equipoDTO);
+    }
     
 }
