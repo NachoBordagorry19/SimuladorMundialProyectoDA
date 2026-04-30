@@ -125,11 +125,8 @@ public class EquipoServicios
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
     {
         VerificarListaDeEquiposSinNulo(equipos);
-        
-        var ordenBase = equipos
-            .OrderBy(e => e.rankingFifa)
-            .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+
+        var ordenBase = OrdenoPorRankinFifa(equipos);
         
         var auditoria = new List<EntradaAuditoria>();
         var listaFinal = new List<EquipoDTO>();
@@ -197,4 +194,13 @@ public class EquipoServicios
         }
     }
 
+    public List<EquipoDTO> OrdenoPorRankinFifa(List<EquipoDTO> equipos)
+    {
+        if (equipos == null) return new List<EquipoDTO>();
+        var ordenBase = equipos
+            .OrderBy(e => e.rankingFifa)
+            .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        return ordenBase;
+    }
 }
