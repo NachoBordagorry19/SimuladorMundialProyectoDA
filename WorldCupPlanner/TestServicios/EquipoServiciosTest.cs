@@ -56,7 +56,7 @@ public class EquipoServiciosTest
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.AgregarEquipo(_equipoDTO2);
-        List<Equipo> equipos = _equipoServicios.ObtenerEquipos();
+        List<EquipoDTO> equipos = _equipoServicios.ObtenerEquipos();
         Assert.AreEqual(2,equipos.Count);
     }
     

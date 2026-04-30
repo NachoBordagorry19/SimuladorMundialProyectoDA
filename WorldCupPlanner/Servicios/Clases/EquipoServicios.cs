@@ -1,6 +1,8 @@
 using Dominio.Clases;
+using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Modelo;
+using System.Collections.Generic;
 
 namespace Servicios.Clases;
 
@@ -29,6 +31,29 @@ public class EquipoServicios
         };
         return equipo;
     }
-    
-    
+
+    public List<EquipoDTO> ObtenerEquipos()
+    {
+        List<Equipo> equipos = _equipoRepositorio.ObtenerEquipos();
+        List<EquipoDTO> equiposDTOS = new List<EquipoDTO>();
+        foreach (var equipo in equipos)
+        {
+            EquipoDTO equipoDto = EquipoEntidadAEquipoDTO(equipo);
+            equiposDTOS.Add(equipoDto);
+        }
+
+        return equiposDTOS;
+    }
+
+    public static EquipoDTO EquipoEntidadAEquipoDTO(Equipo equipo)
+    {
+        EquipoDTO equipoDto = new EquipoDTO()
+        {
+            nombre = equipo.Nombre,
+            confederacion = equipo.Confederacion,
+            rankingFifa = equipo.RankingFifa
+        };
+        return equipoDto;
+    }
+
 }
