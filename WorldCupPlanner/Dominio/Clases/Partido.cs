@@ -110,9 +110,16 @@ public class Partido
     public int GolesVisitante
     {
         get => _golesVisitante;
-        set => _golesVisitante = value;
-    }
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Los goles del visitante no pueden ser negativos");
+            }
 
+            _golesVisitante = value;
+        }
+    }
     public Partido(DateTime fecha, Estadio estadio, Equipo local, Equipo visitante, Fase fase, int golesLocal, int golesVisitante)
     {
         _contadorId++;
