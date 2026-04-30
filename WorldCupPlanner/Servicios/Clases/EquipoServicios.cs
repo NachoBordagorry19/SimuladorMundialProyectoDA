@@ -4,6 +4,8 @@ using Repositorio.Interfaces;
 using Servicios.Modelo;
 using System.Collections.Generic;
 using Dominio.Enums;
+using System;
+using System.Linq;
 
 namespace Servicios.Clases;
 
@@ -119,5 +121,6 @@ public class EquipoServicios
         Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
         _equipoRepositorio.ActualizarEquipo(equipoActualizado);
     }
+    
 
 }

@@ -175,5 +175,21 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(Equipodto2Prueba);
     }
     
-    
+    [TestMethod]
+    public void ResolverEmpates_Minimo_OrdenaPorRankingYNombreYAuditoriaVacia()
+    {
+        var equipos = new List<EquipoDTO>
+        {
+            new EquipoDTO { nombre = "Zeta", confederacion = Confederacion.UEFA, rankingFifa = 10 },
+            new EquipoDTO { nombre = "Alpha", confederacion = Confederacion.AFC, rankingFifa = 10 },
+            new EquipoDTO { nombre = "Bravo", confederacion = Confederacion.CAF, rankingFifa = 5 }
+        };
+
+        var resultado = _equipoServicios.ResolverEmpatesYOrdenar(equipos, 123);
+        
+        var nombres = resultado.EquiposOrdenados.Select(e => e.nombre).ToList();
+        CollectionAssert.AreEqual(new List<string> { "Bravo", "Alpha", "Zeta" }, nombres);
+        
+        Assert.AreEqual(1, resultado.AuditoriaEmpates.Count);
+    }
 }
