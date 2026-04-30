@@ -124,13 +124,7 @@ public class EquipoServicios
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
     {
-        for (int i = 0; i < equipos.Count; i++)
-        {
-            if (equipos[i] == null)
-            {
-                throw new ArgumentException("La lista de equipos contiene elementos nulos");
-            }
-        }
+        VerificarListaDeEquiposSinNulo(equipos);
         
         var ordenBase = equipos
             .OrderBy(e => e.rankingFifa)
@@ -190,6 +184,17 @@ public class EquipoServicios
         };
 
         return resultado;
+    }
+
+    public void VerificarListaDeEquiposSinNulo(List<EquipoDTO> equipos)
+    {
+        for (int i = 0; i < equipos.Count; i++)
+        {
+            if (equipos[i] == null)
+            {
+                throw new ArgumentException("La lista de equipos contiene elementos nulos");
+            }
+        }
     }
 
 }
