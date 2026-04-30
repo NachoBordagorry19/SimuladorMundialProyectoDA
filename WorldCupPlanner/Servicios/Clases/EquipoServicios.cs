@@ -56,4 +56,10 @@ public class EquipoServicios
         return equipoDto;
     }
 
+    public EquipoDTO ObtenerEquipo(string nombre)
+    {
+        Equipo? equipo = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        return EquipoEntidadAEquipoDTO(equipo);
+    }
+
 }

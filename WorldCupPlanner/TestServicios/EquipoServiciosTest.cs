@@ -64,7 +64,7 @@ public class EquipoServiciosTest
     public void ObtenerEquipo_SiExiste_DevuelveEquipo()
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
-        EquipoDTO equipoPrueba = _equipoServicios.ObtenerEquipo(_equipoDTO);
+        EquipoDTO equipoPrueba = _equipoServicios.ObtenerEquipo(_equipoDTO.nombre);
         Assert.AreEqual(equipoPrueba.nombre, _equipoDTO.nombre);
         Assert.AreEqual(equipoPrueba.confederacion,_equipoDTO.confederacion);
         Assert.AreEqual(equipoPrueba.rankingFifa,_equipoDTO.rankingFifa);
