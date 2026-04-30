@@ -134,4 +134,16 @@ public class PartidoTest
 
         Assert.AreEqual(visitante, partido.Vencedor);
     }
+    
+    [TestMethod]
+    public void Partido_SiEmpatan_NoTieneVencedor()
+    {
+        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
+        Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
+
+        Partido partido = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 1, 1);
+
+        Assert.IsNull(partido.Vencedor);
+    }
 }
