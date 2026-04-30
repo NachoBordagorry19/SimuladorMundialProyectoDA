@@ -18,9 +18,32 @@ public class EquipoServicios
 
     public void AgregarEquipo(EquipoDTO equipoDTO)
     {
+        int cupo = ObtenerCupo(equipoDTO.confederacion);
+        if (cupo > 0)
+        {
+            var cantidadActual = _equipoRepositorio.ObtenerEquipos().Count(e => e.Confederacion == equipoDTO.confederacion);
+            if (cantidadActual >= cupo)
+            {
+                throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDTO.confederacion}");
+            }
+        }
         ValidarNombreNoExiste(equipoDTO.nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
+    }
+    
+    private int ObtenerCupo(Confederacion confederacion)
+    {
+        switch (confederacion)
+        {
+            case Confederacion.UEFA: return 16;
+            case Confederacion.CONMEBOL: return 7;
+            case Confederacion.CONCACAF: return 7;
+            case Confederacion.CAF: return 9;
+            case Confederacion.AFC: return 8;
+            case Confederacion.OFC: return 1;
+            default: return 0;
+        }
     }
 
     public Equipo EquipoDTOAEntidad(EquipoDTO equipoDto)
