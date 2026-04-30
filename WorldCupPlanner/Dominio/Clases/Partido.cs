@@ -110,6 +110,11 @@ public class Partido
         get => _estado;
         set => _estado = value;
     }
+    
+    public void MarcarComoJugado()
+    {
+        Estado = EstadoPartido.Jugado;
+    }
 
     public int GolesLocal
     {
