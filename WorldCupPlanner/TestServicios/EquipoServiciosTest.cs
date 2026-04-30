@@ -97,5 +97,13 @@ public class EquipoServiciosTest
         _equipoServicios.EliminarEquipo(_equipoDTO2);
     }
 
+    [TestMethod]
+    public void ActualizarEquipo_SiExiste_SeActualiza()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.ActualizarEquipo(_equipoDTO);
+        
+    }
+
 }
 
