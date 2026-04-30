@@ -52,6 +52,14 @@ public class EquipoServiciosTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarEquipo_SiExiste_LanzaExcepcion()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+    }
+
+    [TestMethod]
     public void ObtenerEquipos_DevuelveTodosLosEquipo()
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
