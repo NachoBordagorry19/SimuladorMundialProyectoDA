@@ -124,12 +124,6 @@ public class EquipoServicios
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
     {
-        if (equipos == null)
-        {
-            throw new ArgumentException("Los equipos no deben ser nulos porfavor ingrese equipos correctos");
-        }
-
-        // Nuevo chequeo mínimo: si la lista contiene elementos null, lanzar ArgumentException (test lo exige)
         for (int i = 0; i < equipos.Count; i++)
         {
             if (equipos[i] == null)
@@ -137,20 +131,64 @@ public class EquipoServicios
                 throw new ArgumentException("La lista de equipos contiene elementos nulos");
             }
         }
-
+        
         var ordenBase = equipos
             .OrderBy(e => e.rankingFifa)
             .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
             .ToList();
+        
+        var auditoria = new List<EntradaAuditoria>();
+        var listaFinal = new List<EquipoDTO>();
+        
+        var generadorDeNumerosPrincipal = new Random(semillaFixture);
+        
+        var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderBy(g => g.Key);
 
-        // Preparar resultado y auditoría
+        foreach (var grupo in grupos)
+        {
+            var listaGrupo = grupo.ToList();
+            if (listaGrupo.Count <= 1)
+            {
+                listaFinal.AddRange(listaGrupo);
+                continue;
+            }
+            
+            var ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
+            
+            int semillaGrupo = generadorDeNumerosPrincipal.Next();
+            var generadorDeNumerosGrupo = new Random(semillaGrupo);
+            
+            var copiaGrupo = listaGrupo.ToList();
+            for (int i = copiaGrupo.Count - 1; i > 0; i--)
+            {
+                int j = generadorDeNumerosGrupo.Next(i + 1); 
+                var copiaTemporal = copiaGrupo[i];
+                copiaGrupo[i] = copiaGrupo[j];
+                copiaGrupo[j] = copiaTemporal;
+            }
+
+            var ordenResuelto = copiaGrupo.Select(x => x.nombre).ToList();
+            
+            auditoria.Add(new EntradaAuditoria
+            {
+                RankingFifa = grupo.Key,
+                OrdenOriginal = ordenOriginal,
+                OrdenResuelto = ordenResuelto,
+                SemillaUsada = semillaGrupo,
+                Nota = "Empate resuelto con Fisher–Yates derivando semilla desde SemillaFixture"
+            });
+            
+            listaFinal.AddRange(copiaGrupo);
+        }
+
         var resultado = new ResultadoFixture
         {
             SemillaFixture = semillaFixture,
             FechaGeneracion = DateTime.UtcNow,
-            EquiposOrdenados = ordenBase,
-            AuditoriaEmpates = new List<EntradaAuditoria>()
+            EquiposOrdenados = listaFinal,
+            AuditoriaEmpates = auditoria
         };
+
         return resultado;
     }
 

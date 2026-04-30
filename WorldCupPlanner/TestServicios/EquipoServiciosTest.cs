@@ -207,4 +207,40 @@ public class EquipoServiciosTest
         int semilla = 124;
         var resultado = _equipoServicios.ResolverEmpatesYOrdenar(equipos, semilla);
     }
+    
+    [TestMethod]
+public void ResolverEmpates_MismaSemilla_OrdenYAuditoriaDeterministica()
+{
+    // Arrange: empato en ranking 10 entre A y B
+    var equipos = new List<EquipoDTO>
+    {
+        new EquipoDTO { nombre = "EquipoA", confederacion = Confederacion.UEFA, rankingFifa = 10 },
+        new EquipoDTO { nombre = "EquipoB", confederacion = Confederacion.UEFA, rankingFifa = 10 },
+        new EquipoDTO { nombre = "EquipoC", confederacion = Confederacion.CAF,  rankingFifa = 5 }
+    };
+    int semillaFixture = 12345;
+    
+    var r1 = _equipoServicios.ResolverEmpatesYOrdenar(equipos, semillaFixture);
+    var r2 = _equipoServicios.ResolverEmpatesYOrdenar(equipos, semillaFixture);
+    
+    var nombres1 = r1.EquiposOrdenados.Select(e => e.nombre).ToList();
+    var nombres2 = r2.EquiposOrdenados.Select(e => e.nombre).ToList();
+    CollectionAssert.AreEqual(nombres1, nombres2);
+    
+    Assert.AreEqual(r1.AuditoriaEmpates.Count, r2.AuditoriaEmpates.Count);
+    
+    for (int i = 0; i < r1.AuditoriaEmpates.Count; i++)
+    {
+        var a1 = r1.AuditoriaEmpates[i];
+        var a2 = r2.AuditoriaEmpates[i];
+
+        Assert.AreEqual(a1.RankingFifa, a2.RankingFifa);
+        Assert.AreEqual(a1.SemillaUsada, a2.SemillaUsada);
+        CollectionAssert.AreEqual(a1.OrdenResuelto, a2.OrdenResuelto);
+    }
+    
+    var nombresEntrada = equipos.Select(e => e.nombre).OrderBy(n => n).ToList();
+    var nombresSalida = r1.EquiposOrdenados.Select(e => e.nombre).OrderBy(n => n).ToList();
+    CollectionAssert.AreEqual(nombresEntrada, nombresSalida);
+}
 }
