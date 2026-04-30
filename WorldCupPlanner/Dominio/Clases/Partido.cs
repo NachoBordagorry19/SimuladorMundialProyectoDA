@@ -96,7 +96,15 @@ public class Partido
     public int GolesLocal
     {
         get => _golesLocal;
-        set => _golesLocal = value;
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Los goles no pueden ser negativos");
+            }
+
+            _golesLocal = value;
+        }
     }
 
     public int GolesVisitante
