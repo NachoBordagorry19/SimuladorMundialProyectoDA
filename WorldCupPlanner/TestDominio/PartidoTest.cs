@@ -77,4 +77,13 @@ public class PartidoTest
 
         new Partido(DateTime.Now, estadio, local, null, Fase.Grupos, 0, 0);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearPartido_SiEquiposSonIguales_TiraExcepcion()
+    {
+        Equipo equipo = new Equipo("A", Confederacion.CONMEBOL, 1000);
+        Estadio estadio = new Estadio("Estadio", "Ciudad", "Desc", 30000);
+
+        new Partido(DateTime.Now, estadio, equipo, equipo, Fase.Grupos, 0, 0);
+    }
 }
