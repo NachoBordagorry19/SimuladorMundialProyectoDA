@@ -74,6 +74,12 @@ public class EstadioServicios : IServicioEstadio
         _estadioRepositorio.EliminarEstadio(estadioExistente);
     }
 
+    public void ActualizarEstadio(EstadioDTO estadioDTO)
+    {
+        Estadio estadio = EstadioDTOAEntidad(estadioDTO);
+        _estadioRepositorio.ActualizarEstadio(estadio);
+    }
+
     private EstadioDTO DesdeEntidad(Estadio estadio)
     {
         return new EstadioDTO()

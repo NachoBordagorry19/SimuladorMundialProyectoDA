@@ -130,4 +130,19 @@ public class EstadioServiciosTest
         Assert.AreEqual("Nueva Descripcion", obtenido.Descripcion);
         Assert.AreEqual(60000, obtenido.CapacidadLocativa);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarEstadio_SiNoExiste_LanzaExcepcion()
+    {
+        EstadioDTO estadio = new EstadioDTO()
+        {
+            Nombre = "NoExiste",
+            Ciudad = "Ciudad",
+            Descripcion = "descripcion",
+            CapacidadLocativa = 30000
+        };
+
+        _servicioEstadio.ActualizarEstadio(estadio);
+    }
 }
