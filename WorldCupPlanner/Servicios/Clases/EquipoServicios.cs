@@ -3,6 +3,7 @@ using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Modelo;
 using System.Collections.Generic;
+using Dominio.Enums;
 
 namespace Servicios.Clases;
 

@@ -4,6 +4,7 @@ using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Clases;
 using Servicios.Modelo;
+using System.Linq;
 
 namespace TestServicios;
 
@@ -133,5 +134,44 @@ public class EquipoServiciosTest
             rankingFifa = 99
         };
         _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
+    }
+
+    [TestMethod]
+    public void AgregarEquipo_OFC_Cupo1_PermiteUnEquipo()
+    {
+        var dto = new EquipoDTO()
+        {
+            nombre = "OFC-Team1",
+            confederacion = Confederacion.OFC,
+            rankingFifa = 50
+        };
+
+        _equipoServicios.AgregarEquipo(dto);
+
+        var equiposOFC = _equipoServicios.ObtenerEquipos().Where(e => e.confederacion == Confederacion.OFC).ToList();
+        Assert.AreEqual(1, equiposOFC.Count);
+        Assert.AreEqual("OFC-Team1", equiposOFC[0].nombre);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarEquipo_OFC_Cupo1_LanzaExcepcionAlExceder()
+    {
+        var EquipoDTOPrueba = new EquipoDTO()
+        {
+            nombre = "Equipo1",
+            confederacion = Confederacion.OFC,
+            rankingFifa = 45
+        };
+
+        var Equipodto2Prueba = new EquipoDTO()
+        {
+            nombre = "Equipo2",
+            confederacion = Confederacion.OFC,
+            rankingFifa = 46
+        };
+
+        _equipoServicios.AgregarEquipo(EquipoDTOPrueba);
+        _equipoServicios.AgregarEquipo(Equipodto2Prueba);
     }
 }
