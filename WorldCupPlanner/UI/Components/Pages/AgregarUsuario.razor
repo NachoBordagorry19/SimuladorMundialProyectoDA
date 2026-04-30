@@ -3,38 +3,61 @@
 @using Dominio.Enums
 
 <div class="home-container">
-    <h3>Crear Nuevo Usuario</h3>
+    <section class="home-hero">
+        <div>
+            <h1 class="hero-title">Nuevo Usuario</h1>
+            <p class="hero-sub">Registra un administrador o editor para el sistema.</p>
+        </div>
+    </section>
 
     <EditForm Model="usuario" OnValidSubmit="OnSave">
         <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="mb-3">
-            <label>Nombre:</label>
-            <InputText @bind-Value="usuario.Nombre" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label>Email:</label>
-            <InputText @bind-Value="usuario.Email" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label>Rol:</label>
-            <InputSelect @bind-Value="rolSeleccionado" class="form-select">
-                @foreach (var r in Enum.GetValues<Rol>()) {
-                    <option value="@r">@r</option>
-                }
-            </InputSelect>
-        </div>
         
-        <button type="submit" class="btn">Guardar Usuario</button>
+        <div class="home-sections" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
+            <div class="home-section">
+                <label>Nombre</label>
+                <InputText @bind-Value="usuario.Nombre" class="form-control" style="width:100%;" />
+            </div>
+            <div class="home-section">
+                <label>Apellido</label>
+                <InputText @bind-Value="usuario.Apellido" class="form-control" style="width:100%;" />
+            </div>
+            <div class="home-section">
+                <label>Email</label>
+                <InputText @bind-Value="usuario.Email" class="form-control" style="width:100%;" />
+            </div>
+            <div class="home-section">
+                <label>Rol</label>
+                <InputSelect @bind-Value="rolSeleccionado" class="form-control" style="width:100%;">
+                    @foreach (var rol in Enum.GetValues<Rol>())
+                    {
+                        <option value="@rol">@rol</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="home-section">
+                <label>Fecha de Nacimiento</label>
+                <InputDate @bind-Value="usuario.FechaNacimiento" class="form-control" style="width:100%;" />
+            </div>
+            <div class="home-section">
+                <label>Contraseña</label>
+                <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control" style="width:100%;" />
+            </div>
+        </div>
+
+        <div class="home-actions">
+            <button type="submit" class="btn">Guardar Usuario</button>
+            <NavLink href="/home" class="btn secondary">Cancelar</NavLink>
+        </div>
     </EditForm>
 </div>
 
 @code {
-    public Usuario usuario = new Usuario("", "", "", DateTime.Today.AddYears(-18), "Pass123!", Rol.Editor);
+    private Usuario usuario = new Usuario("Nombre", "Apellido", "ejemplo@mail.com", DateTime.Today.AddYears(-20), "Pass123!", Rol.Editor);
     private Rol rolSeleccionado = Rol.Editor;
-    
-    public void OnSave() {
-        Console.WriteLine($"Usuario {usuario.Nombre} registrado con rol {rolSeleccionado}");
+
+    private void OnSave()
+    {
+        Console.WriteLine($"Usuario {usuario.Nombre} listo para persistir.");
     }
 }
