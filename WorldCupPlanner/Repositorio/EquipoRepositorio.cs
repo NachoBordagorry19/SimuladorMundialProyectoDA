@@ -1,8 +1,9 @@
 using Dominio.Clases;
+using Repositorio.Interfaces;
 
 namespace Repositorio;
 
-public class EquipoRepositorio
+public class EquipoRepositorio: IEquipoRepositorio
 {
     private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
 
