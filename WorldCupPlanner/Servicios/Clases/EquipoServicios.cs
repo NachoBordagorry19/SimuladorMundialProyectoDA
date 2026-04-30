@@ -124,6 +124,20 @@ public class EquipoServicios
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
     {
+        if (equipos == null)
+        {
+            throw new ArgumentException("Los equipos no deben ser nulos porfavor ingrese equipos correctos");
+        }
+
+        // Nuevo chequeo mínimo: si la lista contiene elementos null, lanzar ArgumentException (test lo exige)
+        for (int i = 0; i < equipos.Count; i++)
+        {
+            if (equipos[i] == null)
+            {
+                throw new ArgumentException("La lista de equipos contiene elementos nulos");
+            }
+        }
+
         var ordenBase = equipos
             .OrderBy(e => e.rankingFifa)
             .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
