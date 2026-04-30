@@ -89,5 +89,13 @@ public class EquipoServiciosTest
         Assert.AreEqual(0,equiposDtos.Count);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarEquipo_SiNoExiste_LanzoExcepcio()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.EliminarEquipo(_equipoDTO2);
+    }
+
 }
 
