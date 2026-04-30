@@ -17,6 +17,7 @@ public class EquipoServicios
 
     public void AgregarEquipo(EquipoDTO equipoDTO)
     {
+        ValidarNombreNoExiste(equipoDTO.nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
     }
@@ -58,12 +59,12 @@ public class EquipoServicios
 
     public EquipoDTO ObtenerEquipo(string nombre)
     {
-        ValidarNombre(nombre);
+        ValidarNombreExiste(nombre);
         Equipo? equipo = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
         return EquipoEntidadAEquipoDTO(equipo);
     }
 
-    public void ValidarNombre(string nombre)
+    public void ValidarNombreExiste(string nombre)
     {
         Equipo equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
         if (equipoExistente == null)
@@ -72,16 +73,25 @@ public class EquipoServicios
         }
     }
 
+    public void ValidarNombreNoExiste(string nombre)
+    {
+        Equipo equipoNoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        if (equipoNoExistente != null)
+        {
+            throw new ArgumentException("El equipo a agregar ya existe porfavor ingrese otro");
+        }
+    }
+
     public void EliminarEquipo(EquipoDTO equipoDto)
     {
-        ValidarNombre(equipoDto.nombre);
+        ValidarNombreExiste(equipoDto.nombre);
         Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
         _equipoRepositorio.EliminarEquipo(equipoExistente);
     }
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
     {
-        ValidarNombre(equipoDto.nombre);
+        ValidarNombreExiste(equipoDto.nombre);
         Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
         _equipoRepositorio.ActualizarEquipo(equipoActualizado);
     }
