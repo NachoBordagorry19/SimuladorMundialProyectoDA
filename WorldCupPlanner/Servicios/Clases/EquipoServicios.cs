@@ -81,6 +81,7 @@ public class EquipoServicios
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
     {
+        ValidarNombre(equipoDto.nombre);
         Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
         _equipoRepositorio.ActualizarEquipo(equipoActualizado);
     }
