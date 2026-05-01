@@ -1,0 +1,31 @@
+@page "/home"
+
+<div class="home-container">
+    <section class="home-hero">
+        <div>
+            <h1 class="hero-title">WorldCupPlanner</h1>
+            <p class="hero-sub">Bienvenido — página de inicio.</p>
+            <div class="home-actions">
+                <NavLink class="btn" href="/usuarios" Match="NavLinkMatch.Prefix">Usuarios</NavLink>
+                <NavLink class="btn secondary" href="/equipos" Match="NavLinkMatch.Prefix">Equipos</NavLink>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-sections" aria-label="Secciones rápidas">
+        <div class="home-section">
+            <h3>Fixture</h3>
+            <p>Ver y administrar el fixture del torneo.</p>
+        </div>
+        <div class="home-section">
+            <h3>Partidos</h3>
+            <p>Consultar calendario y resultados.</p>
+        </div>
+        <div class="home-section">
+            <h3>Importar</h3>
+            <p>Subir datos por CSV/JSON y previsualizar.</p>
+        </div>
+    </section>
+</div>
+
+

@@ -1,0 +1,35 @@
+@page "/equipos"
+@using Dominio.Clases
+
+<div class="home-container">
+    <section class="home-hero">
+        <div>
+            <h1 class="hero-title">Equipos</h1>
+            <p class="hero-sub">Listado de selecciones clasificadas.</p>
+        </div>
+        <div class="home-actions">
+            <NavLink class="btn" href="/AgregarEquipo">Nuevo Equipo</NavLink>
+        </div>
+    </section>
+
+    <div class="home-sections" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
+        <div class="home-section">
+            <table class="table" style="width:100%; color: var(--wc-text);">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Confederación</th>
+                    <th>Ranking FIFA</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Uruguay</td>
+                    <td>CONMEBOL</td>
+                    <td>11</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

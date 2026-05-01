@@ -1,0 +1,36 @@
+@page "/AgregarEstadio"
+@using Dominio.Clases
+
+<div class="home-container">
+    <h3>Registrar Estadio</h3>
+    <EditForm Model="estadio" OnSubmit="Guardar">
+        <div class="home-sections">
+            <div class="home-section">
+                <label>Nombre</label>
+                <InputText @bind-Value="estadio.Nombre" class="form-control" />
+            </div>
+            <div class="home-section">
+                <label>Ciudad</label>
+                <InputText @bind-Value="estadio.Ciudad" class="form-control" />
+            </div>
+            <div class="home-section">
+                <label>Capacidad</label>
+                <InputNumber @bind-Value="capacidad" class="form-control" />
+            </div>
+        </div>
+        <div class="home-actions">
+            <button type="submit" class="btn">Registrar</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private Estadio estadio = new Estadio("Nombre", "Ciudad", "Descripción", 10000);
+    private int capacidad = 10000;
+
+    private void Guardar()
+    {
+        estadio.CapacidadLocativa = capacidad;
+        Console.WriteLine("Estadio enviado al repositorio.");
+    }
+}
