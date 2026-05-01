@@ -1,13 +1,30 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <main>
-        <header class="top-row">
-            <NavMenu />
-        </header>
+    <div class="@SidebarCssClass">
+        <NavMenu />
+    </div>
 
-        <article class="content px-4">
+    <main>
+        <div class="top-row">
+            <button class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="top-row-title" href="">WorldCupPlanner</a>
+        </div>
+
+        <article class="content">
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private string SidebarCssClass => collapseNavMenu ? "sidebar collapse" : "sidebar";
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

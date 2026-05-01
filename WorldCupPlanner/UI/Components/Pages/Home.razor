@@ -1,31 +1,42 @@
+@page "/"
 @page "/home"
 
-<div class="home-container">
-    <section class="home-hero">
-        <div>
-            <h1 class="hero-title">WorldCupPlanner</h1>
-            <p class="hero-sub">Bienvenido — página de inicio.</p>
-            <div class="home-actions">
-                <NavLink class="btn" href="/usuarios" Match="NavLinkMatch.Prefix">Usuarios</NavLink>
-                <NavLink class="btn secondary" href="/equipos" Match="NavLinkMatch.Prefix">Equipos</NavLink>
-            </div>
+<div class="home-wrapper">
+    <div class="hero-section">
+        <div class="hero-header">
+            <div class="hero-line"></div>
+            <h1>WorldCupPlanner</h1>
+            <div class="hero-line"></div>
         </div>
-    </section>
+        <div class="hero-accent"></div>
+        <p>La plataforma definitiva para la gestión y simulación de torneos internacionales.</p>
+        
+        <div class="hero-btns">
+            <button class="btn-main">Gestionar Usuarios</button>
+            <button class="btn-outline">Ver Equipos</button>
+        </div>
+    </div>
 
-    <section class="home-sections" aria-label="Secciones rápidas">
-        <div class="home-section">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📅</div>
             <h3>Fixture</h3>
-            <p>Ver y administrar el fixture del torneo.</p>
+            <p>Organiza los grupos y las fases eliminatorias del mundial.</p>
+            <a href="fixture">Explorar →</a>
         </div>
-        <div class="home-section">
+
+        <div class="feature-card">
+            <div class="feature-icon">⚽</div>
             <h3>Partidos</h3>
-            <p>Consultar calendario y resultados.</p>
+            <p>Consulta el calendario completo y registra resultados en tiempo real.</p>
+            <a href="partidos">Ver Partidos →</a>
         </div>
-        <div class="home-section">
+
+        <div class="feature-card">
+            <div class="feature-icon">📥</div>
             <h3>Importar</h3>
-            <p>Subir datos por CSV/JSON y previsualizar.</p>
+            <p>Carga masiva de datos mediante archivos CSV y JSON.</p>
+            <a href="importar">Cargar Datos →</a>
         </div>
-    </section>
+    </div>
 </div>
-
-
