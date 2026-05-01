@@ -2,38 +2,37 @@
 @page "/"
 
 <div class="inicio-container">
-    <header class="inicio-hero">
-        <div class="hero-content">
-            <h1 class="hero-title">WorldCupPlanner</h1>
-            <div class="hero-line"></div>
-            <p class="hero-sub">La plataforma definitiva para la gestión y simulación de torneos internacionales.</p>
-            <div class="hero-actions">
-                <NavLink class="btn-principal" href="/usuarios">Gestionar Usuarios</NavLink>
-                <NavLink class="btn-secundario" href="/equipos">Ver Equipos</NavLink>
-            </div>
+    <section class="inicio-hero">
+        <h1 class="hero-title">WorldCupPlanner</h1>
+        <div class="hero-line"></div>
+        <p class="hero-sub">La plataforma definitiva para la gestión y simulación de torneos internacionales.</p>
+        
+        <div class="hero-actions">
+            <a href="usuarios" class="btn-principal">Gestionar Usuarios</a>
+            <a href="equipos" class="btn-secundario">Ver Equipos</a>
         </div>
-    </header>
+    </section>
 
-    <section class="inicio-grid" aria-label="Secciones de acceso rápido">
+    <div class="inicio-grid">
         <div class="card-interactiva">
             <div class="card-icon">📅</div>
             <h3>Fixture</h3>
             <p>Organiza los grupos y las fases eliminatorias del mundial.</p>
-            <NavLink href="/fixture" class="card-link">Explorar →</NavLink>
+            <a href="fixture" class="card-link">Explorar →</a>
         </div>
 
         <div class="card-interactiva">
             <div class="card-icon">⚽</div>
             <h3>Partidos</h3>
             <p>Consulta el calendario completo y registra los resultados en tiempo real.</p>
-            <NavLink href="/partidos" class="card-link">Explorar →</NavLink>
+            <a href="partidos" class="card-link">Ver Partidos →</a>
         </div>
 
         <div class="card-interactiva">
             <div class="card-icon">📥</div>
             <h3>Importar</h3>
-            <p>Carga masiva de datos mediante archivos CSV y JSON.</p>
-            <NavLink href="/importar" class="card-link">Explorar →</NavLink>
+            <p>Carga masiva de datos mediante archivos CSV y JSON de forma rápida.</p>
+            <a href="importar" class="card-link">Cargar Datos →</a>
         </div>
-    </section>
+    </div>
 </div>

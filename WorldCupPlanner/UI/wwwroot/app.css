@@ -1,42 +1,40 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #ccd6f6 !important;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
 }
 
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
     background-color: #ccd6f6;
 }
 
 main {
     flex: 1;
     background-color: #ccd6f6;
-}
-
-.content {
-    padding-top: 1.1rem;
-    background-color: #ccd6f6;
+    display: flex;
+    flex-direction: column;
 }
 
 .top-row {
     background-color: #0a192f;
     border-bottom: 1px solid #233554;
-    justify-content: flex-end;
     height: 3.5rem;
     display: flex;
     align-items: center;
+    padding: 0 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.top-row ::deep a, .top-row ::deep .btn-link {
-    white-space: nowrap;
-    margin-left: 1.5rem;
-    text-decoration: none;
-}
-
-.top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-    text-decoration: underline;
+.content {
+    background-color: #ccd6f6;
+    flex: 1;
 }
 
 @media (min-width: 641px) {
@@ -49,13 +47,10 @@ main {
         height: 100vh;
         position: sticky;
         top: 0;
+        background-color: #0a192f;
     }
 
     .top-row {
         display: none;
-    }
-
-    .content {
-        padding: 2rem !important;
     }
 }
