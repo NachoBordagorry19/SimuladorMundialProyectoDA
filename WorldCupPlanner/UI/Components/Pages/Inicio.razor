@@ -1,31 +1,39 @@
-@page "/inicio"
+@page "/home"
+@page "/"
 
-<div class="home-container">
-    <section class="home-hero">
-        <div>
+<div class="inicio-container">
+    <header class="inicio-hero">
+        <div class="hero-content">
             <h1 class="hero-title">WorldCupPlanner</h1>
-            <p class="hero-sub">Bienvenido — Página de Inicio.</p>
-            <div class="home-actions">
-                <NavLink class="btn" href="/usuarios" Match="NavLinkMatch.Prefix">Usuarios</NavLink>
-                <NavLink class="btn secondary" href="/equipos" Match="NavLinkMatch.Prefix">Equipos</NavLink>
+            <div class="hero-line"></div>
+            <p class="hero-sub">La plataforma definitiva para la gestión y simulación de torneos internacionales.</p>
+            <div class="hero-actions">
+                <NavLink class="btn-principal" href="/usuarios">Gestionar Usuarios</NavLink>
+                <NavLink class="btn-secundario" href="/equipos">Ver Equipos</NavLink>
             </div>
         </div>
-    </section>
+    </header>
 
-    <section class="home-sections" aria-label="Secciones rápidas">
-        <div class="home-section">
+    <section class="inicio-grid" aria-label="Secciones de acceso rápido">
+        <div class="card-interactiva">
+            <div class="card-icon">📅</div>
             <h3>Fixture</h3>
-            <p>Ver y administrar el fixture del torneo.</p>
+            <p>Organiza los grupos y las fases eliminatorias del mundial.</p>
+            <NavLink href="/fixture" class="card-link">Explorar →</NavLink>
         </div>
-        <div class="home-section">
+
+        <div class="card-interactiva">
+            <div class="card-icon">⚽</div>
             <h3>Partidos</h3>
-            <p>Consultar calendario y resultados.</p>
+            <p>Consulta el calendario completo y registra los resultados en tiempo real.</p>
+            <NavLink href="/partidos" class="card-link">Explorar →</NavLink>
         </div>
-        <div class="home-section">
+
+        <div class="card-interactiva">
+            <div class="card-icon">📥</div>
             <h3>Importar</h3>
-            <p>Subir datos por CSV/JSON y previsualizar.</p>
+            <p>Carga masiva de datos mediante archivos CSV y JSON.</p>
+            <NavLink href="/importar" class="card-link">Explorar →</NavLink>
         </div>
     </section>
 </div>
-
-
