@@ -33,4 +33,14 @@ public class PosicionEquipoServiciosTest
             Puntos = 0
         };
     }
+
+    [TestMethod]
+    public void AgregarPosicion_DatosInicialesCorrectos()
+    {
+        _servicioPosicionEquipo.AgregarPosicion(_posicionEquipoDTO);
+        var obtenido = _servicioPosicionEquipo.ObtenerPosicionPorEquipo("Uruguay");
+        Assert.AreEqual("Uruguay", obtenido.EquipoNombre);
+        Assert.AreEqual(0, obtenido.Puntos);
+        Assert.AreEqual(0, obtenido.PartidosJugados);
+    }
 }
