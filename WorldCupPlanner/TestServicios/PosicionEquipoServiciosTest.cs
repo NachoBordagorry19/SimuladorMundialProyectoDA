@@ -12,4 +12,13 @@ public class PosicionEquipoServiciosTest
     private IServicioPosicionEquipo _servicioPosicionEquipo;
     private IPosicionEquipoRepositorio _posicionEquipoRepositorio;
     private PosicionEquipoDTO _posicionEquipoDTO;
+
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _BDEnMemoria = new BaseDeDatosEnMemoria();
+        _posicionEquipoDTO = new PosicionEquipoDTO();
+        _posicionEquipoRepositorio = new PosicionEquipoRepositorio(_BDEnMemoria);
+        _servicioPosicionEquipo = new PosicionEquipoServicios(_posicionEquipoRepositorio);
+    }
 }
