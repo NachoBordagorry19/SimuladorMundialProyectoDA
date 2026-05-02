@@ -59,9 +59,4 @@ public class Equipo
         Confederacion = confederacion;
         RankingFifa = rankingFifa;
     }
-
-    public Equipo()
-    {
-
-    }
 }
