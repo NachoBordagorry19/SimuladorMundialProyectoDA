@@ -16,4 +16,9 @@ public class PartidoRepositorio : IPartidoRepositorio
     {
         return _BDEnMemoria.ObtenerPartidos();
     }
+
+    public void AgregarPartido(Partido partido)
+    {
+        _BDEnMemoria.AgregarPartido(partido);
+    }
 }

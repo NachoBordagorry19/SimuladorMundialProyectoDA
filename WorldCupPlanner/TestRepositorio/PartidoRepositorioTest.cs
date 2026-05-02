@@ -38,7 +38,7 @@ public class PartidoRepositorioTest
     
     
     [TestMethod]
-    public void AgregarPartido_CuandoSeAgregaUno_ApareceEnLaLista()
+    public void CrearPartido_AgregarEnLista()
     {
         var partido = CrearPartido();
 
