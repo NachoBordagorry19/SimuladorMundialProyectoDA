@@ -1,5 +1,6 @@
 using Repositorio;
 using Repositorio.Interfaces;
+using Servicios.Clases;
 using Servicios.Interfaces;
 using Servicios.Modelo;
 
