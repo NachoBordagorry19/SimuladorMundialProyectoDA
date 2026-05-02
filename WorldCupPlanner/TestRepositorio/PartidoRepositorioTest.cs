@@ -64,4 +64,16 @@ public class PartidoRepositorioTest
         Assert.IsNotNull(encontrado);
         Assert.AreSame(partido2, encontrado);
     }
+    
+    [TestMethod]
+    public void ObtenerPartidoPorId_SiNoExiste_DevuelveNull()
+    {
+        var partido = CrearPartido();
+
+        _partidoRepositorio.AgregarPartido(partido);
+
+        var encontrado = _partidoRepositorio.ObtenerPartidoPorId(-1);
+
+        Assert.IsNull(encontrado);
+    }
 }
