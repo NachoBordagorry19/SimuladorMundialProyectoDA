@@ -37,6 +37,17 @@ public class PartidoRepositorioTest
     }
     
     
-    
+    [TestMethod]
+    public void AgregarPartido_CuandoSeAgregaUno_ApareceEnLaLista()
+    {
+        var partido = CrearPartido();
+
+        _partidoRepositorio.AgregarPartido(partido);
+
+        var partidos = _partidoRepositorio.ObtenerPartidos();
+
+        Assert.AreEqual(1, partidos.Count);
+        Assert.AreSame(partido, partidos[0]);
+    }
     
 }
