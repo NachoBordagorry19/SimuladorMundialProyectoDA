@@ -16,22 +16,22 @@ public class PosicionEquipoServicios : IServicioPosicionEquipo
         _posicionEquipoRepositorio = posicionEquipoRepositorio;
     }
 
-    public void AgregarPosicion(PosicionEquipo posicion)
+    public void AgregarPosicion(PosicionEquipoDTO posicionEquipoDTO)
     {
         throw new NotImplementedException();
     }
 
-    public void ActualizarPosicion(PosicionEquipo posicion)
+    public void ActualizarPosicion(PosicionEquipoDTO posicionEquipoDTO)
     {
         throw new NotImplementedException();
     }
 
-    public void EliminarPosicion(PosicionEquipo posicion)
+    public void EliminarPosicion(PosicionEquipoDTO posicionEquipoDTO)
     {
         throw new NotImplementedException();
     }
 
-    public List<PosicionEquipo> ObtenerPosiciones()
+    public List<PosicionEquipoDTO> ObtenerPosiciones()
     {
         throw new NotImplementedException();
     }
