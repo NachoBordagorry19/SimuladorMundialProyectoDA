@@ -6,4 +6,5 @@ public interface IPartidoRepositorio
 {
     List<Partido> ObtenerPartidos();
     void AgregarPartido(Partido partido);
+    Partido? ObtenerPartidoPorId(int id);
 }

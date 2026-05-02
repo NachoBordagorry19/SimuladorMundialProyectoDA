@@ -21,4 +21,9 @@ public class PartidoRepositorio : IPartidoRepositorio
     {
         _BDEnMemoria.AgregarPartido(partido);
     }
+    
+    public Partido? ObtenerPartidoPorId(int id)
+    {
+        return _BDEnMemoria.ObtenerPartidos().FirstOrDefault(p => p.Id == id);
+    }
 }

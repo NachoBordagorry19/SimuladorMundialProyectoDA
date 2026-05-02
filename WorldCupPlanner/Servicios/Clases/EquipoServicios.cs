@@ -50,13 +50,11 @@ public class EquipoServicios
 
     public Equipo EquipoDTOAEntidad(EquipoDTO equipoDto)
     {
-        Equipo equipo = new Equipo()
-        {
-            Nombre = equipoDto.nombre,
-            Confederacion = equipoDto.confederacion,
-            RankingFifa = equipoDto.rankingFifa,
-        };
-        return equipo;
+        return new Equipo(
+            equipoDto.nombre,
+            equipoDto.confederacion,
+            equipoDto.rankingFifa
+        );
     }
 
     public List<EquipoDTO> ObtenerEquipos()
