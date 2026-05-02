@@ -9,11 +9,11 @@ namespace Servicios.Clases;
 
 public class PosicionEquipoServicios : IServicioPosicionEquipo
 {
-    private readonly IEstadioRepositorio _estadioRepositorio;
+    private readonly IPosicionEquipoRepositorio _posicionEquipoRepositorio;
 
-    public PosicionEquipoServicios(IEstadioRepositorio estadioRepositorio)
+    public PosicionEquipoServicios(IPosicionEquipoRepositorio posicionEquipoRepositorio)
     {
-        _estadioRepositorio = estadioRepositorio;
+        _posicionEquipoRepositorio = posicionEquipoRepositorio;
     }
 
     public void AgregarPosicion(PosicionEquipo posicion)
