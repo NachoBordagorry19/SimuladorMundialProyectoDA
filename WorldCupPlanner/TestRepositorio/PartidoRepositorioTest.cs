@@ -90,4 +90,34 @@ public class PartidoRepositorioTest
 
         Assert.AreEqual(0, _partidoRepositorio.ObtenerPartidos().Count);
     }
+    
+    
+    [TestMethod]
+    public void ActualizarPartido_ModificaDatosCorrectamente()
+    {
+        var partido = CrearPartido();
+        _partidoRepositorio.AgregarPartido(partido);
+
+        Estadio nuevoEstadio = new Estadio("Centenario", "Montevideo", "Descripcion", 60000);
+        Partido partidoActualizado = new Partido(
+            partido.Fecha.AddDays(1),
+            nuevoEstadio,
+            partido.Local,
+            partido.Visitante,
+            partido.Fase,
+            2,
+            1
+        );
+
+        partidoActualizado.Id = partido.Id;
+
+        var actualizado = _partidoRepositorio.ActualizarPartido(partidoActualizado);
+        var obtenido = _partidoRepositorio.ObtenerPartidoPorId(partido.Id);
+
+        Assert.IsTrue(actualizado);
+        Assert.IsNotNull(obtenido);
+        Assert.AreEqual(nuevoEstadio, obtenido.Estadio);
+        Assert.AreEqual(2, obtenido.GolesLocal);
+        Assert.AreEqual(1, obtenido.GolesVisitante);
+    }
 }
