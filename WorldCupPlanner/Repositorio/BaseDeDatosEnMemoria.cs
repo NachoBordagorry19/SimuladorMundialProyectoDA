@@ -101,7 +101,7 @@ public class BaseDeDatosEnMemoria
     {
         return _listaDePartidos;
     }
-    
+
     public void ActualizarPartido(Partido partido)
     {
         Partido? partidoParaActualizar = _listaDePartidos.Find(p => p.Id == partido.Id);

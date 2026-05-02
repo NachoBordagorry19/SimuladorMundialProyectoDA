@@ -26,7 +26,7 @@ public class PartidoRepositorioTest
 
         return new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, 0);
     }
-    
+
     [TestMethod]
     public void ObtenerPartidos_CuandoNoHayPartidos_RetornaListaVacia()
     {
@@ -35,8 +35,8 @@ public class PartidoRepositorioTest
         Assert.IsNotNull(partidos);
         Assert.AreEqual(0, partidos.Count);
     }
-    
-    
+
+
     [TestMethod]
     public void CrearPartido_AgregarEnLista()
     {
@@ -49,7 +49,7 @@ public class PartidoRepositorioTest
         Assert.AreEqual(1, partidos.Count);
         Assert.AreSame(partido, partidos[0]);
     }
-    
+
     [TestMethod]
     public void ObtenerPartidoPorId_SiExiste_DevuelveCoincidencia()
     {
@@ -64,7 +64,7 @@ public class PartidoRepositorioTest
         Assert.IsNotNull(encontrado);
         Assert.AreSame(partido2, encontrado);
     }
-    
+
     [TestMethod]
     public void ObtenerPartidoPorId_SiNoExiste_DevuelveNull()
     {
@@ -76,7 +76,7 @@ public class PartidoRepositorioTest
 
         Assert.IsNull(encontrado);
     }
-    
+
     [TestMethod]
     public void EliminarPartido_SiExiste_DejaListaVacia()
     {
@@ -90,8 +90,8 @@ public class PartidoRepositorioTest
 
         Assert.AreEqual(0, _partidoRepositorio.ObtenerPartidos().Count);
     }
-    
-    
+
+
     [TestMethod]
     public void ActualizarPartido_ModificaDatosCorrectamente()
     {
