@@ -8,5 +8,5 @@ public interface IPartidoRepositorio
     void AgregarPartido(Partido partido);
     Partido? ObtenerPartidoPorId(int id);
     void EliminarPartido(Partido partido);
-    bool ActualizarPartido(Partido partido);
+    void ActualizarPartido(Partido partido);
 }

@@ -32,8 +32,8 @@ public class PartidoRepositorio : IPartidoRepositorio
         _BDEnMemoria.BorrarPartido(partido);
     }
 
-    public bool ActualizarPartido(Partido partido)
+    public void ActualizarPartido(Partido partido)
     {
-        return _BDEnMemoria.ActualizarPartido(partido);
+        _BDEnMemoria.ActualizarPartido(partido);
     }
 }
