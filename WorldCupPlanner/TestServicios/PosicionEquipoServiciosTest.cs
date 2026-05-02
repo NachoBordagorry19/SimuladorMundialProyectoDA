@@ -17,8 +17,19 @@ public class PosicionEquipoServiciosTest
     public void TestInitialize()
     {
         _BDEnMemoria = new BaseDeDatosEnMemoria();
-        _posicionEquipoDTO = new PosicionEquipoDTO();
         _posicionEquipoRepositorio = new PosicionEquipoRepositorio(_BDEnMemoria);
         _servicioPosicionEquipo = new PosicionEquipoServicios(_posicionEquipoRepositorio);
+        _posicionEquipoDTO = new PosicionEquipoDTO()
+        {
+            EquipoNombre = "Uruguay",
+            PartidosJugados = 0,
+            Ganados = 0,
+            Empatados = 0,
+            Perdidos = 0,
+            GolesAFavor = 0,
+            GolesEnContra = 0,
+            Diferencia = 0,
+            Puntos = 0
+        };
     }
 }

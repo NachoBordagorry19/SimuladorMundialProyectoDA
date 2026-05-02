@@ -1,14 +1,15 @@
+using Dominio.Clases;
 namespace Servicios.Interfaces;
 
 public interface IServicioPosicionEquipo
 {
-    void AgregarPosicion(PosicionEquipoDTO posicion);
+    void AgregarPosicion(PosicionEquipo posicion);
 
-    void ActualizarPosicion(PosicionEquipoDTO posicion);
+    void ActualizarPosicion(PosicionEquipo posicion);
 
-    void EliminarPosicion(PosicionEquipoDTO posicion);
+    void EliminarPosicion(PosicionEquipo posicion);
 
-    List<PosicionEquipoDTO> ObtenerPosiciones();
+    List<PosicionEquipo> ObtenerPosiciones();
 
-    PosicionEquipoDTO ObtenerPosicionPorEquipo(string nombreEquipo);
+    PosicionEquipo ObtenerPosicionPorEquipo(string nombreEquipo);
 }
