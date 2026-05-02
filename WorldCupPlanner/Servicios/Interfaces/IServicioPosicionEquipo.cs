@@ -13,5 +13,5 @@ public interface IServicioPosicionEquipo
 
     List<PosicionEquipoDTO> ObtenerPosiciones();
 
-    PosicionEquipo ObtenerPosicionPorEquipo(string nombreEquipo);
+    PosicionEquipoDTO ObtenerPosicionPorEquipo(string nombreEquipo);
 }
