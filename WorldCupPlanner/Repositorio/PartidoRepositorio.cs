@@ -26,4 +26,9 @@ public class PartidoRepositorio : IPartidoRepositorio
     {
         return _BDEnMemoria.ObtenerPartidos().FirstOrDefault(p => p.Id == id);
     }
+
+    public void EliminarPartido(Partido partido)
+    {
+        _BDEnMemoria.BorrarPartido(partido);
+    }
 }
