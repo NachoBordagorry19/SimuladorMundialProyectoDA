@@ -8,7 +8,7 @@ using Servicios.Modelo;
 
 namespace Servicios.Clases;
 
-public class ServicioUsuario:IServicioUsuario
+public class ServicioUsuario : IServicioUsuario
 {
     private readonly IUsuarioRepositorio _usuarioRepositorio;
 
@@ -67,7 +67,7 @@ public class ServicioUsuario:IServicioUsuario
             FechaNacimiento = usuario.FechaNacimiento,
         };
     }
-    
+
     public List<UsuarioDTO> ObtenerUsuarios()
     {
         List<UsuarioDTO> usuarioDTO = new List<UsuarioDTO>();
@@ -103,8 +103,8 @@ public class ServicioUsuario:IServicioUsuario
             _usuarioRepositorio.EliminarUsuario(usuarioExistente);
         }
     }
-    
-    
+
+
 
 
 

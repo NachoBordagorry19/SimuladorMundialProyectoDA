@@ -15,7 +15,7 @@ public class EstadioServiciosTest
     private EstadioDTO _estadioDTO;
 
     [TestInitialize]
-    public void TestInitialize() 
+    public void TestInitialize()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
@@ -32,14 +32,14 @@ public class EstadioServiciosTest
 
     [TestMethod]
     public void AgregarEstadio_NombreUnicoEnSistema()
-        {
-            _servicioEstadio.AgregarEstadio(_estadioDTO);
-            Assert.AreEqual("CDS", _estadioDTO.Nombre);
-            Assert.AreEqual("Montevideo", _estadioDTO.Ciudad);
-            Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
-            Assert.AreEqual(50000, _estadioDTO.CapacidadLocativa);
-        }
-    
+    {
+        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        Assert.AreEqual("CDS", _estadioDTO.Nombre);
+        Assert.AreEqual("Montevideo", _estadioDTO.Ciudad);
+        Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
+        Assert.AreEqual(50000, _estadioDTO.CapacidadLocativa);
+    }
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void AgregarEstadio_SiNombreExiste_LanzaExcepcion()
@@ -60,13 +60,13 @@ public class EstadioServiciosTest
             Descripcion = "descripcion",
             CapacidadLocativa = 50000,
         };
-        
+
         _servicioEstadio.AgregarEstadio(estadio2);
-        
+
         var estadios = _servicioEstadio.ObtenerEstadios();
         Assert.AreEqual(2, estadios.Count);
     }
-    
+
     [TestMethod]
     public void ObtenerEstadioPorNombre_DevuelveCorrectamente()
     {
@@ -86,7 +86,7 @@ public class EstadioServiciosTest
 
         Assert.AreEqual("Monumental", obtenido.Nombre);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void ObtenerEstadioPorNombre_SiNoExiste_LanzaExcepcion()
@@ -102,7 +102,7 @@ public class EstadioServiciosTest
         var estadios = _servicioEstadio.ObtenerEstadios();
         Assert.AreEqual(0, estadios.Count);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void EliminarEstadio_SiNoExiste_LanzaExcepcion()
@@ -130,7 +130,7 @@ public class EstadioServiciosTest
         Assert.AreEqual("Nueva Descripcion", obtenido.Descripcion);
         Assert.AreEqual(60000, obtenido.CapacidadLocativa);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void ActualizarEstadio_SiNoExiste_LanzaExcepcion()

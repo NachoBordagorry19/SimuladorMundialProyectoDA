@@ -49,7 +49,7 @@ public class UsuarioServicioTest
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void AgregarUsuario_SiRolesDuplicados_LanzoExcepcion()
@@ -62,7 +62,7 @@ public class UsuarioServicioTest
     public void ObtenerUsuarios_SeDevuelvenCorrectamente()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
-        UsuarioDTO usuario = new  UsuarioDTO();
+        UsuarioDTO usuario = new UsuarioDTO();
         usuario.Nombre = "Mateo";
         usuario.Apellido = "Roo";
         usuario.FechaNacimiento = new DateTime(2000, 05, 15);
@@ -70,9 +70,9 @@ public class UsuarioServicioTest
         usuario.Roles = new List<Rol> { Rol.Editor };
         _servicioUsuario.AgregarUsuario(usuario);
         var usuarios = _servicioUsuario.ObtenerUsuarios();
-        Assert.AreEqual(usuarios.Count(),2);
+        Assert.AreEqual(usuarios.Count(), 2);
     }
-    
+
     [TestMethod]
     public void ObtenerUsuario_SeDevuelveUsuarioCorrectamente()
     {

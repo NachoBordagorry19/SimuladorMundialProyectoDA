@@ -3,7 +3,7 @@ using Repositorio.Interfaces;
 
 namespace Repositorio;
 
-public class EquipoRepositorio: IEquipoRepositorio
+public class EquipoRepositorio : IEquipoRepositorio
 {
     private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
 

@@ -10,7 +10,10 @@ public class Partido
     private Estadio _estadio;
     private Equipo _local;
     private Equipo _visitante;
-    private Grupo _grupo;
+    private Fase _fase;
+    private EstadoPartido _estado;
+    private int _golesLocal;
+    private int _golesVisitante;
 
     public int Id
     {
@@ -24,8 +27,9 @@ public class Partido
         set
         {
             if (value == DateTime.MinValue)
+            {
                 throw new ArgumentException("La fecha es invalida");
-
+            }
             _fecha = value;
         }
     }
@@ -36,7 +40,10 @@ public class Partido
         set
         {
             if (value == null)
+            {
                 throw new ArgumentException("El estadio no puede ser null");
+            }
+
             _estadio = value;
         }
     }
@@ -47,7 +54,9 @@ public class Partido
         set
         {
             if (value == null)
-                throw new ArgumentException("El equipo local es requerido");
+            {
+                throw new ArgumentException("El equipo local es obligatorio");
+            }
 
             _local = value;
         }
@@ -59,29 +68,82 @@ public class Partido
         set
         {
             if (value == null)
-                throw new ArgumentException("El equipo visitante es requerido");
+            {
+                throw new ArgumentException("El equipo visitante es obligatorio");
+            }
 
             if (_local != null && value == _local)
-                throw new ArgumentException("Los equipos deben ser distintos");
+            {
+                throw new ArgumentException("Los equipos no pueden ser los mismos");
+            }
 
             _visitante = value;
         }
     }
 
-    public Grupo Grupo
+    public Equipo? Vencedor
     {
-        get => _grupo;
-        set
+        get
         {
-            if (value == null)
-                throw new ArgumentException("Grupo  es requerido");
+            if (GolesLocal > GolesVisitante)
+            {
+                return Local;
+            }
 
-            _grupo = value;
+            if (GolesVisitante > GolesLocal)
+            {
+                return Visitante;
+            }
+
+            return null;
         }
     }
 
+    public Fase Fase
+    {
+        get => _fase;
+        set => _fase = value;
+    }
 
-    public Partido(DateTime fecha, Estadio estadio, Equipo local, Equipo visitante, Grupo grupo)
+    public EstadoPartido Estado
+    {
+        get => _estado;
+        set => _estado = value;
+    }
+
+    public void MarcarComoJugado()
+    {
+        Estado = EstadoPartido.Jugado;
+    }
+
+    public int GolesLocal
+    {
+        get => _golesLocal;
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Los goles no pueden ser negativos");
+            }
+
+            _golesLocal = value;
+        }
+    }
+
+    public int GolesVisitante
+    {
+        get => _golesVisitante;
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Los goles no pueden ser negativos");
+            }
+
+            _golesVisitante = value;
+        }
+    }
+    public Partido(DateTime fecha, Estadio estadio, Equipo local, Equipo visitante, Fase fase, int golesLocal, int golesVisitante)
     {
         _contadorId++;
         Id = _contadorId;
@@ -90,6 +152,9 @@ public class Partido
         Estadio = estadio;
         Local = local;
         Visitante = visitante;
-        Grupo = grupo;
+        Fase = fase;
+        Estado = EstadoPartido.Pendiente;
+        GolesLocal = golesLocal;
+        GolesVisitante = golesVisitante;
     }
 }

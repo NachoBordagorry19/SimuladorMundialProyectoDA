@@ -8,6 +8,6 @@ public class UsuarioDTO
     public string Apellido { get; set; }
     public string Email { get; set; }
     public DateTime FechaNacimiento { get; set; }
-    
+
     public List<Rol> Roles { get; set; } = new();
 }

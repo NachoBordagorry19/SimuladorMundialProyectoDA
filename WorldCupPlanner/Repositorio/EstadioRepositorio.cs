@@ -33,7 +33,7 @@ public class EstadioRepositorio : IEstadioRepositorio
     {
         _BDEnMemoria.BorrarEstadio(estadio);
     }
-    
+
     public bool ActualizarEstadio(Estadio estadio)
     {
         return _BDEnMemoria.ActualizarEstadio(estadio);
