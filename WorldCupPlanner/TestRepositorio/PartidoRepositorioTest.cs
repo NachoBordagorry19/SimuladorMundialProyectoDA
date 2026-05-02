@@ -50,4 +50,18 @@ public class PartidoRepositorioTest
         Assert.AreSame(partido, partidos[0]);
     }
     
+    [TestMethod]
+    public void ObtenerPartidoPorId_SiExiste_DevuelveCoincidencia()
+    {
+        var partido1 = CrearPartido();
+        var partido2 = CrearPartido();
+
+        _partidoRepositorio.AgregarPartido(partido1);
+        _partidoRepositorio.AgregarPartido(partido2);
+
+        var encontrado = _partidoRepositorio.ObtenerPartidoPorId(partido2.Id);
+
+        Assert.IsNotNull(encontrado);
+        Assert.AreSame(partido2, encontrado);
+    }
 }
