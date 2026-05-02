@@ -76,4 +76,18 @@ public class PartidoRepositorioTest
 
         Assert.IsNull(encontrado);
     }
+    
+    [TestMethod]
+    public void EliminarPartido_SiExiste_DejaListaVacia()
+    {
+        var partido = CrearPartido();
+
+        _partidoRepositorio.AgregarPartido(partido);
+
+        Assert.AreEqual(1, _partidoRepositorio.ObtenerPartidos().Count);
+
+        _partidoRepositorio.EliminarPartido(partido);
+
+        Assert.AreEqual(0, _partidoRepositorio.ObtenerPartidos().Count);
+    }
 }
