@@ -1,76 +1,44 @@
-html, body {
-    background-color: #ccd6f6 !important;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.top-row {
-    background-color: #0a192f;
+.nav-header {
     height: 3.5rem;
     display: flex;
     align-items: center;
-    padding: 0 1rem;
-    width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.25rem 0.5rem;
-    margin-right: 1rem;
-    cursor: pointer;
-}
-
-.navbar-toggler-icon {
-    display: inline-block;
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: middle;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 100%;
-}
-
-.top-row-title {
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    background-color: #0a192f;
     color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-decoration: none;
+    z-index: 3000;
+    position: relative;
 }
 
-.content {
-    flex: 1;
+.ham-menu span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #ccd6f6;
+    border-radius: 9px;
+    transition: .25s ease-in-out;
+}
+
+.ham-menu span:nth-child(1) { top: 0; }
+.ham-menu span:nth-child(2) { top: 10px; }
+.ham-menu span:nth-child(3) { top: 20px; }
+
+.ham-menu.active span:nth-child(1) { top: 10px; transform: rotate(135deg); }
+.ham-menu.active span:nth-child(2) { opacity: 0; left: -60px; }
+.ham-menu.active span:nth-child(3) { top: 10px; transform: rotate(-135deg); }
+
+.off-screen-menu.active {
+    right: 0;
 }
 
 @media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-    .sidebar {
+    .ham-menu { display: none; }
+    .off-screen-menu {
+        position: static;
         width: 250px;
-        background-color: #0a192f;
-        min-height: 100vh;
+        right: 0;
+        height: auto;
     }
-
-    .navbar-toggler {
-        display: none;
-    }
+    .main-container { display: flex; }
 }
