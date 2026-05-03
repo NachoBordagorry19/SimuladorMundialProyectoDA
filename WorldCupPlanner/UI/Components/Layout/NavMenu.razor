@@ -1,19 +1,20 @@
 ﻿@rendermode InteractiveServer
 
 <div class="header-bar">
-    <span class="logo">WorldCupPlanner</span>
-
-    <div class="hamburguesa" @onclick="ToggleMenu">
+    <div class="hamburguesa @(isOpen ? "active" : "")" @onclick="ToggleMenu">
         <span></span>
         <span></span>
         <span></span>
     </div>
+    <span class="logo">WorldCupPlanner</span>
 </div>
+@if (isOpen)
+{
+    <div class="menu-overlay" @onclick="ToggleMenu"></div>
+}
 
 <div class="sidebar-menu @(isOpen ? "active" : "")">
     
-    <div class="close-btn" @onclick="ToggleMenu">✕</div>
-
     <nav class="nav-links">
         <NavLink href="/home">Inicio</NavLink>
         <NavLink href="/equipos">Equipos</NavLink>
@@ -25,5 +26,9 @@
 
 @code {
     private bool isOpen = false;
-    private void ToggleMenu() => isOpen = !isOpen;
+
+    private void ToggleMenu()
+    {
+        isOpen = !isOpen;
+    }
 }

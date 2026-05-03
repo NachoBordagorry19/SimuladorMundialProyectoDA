@@ -3,7 +3,7 @@
     background-color: #0a192f;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 0 25px;
     color: white;
     position: sticky;
@@ -13,6 +13,7 @@
 }
 
 .logo {
+    margin-left: 15px;
     font-weight: bold;
     font-size: 1.3rem;
 }
@@ -20,9 +21,11 @@
 .hamburguesa {
     width: 30px;
     height: 20px;
+    display: block;
     cursor: pointer;
     position: relative;
     margin-right: 10px;
+    z-index: 1001;
 }
 
 .hamburguesa span {
@@ -65,6 +68,16 @@
     left: 0;
 }
 
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 998;
+}
+
 .nav-links {
     display: flex;
     flex-direction: column;
@@ -88,15 +101,4 @@
 .nav-links ::deep a.active {
     background-color: rgba(100, 255, 218, 0.2);
     color: #ccd6f6;
-}
-
-
-.hamburguesa {
-    display: block;
-}
-
-.sidebar-menu {
-    position: fixed;
-    top: 60px;
-    right: -100%;
 }
