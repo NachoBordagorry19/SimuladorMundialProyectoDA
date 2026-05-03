@@ -1,18 +1,14 @@
-.page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+.layout-body {
+    display: block;
 }
 
-main {
+.main-content {
     flex: 1;
+    padding: 30px;
 }
 
-.top-row {
-    background-color: #0a192f;
-    color: white;
-}
-
-.sidebar {
-    background-image: linear-gradient(180deg, #0a192f 0%, #112240 100%);
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
 }

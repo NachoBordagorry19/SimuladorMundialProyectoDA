@@ -1,47 +1,34 @@
 ﻿@rendermode InteractiveServer
 
-<div class="nav-header">
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon">☰</span>
-    </button>
-    <span class="nav-brand">WorldCupPlanner</span>
+<div class="header-bar">
+    <div class="hamburguesa @(isOpen ? "active" : "")" @onclick="ToggleMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <span class="logo">WorldCupPlanner</span>
 </div>
+@if (isOpen)
+{
+    <div class="menu-overlay" @onclick="ToggleMenu"></div>
+}
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="nav-menu">
-        <ul class="nav-list">
-            <li class="nav-item">
-                <NavLink href="/home" class="nav-link" Match="NavLinkMatch.All">Inicio</NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink href="/AgregarUsuario" class="nav-link">Usuarios</NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink href="/equipos" class="nav-link">Equipos</NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink href="/partidos" class="nav-link">Partidos</NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink href="/fixture" class="nav-link">Fixture</NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink href="/importar" class="nav-link">Importar</NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink href="/login" class="nav-link">Login</NavLink>
-            </li>
-        </ul>
+<div class="sidebar-menu @(isOpen ? "active" : "")">
+    
+    <nav class="nav-links">
+        <NavLink href="/home">Inicio</NavLink>
+        <NavLink href="/equipos">Equipos</NavLink>
+        <NavLink href="/partidos">Partidos</NavLink>
+        <NavLink href="/fixture">Fixture</NavLink>
+        <NavLink href="/importar">Importar</NavLink>
     </nav>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool isOpen = false;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : "show";
-
-    private void ToggleNavMenu()
+    private void ToggleMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        isOpen = !isOpen;
     }
 }
