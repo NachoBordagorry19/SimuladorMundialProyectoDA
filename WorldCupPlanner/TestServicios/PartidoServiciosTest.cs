@@ -74,4 +74,11 @@ public class PartidoServiciosTest
         var partidos = _partidoRepositorio.ObtenerPartidos();
         Assert.AreEqual(1, partidos.Count);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarPartido_SiPartidoEsNulo_LanzoExcepcion()
+    {
+        _servicioPartido.AgregarPartido(null, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+    }
 }
