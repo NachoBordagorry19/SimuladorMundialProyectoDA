@@ -51,12 +51,7 @@ public class PartidoServiciosTest
             confederacion = _confederacion,
             rankingFifa = 3
         };
-    }
-
-    [TestMethod]
-    public void AgregarPartido()
-    {
-
+        
         _partidoDTO = new PartidoDTO
         {
             Fecha = new DateTime(2026, 6, 1),
@@ -68,7 +63,11 @@ public class PartidoServiciosTest
             golesLocal = 0,
             golesVisitante = 0
         };
-        
+    }
+
+    [TestMethod]
+    public void AgregarPartido()
+    {
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
 
         var partidos = _partidoRepositorio.ObtenerPartidos();
@@ -80,5 +79,15 @@ public class PartidoServiciosTest
     public void AgregarPartido_SiPartidoEsNulo_LanzoExcepcion()
     {
         _servicioPartido.AgregarPartido(null, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+    }
+
+    [TestMethod]
+    public void ObtenerPartido_SiPartidoValido_SeObtieneCorrectamente()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO,  equipoVisitanteDTO, estadioDTO);
+        PartidoDTO partidoPrueba = _servicioPartido.ObtenerPartido();
+        Assert.AreEqual(partidoPrueba.equipoLocal, _partidoDTO.equipoLocal);
+        Assert.AreEqual(partidoPrueba.equipoVisitante, _partidoDTO.equipoVisitante);
+        Assert.AreEqual(partidoPrueba.Fecha, _partidoDTO.Fecha);
     }
 }
