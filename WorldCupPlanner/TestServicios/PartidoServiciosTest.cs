@@ -117,4 +117,12 @@ public class PartidoServiciosTest
     {
         PartidoDTO partidoDto = _servicioPartido.ObtenerPartido(-1);
     }
+
+    [TestMethod]
+    public void EliminarPartido_SiPartidoValido_SeEliminaCorrectamente()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO,equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
+        _servicioPartido.EliminarPartido(_partidoDTO);
+        Assert.AreEqual(0,_servicioPartido.ObtenerPartidos().Count);
+    }
 }
