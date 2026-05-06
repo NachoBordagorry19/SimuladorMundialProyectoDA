@@ -110,4 +110,11 @@ public class PartidoServiciosTest
         Assert.AreEqual(partidoPrueba.equipoVisitante.nombre, _partidoDTO.equipoVisitante.nombre);
         Assert.AreEqual(partidoPrueba.Fecha, _partidoDTO.Fecha);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerPartido_SiPartidoNoExiste_SeLanzaExcepcion()
+    {
+        PartidoDTO partidoDto = _servicioPartido.ObtenerPartido(-1);
+    }
 }
