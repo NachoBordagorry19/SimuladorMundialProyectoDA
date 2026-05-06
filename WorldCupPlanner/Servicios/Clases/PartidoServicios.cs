@@ -58,6 +58,10 @@ public class PartidoServicios
     
     public PartidoDTO ObtenerPartido(int id)
     {
+        if (_partidoRepositorio.ObtenerPartidoPorId(id) == null)
+        {
+            throw new ArgumentException("El partido a consultar no existe");
+        }
         Partido? partido = _partidoRepositorio.ObtenerPartidoPorId(id);
         return PartidoEntidadADto(partido);
     }
