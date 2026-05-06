@@ -19,6 +19,7 @@ public class PartidoServiciosTest
     private EstadioDTO estadioDTO;
     private EquipoDTO equipoLocalDTO;
     private EquipoDTO equipoVisitanteDTO;
+    private Partido partido;
     
     [TestInitialize]
     public void Inicializar()
@@ -54,6 +55,7 @@ public class PartidoServiciosTest
         
         _partidoDTO = new PartidoDTO
         {
+            
             Fecha = new DateTime(2026, 6, 1),
             Estadio = estadioDTO,
             equipoLocal = equipoLocalDTO,
@@ -63,6 +65,7 @@ public class PartidoServiciosTest
             golesLocal = 0,
             golesVisitante = 0
         };
+        
     }
 
     [TestMethod]
@@ -81,6 +84,14 @@ public class PartidoServiciosTest
         _servicioPartido.AgregarPartido(null, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
     }
 
+    [TestMethod]
+    public void ObtenerPartidos_SiHayPartidos_LosTraigo()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO,equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
+        List<PartidoDTO> partidosPrueba = _servicioPartido.ObtenerPartidos();
+        Assert.AreEqual(2, partidosPrueba.Count);
+    }
+    
     [TestMethod]
     public void ObtenerPartido_SiPartidoValido_SeObtieneCorrectamente()
     {

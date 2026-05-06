@@ -56,5 +56,42 @@ public class PartidoServicios
         return estadio;
     }
     
+    public PartidoDTO ObtenerPartido(int id)
+    {
+        Partido partido = _partidoRepositorio.ObtenerPartidoPorId(id);
+        return PartidoEntidadADto(partido);
+    }
     
+    
+    private PartidoDTO PartidoEntidadADto(Partido partido)
+    {
+
+        return new PartidoDTO
+        {
+            Fecha = partido.Fecha,
+            Estadio = new EstadioDTO
+            {
+                Nombre = partido.Estadio.Nombre,
+                Ciudad = partido.Estadio.Ciudad,
+                Descripcion = partido.Estadio.Descripcion,
+                CapacidadLocativa = partido.Estadio.CapacidadLocativa
+            },
+            equipoLocal = new EquipoDTO
+            {
+                nombre = partido.Local.Nombre,
+                confederacion = partido.Local.Confederacion,
+                rankingFifa = partido.Local.RankingFifa
+            },
+            equipoVisitante = new EquipoDTO
+            {
+                nombre = partido.Visitante.Nombre,
+                confederacion = partido.Visitante.Confederacion,
+                rankingFifa = partido.Visitante.RankingFifa
+            },
+            fase = partido.Fase,
+            estadoPartido = partido.Estado,
+            golesLocal = partido.GolesLocal,
+            golesVisitante = partido.GolesVisitante
+        };
+    }
 }
