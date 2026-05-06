@@ -16,6 +16,11 @@ public class PartidoServicios
     
     public void AgregarPartido(PartidoDTO partidoDto, EquipoDTO equipoLocal, EquipoDTO equipoVisitante, EstadioDTO estadio)
     {
+
+        if (partidoDto == null)
+        {
+            throw new ArgumentException("El partido no puede ser nulo porfavor ingrese partido valido");
+        }
         
         var partido = new Partido(
             partidoDto.Fecha == default ? DateTime.UtcNow : partidoDto.Fecha,
