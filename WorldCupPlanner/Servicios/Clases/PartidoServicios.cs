@@ -58,12 +58,16 @@ public class PartidoServicios
     
     public PartidoDTO ObtenerPartido(int id)
     {
-        Partido partido = _partidoRepositorio.ObtenerPartidoPorId(id);
+        Partido? partido = _partidoRepositorio.ObtenerPartidoPorId(id);
         return PartidoEntidadADto(partido);
     }
 
     public List<PartidoDTO> ObtenerPartidos()
     {
+        if (_partidoRepositorio.ObtenerPartidos().Count == 0)
+        {
+            throw new ArgumentException("No hay partidos registrados");
+        }
         List<Partido> partidos = _partidoRepositorio.ObtenerPartidos();
         List<PartidoDTO> partidosDTO = new List<PartidoDTO>();
         foreach(Partido partido in partidos)
