@@ -61,7 +61,18 @@ public class PartidoServicios
         Partido partido = _partidoRepositorio.ObtenerPartidoPorId(id);
         return PartidoEntidadADto(partido);
     }
-    
+
+    public List<PartidoDTO> ObtenerPartidos()
+    {
+        List<Partido> partidos = _partidoRepositorio.ObtenerPartidos();
+        List<PartidoDTO> partidosDTO = new List<PartidoDTO>();
+        foreach(Partido partido in partidos)
+        {
+            PartidoDTO partidoDTO = PartidoEntidadADto(partido);
+            partidosDTO.Add(partidoDTO);
+        }
+        return  partidosDTO;
+    }
     
     private PartidoDTO PartidoEntidadADto(Partido partido)
     {
