@@ -89,16 +89,18 @@ public class PartidoServiciosTest
     {
         _servicioPartido.AgregarPartido(_partidoDTO,equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
         List<PartidoDTO> partidosPrueba = _servicioPartido.ObtenerPartidos();
-        Assert.AreEqual(2, partidosPrueba.Count);
+        Assert.AreEqual(1, partidosPrueba.Count);
     }
     
     [TestMethod]
     public void ObtenerPartido_SiPartidoValido_SeObtieneCorrectamente()
     {
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO,  equipoVisitanteDTO, estadioDTO);
-        PartidoDTO partidoPrueba = _servicioPartido.ObtenerPartido();
-        Assert.AreEqual(partidoPrueba.equipoLocal, _partidoDTO.equipoLocal);
-        Assert.AreEqual(partidoPrueba.equipoVisitante, _partidoDTO.equipoVisitante);
+        Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
+        int id = partido.Id;
+        PartidoDTO partidoPrueba = _servicioPartido.ObtenerPartido(id);
+        Assert.AreEqual(partidoPrueba.equipoLocal.nombre, _partidoDTO.equipoLocal.nombre);
+        Assert.AreEqual(partidoPrueba.equipoVisitante.nombre, _partidoDTO.equipoVisitante.nombre);
         Assert.AreEqual(partidoPrueba.Fecha, _partidoDTO.Fecha);
     }
 }
