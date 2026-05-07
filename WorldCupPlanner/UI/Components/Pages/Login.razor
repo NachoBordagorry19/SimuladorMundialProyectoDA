@@ -1,0 +1,65 @@
+@page "/login"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioUsuario ServicioUsuario
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
+
+<div class="home-container">
+    <section class="home-hero">
+        <div>
+            <h1 class="hero-title">Login</h1>
+            <p class="hero-sub">Ingrese con un usuario registrado en el sistema.</p>
+        </div>
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(mensajeError))
+    {
+        <div class="alert alert-danger">@mensajeError</div>
+    }
+
+    <EditForm Model="login" OnValidSubmit="IniciarSesion">
+        <div class="home-sections" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
+            <div class="home-section">
+                <label>Email</label>
+                <InputText @bind-Value="login.Email" class="form-control" style="width:100%;" />
+            </div>
+
+            <div class="home-section">
+                <label>Contraseña</label>
+                <InputText @bind-Value="login.Contraseña" type="password" class="form-control" style="width:100%;" />
+            </div>
+        </div>
+
+        <div class="home-actions">
+            <button type="submit" class="btn">Ingresar</button>
+            <NavLink href="/home" class="btn secondary">Cancelar</NavLink>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private LoginModel login = new LoginModel();
+    private string? mensajeError;
+
+    private void IniciarSesion()
+    {
+        try
+        {
+            UsuarioDTO usuario = ServicioUsuario.AutenticarUsuario(login.Email, login.Contraseña);
+            Sesion.UsuarioActual = usuario;
+            Navigation.NavigateTo("/home");
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
+    }
+
+    private class LoginModel
+    {
+        public string Email { get; set; } = "";
+        public string Contraseña { get; set; } = "";
+    }
+}
