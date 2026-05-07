@@ -96,6 +96,24 @@ public class PartidoServicios
         }
     }
 
+    public void ActualizarPartido(PartidoDTO partidoDTO)
+    {
+        var partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
+        
+        if (partidoDTO.Fecha != default)
+        {
+            partidoExistente.Fecha = partidoDTO.Fecha;
+        }
+
+        if (partidoDTO.Estadio != null)
+        {
+            partidoExistente.Estadio = EstadioDTOAEntidad(partidoDTO.Estadio);
+        }
+
+        partidoExistente.GolesLocal = partidoDTO.golesLocal;
+        partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
+    }
+
     private PartidoDTO PartidoEntidadADto(Partido partido)
     {
 
