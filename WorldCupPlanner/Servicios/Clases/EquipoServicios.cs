@@ -59,7 +59,8 @@ public class EquipoServicios : IServicioEquipo
 
             for (int i = 1; i <= faltantes; i++)
             {
-                string nombreFormateado = conf.ToString() + "_" + (cantidadActual + i).ToString("D2");
+                int numeroEquipo = cantidadActual + i;
+                string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
                 EquipoDTO nuevoEquipo = new EquipoDTO();
                 nuevoEquipo.nombre = nombreFormateado;
                 nuevoEquipo.confederacion = conf;
