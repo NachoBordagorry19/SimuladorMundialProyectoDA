@@ -37,7 +37,33 @@ public class EquipoServicios : IServicioEquipo
 
     public void GenerarEquiposAutomaticamente(int semillaCompletar)
     {
+        Array valoresEnum = Enum.GetValues(typeof(Confederacion));
+
+        foreach (Confederacion conf in valoresEnum)
+        {
+            int cupoMaximo = ObtenerCupo(conf);
+
+            int cantidadActual = 0;
+            List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
         
+            foreach (EquipoDTO equipo in todosLosEquipos)
+            {
+                if (equipo.confederacion == conf)
+                {
+                    cantidadActual++;
+                }
+            }
+
+            for (int i = cantidadActual; i < cupoMaximo; i++)
+            {
+                EquipoDTO nuevoEquipo = new EquipoDTO();
+                nuevoEquipo.nombre = "Temp_" + Guid.NewGuid().ToString();
+                nuevoEquipo.confederacion = conf;
+                nuevoEquipo.rankingFifa = 100;
+
+                this.AgregarEquipo(nuevoEquipo);
+            }
+        }
     }
     public int ObtenerCupo(Confederacion confederacion)
     {
