@@ -62,7 +62,13 @@ public class Equipo
     public int GolesAFavor
     {
         get => _golesAFavor;
-        set => _golesAFavor = value;
+        set 
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Los goles a favor no pueden ser negativos");
+            }
+        }
     }
 
     public int DiferenciaDeGoles
