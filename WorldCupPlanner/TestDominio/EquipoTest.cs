@@ -50,4 +50,12 @@ public class EquipoTest
         Assert.AreEqual(0,equipo.DiferenciaDeGoles);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void SeQuiereAgregarPuntosNegativos_LanzoExcepcion()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
+        int puntos = -20;
+        equipo.Puntos = puntos;
+    }
 }
