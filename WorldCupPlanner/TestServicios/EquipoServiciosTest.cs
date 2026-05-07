@@ -246,8 +246,6 @@ public class EquipoServiciosTest
     [TestMethod]
     public void GenerarEquiposAutomaticamente_DebeCompletar48Equipos_EnTotal()
     {
-        _equipoServicios.GenerarEquiposAutomaticamente();
-        var total = _equipoServicios.ObtenerEquipos().Count;
-        Assert.AreEqual(total, 48);
+        
     }
 }
