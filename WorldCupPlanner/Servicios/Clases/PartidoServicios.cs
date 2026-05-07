@@ -104,7 +104,7 @@ public class PartidoServicios
             throw new ArgumentException("El partido no puede ser nulo");
         }
 
-        var partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
+        Partido partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
         
         if (partidoExistente == null)
         {
@@ -120,9 +120,6 @@ public class PartidoServicios
         {
             partidoExistente.Estadio = EstadioDTOAEntidad(partidoDTO.Estadio);
         }
-
-        partidoExistente.GolesLocal = partidoDTO.golesLocal;
-        partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
     }
 
     private PartidoDTO PartidoEntidadADto(Partido partido)

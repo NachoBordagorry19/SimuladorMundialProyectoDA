@@ -170,4 +170,20 @@ public class PartidoServiciosTest
         _servicioPartido.ActualizarPartido(null);
     }
 
+    [TestMethod]
+    public void ActualizarPartido_SiCargaResultado_SeMarcoComoJugado()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+        Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
+        int id = partido.Id;
+        
+        _partidoDTO.golesLocal = 3;
+        _partidoDTO.golesVisitante = 2;
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+        
+        PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(id);
+        Assert.AreEqual(3, partidoActualizado.golesLocal);
+        Assert.AreEqual(2, partidoActualizado.golesVisitante);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.estadoPartido);
+    }
 }
