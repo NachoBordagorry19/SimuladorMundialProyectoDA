@@ -1,6 +1,12 @@
+using Dominio.Enums;
+using Servicios.Modelo;
+
 namespace Servicios.Interfaces;
 
-public class IServicioEquipo
+public interface IServicioEquipo
 {
-    
+    void AgregarEquipo(EquipoDTO equipoDTO);
+    List<EquipoDTO> ObtenerEquipos();
+    void GenerarEquiposAutomaticamente();
+    int ObtenerCupo(Confederacion confederacion);
 }
