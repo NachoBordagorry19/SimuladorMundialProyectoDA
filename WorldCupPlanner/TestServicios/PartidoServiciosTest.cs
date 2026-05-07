@@ -125,4 +125,11 @@ public class PartidoServiciosTest
         _servicioPartido.EliminarPartido(_partidoDTO);
         Assert.AreEqual(0,_servicioPartido.ObtenerPartidos().Count);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarPartido_SiPartidoNoValido_SeLanzaExcepcion()
+    {
+        _servicioPartido.EliminarPartido(_partidoDTO);
+    }
 }
