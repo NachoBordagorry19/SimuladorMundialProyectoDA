@@ -211,7 +211,6 @@ public class EquipoServiciosTest
     [TestMethod]
     public void ResolverEmpates_MismaSemilla_OrdenYAuditoriaDeterministica()
     {
-        // Arrange: empato en ranking 10 entre A y B
         var equipos = new List<EquipoDTO>
     {
         new EquipoDTO { nombre = "EquipoA", confederacion = Confederacion.UEFA, rankingFifa = 10 },
@@ -242,5 +241,13 @@ public class EquipoServiciosTest
         var nombresEntrada = equipos.Select(e => e.nombre).OrderBy(n => n).ToList();
         var nombresSalida = r1.EquiposOrdenados.Select(e => e.nombre).OrderBy(n => n).ToList();
         CollectionAssert.AreEqual(nombresEntrada, nombresSalida);
+    }
+
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_DebeCompletar48Equipos_EnTotal()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente();
+        var total = _equipoServicios.ObtenerEquipos().Count;
+        Assert.AreEqual(total, 48);
     }
 }

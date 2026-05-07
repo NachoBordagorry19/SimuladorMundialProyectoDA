@@ -35,7 +35,22 @@ public class EquipoServicios : IServicioEquipo
         _equipoRepositorio.AgregarEquipo(equipo);
     }
 
-    private int ObtenerCupo(Confederacion confederacion)
+    public void GenerarEquiposAutomaticamente()
+    {
+        int actuales = _equipoRepositorio.ObtenerEquipos().Count;
+        int faltantes = 48 - actuales;
+
+        for (int i = 0; i < faltantes; i++)
+        {
+            var nuevo = new EquipoDTO { 
+                nombre = $"Temp_{Guid.NewGuid()}", 
+                confederacion = Confederacion.UEFA, 
+                rankingFifa = 100 
+            };
+            this.AgregarEquipo(nuevo);
+        }
+    }
+    public int ObtenerCupo(Confederacion confederacion)
     {
         switch (confederacion)
         {
@@ -202,4 +217,6 @@ public class EquipoServicios : IServicioEquipo
             .ToList();
         return ordenBase;
     }
+    
+    
 }
