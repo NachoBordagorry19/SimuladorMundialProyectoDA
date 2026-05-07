@@ -181,6 +181,11 @@ public class PartidoServicios
         
         Partido partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
 
+        if (partidoExistente == null)
+        {
+            throw new ArgumentException("El partido no existe, porfavor ingrese un partido existente");
+        }
+
         Random random = new Random(semillaSimulacion);
 
         int rankingLocal = partidoExistente.Local.RankingFifa;
