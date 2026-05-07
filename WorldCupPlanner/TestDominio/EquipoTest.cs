@@ -46,8 +46,8 @@ public class EquipoTest
     {
         Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
         Assert.AreEqual(0,equipo.Puntos);
-        Assert.AreEqual(0,Equipo.GolesAFavor);
-        Assert.AreEqual(0,Equipo.DiferenciaDeGoles);
+        Assert.AreEqual(0,equipo.GolesAFavor);
+        Assert.AreEqual(0,equipo.DiferenciaDeGoles);
     }
 
 }
