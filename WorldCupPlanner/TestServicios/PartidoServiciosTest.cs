@@ -20,14 +20,14 @@ public class PartidoServiciosTest
     private EquipoDTO equipoLocalDTO;
     private EquipoDTO equipoVisitanteDTO;
     private Partido partido;
-    
+
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatosEnMemoria);
         _servicioPartido = new PartidoServicios(_partidoRepositorio);
-        
+
         estadioDTO = new EstadioDTO()
         {
             Nombre = "Alianz Arena",
@@ -38,24 +38,24 @@ public class PartidoServiciosTest
 
         Confederacion _confederacion = new Confederacion();
         _confederacion = Confederacion.UEFA;
-        
+
         equipoLocalDTO = new EquipoDTO()
         {
             nombre = "Bayern Munich",
             confederacion = _confederacion,
             rankingFifa = 2
         };
-        
+
         equipoVisitanteDTO = new EquipoDTO()
         {
             nombre = "Real Madrid",
             confederacion = _confederacion,
             rankingFifa = 3
         };
-        
+
         _partidoDTO = new PartidoDTO
         {
-            
+
             Fecha = new DateTime(2026, 6, 1),
             Estadio = estadioDTO,
             equipoLocal = equipoLocalDTO,
@@ -65,13 +65,13 @@ public class PartidoServiciosTest
             golesLocal = 0,
             golesVisitante = 0
         };
-        
+
     }
 
     [TestMethod]
     public void AgregarPartido()
     {
-        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
 
         var partidos = _partidoRepositorio.ObtenerPartidos();
         Assert.AreEqual(1, partidos.Count);
@@ -87,7 +87,7 @@ public class PartidoServiciosTest
     [TestMethod]
     public void ObtenerPartidos_SiHayPartidos_LosTraigo()
     {
-        _servicioPartido.AgregarPartido(_partidoDTO,equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
         List<PartidoDTO> partidosPrueba = _servicioPartido.ObtenerPartidos();
         Assert.AreEqual(1, partidosPrueba.Count);
     }
@@ -98,11 +98,11 @@ public class PartidoServiciosTest
         List<PartidoDTO> partidosPrueba = _servicioPartido.ObtenerPartidos();
         Assert.AreEqual(0, partidosPrueba.Count);
     }
-    
+
     [TestMethod]
     public void ObtenerPartido_SiPartidoValido_SeObtieneCorrectamente()
     {
-        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO,  equipoVisitanteDTO, estadioDTO);
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
         Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
         int id = partido.Id;
         PartidoDTO partidoPrueba = _servicioPartido.ObtenerPartido(id);
@@ -121,9 +121,9 @@ public class PartidoServiciosTest
     [TestMethod]
     public void EliminarPartido_SiPartidoValido_SeEliminaCorrectamente()
     {
-        _servicioPartido.AgregarPartido(_partidoDTO,equipoLocalDTO,equipoVisitanteDTO, estadioDTO);
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
         _servicioPartido.EliminarPartido(_partidoDTO);
-        Assert.AreEqual(0,_servicioPartido.ObtenerPartidos().Count);
+        Assert.AreEqual(0, _servicioPartido.ObtenerPartidos().Count);
     }
 
     [TestMethod]
@@ -137,21 +137,21 @@ public class PartidoServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void ActualizarEquipo_SeActualizaCorrectamente()
     {
-        
+
     }
-    
+
     [TestMethod]
     public void ActualizarPartido_SiPartidoValido_SeActualizaCorrectamente()
     {
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
         Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
         int id = partido.Id;
-        
+
         DateTime nuevaFecha = new DateTime(2026, 6, 4);
         _partidoDTO.Fecha = nuevaFecha;
-        
+
         _servicioPartido.ActualizarPartido(_partidoDTO);
-        
+
         PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(id);
         Assert.AreEqual(nuevaFecha, partidoActualizado.Fecha);
     }
@@ -162,4 +162,12 @@ public class PartidoServiciosTest
     {
         _servicioPartido.ActualizarPartido(_partidoDTO);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarPartido_SiPartidoNulo_LanzoExcepcion()
+    {
+        _servicioPartido.ActualizarPartido(null);
+    }
+
 }
