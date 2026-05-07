@@ -26,23 +26,23 @@ public class EquipoServiciosTest
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
         _equipoServicios = new EquipoServicios(_equipoRepositorio);
 
-        Confederacion _confederacion = new Confederacion();
-        _confederacion = Confederacion.UEFA;
+        Confederacion confederacion = new Confederacion();
+        confederacion = Confederacion.UEFA;
 
         _equipoDTO = new EquipoDTO()
         {
             nombre = "Alianzz Arena",
-            confederacion = _confederacion,
+            confederacion = confederacion,
             rankingFifa = 1
         };
 
-        Confederacion _confederacion2 = new Confederacion();
-        _confederacion2 = Confederacion.CONMEBOL;
+        Confederacion confederacion2 = new Confederacion();
+        confederacion2 = Confederacion.CONMEBOL;
 
         _equipoDTO2 = new EquipoDTO()
         {
             nombre = "Centenario",
-            confederacion = _confederacion2,
+            confederacion = confederacion2,
             rankingFifa = 23
         };
     }
@@ -250,5 +250,25 @@ public class EquipoServiciosTest
         _equipoServicios.GenerarEquiposAutomaticamente(semillaCompletar);
         var equipos = _equipoServicios.ObtenerEquipos();
         Assert.AreEqual(48, equipos.Count);
+    }
+    
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_DebeGenerarNombresConFormatoCorrecto()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        List<EquipoDTO> listaEquipos = _equipoServicios.ObtenerEquipos();
+
+        // Assert: Verificamos que el primer equipo de la UEFA se llame UEFA_01
+        // (Asumiendo que empezamos con la lista vacía en el Initialize)
+        bool existeNombreFormateado = false;
+        foreach (EquipoDTO eq in listaEquipos)
+        {
+            if (eq.nombre == "UEFA_01")
+            {
+                existeNombreFormateado = true;
+            }
+        }
+
+        Assert.IsTrue(existeNombreFormateado, "El nombre del equipo debería seguir el formato 'CONFEDERACION_NUMERO' (ej: UEFA_01).");
     }
 }
