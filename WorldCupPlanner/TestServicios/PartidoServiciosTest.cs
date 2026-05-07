@@ -195,4 +195,12 @@ public class PartidoServiciosTest
         Assert.IsTrue(partidoSimulado.golesVisitante >= 0);
         Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void SimularResultado_SiPartidoEsNulo_LanzaExcepcion()
+    {
+        _servicioPartido.SimularResultado(null, 12345);
+    }
+
 }
