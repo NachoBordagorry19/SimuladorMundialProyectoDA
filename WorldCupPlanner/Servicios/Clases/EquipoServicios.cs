@@ -37,6 +37,7 @@ public class EquipoServicios : IServicioEquipo
 
     public void GenerarEquiposAutomaticamente(int semillaCompletar)
     {
+        Random random = new Random(semillaCompletar);
         Array valoresEnum = Enum.GetValues(typeof(Confederacion));
 
         foreach (Confederacion conf in valoresEnum)
@@ -53,13 +54,17 @@ public class EquipoServicios : IServicioEquipo
                     cantidadActual++;
                 }
             }
+            
+            int faltantes = cupoMaximo - cantidadActual;
 
-            for (int i = cantidadActual; i < cupoMaximo; i++)
+            for (int i = 1; i <= faltantes; i++)
             {
+                string nombreFormateado = conf.ToString() + "_" + (cantidadActual + i).ToString("D2");
                 EquipoDTO nuevoEquipo = new EquipoDTO();
-                nuevoEquipo.nombre = "Temp_" + Guid.NewGuid().ToString();
+                nuevoEquipo.nombre = nombreFormateado;
                 nuevoEquipo.confederacion = conf;
-                nuevoEquipo.rankingFifa = 100;
+                
+                nuevoEquipo.rankingFifa = random.Next(1, 201);
 
                 this.AgregarEquipo(nuevoEquipo);
             }
