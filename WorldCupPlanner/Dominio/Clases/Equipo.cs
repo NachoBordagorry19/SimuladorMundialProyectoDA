@@ -6,7 +6,6 @@ public class Equipo
     private string _nombre;
     private Confederacion _confederacion;
     private int _rankingFifa;
-
     public String Nombre
     {
         get => _nombre;

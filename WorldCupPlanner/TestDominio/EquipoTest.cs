@@ -23,7 +23,8 @@ public class EquipoTest
     [ExpectedException(typeof(ArgumentException))]
     public void CrearEquipo_NombreMayorA60Caracteres_LanzoExcepcion()
     {
-        Equipo equipoPrueba = new Equipo("Esta cadena tiene exactamente sesenta y un caracteres ahora!!", Confederacion.UEFA, 400);
+        Equipo equipoPrueba = new Equipo("Esta cadena tiene exactamente sesenta y un caracteres ahora!!",
+            Confederacion.UEFA, 400);
     }
 
     [TestMethod]
@@ -39,4 +40,14 @@ public class EquipoTest
     {
         Equipo equipoPrueba = new Equipo("Nacional", Confederacion.UEFA, -50);
     }
+
+    [TestMethod]
+    public void CrearEquipo_SeCreaConPuntos_Goles_DiferenciaDeGoles_EnCero()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
+        Assert.AreEqual(0,equipo.Puntos);
+        Assert.AreEqual(0,Equipo.GolesAFavor);
+        Assert.AreEqual(0,Equipo.DiferenciaDeGoles);
+    }
+
 }
