@@ -133,12 +133,6 @@ public class PartidoServiciosTest
         _servicioPartido.EliminarPartido(_partidoDTO);
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void ActualizarEquipo_SeActualizaCorrectamente()
-    {
-
-    }
 
     [TestMethod]
     public void ActualizarPartido_SiPartidoValido_SeActualizaCorrectamente()
@@ -176,14 +170,46 @@ public class PartidoServiciosTest
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
         Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
         int id = partido.Id;
-        
+
         _partidoDTO.golesLocal = 3;
         _partidoDTO.golesVisitante = 2;
         _servicioPartido.ActualizarPartido(_partidoDTO);
-        
+
         PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(id);
         Assert.AreEqual(3, partidoActualizado.golesLocal);
         Assert.AreEqual(2, partidoActualizado.golesVisitante);
         Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.estadoPartido);
+    }
+
+    [TestMethod]
+    public void SimularResultado_SiPartidoValido_SimulaCorrectamente()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+        Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
+        int id = partido.Id;
+
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(id);
+        Assert.IsTrue(partidoSimulado.golesLocal >= 0);
+        Assert.IsTrue(partidoSimulado.golesVisitante >= 0);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void SimularResultado_SiPartidoEsNulo_LanzaExcepcion()
+    {
+        _servicioPartido.SimularResultado(null, 12345);
+    }
+
+    
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void SimularResultado_SiPartidoNoExiste_LanzaExcepcion()
+    {
+        _partidoDTO.idPartido = -1;
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
     }
 }
