@@ -2,6 +2,7 @@ using System;
 using Dominio.Clases;
 using Dominio.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace TestDominio;
 
@@ -82,6 +83,15 @@ public class UsuarioTest
     public void InsertoContraseña_SiContraTieneMenosDe8Caracteres_TiroExcepcion()
     {
         Usuario usuario = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "av34.A", Rol.Administrador);
+    }
+    
+    [TestMethod]
+    public void CrearUsuario_PermiteRolesNoExcluyentes()
+    {
+        Usuario usuarioPrueba = new Usuario("Fede", "Gonzales", "a@gmail.com", new DateTime(2003, 08, 23), "aveAA@e123", new List<Rol> { Rol.Administrador, Rol.Editor });
+
+        Assert.IsTrue(usuarioPrueba.Roles.Contains(Rol.Administrador));
+        Assert.IsTrue(usuarioPrueba.Roles.Contains(Rol.Editor));
     }
 
 }
