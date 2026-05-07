@@ -258,17 +258,15 @@ public class EquipoServiciosTest
         _equipoServicios.GenerarEquiposAutomaticamente(123);
         List<EquipoDTO> listaEquipos = _equipoServicios.ObtenerEquipos();
 
-        // Assert: Verificamos que el primer equipo de la UEFA se llame UEFA_01
-        // (Asumiendo que empezamos con la lista vacía en el Initialize)
         bool existeNombreFormateado = false;
-        foreach (EquipoDTO eq in listaEquipos)
+        foreach (EquipoDTO equipo in listaEquipos)
         {
-            if (eq.nombre == "UEFA_01")
+            if (equipo.nombre == "UEFA_01")
             {
                 existeNombreFormateado = true;
             }
         }
 
-        Assert.IsTrue(existeNombreFormateado, "El nombre del equipo debería seguir el formato 'CONFEDERACION_NUMERO' (ej: UEFA_01).");
+        Assert.IsTrue(existeNombreFormateado);
     }
 }
