@@ -132,4 +132,27 @@ public class PartidoServiciosTest
     {
         _servicioPartido.EliminarPartido(_partidoDTO);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarEquipo_SeActualizaCorrectamente()
+    {
+        
+    }
+    
+    [TestMethod]
+    public void ActualizarPartido_SiPartidoValido_SeActualizaCorrectamente()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+        Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
+        int id = partido.Id;
+        
+        DateTime nuevaFecha = new DateTime(2026, 6, 4);
+        _partidoDTO.Fecha = nuevaFecha;
+        
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+        
+        PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(id);
+        Assert.AreEqual(nuevaFecha, partidoActualizado.Fecha);
+    }
 }
