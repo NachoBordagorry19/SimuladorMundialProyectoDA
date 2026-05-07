@@ -28,6 +28,7 @@ public class UsuarioServicioTest
             Apellido = "Rodriguez",
             Email = "a@gmail.com",
             FechaNacimiento = new DateTime(2000, 05, 15),
+            Contraseña = "Password123!",
             Roles = new List<Rol> { Rol.Administrador }
         };
     }
@@ -66,6 +67,7 @@ public class UsuarioServicioTest
         usuario.Nombre = "Mateo";
         usuario.Apellido = "Roo";
         usuario.FechaNacimiento = new DateTime(2000, 05, 15);
+        usuario.Contraseña = "Password123!";
         usuario.Email = "b@gmail.com";
         usuario.Roles = new List<Rol> { Rol.Editor };
         _servicioUsuario.AgregarUsuario(usuario);
@@ -103,5 +105,16 @@ public class UsuarioServicioTest
     public void EliminarUsuario_SiNoExiste_LanzoExcepcion()
     {
         _servicioUsuario.EliminarUsuario(_usuarioDTO);
+    }
+    
+    [TestMethod]
+    public void AgregarUsuario_GuardaContraseñaCifrada()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        var usuarioGuardado = _usuarioRepositorio.ObtenerUsuario(u => u.Email == "a@gmail.com");
+
+        Assert.IsNotNull(usuarioGuardado);
+        Assert.AreNotEqual("Password123!", usuarioGuardado.Contraseña);
     }
 }
