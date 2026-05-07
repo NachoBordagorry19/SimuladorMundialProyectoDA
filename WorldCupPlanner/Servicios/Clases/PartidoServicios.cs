@@ -174,6 +174,10 @@ public class PartidoServicios
 
     public void SimularResultado(PartidoDTO partidoDTO, int semillaSimulacion)
     {
+        if (partidoDTO == null)
+        {
+            throw new ArgumentException("El partido recibido no puede ser nulo");
+        }
         
         Partido partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
 
