@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio.Interfaces;
@@ -47,13 +49,15 @@ public class ServicioUsuario : IServicioUsuario
 
     private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
     {
-        var usuario = new Usuario()
-        {
-            Nombre = usuarioDto.Nombre,
-            Apellido = usuarioDto.Apellido,
-            Email = usuarioDto.Email,
-            FechaNacimiento = usuarioDto.FechaNacimiento,
-        };
+        var usuario = new Usuario(
+            usuarioDto.Nombre,
+            usuarioDto.Apellido,
+            usuarioDto.Email,
+            usuarioDto.FechaNacimiento,
+            CifrarContraseña(usuarioDto.Contraseña),
+            usuarioDto.Roles
+        );
+
         return usuario;
     }
 
@@ -65,6 +69,7 @@ public class ServicioUsuario : IServicioUsuario
             Apellido = usuario.Apellido,
             Email = usuario.Email,
             FechaNacimiento = usuario.FechaNacimiento,
+            Roles = usuario.Roles.ToList()
         };
     }
 
@@ -104,7 +109,13 @@ public class ServicioUsuario : IServicioUsuario
         }
     }
 
+    private string CifrarContraseña(string contraseña)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(contraseña);
+        byte[] hash = SHA256.HashData(bytes);
 
+        return "Aa1!" + Convert.ToHexString(hash);
+    }
 
 
 
