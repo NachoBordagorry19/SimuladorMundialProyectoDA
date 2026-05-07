@@ -100,6 +100,11 @@ public class PartidoServicios
     {
         var partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
         
+        if (partidoExistente == null)
+        {
+            throw new ArgumentException("El partido a actualizar no existe");
+        }
+        
         if (partidoDTO.Fecha != default)
         {
             partidoExistente.Fecha = partidoDTO.Fecha;
