@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using Dominio.Enums;
 using System;
 using System.Linq;
+using Servicios.Interfaces;
 
 namespace Servicios.Clases;
 
-public class EquipoServicios
+public class EquipoServicios : IServicioEquipo
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
 
