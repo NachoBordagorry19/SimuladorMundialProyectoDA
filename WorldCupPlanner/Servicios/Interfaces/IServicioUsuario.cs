@@ -9,5 +9,8 @@ public interface IServicioUsuario
     public List<UsuarioDTO> ObtenerUsuarios();
     public UsuarioDTO ObtenerUsuario(string email);
     public void EliminarUsuario(UsuarioDTO usuarioDto);
+    public UsuarioDTO AutenticarUsuario(string email, string contraseña);
+    public void ActualizarUsuario(UsuarioDTO usuarioDto);
+    public void ReiniciarContraseña(string email);
 
 }
