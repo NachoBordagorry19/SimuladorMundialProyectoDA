@@ -58,4 +58,13 @@ public class EquipoTest
         int puntos = -20;
         equipo.Puntos = puntos;
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void SeQuierenAgregarGolesNegativos_LanzoExcepcion()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
+        int goles = -20;
+        equipo.GolesAFavor = goles;
+    }
 }
