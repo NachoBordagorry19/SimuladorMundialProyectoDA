@@ -13,6 +13,7 @@ public class Usuario
     private string _email;
     private DateTime _fechaNacimiento;
     private string _contraseña;
+    public IReadOnlyList<Rol> Roles => _roles.AsReadOnly();
     private readonly List<Rol> _roles = new();
 
     public string Nombre
@@ -127,6 +128,20 @@ public class Usuario
         FechaNacimiento = fechaNacimiento;
         Contraseña = contraseña;
         _roles.Add(rol);
+    }
+    
+    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, List<Rol> roles)
+    {
+        Nombre = nombre;
+        Apellido = apellido;
+        Email = email;
+        FechaNacimiento = fechaNacimiento;
+        Contraseña = contraseña;
+
+        foreach (Rol rol in roles)
+        {
+            _roles.Add(rol);
+        }
     }
 
 }
