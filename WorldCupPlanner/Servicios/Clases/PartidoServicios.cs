@@ -128,7 +128,7 @@ public class PartidoServicios
             partidoExistente.MarcarComoJugado();
         }
     }
-
+    
     private PartidoDTO PartidoEntidadADto(Partido partido)
     {
 

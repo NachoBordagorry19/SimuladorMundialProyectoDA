@@ -186,4 +186,19 @@ public class PartidoServiciosTest
         Assert.AreEqual(2, partidoActualizado.golesVisitante);
         Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.estadoPartido);
     }
+
+    [TestMethod]
+    public void SimularResultado_SiPartidoValido_SimulaCorrectamente()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+        Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
+        int id = partido.Id;
+        
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+        
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(id);
+        Assert.IsTrue(partidoSimulado.golesLocal >= 0);
+        Assert.IsTrue(partidoSimulado.golesVisitante >= 0);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
+    }
 }
