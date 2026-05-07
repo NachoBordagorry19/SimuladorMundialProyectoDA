@@ -120,6 +120,13 @@ public class PartidoServicios
         {
             partidoExistente.Estadio = EstadioDTOAEntidad(partidoDTO.Estadio);
         }
+        
+        if (partidoDTO.golesLocal >= 0 || partidoDTO.golesVisitante >= 0)
+        {
+            partidoExistente.GolesLocal = partidoDTO.golesLocal;
+            partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
+            partidoExistente.MarcarComoJugado();
+        }
     }
 
     private PartidoDTO PartidoEntidadADto(Partido partido)
