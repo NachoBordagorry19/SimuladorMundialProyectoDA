@@ -203,4 +203,13 @@ public class PartidoServiciosTest
         _servicioPartido.SimularResultado(null, 12345);
     }
 
+    
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void SimularResultado_SiPartidoNoExiste_LanzaExcepcion()
+    {
+        _partidoDTO.idPartido = -1;
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+    }
 }
