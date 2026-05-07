@@ -49,7 +49,14 @@ public class Equipo
     public int Puntos
     {
         get => _puntos;
-        set => _puntos = value;
+        set 
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentException("Los puntos asignados deben ser un número positivo mayor a 0");
+            }
+            _puntos = value;
+        }
     }
 
     public int GolesAFavor
