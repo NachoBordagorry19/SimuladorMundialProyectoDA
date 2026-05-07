@@ -155,4 +155,11 @@ public class PartidoServiciosTest
         PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(id);
         Assert.AreEqual(nuevaFecha, partidoActualizado.Fecha);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarPartido_SiPartidoNoValido_LanzoExcepcion()
+    {
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+    }
 }
