@@ -246,6 +246,9 @@ public class EquipoServiciosTest
     [TestMethod]
     public void GenerarEquiposAutomaticamente_DebeCompletar48Equipos_EnTotal()
     {
-        
+        int semillaCompletar = 123;
+        _equipoServicios.GenerarEquiposAutomaticamente(semillaCompletar);
+        var equipos = _equipoServicios.ObtenerEquipos();
+        Assert.AreEqual(48, equipos.Count);
     }
 }
