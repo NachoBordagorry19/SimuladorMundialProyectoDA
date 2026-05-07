@@ -33,6 +33,7 @@ public class PartidoServicios
         );
 
         _partidoRepositorio.AgregarPartido(partido);
+        partidoDto.idPartido = partido.Id;
     }
     
     public Equipo EquipoDTOAEntidad(EquipoDTO equipoDto)
@@ -68,25 +69,35 @@ public class PartidoServicios
 
     public List<PartidoDTO> ObtenerPartidos()
     {
-        if (_partidoRepositorio.ObtenerPartidos().Count == 0)
-        {
-            throw new ArgumentException("No hay partidos registrados");
-        }
         List<Partido> partidos = _partidoRepositorio.ObtenerPartidos();
+        if (partidos.Count == 0)
+        {
+            return new List<PartidoDTO>();
+        }
         List<PartidoDTO> partidosDTO = new List<PartidoDTO>();
-        foreach(Partido partido in partidos)
+        foreach (Partido partido in partidos)
         {
             PartidoDTO partidoDTO = PartidoEntidadADto(partido);
             partidosDTO.Add(partidoDTO);
         }
         return  partidosDTO;
     }
-    
+
+    public void EliminarPartido(PartidoDTO partidoDTO)
+    {
+        var partidoPorId = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
+        if (partidoPorId != null) 
+        {
+            _partidoRepositorio.EliminarPartido(partidoPorId);
+        }
+    }
+
     private PartidoDTO PartidoEntidadADto(Partido partido)
     {
 
         return new PartidoDTO
         {
+            idPartido = partido.Id,
             Fecha = partido.Fecha,
             Estadio = new EstadioDTO
             {
@@ -112,5 +123,15 @@ public class PartidoServicios
             golesLocal = partido.GolesLocal,
             golesVisitante = partido.GolesVisitante
         };
+    }
+    
+    private Partido PartidoDTOAEntidad(PartidoDTO dto)
+    {
+        var estadio = EstadioDTOAEntidad(dto.Estadio);
+        var local = EquipoDTOAEntidad(dto.equipoLocal);
+        var visitante = EquipoDTOAEntidad(dto.equipoVisitante);
+        var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
+        var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
+        return partido;
     }
 }

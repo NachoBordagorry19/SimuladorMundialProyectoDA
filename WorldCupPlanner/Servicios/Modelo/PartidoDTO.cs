@@ -5,7 +5,7 @@ namespace Servicios.Modelo;
 
 public class PartidoDTO
 {
-    public int idPartido { get; }
+    public int idPartido { get; set; }
     public DateTime Fecha { get; set; }
     public EstadioDTO Estadio { get; set; }
     public EquipoDTO equipoLocal { get; set; }

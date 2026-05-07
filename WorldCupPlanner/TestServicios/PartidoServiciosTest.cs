@@ -93,10 +93,10 @@ public class PartidoServiciosTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void ObtenerPartidos_SiNoHayPartidos_LanzoExcepcion()
+    public void ObtenerPartidos_SiNoHayPartidos_RetornaListaVacia()
     {
         List<PartidoDTO> partidosPrueba = _servicioPartido.ObtenerPartidos();
+        Assert.AreEqual(0, partidosPrueba.Count);
     }
     
     [TestMethod]
