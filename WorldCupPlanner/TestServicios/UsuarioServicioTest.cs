@@ -117,4 +117,61 @@ public class UsuarioServicioTest
         Assert.IsNotNull(usuarioGuardado);
         Assert.AreNotEqual("Password123!", usuarioGuardado.Contraseña);
     }
+    
+    [TestMethod]
+    public void AutenticarUsuario_SiDatosSonCorrectos_DevuelveUsuario()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuarioAutenticado = _servicioUsuario.AutenticarUsuario("a@gmail.com", "Password123!");
+
+        Assert.AreEqual("Fede", usuarioAutenticado.Nombre);
+        Assert.AreEqual("a@gmail.com", usuarioAutenticado.Email);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AutenticarUsuario_SiContraseñaEsIncorrecta_LanzaExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _servicioUsuario.AutenticarUsuario("a@gmail.com", "Incorrecta123!");
+    }
+
+    [TestMethod]
+    public void ActualizarUsuario_ModificaDatos()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuarioActualizado = new UsuarioDTO()
+        {
+            Nombre = "Federico",
+            Apellido = "Perez",
+            Email = "a@gmail.com",
+            FechaNacimiento = new DateTime(1999, 10, 10),
+            Contraseña = "",
+            Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
+        };
+
+        _servicioUsuario.ActualizarUsuario(usuarioActualizado);
+
+        UsuarioDTO usuarioObtenido = _servicioUsuario.ObtenerUsuario("a@gmail.com");
+
+        Assert.AreEqual("Federico", usuarioObtenido.Nombre);
+        Assert.AreEqual("Perez", usuarioObtenido.Apellido);
+        Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Administrador));
+        Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Editor));
+    }
+
+    [TestMethod]
+    public void ReiniciarContraseña_PermiteAutenticarConContraseñaPorDefecto()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _servicioUsuario.ReiniciarContraseña("a@gmail.com");
+
+        UsuarioDTO usuarioAutenticado = _servicioUsuario.AutenticarUsuario("a@gmail.com", "Usuario123!");
+
+        Assert.AreEqual("a@gmail.com", usuarioAutenticado.Email);
+    }
 }
