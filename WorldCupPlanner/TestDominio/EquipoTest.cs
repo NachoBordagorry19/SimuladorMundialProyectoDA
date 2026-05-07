@@ -45,9 +45,9 @@ public class EquipoTest
     public void CrearEquipo_SeCreaConPuntos_Goles_DiferenciaDeGoles_EnCero()
     {
         Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
-        Assert.AreEqual(0,equipo.Puntos);
-        Assert.AreEqual(0,equipo.GolesAFavor);
-        Assert.AreEqual(0,equipo.DiferenciaDeGoles);
+        Assert.AreEqual(0, equipo.Puntos);
+        Assert.AreEqual(0, equipo.GolesAFavor);
+        Assert.AreEqual(0, equipo.DiferenciaDeGoles);
     }
 
     [TestMethod]
