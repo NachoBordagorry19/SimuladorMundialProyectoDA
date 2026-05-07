@@ -85,6 +85,10 @@ public class PartidoServicios
 
     public void EliminarPartido(PartidoDTO partidoDTO)
     {
+        if (_partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido) == null)
+        {
+            throw new ArgumentException("El partido a buscar no existe, porfavor busque uno valido");
+        }
         var partidoPorId = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
         if (partidoPorId != null) 
         {
