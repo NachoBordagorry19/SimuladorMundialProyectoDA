@@ -98,6 +98,12 @@ public class PartidoServicios
 
     public void ActualizarPartido(PartidoDTO partidoDTO)
     {
+        
+        if (partidoDTO == null)
+        {
+            throw new ArgumentException("El partido no puede ser nulo");
+        }
+
         var partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
         
         if (partidoExistente == null)
