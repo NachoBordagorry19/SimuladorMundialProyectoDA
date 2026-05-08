@@ -33,11 +33,15 @@ if (app.Environment.IsDevelopment())
     using IServiceScope scope = app.Services.CreateScope();
     IServicioUsuario servicioUsuario = scope.ServiceProvider.GetRequiredService<IServicioUsuario>();
 
-    if (!servicioUsuario.ObtenerUsuarios().Any())
+    bool existeAdmin = servicioUsuario
+        .ObtenerUsuarios()
+        .Any(usuario => usuario.Email == "admin@admin.com");
+
+    if (!existeAdmin)
     {
         servicioUsuario.AgregarUsuario(new UsuarioDTO()
         {
-            Nombre = "admin",
+            Nombre = "Admin",
             Apellido = "Prueba",
             Email = "admin@admin.com",
             FechaNacimiento = new DateTime(2000, 1, 1),

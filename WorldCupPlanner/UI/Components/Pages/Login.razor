@@ -1,4 +1,6 @@
+@page "/"
 @page "/login"
+@rendermode InteractiveServer
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using UI.Estado
@@ -6,37 +8,42 @@
 @inject UsuarioSesion Sesion
 @inject NavigationManager Navigation
 
-<div class="home-container">
-    <section class="home-hero">
-        <div>
-            <h1 class="hero-title">Login</h1>
-            <p class="hero-sub">Ingrese con un usuario registrado en el sistema.</p>
-        </div>
-    </section>
+<div class="login-page">
+    <div class="login-card">
+        <h1 class="login-title">Login</h1>
+        <p class="login-subtitle">Ingrese con un usuario registrado en el sistema.</p>
 
-    @if (!string.IsNullOrWhiteSpace(mensajeError))
-    {
-        <div class="alert alert-danger">@mensajeError</div>
-    }
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger login-alert">@mensajeError</div>
+        }
 
-    <EditForm Model="login" OnValidSubmit="IniciarSesion">
-        <div class="home-sections" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
-            <div class="home-section">
-                <label>Email</label>
-                <InputText @bind-Value="login.Email" class="form-control" style="width:100%;" />
+        <EditForm Model="login" OnSubmit="IniciarSesion" FormName="loginForm">
+            <div class="login-form-grid">
+                <div class="login-field">
+                    <label>Email</label>
+                    <InputText @bind-Value="login.Email" class="form-control" />
+                </div>
+
+                <div class="login-field">
+                    <label>Contraseña</label>
+                    <InputText @bind-Value="login.Contrasena" type="password" class="form-control" />
+                </div>
             </div>
 
-            <div class="home-section">
-                <label>Contraseña</label>
-                <InputText @bind-Value="login.Contraseña" type="password" class="form-control" style="width:100%;" />
+            <div class="login-actions">
+                <button type="submit" class="login-btn login-btn-primary">Ingresar</button>
+                <NavLink href="/home" class="login-btn login-btn-secondary">Cancelar</NavLink>
             </div>
-        </div>
+        </EditForm>
 
-        <div class="home-actions">
-            <button type="submit" class="btn">Ingresar</button>
-            <NavLink href="/home" class="btn secondary">Cancelar</NavLink>
+        <div class="login-help">
+            Usuario de prueba:
+            <strong>admin@admin.com</strong>
+            /
+            <strong>Admin123!</strong>
         </div>
-    </EditForm>
+    </div>
 </div>
 
 @code {
@@ -47,19 +54,46 @@
     {
         try
         {
-            UsuarioDTO usuario = ServicioUsuario.AutenticarUsuario(login.Email, login.Contraseña);
+            mensajeError = null;
+
+            if (string.IsNullOrWhiteSpace(login.Email))
+            {
+                mensajeError = "Debe ingresar un email.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(login.Contrasena))
+            {
+                mensajeError = "Debe ingresar una contraseña.";
+                return;
+            }
+
+            UsuarioDTO usuario = ServicioUsuario.AutenticarUsuario(login.Email, login.Contrasena);
+
             Sesion.UsuarioActual = usuario;
+
             Navigation.NavigateTo("/home");
+        }
+        catch (ArgumentException ex)
+        {
+            if (ex.Message.Contains("no existe"))
+            {
+                mensajeError = "Usuario no encontrado.";
+            }
+            else
+            {
+                mensajeError = "Error de login: " + ex.Message;
+            }
         }
         catch (Exception ex)
         {
-            mensajeError = ex.Message;
+            mensajeError = "Error inesperado: " + ex.Message;
         }
     }
 
     private class LoginModel
     {
         public string Email { get; set; } = "";
-        public string Contraseña { get; set; } = "";
+        public string Contrasena { get; set; } = "";
     }
 }

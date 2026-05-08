@@ -7,66 +7,64 @@
 @inject UsuarioSesion Sesion
 @inject NavigationManager Navigation
 
-<div class="home-container">
-    <section class="home-hero">
-        <div>
-            <h1 class="hero-title">Agregar Usuario</h1>
-            <p class="hero-sub">Crear un nuevo usuario del sistema.</p>
-        </div>
-    </section>
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Agregar Usuario</h1>
+        <p class="wcp-subtitle">Crear un nuevo usuario del sistema.</p>
 
-    @if (!string.IsNullOrWhiteSpace(mensajeError))
-    {
-        <div class="alert alert-danger">@mensajeError</div>
-    }
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger wcp-alert">@mensajeError</div>
+        }
 
-    <EditForm Model="usuario" OnValidSubmit="OnSave">
-        <div class="home-sections" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
-            <div class="home-section">
-                <label>Nombre</label>
-                <InputText @bind-Value="usuario.Nombre" class="form-control" style="width:100%;" />
-            </div>
-
-            <div class="home-section">
-                <label>Apellido</label>
-                <InputText @bind-Value="usuario.Apellido" class="form-control" style="width:100%;" />
-            </div>
-
-            <div class="home-section">
-                <label>Email</label>
-                <InputText @bind-Value="usuario.Email" class="form-control" style="width:100%;" />
-            </div>
-
-            <div class="home-section">
-                <label>Fecha de nacimiento</label>
-                <InputDate @bind-Value="usuario.FechaNacimiento" class="form-control" style="width:100%;" />
-            </div>
-
-            <div class="home-section">
-                <label>Contraseña</label>
-                <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control" style="width:100%;" />
-            </div>
-
-            <div class="home-section">
-                <label>Roles</label>
-
-                <div>
-                    <InputCheckbox @bind-Value="esAdministrador" />
-                    <span> Administrador</span>
+        <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="agregarUsuarioForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Nombre</label>
+                    <InputText @bind-Value="usuario.Nombre" class="form-control" />
                 </div>
 
-                <div>
-                    <InputCheckbox @bind-Value="esEditor" />
-                    <span> Editor</span>
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Apellido</label>
+                    <InputText @bind-Value="usuario.Apellido" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Email</label>
+                    <InputText @bind-Value="usuario.Email" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Fecha de nacimiento</label>
+                    <InputDate @bind-Value="usuario.FechaNacimiento" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Contraseña</label>
+                    <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Roles</label>
+
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="esAdministrador" class="form-check-input" />
+                        <label class="form-check-label">Administrador</label>
+                    </div>
+
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="esEditor" class="form-check-input" />
+                        <label class="form-check-label">Editor</label>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="home-actions">
-            <button type="submit" class="btn">Guardar</button>
-            <NavLink href="/usuarios" class="btn secondary">Cancelar</NavLink>
-        </div>
-    </EditForm>
+            <div class="wcp-actions">
+                <button type="submit" class="wcp-btn-primary">Guardar</button>
+                <NavLink href="/usuarios" class="wcp-btn-secondary">Cancelar</NavLink>
+            </div>
+        </EditForm>
+    </div>
 </div>
 
 @code {
@@ -79,7 +77,6 @@
         Contraseña = "",
         Roles = new List<Rol>()
     };
-    
 
     private bool esAdministrador;
     private bool esEditor = true;
@@ -124,4 +121,4 @@
             mensajeError = ex.Message;
         }
     }
-}   
+}

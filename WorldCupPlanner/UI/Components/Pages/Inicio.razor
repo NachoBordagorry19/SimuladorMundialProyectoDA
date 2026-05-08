@@ -1,4 +1,7 @@
-@page "/"
+@using UI.Estado
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
+
 @page "/home"
 
 <div class="home-wrapper">
@@ -40,3 +43,13 @@
         </a>
     </div>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual == null)
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+}

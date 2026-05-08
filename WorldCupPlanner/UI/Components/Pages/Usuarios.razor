@@ -7,30 +7,28 @@
 @inject UsuarioSesion Sesion
 @inject NavigationManager Navigation
 
-<div class="home-container">
-    <section class="home-hero">
-        <div>
-            <h1 class="hero-title">Usuarios</h1>
-            <p class="hero-sub">Listado de usuarios del sistema.</p>
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Usuarios</h1>
+                <p class="wcp-subtitle">Listado de usuarios registrados en el sistema.</p>
+            </div>
+
+            <NavLink href="/AgregarUsuario" class="wcp-btn-primary">Nuevo Usuario</NavLink>
         </div>
 
-        <div class="home-actions">
-            <NavLink href="/AgregarUsuario" class="btn">Nuevo Usuario</NavLink>
-        </div>
-    </section>
-
-    @if (Sesion.UsuarioActual == null)
-    {
-        <div class="alert alert-warning">Debe iniciar sesión.</div>
-    }
-    else if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
-    {
-        <div class="alert alert-danger">Solo un administrador puede gestionar usuarios.</div>
-    }
-    else
-    {
-        <div class="home-section" style="margin-top: 1rem;">
-            <table class="table" style="width:100%; color: var(--wc-text);">
+        @if (Sesion.UsuarioActual == null)
+        {
+            <div class="alert alert-warning wcp-alert">Debe iniciar sesión.</div>
+        }
+        else if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            <div class="alert alert-danger wcp-alert">Solo un administrador puede gestionar usuarios.</div>
+        }
+        else
+        {
+            <table class="wcp-table mt-3">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -51,8 +49,8 @@
                     }
                 </tbody>
             </table>
-        </div>
-    }
+        }
+    </div>
 </div>
 
 @code {
