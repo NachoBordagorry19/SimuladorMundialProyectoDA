@@ -35,8 +35,9 @@ public class EquipoServicios : IServicioEquipo
         _equipoRepositorio.AgregarEquipo(equipo);
     }
 
-    public void GenerarEquiposAutomaticamente(int semillaCompletar)
+    public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
     {
+        List<String> registrosAuditoria = new List<String>(); 
         Random random = new Random(semillaCompletar);
         Array valoresEnum = Enum.GetValues(typeof(Confederacion));
 
@@ -56,6 +57,12 @@ public class EquipoServicios : IServicioEquipo
             }
             
             int faltantes = cupoMaximo - cantidadActual;
+            
+            if (faltantes > 0)
+            {
+                string log = "Confederacion: " + conf.ToString() + " | Generados: " + faltantes + " | Semilla: " + semillaCompletar;
+                registrosAuditoria.Add(log);
+            }
 
             for (int i = 1; i <= faltantes; i++)
             {
@@ -70,6 +77,7 @@ public class EquipoServicios : IServicioEquipo
                 this.AgregarEquipo(nuevoEquipo);
             }
         }
+        return registrosAuditoria;
     }
     public int ObtenerCupo(Confederacion confederacion)
     {
