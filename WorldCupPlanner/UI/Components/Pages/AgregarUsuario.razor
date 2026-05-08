@@ -1,63 +1,127 @@
 @page "/AgregarUsuario"
-@using Dominio.Clases
 @using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioUsuario ServicioUsuario
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
 
 <div class="home-container">
     <section class="home-hero">
         <div>
-            <h1 class="hero-title">Nuevo Usuario</h1>
-            <p class="hero-sub">Registra un administrador o editor para el sistema.</p>
+            <h1 class="hero-title">Agregar Usuario</h1>
+            <p class="hero-sub">Crear un nuevo usuario del sistema.</p>
         </div>
     </section>
 
+    @if (!string.IsNullOrWhiteSpace(mensajeError))
+    {
+        <div class="alert alert-danger">@mensajeError</div>
+    }
+
     <EditForm Model="usuario" OnValidSubmit="OnSave">
-        <DataAnnotationsValidator />
-        
         <div class="home-sections" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
             <div class="home-section">
                 <label>Nombre</label>
                 <InputText @bind-Value="usuario.Nombre" class="form-control" style="width:100%;" />
             </div>
+
             <div class="home-section">
                 <label>Apellido</label>
                 <InputText @bind-Value="usuario.Apellido" class="form-control" style="width:100%;" />
             </div>
+
             <div class="home-section">
                 <label>Email</label>
                 <InputText @bind-Value="usuario.Email" class="form-control" style="width:100%;" />
             </div>
+
             <div class="home-section">
-                <label>Rol</label>
-                <InputSelect @bind-Value="rolSeleccionado" class="form-control" style="width:100%;">
-                    @foreach (var rol in Enum.GetValues<Rol>())
-                    {
-                        <option value="@rol">@rol</option>
-                    }
-                </InputSelect>
-            </div>
-            <div class="home-section">
-                <label>Fecha de Nacimiento</label>
+                <label>Fecha de nacimiento</label>
                 <InputDate @bind-Value="usuario.FechaNacimiento" class="form-control" style="width:100%;" />
             </div>
+
             <div class="home-section">
                 <label>Contraseña</label>
                 <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control" style="width:100%;" />
             </div>
+
+            <div class="home-section">
+                <label>Roles</label>
+
+                <div>
+                    <InputCheckbox @bind-Value="esAdministrador" />
+                    <span> Administrador</span>
+                </div>
+
+                <div>
+                    <InputCheckbox @bind-Value="esEditor" />
+                    <span> Editor</span>
+                </div>
+            </div>
         </div>
 
         <div class="home-actions">
-            <button type="submit" class="btn">Guardar Usuario</button>
-            <NavLink href="/home" class="btn secondary">Cancelar</NavLink>
+            <button type="submit" class="btn">Guardar</button>
+            <NavLink href="/usuarios" class="btn secondary">Cancelar</NavLink>
         </div>
     </EditForm>
 </div>
 
 @code {
-    private Usuario usuario = new Usuario("Nombre", "Apellido", "ejemplo@mail.com", DateTime.Today.AddYears(-20), "Pass123!", Rol.Editor);
-    private Rol rolSeleccionado = Rol.Editor;
+    private UsuarioDTO usuario = new UsuarioDTO()
+    {
+        Nombre = "",
+        Apellido = "",
+        Email = "",
+        FechaNacimiento = DateTime.Today.AddYears(-18),
+        Contraseña = "",
+        Roles = new List<Rol>()
+    };
+    
+
+    private bool esAdministrador;
+    private bool esEditor = true;
+    private string? mensajeError;
+
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual == null)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            Navigation.NavigateTo("/home");
+        }
+    }
 
     private void OnSave()
     {
-        Console.WriteLine($"Usuario {usuario.Nombre} listo para persistir.");
+        try
+        {
+            usuario.Roles = new List<Rol>();
+
+            if (esAdministrador)
+            {
+                usuario.Roles.Add(Rol.Administrador);
+            }
+
+            if (esEditor)
+            {
+                usuario.Roles.Add(Rol.Editor);
+            }
+
+            ServicioUsuario.AgregarUsuario(usuario);
+
+            Navigation.NavigateTo("/usuarios");
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
     }
-}
+}   

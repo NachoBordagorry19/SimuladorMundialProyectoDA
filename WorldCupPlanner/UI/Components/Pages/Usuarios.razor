@@ -1,0 +1,74 @@
+@page "/usuarios"
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioUsuario ServicioUsuario
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
+
+<div class="home-container">
+    <section class="home-hero">
+        <div>
+            <h1 class="hero-title">Usuarios</h1>
+            <p class="hero-sub">Listado de usuarios del sistema.</p>
+        </div>
+
+        <div class="home-actions">
+            <NavLink href="/AgregarUsuario" class="btn">Nuevo Usuario</NavLink>
+        </div>
+    </section>
+
+    @if (Sesion.UsuarioActual == null)
+    {
+        <div class="alert alert-warning">Debe iniciar sesión.</div>
+    }
+    else if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+    {
+        <div class="alert alert-danger">Solo un administrador puede gestionar usuarios.</div>
+    }
+    else
+    {
+        <div class="home-section" style="margin-top: 1rem;">
+            <table class="table" style="width:100%; color: var(--wc-text);">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Fecha nacimiento</th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (UsuarioDTO usuario in usuarios)
+                    {
+                        <tr>
+                            <td>@usuario.Nombre @usuario.Apellido</td>
+                            <td>@usuario.Email</td>
+                            <td>@usuario.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                            <td>@string.Join(", ", usuario.Roles)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<UsuarioDTO> usuarios = new List<UsuarioDTO>();
+
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual == null)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            usuarios = ServicioUsuario.ObtenerUsuarios();
+        }
+    }
+}
