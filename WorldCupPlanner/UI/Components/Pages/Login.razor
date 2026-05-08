@@ -1,0 +1,99 @@
+@page "/"
+@page "/login"
+@rendermode InteractiveServer
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioUsuario ServicioUsuario
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
+
+<div class="login-page">
+    <div class="login-card">
+        <h1 class="login-title">Login</h1>
+        <p class="login-subtitle">Ingrese con un usuario registrado en el sistema.</p>
+
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger login-alert">@mensajeError</div>
+        }
+
+        <EditForm Model="login" OnSubmit="IniciarSesion" FormName="loginForm">
+            <div class="login-form-grid">
+                <div class="login-field">
+                    <label>Email</label>
+                    <InputText @bind-Value="login.Email" class="form-control" />
+                </div>
+
+                <div class="login-field">
+                    <label>Contraseña</label>
+                    <InputText @bind-Value="login.Contrasena" type="password" class="form-control" />
+                </div>
+            </div>
+
+            <div class="login-actions">
+                <button type="submit" class="login-btn login-btn-primary">Ingresar</button>
+                <NavLink href="/home" class="login-btn login-btn-secondary">Cancelar</NavLink>
+            </div>
+        </EditForm>
+
+        <div class="login-help">
+            Usuario de prueba:
+            <strong>admin@admin.com</strong>
+            /
+            <strong>Admin123!</strong>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginModel login = new LoginModel();
+    private string? mensajeError;
+
+    private void IniciarSesion()
+    {
+        try
+        {
+            mensajeError = null;
+
+            if (string.IsNullOrWhiteSpace(login.Email))
+            {
+                mensajeError = "Debe ingresar un email.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(login.Contrasena))
+            {
+                mensajeError = "Debe ingresar una contraseña.";
+                return;
+            }
+
+            UsuarioDTO usuario = ServicioUsuario.AutenticarUsuario(login.Email, login.Contrasena);
+
+            Sesion.UsuarioActual = usuario;
+
+            Navigation.NavigateTo("/home");
+        }
+        catch (ArgumentException ex)
+        {
+            if (ex.Message.Contains("no existe"))
+            {
+                mensajeError = "Usuario no encontrado.";
+            }
+            else
+            {
+                mensajeError = "Error de login: " + ex.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = "Error inesperado: " + ex.Message;
+        }
+    }
+
+    private class LoginModel
+    {
+        public string Email { get; set; } = "";
+        public string Contrasena { get; set; } = "";
+    }
+}

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio.Interfaces;
@@ -11,7 +13,9 @@ namespace Servicios.Clases;
 public class ServicioUsuario : IServicioUsuario
 {
     private readonly IUsuarioRepositorio _usuarioRepositorio;
-
+    
+    private const string ContraseñaPorDefecto = "Usuario123!";
+    
     public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio)
     {
         _usuarioRepositorio = usuarioRepositorio;
@@ -47,13 +51,15 @@ public class ServicioUsuario : IServicioUsuario
 
     private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
     {
-        var usuario = new Usuario()
-        {
-            Nombre = usuarioDto.Nombre,
-            Apellido = usuarioDto.Apellido,
-            Email = usuarioDto.Email,
-            FechaNacimiento = usuarioDto.FechaNacimiento,
-        };
+        var usuario = new Usuario(
+            usuarioDto.Nombre,
+            usuarioDto.Apellido,
+            usuarioDto.Email,
+            usuarioDto.FechaNacimiento,
+            CifrarContraseña(usuarioDto.Contraseña),
+            usuarioDto.Roles
+        );
+
         return usuario;
     }
 
@@ -65,6 +71,7 @@ public class ServicioUsuario : IServicioUsuario
             Apellido = usuario.Apellido,
             Email = usuario.Email,
             FechaNacimiento = usuario.FechaNacimiento,
+            Roles = usuario.Roles.ToList()
         };
     }
 
@@ -104,8 +111,76 @@ public class ServicioUsuario : IServicioUsuario
         }
     }
 
+    private string CifrarContraseña(string contraseña)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(contraseña);
+        byte[] hash = SHA256.HashData(bytes);
 
+        return "Aa1!" + Convert.ToHexString(hash);
+    }
 
+    private Usuario ObtenerEntidadPorEmail(string email)
+    {
+        Usuario? usuario = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+
+        if (usuario == null)
+        {
+            throw new ArgumentException("El usuario no existe, porfavor ingrese un usuario que exista");
+        }
+
+        return usuario;
+    }
+    
+    public UsuarioDTO AutenticarUsuario(string email, string contraseña)
+    {
+        Usuario usuario = ObtenerEntidadPorEmail(email);
+
+        if (usuario.Contraseña != CifrarContraseña(contraseña))
+        {
+            throw new ArgumentException("Email o contraseña incorrectos");
+        }
+
+        return desdeEntidad(usuario);
+    }
+
+    public void ActualizarUsuario(UsuarioDTO usuarioDto)
+    {
+        Usuario usuarioExistente = ObtenerEntidadPorEmail(usuarioDto.Email);
+
+        string contraseña = usuarioExistente.Contraseña;
+
+        if (!string.IsNullOrWhiteSpace(usuarioDto.Contraseña))
+        {
+            contraseña = CifrarContraseña(usuarioDto.Contraseña);
+        }
+
+        Usuario usuarioActualizado = new Usuario(
+            usuarioDto.Nombre,
+            usuarioDto.Apellido,
+            usuarioDto.Email,
+            usuarioDto.FechaNacimiento,
+            contraseña,
+            usuarioDto.Roles
+        );
+
+        _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+    }
+
+    public void ReiniciarContraseña(string email)
+    {
+        Usuario usuarioExistente = ObtenerEntidadPorEmail(email);
+
+        Usuario usuarioActualizado = new Usuario(
+            usuarioExistente.Nombre,
+            usuarioExistente.Apellido,
+            usuarioExistente.Email,
+            usuarioExistente.FechaNacimiento,
+            CifrarContraseña(ContraseñaPorDefecto),
+            usuarioExistente.Roles.ToList()
+        );
+
+        _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+    }
 
 
 

@@ -1,0 +1,72 @@
+@page "/usuarios"
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioUsuario ServicioUsuario
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Usuarios</h1>
+                <p class="wcp-subtitle">Listado de usuarios registrados en el sistema.</p>
+            </div>
+
+            <NavLink href="/AgregarUsuario" class="wcp-btn-primary">Nuevo Usuario</NavLink>
+        </div>
+
+        @if (Sesion.UsuarioActual == null)
+        {
+            <div class="alert alert-warning wcp-alert">Debe iniciar sesión.</div>
+        }
+        else if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            <div class="alert alert-danger wcp-alert">Solo un administrador puede gestionar usuarios.</div>
+        }
+        else
+        {
+            <table class="wcp-table mt-3">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Fecha nacimiento</th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (UsuarioDTO usuario in usuarios)
+                    {
+                        <tr>
+                            <td>@usuario.Nombre @usuario.Apellido</td>
+                            <td>@usuario.Email</td>
+                            <td>@usuario.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                            <td>@string.Join(", ", usuario.Roles)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+    private List<UsuarioDTO> usuarios = new List<UsuarioDTO>();
+
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual == null)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            usuarios = ServicioUsuario.ObtenerUsuarios();
+        }
+    }
+}
