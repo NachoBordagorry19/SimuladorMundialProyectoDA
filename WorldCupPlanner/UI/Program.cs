@@ -4,6 +4,9 @@ using Repositorio.Interfaces;
 using Servicios.Clases;
 using Servicios.Interfaces;
 using UI.Estado;
+using Dominio.Enums;
+using Servicios.Interfaces;
+using Servicios.Modelo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,24 @@ builder.Services.AddScoped<PartidoServicios>();
 builder.Services.AddScoped<UsuarioSesion>();
 
 var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    using IServiceScope scope = app.Services.CreateScope();
+    IServicioUsuario servicioUsuario = scope.ServiceProvider.GetRequiredService<IServicioUsuario>();
+
+    if (!servicioUsuario.ObtenerUsuarios().Any())
+    {
+        servicioUsuario.AgregarUsuario(new UsuarioDTO()
+        {
+            Nombre = "admin",
+            Apellido = "Prueba",
+            Email = "admin@admin.com",
+            FechaNacimiento = new DateTime(2000, 1, 1),
+            Contraseña = "Admin123!",
+            Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
+        });
+    }
+}
 
 if (!app.Environment.IsDevelopment())
 {
