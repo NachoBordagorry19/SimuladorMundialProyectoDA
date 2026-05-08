@@ -68,6 +68,7 @@ public class Equipo
             {
                 throw new ArgumentException("Los goles a favor no pueden ser negativos");
             }
+            _golesAFavor = value;
         }
     }
 

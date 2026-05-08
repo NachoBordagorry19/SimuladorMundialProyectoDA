@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using Dominio.Enums;
 using System;
 using System.Linq;
+using Servicios.Interfaces;
 
 namespace Servicios.Clases;
 
-public class EquipoServicios
+public class EquipoServicios : IServicioEquipo
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
 
@@ -34,17 +35,74 @@ public class EquipoServicios
         _equipoRepositorio.AgregarEquipo(equipo);
     }
 
-    private int ObtenerCupo(Confederacion confederacion)
+    public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
+    {
+        List<String> registrosAuditoria = new List<String>(); 
+        Random random = new Random(semillaCompletar);
+        Array valoresEnum = Enum.GetValues(typeof(Confederacion));
+
+        List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
+        if (todosLosExistentes.Count >= 48)
+        {
+            registrosAuditoria.Add("El cupo total de 48 equipos ya está completo.");
+            return registrosAuditoria;
+        }
+        foreach (Confederacion conf in valoresEnum)
+        {
+            int cupoMaximo = ObtenerCupo(conf);
+
+            int cantidadActual = 0;
+            List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
+        
+            foreach (EquipoDTO equipo in todosLosEquipos)
+            {
+                if (equipo.confederacion == conf)
+                {
+                    cantidadActual++;
+                }
+            }
+            
+            int faltantes = cupoMaximo - cantidadActual;
+            
+            if (faltantes > 0)
+            {
+                string log = "Confederacion: " + conf.ToString() + " | Generados: " + faltantes + " | Semilla: " + semillaCompletar;
+                registrosAuditoria.Add(log);
+            }
+
+            for (int i = 1; i <= faltantes; i++)
+            {
+                int numeroEquipo = cantidadActual + i;
+                string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
+                EquipoDTO nuevoEquipo = new EquipoDTO();
+                nuevoEquipo.nombre = nombreFormateado;
+                nuevoEquipo.confederacion = conf;
+                
+                nuevoEquipo.rankingFifa = random.Next(1, 201);
+
+                this.AgregarEquipo(nuevoEquipo);
+            }
+        }
+        return registrosAuditoria;
+    }
+    public int ObtenerCupo(Confederacion confederacion)
     {
         switch (confederacion)
         {
-            case Confederacion.UEFA: return 16;
-            case Confederacion.CONMEBOL: return 7;
-            case Confederacion.CONCACAF: return 7;
-            case Confederacion.CAF: return 9;
-            case Confederacion.AFC: return 8;
-            case Confederacion.OFC: return 1;
-            default: return 0;
+            case Confederacion.UEFA:
+                return 16;
+            case Confederacion.CONMEBOL:
+                return 7;
+            case Confederacion.CONCACAF:
+                return 7;
+            case Confederacion.CAF:
+                return 9;
+            case Confederacion.AFC: 
+                return 8;
+            case Confederacion.OFC:
+                return 1;
+            default: 
+                return 0;
         }
     }
 
@@ -201,4 +259,6 @@ public class EquipoServicios
             .ToList();
         return ordenBase;
     }
+    
+    
 }

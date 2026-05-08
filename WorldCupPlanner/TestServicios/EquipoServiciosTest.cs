@@ -26,23 +26,23 @@ public class EquipoServiciosTest
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
         _equipoServicios = new EquipoServicios(_equipoRepositorio);
 
-        Confederacion _confederacion = new Confederacion();
-        _confederacion = Confederacion.UEFA;
+        Confederacion confederacion = new Confederacion();
+        confederacion = Confederacion.UEFA;
 
         _equipoDTO = new EquipoDTO()
         {
             nombre = "Alianzz Arena",
-            confederacion = _confederacion,
+            confederacion = confederacion,
             rankingFifa = 1
         };
 
-        Confederacion _confederacion2 = new Confederacion();
-        _confederacion2 = Confederacion.CONMEBOL;
+        Confederacion confederacion2 = new Confederacion();
+        confederacion2 = Confederacion.CONMEBOL;
 
         _equipoDTO2 = new EquipoDTO()
         {
             nombre = "Centenario",
-            confederacion = _confederacion2,
+            confederacion = confederacion2,
             rankingFifa = 23
         };
     }
@@ -211,7 +211,6 @@ public class EquipoServiciosTest
     [TestMethod]
     public void ResolverEmpates_MismaSemilla_OrdenYAuditoriaDeterministica()
     {
-        // Arrange: empato en ranking 10 entre A y B
         var equipos = new List<EquipoDTO>
     {
         new EquipoDTO { nombre = "EquipoA", confederacion = Confederacion.UEFA, rankingFifa = 10 },
@@ -242,5 +241,71 @@ public class EquipoServiciosTest
         var nombresEntrada = equipos.Select(e => e.nombre).OrderBy(n => n).ToList();
         var nombresSalida = r1.EquiposOrdenados.Select(e => e.nombre).OrderBy(n => n).ToList();
         CollectionAssert.AreEqual(nombresEntrada, nombresSalida);
+    }
+
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_DebeCompletar48Equipos_EnTotal()
+    {
+        int semillaCompletar = 123;
+        _equipoServicios.GenerarEquiposAutomaticamente(semillaCompletar);
+        var equipos = _equipoServicios.ObtenerEquipos();
+        Assert.AreEqual(48, equipos.Count);
+    }
+    
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_DebeGenerarNombresConFormatoCorrecto()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        List<EquipoDTO> listaEquipos = _equipoServicios.ObtenerEquipos();
+
+        bool existeNombreFormateado = false;
+        foreach (EquipoDTO equipo in listaEquipos)
+        {
+            if (equipo.nombre == "UEFA_01")
+            {
+                existeNombreFormateado = true;
+            }
+        }
+
+        Assert.IsTrue(existeNombreFormateado);
+    }
+    
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_DebeRegistrarAuditoria()
+    {
+        int semilla = 666;
+        List<string> auditoria = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
+
+        Assert.IsNotNull(auditoria);
+        Assert.IsTrue(auditoria.Count > 0);
+    
+        bool registroCorrecto = false;
+        foreach (string log in auditoria)
+        {
+            if (log.Contains("666"))
+            {
+                registroCorrecto = true;
+            }
+        }
+        Assert.IsTrue(registroCorrecto);
+    }
+    
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_SiYaEstaLleno_InformaEnAuditoria()
+    {
+        int semilla = 666;
+        _equipoServicios.GenerarEquiposAutomaticamente(semilla);
+        List<string> resultado = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
+
+        bool mensajeEncontrado = false;
+        foreach (string linea in resultado)
+        {
+            if (linea.Contains("El cupo total de 48 equipos ya está completo."))
+            {
+                mensajeEncontrado = true;
+            }
+        }
+
+        Assert.IsTrue(mensajeEncontrado);
     }
 }
