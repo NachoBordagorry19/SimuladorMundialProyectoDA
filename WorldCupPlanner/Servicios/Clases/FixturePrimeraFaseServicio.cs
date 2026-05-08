@@ -32,6 +32,12 @@ public class FixturePrimeraFaseServicio
 
     public ResultadoFixture GenerarFixturePrimeraFase(int semillaFixture, DateTime? fechaInicio = null)
     {
+        var equipos = _equipoRepositorio.ObtenerEquipos();
+        if (equipos.Count != 48)
+        {
+            throw new ArgumentException("Debe haber exactamente 48 equipos para generar el fixture");
+        }
+
         var resultado = new ResultadoFixture
         {
             SemillaFixture = semillaFixture,
