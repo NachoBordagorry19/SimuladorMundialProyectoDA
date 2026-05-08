@@ -70,4 +70,19 @@ public class FixturePrimeraFaseServicioTest
 
         _fixtureServicio.GenerarFixturePrimeraFase(456);
     }
+
+    [TestMethod]
+    public void GenerarFixture_GeneraDoceGruposConCuatroEquiposYSeisPartidos()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        var partidos = _baseDeDatos.ObtenerPartidos();
+        Assert.AreEqual(72, partidos.Count);
+    }
 }
