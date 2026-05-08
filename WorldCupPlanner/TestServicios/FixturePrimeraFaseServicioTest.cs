@@ -47,4 +47,16 @@ public class FixturePrimeraFaseServicioTest
         Assert.IsNotNull(resultado);
         Assert.AreEqual(456, resultado.SemillaFixture);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void GenerarFixture_SiNoHay48Equipos_LanzaArgumentException()
+    {
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        _fixtureServicio.GenerarFixturePrimeraFase(456);
+    }
 }
