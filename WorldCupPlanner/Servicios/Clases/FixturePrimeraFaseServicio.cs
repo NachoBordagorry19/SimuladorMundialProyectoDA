@@ -38,6 +38,12 @@ public class FixturePrimeraFaseServicio
             throw new ArgumentException("Debe haber exactamente 48 equipos para generar el fixture");
         }
 
+        var estadios = _estadioRepositorio.ObtenerEstadios();
+        if (estadios.Count < 4)
+        {
+            throw new ArgumentException("Debe haber al menos 4 estadios para generar el fixture");
+        }
+
         var resultado = new ResultadoFixture
         {
             SemillaFixture = semillaFixture,
