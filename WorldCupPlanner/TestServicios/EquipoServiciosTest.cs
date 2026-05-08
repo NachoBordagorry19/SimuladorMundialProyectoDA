@@ -289,4 +289,23 @@ public class EquipoServiciosTest
         }
         Assert.IsTrue(registroCorrecto);
     }
+    
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_SiYaEstaLleno_InformaEnAuditoria()
+    {
+        int semilla = 666;
+        _equipoServicios.GenerarEquiposAutomaticamente(semilla);
+        List<string> resultado = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
+
+        bool mensajeEncontrado = false;
+        foreach (string linea in resultado)
+        {
+            if (linea.Contains("El cupo total de 48 equipos ya está completo."))
+            {
+                mensajeEncontrado = true;
+            }
+        }
+
+        Assert.IsTrue(mensajeEncontrado);
+    }
 }

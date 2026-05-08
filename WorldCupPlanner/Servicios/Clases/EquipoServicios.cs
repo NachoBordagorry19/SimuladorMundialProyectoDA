@@ -41,6 +41,12 @@ public class EquipoServicios : IServicioEquipo
         Random random = new Random(semillaCompletar);
         Array valoresEnum = Enum.GetValues(typeof(Confederacion));
 
+        List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
+        if (todosLosExistentes.Count >= 48)
+        {
+            registrosAuditoria.Add("El cupo total de 48 equipos ya está completo.");
+            return registrosAuditoria;
+        }
         foreach (Confederacion conf in valoresEnum)
         {
             int cupoMaximo = ObtenerCupo(conf);
