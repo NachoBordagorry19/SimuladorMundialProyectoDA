@@ -269,4 +269,24 @@ public class EquipoServiciosTest
 
         Assert.IsTrue(existeNombreFormateado);
     }
+    
+    [TestMethod]
+    public void GenerarEquiposAutomaticamente_DebeRegistrarAuditoria()
+    {
+        int semilla = 666;
+        List<string> auditoria = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
+
+        Assert.IsNotNull(auditoria);
+        Assert.IsTrue(auditoria.Count > 0);
+    
+        bool registroCorrecto = false;
+        foreach (string log in auditoria)
+        {
+            if (log.Contains("666"))
+            {
+                registroCorrecto = true;
+            }
+        }
+        Assert.IsTrue(registroCorrecto);
+    }
 }
