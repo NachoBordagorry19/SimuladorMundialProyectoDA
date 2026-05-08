@@ -59,4 +59,15 @@ public class FixturePrimeraFaseServicioTest
 
         _fixtureServicio.GenerarFixturePrimeraFase(456);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void GenerarFixture_SiNoHay4Estadios_LanzaArgumentException()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+
+        _fixtureServicio.GenerarFixturePrimeraFase(456);
+    }
 }
