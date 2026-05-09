@@ -6,13 +6,18 @@ namespace Repositorio;
 public class LogRepositorio : ILogRepositorio
 {
     private readonly BaseDeDatosEnMemoria _BDEnMemoria;
-    public void Agregar(BaseDeDatosEnMemoria bdEnMemoria)
+    public LogRepositorio(BaseDeDatosEnMemoria BDEnMemoria)
     {
-        throw new NotImplementedException();
+        _BDEnMemoria = BDEnMemoria;
     }
 
-    public List<Log> ObtenerTodos()
+    public List<Log> ObtenerLogs()
     {
-        throw new NotImplementedException();
+        return _BDEnMemoria.ObtenerLogs();
+    }
+
+    public void AgregarLog(Log log)
+    {
+        _BDEnMemoria.AgregarLog(log);
     }
 }
