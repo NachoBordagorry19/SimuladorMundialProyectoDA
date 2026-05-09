@@ -254,7 +254,7 @@ public class EquipoServicios : IServicioEquipo
     {
         if (equipos == null) return new List<EquipoDTO>();
         var ordenBase = equipos
-            .OrderBy(e => e.rankingFifa)
+            .OrderByDescending(e => e.rankingFifa)
             .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
             .ToList();
         return ordenBase;

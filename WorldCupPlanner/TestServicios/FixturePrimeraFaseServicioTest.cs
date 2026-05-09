@@ -14,6 +14,7 @@ public class FixturePrimeraFaseServicioTest
     private PartidoRepositorio _partidoRepositorio;
     private EquipoServicios _equipoServicios;
     private EstadioServicios _estadioServicios;
+    private PartidoServicios _partidoServicios;
 
     [TestInitialize]
     public void Inicializar()
@@ -24,13 +25,15 @@ public class FixturePrimeraFaseServicioTest
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
         _equipoServicios = new EquipoServicios(_equipoRepositorio);
         _estadioServicios = new EstadioServicios(_estadioRepositorio);
+        _partidoServicios = new PartidoServicios(_partidoRepositorio);
 
         _fixtureServicio = new FixturePrimeraFaseServicio(
             _equipoRepositorio, 
             _estadioRepositorio, 
             _partidoRepositorio,
             _equipoServicios,
-            _estadioServicios);
+            _estadioServicios,
+            _partidoServicios);
     }
 
     [TestMethod]
