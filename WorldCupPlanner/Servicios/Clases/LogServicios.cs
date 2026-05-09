@@ -1,3 +1,4 @@
+using Dominio.Clases;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 using Servicios.Modelo;
@@ -15,10 +16,31 @@ public class LogServicios : IServicioLog
 
     public void GuardarLog(LogDTO dto)
     {
+        Log nuevoLog = new Log();
+        nuevoLog.Mensaje = dto.mensaje;
+        nuevoLog.Usuario = dto.usuario;
+        nuevoLog.Tipo = dto.tipo;
+        nuevoLog.Fecha = DateTime.Parse(dto.fechaISO8601);
+
+        _logRepo.AgregarLog(nuevoLog);
     }
 
     public List<LogDTO> ObtenerLogs()
     {
-        return new List<LogDTO>();
+        List<Log> entidades = _logRepo.ObtenerLogs();
+        List<LogDTO> listaDtos = new List<LogDTO>();
+
+        foreach (Log log in entidades)
+        {
+            LogDTO dto = new LogDTO();
+            dto.mensaje = log.Mensaje;
+            dto.usuario = log.Usuario;
+            dto.tipo = log.Tipo;
+            dto.fechaISO8601 = log.Fecha.ToString("o");
+        
+            listaDtos.Add(dto);
+        }
+
+        return listaDtos;
     }
 }
