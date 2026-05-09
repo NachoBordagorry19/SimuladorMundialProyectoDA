@@ -120,4 +120,10 @@ public class BaseDeDatosEnMemoria
         }
         return copia;
     }
+    
+    public void AgregarLog(Log log)
+    {
+        log.Id = _listaDeLogs.Count + 1;
+        _listaDeLogs.Add(log);
+    }
 }
