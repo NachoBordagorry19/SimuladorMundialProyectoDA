@@ -4,6 +4,6 @@ namespace Repositorio.Interfaces;
 
 public interface ILogRepositorio
 {
-    void Agregar(Log nuevoLog);
-    List<Log> ObtenerTodos();
+    List<Log> ObtenerLogs();
+    void AgregarLog(Log log);
 }
