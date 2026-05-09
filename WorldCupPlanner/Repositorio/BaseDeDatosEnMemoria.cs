@@ -9,6 +9,7 @@ public class BaseDeDatosEnMemoria
     private List<Equipo> _listaDeEquipos { get; }
     private List<Estadio> _listaDeEstadios { get; }
     private List<Partido> _listaDePartidos { get; }
+    private List<Log> _listaDeLogs { get; }
 
     public BaseDeDatosEnMemoria()
     {
@@ -16,6 +17,7 @@ public class BaseDeDatosEnMemoria
         _listaDeEquipos = new List<Equipo>();
         _listaDeEstadios = new List<Estadio>();
         _listaDePartidos = new List<Partido>();
+        _listaDeLogs = new List<Log>();
     }
 
     public void AgregarUsuario(Usuario usuario)
@@ -107,5 +109,15 @@ public class BaseDeDatosEnMemoria
         Partido? partidoParaActualizar = _listaDePartidos.Find(p => p.Id == partido.Id);
         var indicePartido = _listaDePartidos.IndexOf(partidoParaActualizar);
         _listaDePartidos[indicePartido] = partido;
+    }
+    
+    public List<Log> ObtenerLogs()
+    {
+        List<Log> copia = new List<Log>();
+        foreach (Log log in _listaDeLogs)
+        {
+            copia.Add(log);
+        }
+        return copia;
     }
 }
