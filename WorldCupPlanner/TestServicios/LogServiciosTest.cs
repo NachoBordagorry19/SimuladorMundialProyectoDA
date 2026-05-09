@@ -1,6 +1,7 @@
 using Dominio.Enums;
 using Repositorio;
 using Repositorio.Interfaces;
+using Servicios.Clases;
 using Servicios.Interfaces;
 using Servicios.Modelo;
 
@@ -28,5 +29,15 @@ public class LogServiciosTest
             tipo = TipoLog.Info,
             fechaISO8601 = DateTime.Now.ToString("o")
         };
+    }
+    
+    [TestMethod]
+    public void GuardarLog_SePersisteCorrectamente()
+    {
+        _logServicios.GuardarLog(_logDTO);
+    
+        var logs = _logServicios.ObtenerLogs();
+        Assert.IsNotNull(logs);
+        Assert.AreEqual(1, logs.Count);
     }
 }
