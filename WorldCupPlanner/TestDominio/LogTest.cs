@@ -16,6 +16,15 @@ public class LogTest
         log.Validar();
     }
 
-    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void Validar_CuandoUsuarioEsNulo_LanzaExcepcion()
+    {
+        Log log = new Log();
+        log.Mensaje = "Mensaje";
+        log.Usuario = "";
+        
+        log.Validar();
+    }
     
 }

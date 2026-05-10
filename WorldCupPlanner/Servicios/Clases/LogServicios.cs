@@ -16,10 +16,6 @@ public class LogServicios : IServicioLog
 
     public void GuardarLog(LogDTO dto)
     {
-        if (string.IsNullOrEmpty(dto.usuario))
-        {
-            throw new ArgumentException("El usuario no puede ser nulo");
-        }
         Log nuevoLog = new Log();
         nuevoLog.Mensaje = dto.mensaje;
         nuevoLog.Usuario = dto.usuario;
