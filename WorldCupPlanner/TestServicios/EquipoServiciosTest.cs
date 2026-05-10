@@ -25,6 +25,8 @@ public class EquipoServiciosTest
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
         _equipoServicios = new EquipoServicios(_equipoRepositorio);
+        var logRepo = new LogRepositorio(_baseDeDatosEnMemoria);
+        _logServicio = new LogServicios(logRepo);
 
         Confederacion confederacion = new Confederacion();
         confederacion = Confederacion.UEFA;
