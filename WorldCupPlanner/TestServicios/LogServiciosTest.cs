@@ -57,7 +57,7 @@ public class LogServiciosTest
         string fechaResultante = logs[0].fechaISO8601;
 
         Assert.IsNotNull(fechaResultante);
-        string hoy = DateTime.Now.ToString("dd/MM/yyyy");
+        string hoy = DateTime.Now.ToString("yyyy/MM/dd");
         StringAssert.Contains(fechaResultante, hoy);
         StringAssert.Contains(fechaResultante, "T");
     }
