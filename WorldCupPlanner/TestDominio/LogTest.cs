@@ -27,4 +27,16 @@ public class LogTest
         log.Validar();
     }
     
+    [TestMethod]
+    public void Validar_ConDatosCorrectos_NoLanzaExcepcion()
+    {
+        Log log = new Log { 
+            Mensaje = "Usuario logueado", 
+            Usuario = "admin@cup.com" 
+        };
+
+        log.Validar();
+        Assert.IsNotNull(log.Mensaje);
+        Assert.IsNull(log.Usuario);
+    }
 }
