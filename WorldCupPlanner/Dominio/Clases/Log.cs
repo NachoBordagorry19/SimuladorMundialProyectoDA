@@ -17,7 +17,7 @@ public class Log
     
     public void Validar()
     {
-        if (string.IsNullOrEmpty(Mensaje))
+        if (string.IsNullOrWhiteSpace(Mensaje))
         {
             throw new ArgumentException("El mensaje no puede estar vacío.");
         }

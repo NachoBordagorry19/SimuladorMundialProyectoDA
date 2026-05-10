@@ -37,6 +37,7 @@ public class LogTest
 
         log.Validar();
     }
+
     
     [TestMethod]
     public void Validar_ConDatosCorrectos_NoLanzaExcepcion()
