@@ -323,4 +323,16 @@ public class EquipoServiciosTest
         Assert.AreEqual(1, logs.Count);
         StringAssert.Contains(logs[0].mensaje, _equipoDTO.nombre);
     }
+    
+    [TestMethod]
+    public void EliminarEquipo_GeneraLogDeAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.EliminarEquipo(_equipoDTO);
+
+        var logs = _logServicio.ObtenerLogs();
+        Assert.AreEqual(2, logs.Count);
+        Assert.AreEqual(TipoLog.Advertencia, logs[1].tipo);
+        StringAssert.Contains(logs[1].mensaje, "eliminado");
+    }
 }
