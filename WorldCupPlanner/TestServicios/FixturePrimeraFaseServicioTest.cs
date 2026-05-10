@@ -1,6 +1,8 @@
 using Dominio.Clases;
 using Repositorio;
 using Servicios.Clases;
+using System.Linq;
+using Servicios.Modelo;
 
 namespace TestServicios;
 
@@ -87,5 +89,49 @@ public class FixturePrimeraFaseServicioTest
 
         var partidos = _baseDeDatos.ObtenerPartidos();
         Assert.AreEqual(72, partidos.Count);
+    }
+
+    [TestMethod]
+    public void GenerarFixture_RespetaReglasConfederaciones()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        var partidos = _baseDeDatos.ObtenerPartidos();
+        var gruposDict = new Dictionary<char, List<Equipo>>();
+
+        for (char letra = 'A'; letra <= 'L'; letra++)
+        {
+            gruposDict[letra] = new List<Equipo>();
+        }
+
+        foreach (var partido in partidos)
+        {
+            foreach (var letra in gruposDict.Keys)
+            {
+                if (!gruposDict[letra].Contains(partido.Local))
+                    gruposDict[letra].Add(partido.Local);
+                if (!gruposDict[letra].Contains(partido.Visitante))
+                    gruposDict[letra].Add(partido.Visitante);
+            }
+        }
+
+        foreach (var grupo in gruposDict)
+        {
+            var conteoPorConf = grupo.Value.GroupBy(e => e.Confederacion);
+
+            foreach (var confederacion in conteoPorConf)
+            {
+                if (confederacion.Key.ToString() == "UEFA")
+                    Assert.IsTrue(confederacion.Count() <= 2);
+                else
+                    Assert.IsTrue(confederacion.Count() <= 1);
+            }
+        }
     }
 }
