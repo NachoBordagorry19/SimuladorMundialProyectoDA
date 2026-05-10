@@ -1,0 +1,134 @@
+using Dominio.Enums;
+using Repositorio;
+using Repositorio.Interfaces;
+using Servicios.Clases;
+using Servicios.Interfaces;
+using Servicios.Modelo;
+
+namespace TestServicios;
+
+[TestClass]
+public class LogServiciosTest
+{
+    private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
+    private ILogRepositorio _logRepositorio;
+    private IServicioLog _logServicios;
+    private LogDTO _logDTO;
+
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
+        _logRepositorio = new LogRepositorio(_baseDeDatosEnMemoria);
+        _logServicios = new LogServicios(_logRepositorio);
+
+        _logDTO = new LogDTO()
+        {
+            mensaje = "Inicio de sistema",
+            usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = DateTime.Now.ToString("o")
+        };
+    }
+    
+    [TestMethod]
+    public void GuardarLog_SePersisteCorrectamente()
+    {
+        _logServicios.GuardarLog(_logDTO);
+    
+        var logs = _logServicios.ObtenerLogs();
+        Assert.IsNotNull(logs);
+        Assert.AreEqual(1, logs.Count);
+    }
+    
+    [TestMethod]
+    public void GuardarLog_SiFechaEsVacia_AsignaFechaActual()
+    {
+        LogDTO log = new LogDTO()
+        {
+            mensaje = "Inicio de sistema",
+            usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = ""
+        };
+
+        _logServicios.GuardarLog(log);
+        var logs = _logServicios.ObtenerLogs();
+        string fechaResultante = logs[0].fechaISO8601;
+
+        Assert.IsNotNull(fechaResultante);
+        string hoy = DateTime.Now.ToString("yyyy/MM/dd");
+        StringAssert.Contains(fechaResultante, hoy);
+        StringAssert.Contains(fechaResultante, "T");
+    }
+    
+    [TestMethod]
+    public void GuardarLog_CuandoFechaTieneFormatoInvalido_AsignaFechaActual()
+    {
+        LogDTO log = new LogDTO()
+        {
+            mensaje = "Mensaje",
+            usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = "Fecha Invalida"
+        };
+
+        _logServicios.GuardarLog(log);
+        var logs = _logServicios.ObtenerLogs();
+        StringAssert.Contains(logs[0].fechaISO8601, DateTime.Now.ToString("yyyy-MM-dd"));
+    }
+    
+    [TestMethod]
+    public void GuardarLog_VerificarQueTodosLosCamposSeGuardanCorrectamente()
+    {
+        var fechaEspecifica = new DateTime(2026, 05, 10, 15, 30, 0);
+        var logA = new LogDTO()
+        {
+            mensaje = "Mensaje",
+            usuario = "analista@worldcup.com",
+            tipo = TipoLog.Advertencia,
+            fechaISO8601 = fechaEspecifica.ToString("o")
+        };
+
+        _logServicios.GuardarLog(logA);
+        var listaDeLogs = _logServicios.ObtenerLogs();
+        var logB = listaDeLogs[0];
+
+        Assert.AreEqual(logA.mensaje, logB.mensaje);
+        Assert.AreEqual(logA.usuario, logB.usuario);
+        Assert.AreEqual(logA.tipo, logB.tipo);
+        StringAssert.Contains(logB.fechaISO8601, "2026-05-10");
+    }
+    
+    [TestMethod]
+    public void ObtenerLogs_CuandoExistenVarios_DevuelveListaCompleta()
+    {
+        var log1 = new LogDTO { mensaje = "Primer log", usuario = "admin", tipo = TipoLog.Info };
+        var log2 = new LogDTO { mensaje = "Segundo log", usuario = "editor", tipo = TipoLog.Error };
+    
+        _logServicios.GuardarLog(log1);
+        _logServicios.GuardarLog(log2);
+
+        List<LogDTO> listaDeLogs = _logServicios.ObtenerLogs();
+
+        Assert.AreEqual(2, listaDeLogs.Count);
+        Assert.AreEqual("Primer log", listaDeLogs[0].mensaje);
+        Assert.AreEqual("Segundo log", listaDeLogs[1].mensaje);
+    }
+    
+    [TestMethod]
+    public void ObtenerLogsPorTipo_DebeRetornarSoloLosDelTipoSolicitado()
+    {
+        _logServicios.GuardarLog(new LogDTO { mensaje = "Error 1", tipo = TipoLog.Error, usuario = "admin" });
+        _logServicios.GuardarLog(new LogDTO { mensaje = "Info 1", tipo = TipoLog.Info, usuario = "admin" });
+        _logServicios.GuardarLog(new LogDTO { mensaje = "Error 2", tipo = TipoLog.Error, usuario = "admin" });
+
+        List<LogDTO> logsError = _logServicios.ObtenerLogsPorTipo(TipoLog.Error);
+        Assert.AreEqual(2, logsError.Count);
+    
+        foreach (var log in logsError)
+        {
+            Assert.AreEqual(TipoLog.Error, log.tipo);
+        }
+    }
+}
