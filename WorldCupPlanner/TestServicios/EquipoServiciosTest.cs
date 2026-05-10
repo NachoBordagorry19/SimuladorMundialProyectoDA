@@ -18,6 +18,8 @@ public class EquipoServiciosTest
     private EquipoServicios _equipoServicios;
     private EquipoDTO _equipoDTO;
     private EquipoDTO _equipoDTO2;
+    private LogServicios _logServicio;
+    private LogRepositorio _logRepositorio;
 
     [TestInitialize]
     public void Inicializar()
@@ -25,8 +27,8 @@ public class EquipoServiciosTest
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
         _equipoServicios = new EquipoServicios(_equipoRepositorio);
-        var logRepo = new LogRepositorio(_baseDeDatosEnMemoria);
-        _logServicio = new LogServicios(logRepo);
+        _logRepositorio = new LogRepositorio(_baseDeDatosEnMemoria);
+        _logServicio = new LogServicios(_logRepositorio);
 
         Confederacion confederacion = new Confederacion();
         confederacion = Confederacion.UEFA;
