@@ -40,4 +40,25 @@ public class LogServiciosTest
         Assert.IsNotNull(logs);
         Assert.AreEqual(1, logs.Count);
     }
+    
+    [TestMethod]
+    public void GuardarLog_SiFechaEsVacia_AsignaFechaActual()
+    {
+        LogDTO logSinFecha = new LogDTO()
+        {
+            mensaje = "Inicio de sistema",
+            usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = ""
+        };
+
+        _logServicios.GuardarLog(logSinFecha);
+        var logs = _logServicios.ObtenerLogs();
+        string fechaResultante = logs[0].fechaISO8601;
+
+        Assert.IsNotNull(fechaResultante);
+        string hoy = DateTime.Now.ToString("dd/MM/yyyy");
+        StringAssert.Contains(fechaResultante, hoy);
+        StringAssert.Contains(fechaResultante, "T");
+    }
 }
