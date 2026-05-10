@@ -1,4 +1,5 @@
 using Dominio.Clases;
+using Dominio.Enums;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 using Servicios.Modelo;
@@ -52,5 +53,23 @@ public class LogServicios : IServicioLog
         }
 
         return listaDtos;
+    }
+    
+    public List<LogDTO> ObtenerLogsPorTipo(TipoLog tipo)
+    {
+        List<Log> logs = _logRepo.ObtenerLogsPorTipo(tipo);
+    
+        List<LogDTO> logsPorTipo = new List<LogDTO>();
+        foreach (var log in logs)
+        {
+            logsPorTipo.Add(new LogDTO 
+            { 
+                mensaje = log.Mensaje, 
+                usuario = log.Usuario, 
+                tipo = log.Tipo, 
+                fechaISO8601 = log.Fecha.ToString("o") 
+            });
+        }
+        return logsPorTipo;
     }
 }
