@@ -37,6 +37,6 @@ public class LogTest
 
         log.Validar();
         Assert.IsNotNull(log.Mensaje);
-        Assert.IsNull(log.Usuario);
+        Assert.AreEqual("admin@cup.com", log.Usuario);
     }
 }
