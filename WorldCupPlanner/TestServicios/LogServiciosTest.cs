@@ -99,4 +99,20 @@ public class LogServiciosTest
         Assert.AreEqual(logA.tipo, logB.tipo);
         StringAssert.Contains(logB.fechaISO8601, "2026-05-10");
     }
+    
+    [TestMethod]
+    public void ObtenerLogs_CuandoExistenVarios_DevuelveListaCompleta()
+    {
+        var log1 = new LogDTO { mensaje = "Primer log", usuario = "admin", tipo = TipoLog.Info };
+        var log2 = new LogDTO { mensaje = "Segundo log", usuario = "editor", tipo = TipoLog.Error };
+    
+        _logServicios.GuardarLog(log1);
+        _logServicios.GuardarLog(log2);
+
+        List<LogDTO> listaDeLogs = _logServicios.ObtenerLogs();
+
+        Assert.AreEqual(2, listaDeLogs.Count);
+        Assert.AreEqual("Primer log", listaDeLogs[0].mensaje);
+        Assert.AreEqual("Segundo log", listaDeLogs[1].mensaje);
+    }
 }
