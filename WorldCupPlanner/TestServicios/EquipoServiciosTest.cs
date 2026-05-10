@@ -312,4 +312,14 @@ public class EquipoServiciosTest
 
         Assert.IsTrue(mensajeEncontrado);
     }
+    
+    [TestMethod]
+    public void AgregarEquipo_GeneraLogDeAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        var logs = _logServicio.ObtenerLogs();
+
+        Assert.AreEqual(1, logs.Count);
+        StringAssert.Contains(logs[0].mensaje, _equipoDTO.nombre);
+    }
 }
