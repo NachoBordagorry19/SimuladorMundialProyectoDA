@@ -191,6 +191,12 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreExiste(equipoDto.nombre);
         Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
         _equipoRepositorio.ActualizarEquipo(equipoActualizado);
+        _logServicio.GuardarLog(new LogDTO 
+        {
+            mensaje = $"Datos actualizados para el equipo: {equipoActualizado.Nombre}",
+            usuario = "Editor_Sist",
+            tipo = TipoLog.Info
+        });
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
