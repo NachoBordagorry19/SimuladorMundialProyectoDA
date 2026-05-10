@@ -14,4 +14,13 @@ public class Log
     {
         
     }
+    
+    public void Validar()
+    {
+        if (string.IsNullOrEmpty(Mensaje))
+        {
+            throw new ArgumentException("El mensaje no puede estar vacío.");
+        }
+
+    }
 }
