@@ -61,4 +61,19 @@ public class LogServiciosTest
         StringAssert.Contains(fechaResultante, hoy);
         StringAssert.Contains(fechaResultante, "T");
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void GuardarLog_CuandoMensajeEsVacio_LanzaExcepcion()
+    {
+        LogDTO log = new LogDTO()
+        {
+            mensaje = "",
+            usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = DateTime.Now.ToString("o")
+        };
+
+        _logServicios.GuardarLog(log);
+    }
 }
