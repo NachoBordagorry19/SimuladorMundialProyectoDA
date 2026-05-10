@@ -37,7 +37,17 @@ public class LogTest
 
         log.Validar();
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void Validar_CuandoUsuarioSonSoloEspacios_LanzaExcepcion()
+    {
+        Log log = new Log();
+        log.Mensaje = "Usuario logueado";
+        log.Usuario = "   ";
 
+        log.Validar();
+    }
     
     [TestMethod]
     public void Validar_ConDatosCorrectos_NoLanzaExcepcion()
