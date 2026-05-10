@@ -28,6 +28,17 @@ public class LogTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void Validar_CuandoMensajeSonSoloEspacios_LanzaExcepcion()
+    {
+        Log log = new Log();
+        log.Mensaje = "   ";
+        log.Usuario = "admin@worldcup.com";
+
+        log.Validar();
+    }
+    
+    [TestMethod]
     public void Validar_ConDatosCorrectos_NoLanzaExcepcion()
     {
         Log log = new Log { 
