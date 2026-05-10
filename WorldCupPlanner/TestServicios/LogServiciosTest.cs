@@ -61,4 +61,26 @@ public class LogServiciosTest
         StringAssert.Contains(fechaResultante, hoy);
         StringAssert.Contains(fechaResultante, "T");
     }
+    
+    [TestMethod]
+    public void GuardarLog_VerificarQueTodosLosCamposSeGuardanCorrectamente()
+    {
+        var fechaEspecifica = new DateTime(2026, 05, 10, 15, 30, 0);
+        var logA = new LogDTO()
+        {
+            mensaje = "Mensaje",
+            usuario = "analista@worldcup.com",
+            tipo = TipoLog.Advertencia,
+            fechaISO8601 = fechaEspecifica.ToString("o")
+        };
+
+        _logServicios.GuardarLog(logA);
+        var listaDeLogs = _logServicios.ObtenerLogs();
+        var logB = listaDeLogs[0];
+
+        Assert.AreEqual(logA.mensaje, logB.mensaje);
+        Assert.AreEqual(logA.usuario, logB.usuario);
+        Assert.AreEqual(logA.tipo, logB.tipo);
+        StringAssert.Contains(logB.fechaISO8601, "2026-05-10");
+    }
 }
