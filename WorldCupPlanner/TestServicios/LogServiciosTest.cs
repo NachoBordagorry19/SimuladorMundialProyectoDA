@@ -63,6 +63,22 @@ public class LogServiciosTest
     }
     
     [TestMethod]
+    public void GuardarLog_CuandoFechaTieneFormatoInvalido_AsignaFechaActual()
+    {
+        LogDTO log = new LogDTO()
+        {
+            mensaje = "Mensaje",
+            usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = "Fecha Invalida"
+        };
+
+        _logServicios.GuardarLog(log);
+        var logs = _logServicios.ObtenerLogs();
+        StringAssert.Contains(logs[0].fechaISO8601, DateTime.Now.ToString("yyyy-MM-dd"));
+    }
+    
+    [TestMethod]
     public void GuardarLog_VerificarQueTodosLosCamposSeGuardanCorrectamente()
     {
         var fechaEspecifica = new DateTime(2026, 05, 10, 15, 30, 0);
