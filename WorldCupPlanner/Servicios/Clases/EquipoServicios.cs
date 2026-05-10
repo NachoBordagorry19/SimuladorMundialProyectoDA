@@ -178,7 +178,12 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreExiste(equipoDto.nombre);
         Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
         _equipoRepositorio.EliminarEquipo(equipoExistente);
-
+        _logServicio.GuardarLog(new LogDTO 
+        {
+            mensaje = $"Equipo eliminado permanentemente: {equipoExistente.Nombre}",
+            usuario = "Admin_User",
+            tipo = TipoLog.Advertencia
+        });
     }
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
