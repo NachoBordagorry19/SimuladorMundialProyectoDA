@@ -335,4 +335,21 @@ public class EquipoServiciosTest
         Assert.AreEqual(TipoLog.Advertencia, logs[1].tipo);
         StringAssert.Contains(logs[1].mensaje, "eliminado");
     }
+    
+    [TestMethod]
+    public void ActualizarEquipo_GeneraLogDeAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        var equipo = new EquipoDTO
+        {
+            nombre = _equipoDTO.nombre,
+            rankingFifa = 5, 
+            confederacion = _equipoDTO.confederacion
+        };
+        _equipoServicios.ActualizarEquipo(equipo);
+
+        var logs = _logServicio.ObtenerLogs();
+        Assert.AreEqual(2, logs.Count);
+        StringAssert.Contains(logs[1].mensaje, "actualizados");
+    }
 }
