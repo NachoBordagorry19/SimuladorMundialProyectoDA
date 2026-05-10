@@ -13,11 +13,14 @@ namespace Servicios.Clases;
 public class EquipoServicios : IServicioEquipo
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
+    private readonly IServicioLog _logServicio;
 
-    public EquipoServicios(IEquipoRepositorio equipoRepositorio)
+    public EquipoServicios(IEquipoRepositorio equipoRepo, IServicioLog logServicio)
     {
-        _equipoRepositorio = equipoRepositorio;
+        _equipoRepositorio = equipoRepo;
+        _logServicio = logServicio;
     }
+    
 
     public void AgregarEquipo(EquipoDTO equipoDTO)
     {
@@ -33,6 +36,12 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreNoExiste(equipoDTO.nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
+        _logServicio.GuardarLog(new LogDTO 
+        {
+            mensaje = $"Se ha creado el equipo: {equipo.Nombre}",
+            usuario = "Sistema_WC",
+            tipo = TipoLog.Info
+        });
     }
 
     public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
