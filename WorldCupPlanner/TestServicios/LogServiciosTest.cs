@@ -115,4 +115,20 @@ public class LogServiciosTest
         Assert.AreEqual("Primer log", listaDeLogs[0].mensaje);
         Assert.AreEqual("Segundo log", listaDeLogs[1].mensaje);
     }
+    
+    [TestMethod]
+    public void ObtenerLogsPorTipo_DebeRetornarSoloLosDelTipoSolicitado()
+    {
+        _logServicios.GuardarLog(new LogDTO { mensaje = "Error 1", tipo = TipoLog.Error, usuario = "admin" });
+        _logServicios.GuardarLog(new LogDTO { mensaje = "Info 1", tipo = TipoLog.Info, usuario = "admin" });
+        _logServicios.GuardarLog(new LogDTO { mensaje = "Error 2", tipo = TipoLog.Error, usuario = "admin" });
+
+        List<LogDTO> logsError = _logServicios.ObtenerLogsPorTipo(TipoLog.Error);
+        Assert.AreEqual(2, logsError.Count);
+    
+        foreach (var log in logsError)
+        {
+            Assert.AreEqual(TipoLog.Error, log.tipo);
+        }
+    }
 }
