@@ -20,7 +20,10 @@ public class LogServicios : IServicioLog
         {
             throw new ArgumentException("El mensaje no puede ser vacío");
         }
-        
+        if (string.IsNullOrEmpty(dto.usuario))
+        {
+            throw new ArgumentException("El usuario no puede ser nulo");
+        }
         Log nuevoLog = new Log();
         nuevoLog.Mensaje = dto.mensaje;
         nuevoLog.Usuario = dto.usuario;
