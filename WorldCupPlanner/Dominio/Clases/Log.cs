@@ -21,7 +21,7 @@ public class Log
         {
             throw new ArgumentException("El mensaje no puede estar vacío.");
         }
-        if (string.IsNullOrEmpty(Usuario))
+        if (string.IsNullOrWhiteSpace(Usuario))
         {
             throw new ArgumentException("El usuario no puede ser nulo.");
         }
