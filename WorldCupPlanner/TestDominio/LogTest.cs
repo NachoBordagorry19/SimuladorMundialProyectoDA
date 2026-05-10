@@ -1,0 +1,19 @@
+using Dominio.Clases;
+
+namespace TestDominio;
+
+[TestClass]
+public class LogTest
+{
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void Validar_CuandoMensajeEsVacio_LanzaExcepcion()
+    {
+        Log log = new Log();
+        log.Mensaje = "";
+        log.Usuario = "admin@worldcup.com";
+
+        log.Validar();
+    }
+    
+}
