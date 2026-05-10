@@ -44,7 +44,7 @@ public class LogServiciosTest
     [TestMethod]
     public void GuardarLog_SiFechaEsVacia_AsignaFechaActual()
     {
-        LogDTO logSinFecha = new LogDTO()
+        LogDTO log = new LogDTO()
         {
             mensaje = "Inicio de sistema",
             usuario = "admin@worldcup.com",
@@ -52,7 +52,7 @@ public class LogServiciosTest
             fechaISO8601 = ""
         };
 
-        _logServicios.GuardarLog(logSinFecha);
+        _logServicios.GuardarLog(log);
         var logs = _logServicios.ObtenerLogs();
         string fechaResultante = logs[0].fechaISO8601;
 
@@ -70,6 +70,21 @@ public class LogServiciosTest
         {
             mensaje = "",
             usuario = "admin@worldcup.com",
+            tipo = TipoLog.Info,
+            fechaISO8601 = DateTime.Now.ToString("o")
+        };
+
+        _logServicios.GuardarLog(log);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void GuardarLog_CuandoUsuarioEsNulo_LanzaExcepcion()
+    {
+        LogDTO log = new LogDTO()
+        {
+            mensaje = "Inicio de sistema",
+            usuario = null,
             tipo = TipoLog.Info,
             fechaISO8601 = DateTime.Now.ToString("o")
         };
