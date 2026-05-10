@@ -16,11 +16,16 @@ public class LogServicios : IServicioLog
 
     public void GuardarLog(LogDTO dto)
     {
+        if (string.IsNullOrEmpty(dto.mensaje))
+        {
+            throw new ArgumentException("El mensaje no puede ser vacío");
+        }
+        
         Log nuevoLog = new Log();
         nuevoLog.Mensaje = dto.mensaje;
         nuevoLog.Usuario = dto.usuario;
         nuevoLog.Tipo = dto.tipo;
-
+        
         if (string.IsNullOrEmpty(dto.fechaISO8601))
         {
             nuevoLog.Fecha = DateTime.Now;
