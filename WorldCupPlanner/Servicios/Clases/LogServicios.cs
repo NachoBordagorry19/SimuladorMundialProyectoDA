@@ -20,16 +20,18 @@ public class LogServicios : IServicioLog
         nuevoLog.Mensaje = dto.mensaje;
         nuevoLog.Usuario = dto.usuario;
         nuevoLog.Tipo = dto.tipo;
-        
-        if (string.IsNullOrEmpty(dto.fechaISO8601))
+        DateTime fechaParseada;
+        bool esFechaValida = DateTime.TryParse(dto.fechaISO8601, out fechaParseada);
+
+        if (esFechaValida)
         {
-            nuevoLog.Fecha = DateTime.Now;
+            nuevoLog.Fecha = fechaParseada;
         }
         else
         {
-            nuevoLog.Fecha = DateTime.Parse(dto.fechaISO8601);
+            nuevoLog.Fecha = DateTime.Now;
         }
-
+        nuevoLog.Validar();
         _logRepo.AgregarLog(nuevoLog);
     }
 
