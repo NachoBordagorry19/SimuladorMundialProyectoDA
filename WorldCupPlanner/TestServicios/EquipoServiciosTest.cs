@@ -36,7 +36,7 @@ public class EquipoServiciosTest
         {
             nombre = "Alianzz Arena",
             confederacion = confederacion,
-            rankingFifa = 1
+            rankingFifa = 2000
         };
 
         Confederacion confederacion2 = new Confederacion();
@@ -46,7 +46,7 @@ public class EquipoServiciosTest
         {
             nombre = "Centenario",
             confederacion = confederacion2,
-            rankingFifa = 23
+            rankingFifa = 1800
         };
     }
 
@@ -121,11 +121,11 @@ public class EquipoServiciosTest
         {
             nombre = _equipoDTO.nombre,
             confederacion = Confederacion.CONMEBOL,
-            rankingFifa = 99
+            rankingFifa = 1700
         };
         _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
         var equipoObtenido = _equipoServicios.ObtenerEquipo(_equipoDTO.nombre);
-        Assert.AreEqual(99, equipoObtenido.rankingFifa);
+        Assert.AreEqual(1700, equipoObtenido.rankingFifa);
         Assert.AreEqual(Confederacion.CONMEBOL, equipoObtenido.confederacion);
     }
 
@@ -138,7 +138,7 @@ public class EquipoServiciosTest
         {
             nombre = _equipoDTO.nombre,
             confederacion = Confederacion.CONMEBOL,
-            rankingFifa = 99
+            rankingFifa = 1700
         };
         _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
     }
@@ -150,7 +150,7 @@ public class EquipoServiciosTest
         {
             nombre = "OFC-Team1",
             confederacion = Confederacion.OFC,
-            rankingFifa = 50
+            rankingFifa = 1600
         };
 
         _equipoServicios.AgregarEquipo(dto);
@@ -168,27 +168,27 @@ public class EquipoServiciosTest
         {
             nombre = "Equipo1",
             confederacion = Confederacion.OFC,
-            rankingFifa = 45
+            rankingFifa = 1500
         };
 
         var Equipodto2Prueba = new EquipoDTO()
         {
             nombre = "Equipo2",
             confederacion = Confederacion.OFC,
-            rankingFifa = 46
+            rankingFifa = 1400
         };
 
         _equipoServicios.AgregarEquipo(EquipoDTOPrueba);
         _equipoServicios.AgregarEquipo(Equipodto2Prueba);
     }
-
+    
     [TestMethod]
     public void OrdenaYNoGeneraAuditoriaSiNoHayEmpate()
     {
         var equipos = new List<EquipoDTO>
         {
-            new EquipoDTO { nombre = "Zeta", confederacion = Confederacion.UEFA, rankingFifa = 10 },
-            new EquipoDTO { nombre = "Bravo", confederacion = Confederacion.CAF, rankingFifa = 5 }
+            new EquipoDTO { nombre = "Zeta", confederacion = Confederacion.UEFA, rankingFifa = 2000 },
+            new EquipoDTO { nombre = "Bravo", confederacion = Confederacion.CAF, rankingFifa = 1500 }
         };
 
         int semilla = 123;
@@ -197,7 +197,8 @@ public class EquipoServiciosTest
 
         var nombres = resultado.EquiposOrdenados.Select(e => e.nombre).ToList();
 
-        Assert.AreEqual("Bravo", nombres[0]);
+        Assert.AreEqual("Zeta", nombres[0]);
+        Assert.AreEqual(0, resultado.AuditoriaEmpates.Count);
     }
 
     [TestMethod]
@@ -218,9 +219,9 @@ public class EquipoServiciosTest
     {
         var equipos = new List<EquipoDTO>
     {
-        new EquipoDTO { nombre = "EquipoA", confederacion = Confederacion.UEFA, rankingFifa = 10 },
-        new EquipoDTO { nombre = "EquipoB", confederacion = Confederacion.UEFA, rankingFifa = 10 },
-        new EquipoDTO { nombre = "EquipoC", confederacion = Confederacion.CAF,  rankingFifa = 5 }
+        new EquipoDTO { nombre = "EquipoA", confederacion = Confederacion.UEFA, rankingFifa = 2000 },
+        new EquipoDTO { nombre = "EquipoB", confederacion = Confederacion.UEFA, rankingFifa = 2000 },
+        new EquipoDTO { nombre = "EquipoC", confederacion = Confederacion.CAF,  rankingFifa = 1500 }
     };
         int semillaFixture = 12345;
 

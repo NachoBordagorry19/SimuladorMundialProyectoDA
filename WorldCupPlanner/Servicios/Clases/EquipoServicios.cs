@@ -190,8 +190,7 @@ public class EquipoServicios : IServicioEquipo
 
         var generadorDeNumerosPrincipal = new Random(semillaFixture);
 
-        var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderBy(g => g.Key);
-
+        var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderByDescending(g => g.Key);
         foreach (var grupo in grupos)
         {
             var listaGrupo = grupo.ToList();
@@ -233,21 +232,13 @@ public class EquipoServicios : IServicioEquipo
         {
             SemillaFixture = semillaFixture,
             FechaGeneracion = DateTime.UtcNow,
-            EquiposOrdenados = RedistribuirPorConfederaciones(listaFinal),
+            EquiposOrdenados = listaFinal,
             AuditoriaEmpates = auditoria
         };
 
         return resultado;
     }
-
-    private List<EquipoDTO> RedistribuirPorConfederaciones(List<EquipoDTO> equipos)
-    {
-        var resultado = equipos
-            .OrderBy(e => e.confederacion.ToString())
-            .ToList();
-        
-        return resultado;
-    }
+    
 
     public void VerificarListaDeEquiposSinNulo(List<EquipoDTO> equipos)
     {

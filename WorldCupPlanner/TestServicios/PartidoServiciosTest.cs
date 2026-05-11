@@ -43,14 +43,14 @@ public class PartidoServiciosTest
         {
             nombre = "Bayern Munich",
             confederacion = _confederacion,
-            rankingFifa = 2
+            rankingFifa = 2000
         };
 
         equipoVisitanteDTO = new EquipoDTO()
         {
             nombre = "Real Madrid",
             confederacion = _confederacion,
-            rankingFifa = 3
+            rankingFifa = 1900
         };
 
         _partidoDTO = new PartidoDTO
