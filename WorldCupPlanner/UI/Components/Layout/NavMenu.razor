@@ -6,21 +6,24 @@
         <span></span>
         <span></span>
     </div>
+
     <span class="logo">WorldCupPlanner</span>
 </div>
+
 @if (isOpen)
 {
     <div class="menu-overlay" @onclick="ToggleMenu"></div>
 }
 
 <div class="sidebar-menu @(isOpen ? "active" : "")">
-    
     <nav class="nav-links">
-        <NavLink href="/home">Inicio</NavLink>
-        <NavLink href="/equipos">Equipos</NavLink>
-        <NavLink href="/partidos">Partidos</NavLink>
-        <NavLink href="/fixture">Fixture</NavLink>
-        <NavLink href="/importar">Importar</NavLink>
+        <NavLink href="/home" @onclick="CerrarMenu">Inicio</NavLink>
+        <NavLink href="/estadios" @onclick="CerrarMenu">Estadios</NavLink>
+        <NavLink href="/usuarios" @onclick="CerrarMenu">Usuarios</NavLink>
+        <NavLink href="/equipos" @onclick="CerrarMenu">Equipos</NavLink>
+        <NavLink href="/partidos" @onclick="CerrarMenu">Partidos</NavLink>
+        <NavLink href="/fixture" @onclick="CerrarMenu">Fixture</NavLink>
+        <NavLink href="/importar" @onclick="CerrarMenu">Importación</NavLink>
     </nav>
 </div>
 
@@ -30,5 +33,10 @@
     private void ToggleMenu()
     {
         isOpen = !isOpen;
+    }
+
+    private void CerrarMenu()
+    {
+        isOpen = false;
     }
 }

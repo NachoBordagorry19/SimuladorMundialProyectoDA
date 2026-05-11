@@ -2,33 +2,78 @@
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @inject IServicioEquipo ServicioEquipo
+@inject NavigationManager Navigation
 
-<h3>Eliminar Equipo</h3>
-<p>Eliminar equipo del sistema.</p>
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Eliminar Equipo</h1>
+        <p class="wcp-subtitle">Seleccione un equipo registrado para eliminarlo del sistema.</p>
 
-<div class="row g-3">
-    <div class="col-md-6">
-        <label class="wcp-form-label">Nombre</label>
-        <input @bind="equipo.nombre" type="text" class="form-control" />
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="wcp-form-label">Equipo</label>
+                <select @bind="nombreSeleccionado" class="form-control">
+                    <option value="">Seleccionar equipo</option>
+
+                    @foreach (EquipoDTO equipoGuardado in equipos)
+                    {
+                        <option value="@equipoGuardado.nombre">
+                            @equipoGuardado.nombre - @equipoGuardado.confederacion - Ranking @equipoGuardado.rankingFifa
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="wcp-actions mt-3">
+            <button @onclick="Eliminar" class="wcp-btn-danger">Eliminar</button>
+            <NavLink href="/equipos" class="wcp-btn-secondary">Cancelar</NavLink>
+        </div>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                @mensaje
+            </div>
+        }
     </div>
 </div>
-
-<div class="wcp-actions mt-3">
-    <button @onclick="Eliminar" class="wcp-btn-danger">Eliminar</button>
-    <NavLink href="/equipos" class="wcp-btn-secondary">Cancelar</NavLink>
-</div>
-
-@if (!string.IsNullOrEmpty(mensaje))
-{
-    <div class="alert alert-@(esError ? "danger" : "success") mt-3">
-        @mensaje
-    </div>
-}
 
 @code {
-    private EquipoDTO equipo = new EquipoDTO();
+    private List<EquipoDTO> equipos = new List<EquipoDTO>();
+    private string nombreSeleccionado = "";
     private string mensaje = "";
     private bool esError = false;
+
+    protected override void OnInitialized()
+    {
+        CargarEquipos();
+        SeleccionarNombreDesdeUrl();
+    }
+
+    private void CargarEquipos()
+    {
+        try
+        {
+            equipos = ServicioEquipo.ObtenerEquipos();
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al cargar equipos: " + ex.Message;
+            esError = true;
+        }
+    }
+
+    private void SeleccionarNombreDesdeUrl()
+    {
+        var queryParams = new Uri(Navigation.Uri).Query;
+        var nombreDelEquipo = System.Web.HttpUtility.ParseQueryString(queryParams).Get("nombre");
+
+        if (!string.IsNullOrWhiteSpace(nombreDelEquipo))
+        {
+            nombreSeleccionado = nombreDelEquipo;
+        }
+    }
 
     private void Eliminar()
     {
@@ -36,11 +81,21 @@
         {
             mensaje = "";
             esError = false;
-    
+
+            if (string.IsNullOrWhiteSpace(nombreSeleccionado))
+            {
+                mensaje = "Debe seleccionar un equipo.";
+                esError = true;
+                return;
+            }
+
+            EquipoDTO equipo = ServicioEquipo.ObtenerEquipo(nombreSeleccionado);
             ServicioEquipo.EliminarEquipo(equipo);
+
             mensaje = "Equipo eliminado correctamente";
             esError = false;
-            equipo = new EquipoDTO();
+            nombreSeleccionado = "";
+            CargarEquipos();
         }
         catch (Exception ex)
         {
