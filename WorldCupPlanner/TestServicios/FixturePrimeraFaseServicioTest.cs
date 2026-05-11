@@ -210,4 +210,22 @@ public class FixturePrimeraFaseServicioTest
             Assert.IsTrue(ExistePartidoEntre(jornada3, equipos[2], equipos[3]));
         }
     }
+    [TestMethod]
+    public void GenerarFixture_AsignaEstadiosOrdenadosPorNombreNormalizado()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+
+        _baseDeDatos.AgregarEstadio(new Estadio("Monumental", "Buenos Aires", "descrip", 84000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Campeón del Siglo", "Montevideo", "descrip2", 40000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Bombonera", "Buenos Aires", "bocaboca", 54000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Centenario", "Montevideo", "descrip", 60000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        Assert.AreEqual("Bombonera", resultado.Partidos[0].Estadio.nombre);
+        Assert.AreEqual("Campeón del Siglo", resultado.Partidos[1].Estadio.nombre);
+        Assert.AreEqual("Centenario", resultado.Partidos[2].Estadio.nombre);
+        Assert.AreEqual("Monumental", resultado.Partidos[3].Estadio.nombre);
+        Assert.AreEqual("Bombonera", resultado.Partidos[4].Estadio.nombre);
+    }
 }
