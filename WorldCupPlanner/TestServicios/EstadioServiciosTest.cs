@@ -13,11 +13,15 @@ public class EstadioServiciosTest
     private IEstadioRepositorio _estadioRepositorio;
     private IServicioEstadio _servicioEstadio;
     private EstadioDTO _estadioDTO;
+    private LogServicios _logServicio;
+    private LogRepositorio _logRepositorio;
 
     [TestInitialize]
     public void TestInitialize()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
+        _logRepositorio = new LogRepositorio(_baseDeDatosEnMemoria);
+        _logServicio = new LogServicios(_logRepositorio);
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
         _servicioEstadio = new EstadioServicios(_estadioRepositorio);
 
