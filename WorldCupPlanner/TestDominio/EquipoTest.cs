@@ -29,9 +29,39 @@ public class EquipoTest
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CrearEquipo_SinRankingFifa_LanzoExcepcion()
+    public void CrearEquipo_ConRankingFifaCero_LanzoExcepcion()
     {
         Equipo equipoPrueba = new Equipo("Nacional", Confederacion.UEFA, 0);
+    }
+    
+    [TestMethod]
+    public void CrearEquipo_ConRankingFifaMinimo_SeCreaCorrectamente()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 300);
+
+        Assert.AreEqual(300, equipo.RankingFifa);
+    }
+
+    [TestMethod]
+    public void CrearEquipo_ConRankingFifaMaximo_SeCreaCorrectamente()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 2500);
+
+        Assert.AreEqual(2500, equipo.RankingFifa);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearEquipo_ConRankingFifaMenorA300_LanzoExcepcion()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 299);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearEquipo_ConRankingFifaMayorA2500_LanzoExcepcion()
+    {
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 2501);
     }
 
     [TestMethod]
@@ -44,7 +74,7 @@ public class EquipoTest
     [TestMethod]
     public void CrearEquipo_SeCreaConPuntos_Goles_DiferenciaDeGoles_EnCero()
     {
-        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 2000);
         Assert.AreEqual(0, equipo.Puntos);
         Assert.AreEqual(0, equipo.GolesAFavor);
         Assert.AreEqual(0, equipo.DiferenciaDeGoles);
@@ -54,7 +84,7 @@ public class EquipoTest
     [ExpectedException(typeof(ArgumentException))]
     public void SeQuiereAgregarPuntosNegativos_LanzoExcepcion()
     {
-        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 2000);
         int puntos = -20;
         equipo.Puntos = puntos;
     }
@@ -63,7 +93,7 @@ public class EquipoTest
     [ExpectedException(typeof(ArgumentException))]
     public void SeQuierenAgregarGolesNegativos_LanzoExcepcion()
     {
-        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 20);
+        Equipo equipo = new Equipo("Nacional", Confederacion.CONMEBOL, 2000);
         int goles = -20;
         equipo.GolesAFavor = goles;
     }

@@ -40,8 +40,8 @@ public class Equipo
         get => _rankingFifa;
         set
         {
-            if (value <= 0)
-                throw new ArgumentException("El ranking fifa debe ser un número positivo mayor a 0");
+            if (value < 300 || value > 2500)
+                throw new ArgumentException("El ranking FIFA debe ser un numero entre 300 y 2500");
             _rankingFifa = value;
         }
     }
