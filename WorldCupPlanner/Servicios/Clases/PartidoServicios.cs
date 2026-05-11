@@ -155,6 +155,7 @@ public class PartidoServicios
                 confederacion = partido.Visitante.Confederacion,
                 rankingFifa = partido.Visitante.RankingFifa
             },
+            Grupo = partido.Grupo,
             fase = partido.Fase,
             estadoPartido = partido.Estado,
             golesLocal = partido.GolesLocal,
@@ -169,6 +170,7 @@ public class PartidoServicios
         var visitante = EquipoDTOAEntidad(dto.equipoVisitante);
         var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
         var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
+        partido.Grupo = dto.Grupo;
         return partido;
     }
 

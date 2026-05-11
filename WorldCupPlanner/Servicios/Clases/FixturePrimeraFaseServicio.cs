@@ -177,20 +177,21 @@ public class FixturePrimeraFaseServicio
         var fechaJornada2 = fechaInicioGrupo.Date.AddDays(3).AddHours(14);
         var fechaJornada3 = fechaInicioGrupo.Date.AddDays(6).AddHours(14);
 
-        AgregarPartido(partidos, equipos[0], equipos[3], fechaJornada1, estadios);
-        AgregarPartido(partidos, equipos[1], equipos[2], fechaJornada1.AddHours(4), estadios);
+        AgregarPartido(partidos, equipos[0], equipos[3], grupo.Nombre, fechaJornada1, estadios);
+        AgregarPartido(partidos, equipos[1], equipos[2], grupo.Nombre, fechaJornada1.AddHours(4), estadios);
 
-        AgregarPartido(partidos, equipos[0], equipos[2], fechaJornada2, estadios);
-        AgregarPartido(partidos, equipos[1], equipos[3], fechaJornada2.AddHours(4), estadios);
+        AgregarPartido(partidos, equipos[0], equipos[2], grupo.Nombre, fechaJornada2, estadios);
+        AgregarPartido(partidos, equipos[1], equipos[3], grupo.Nombre, fechaJornada2.AddHours(4), estadios);
 
-        AgregarPartido(partidos, equipos[0], equipos[1], fechaJornada3, estadios);
-        AgregarPartido(partidos, equipos[2], equipos[3], fechaJornada3, estadios);
+        AgregarPartido(partidos, equipos[0], equipos[1], grupo.Nombre, fechaJornada3, estadios);
+        AgregarPartido(partidos, equipos[2], equipos[3], grupo.Nombre, fechaJornada3, estadios);
     }
 
     private void AgregarPartido(
         List<PartidoDTO> partidos,
         EquipoDTO equipoLocal,
         EquipoDTO equipoVisitante,
+        string grupo,
         DateTime fechaPartido,
         List<EstadioDTO> estadios)
     {
@@ -202,6 +203,7 @@ public class FixturePrimeraFaseServicio
             idPartido = numeroPartido,
             equipoLocal = equipoLocal,
             equipoVisitante = equipoVisitante,
+            Grupo = grupo,
             Fecha = fechaPartido,
             Estadio = estadio,
             fase = Fase.Grupos,
