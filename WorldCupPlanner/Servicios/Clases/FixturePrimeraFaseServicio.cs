@@ -56,12 +56,34 @@ public class FixturePrimeraFaseServicio
         {
             grupos.Add(new List<EquipoDTO>());
         }
-
+        
         for (int bombo = 0; bombo < 4; bombo++)
         {
             for (int pos = 0; pos < 12; pos++)
             {
-                grupos[pos].Add(equiposOrdenados[bombo * 12 + pos]);
+                var equipo = equiposOrdenados[bombo * 12 + pos];
+                var grupoPreferido = pos;
+                var grupoFinal = grupoPreferido;
+                
+                if (!PuedeAgregarseAGrupo(grupos[grupoPreferido], equipo))
+                {
+                    grupoFinal = -1;
+                    for (int g = 0; g < 12; g++)
+                    {
+                        if (PuedeAgregarseAGrupo(grupos[g], equipo))
+                        {
+                            grupoFinal = g;
+                            break;
+                        }
+                    }
+                    
+                    if (grupoFinal == -1)
+                    {
+                        grupoFinal = grupoPreferido;
+                    }
+                }
+
+                grupos[grupoFinal].Add(equipo);
             }
         }
         
@@ -111,5 +133,20 @@ public class FixturePrimeraFaseServicio
         };
 
         return resultado;
+    }
+
+    private bool PuedeAgregarseAGrupo(List<EquipoDTO> grupo, EquipoDTO equipo)
+    {
+        var confederacion = equipo.confederacion;
+        int conteo = grupo.Count(e => e.confederacion == confederacion);
+
+        if (confederacion == Confederacion.UEFA)
+        {
+            return conteo < 2;
+        }
+        else
+        {
+            return conteo < 1;
+        }
     }
 }

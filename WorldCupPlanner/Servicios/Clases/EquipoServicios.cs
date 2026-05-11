@@ -232,10 +232,19 @@ public class EquipoServicios : IServicioEquipo
         {
             SemillaFixture = semillaFixture,
             FechaGeneracion = DateTime.UtcNow,
-            EquiposOrdenados = listaFinal,
+            EquiposOrdenados = RedistribuirPorConfederaciones(listaFinal),
             AuditoriaEmpates = auditoria
         };
 
+        return resultado;
+    }
+
+    private List<EquipoDTO> RedistribuirPorConfederaciones(List<EquipoDTO> equipos)
+    {
+        var resultado = equipos
+            .OrderBy(e => e.confederacion.ToString())
+            .ToList();
+        
         return resultado;
     }
 

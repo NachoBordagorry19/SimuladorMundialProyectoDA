@@ -2,6 +2,7 @@ using Dominio.Clases;
 using Repositorio;
 using Servicios.Clases;
 using System.Linq;
+using Dominio.Enums;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -100,37 +101,38 @@ public class FixturePrimeraFaseServicioTest
         _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
 
-        _fixtureServicio.GenerarFixturePrimeraFase(456);
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
-        var partidos = _baseDeDatos.ObtenerPartidos();
-        var gruposDict = new Dictionary<char, List<Equipo>>();
+        var equiposOrdenados = resultado.EquiposOrdenados;
 
-        for (char letra = 'A'; letra <= 'L'; letra++)
+        var grupos = new List<List<EquipoDTO>>();
+        for (int grupo = 0; grupo < 12; grupo++)
         {
-            gruposDict[letra] = new List<Equipo>();
+            grupos.Add(new List<EquipoDTO>());
         }
 
-        foreach (var partido in partidos)
+        for (int bombo = 0; bombo < 4; bombo++)
         {
-            foreach (var letra in gruposDict.Keys)
+            for (int pos = 0; pos < 12; pos++)
             {
-                if (!gruposDict[letra].Contains(partido.Local))
-                    gruposDict[letra].Add(partido.Local);
-                if (!gruposDict[letra].Contains(partido.Visitante))
-                    gruposDict[letra].Add(partido.Visitante);
+                grupos[pos].Add(equiposOrdenados[bombo * 12 + pos]);
             }
         }
 
-        foreach (var grupo in gruposDict)
+        foreach (var grupo in grupos)
         {
-            var conteoPorConf = grupo.Value.GroupBy(e => e.Confederacion);
+            var conteoPorConf = grupo.GroupBy(e => e.confederacion);
 
             foreach (var confederacion in conteoPorConf)
             {
-                if (confederacion.Key.ToString() == "UEFA")
+                if (confederacion.Key == Confederacion.UEFA)
+                {
                     Assert.IsTrue(confederacion.Count() <= 2);
+                }
                 else
+                {
                     Assert.IsTrue(confederacion.Count() <= 1);
+                }
             }
         }
     }
