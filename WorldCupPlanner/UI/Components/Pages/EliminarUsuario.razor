@@ -1,0 +1,69 @@
+@page "/EliminarUsuario"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioUsuario ServicioUsuario;
+@inject UsuarioSesion usuarioActivo;
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Eliminar Usuario</h1>
+        <p class="wcp-subtitle">Eliminar usuario del sistema.</p>
+        
+        <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="eliminarUsuarioForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Email</label>
+                    <InputText @bind-Value="usuario.Email" class="form-control" />
+                </div>
+            </div>
+
+            <div class="wcp-actions">
+                <button type="submit" class="wcp-btn-danger">Eliminar</button>
+                <NavLink href="/usuarios" class="wcp-btn-secondary">Cancelar</NavLink>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                @mensaje
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    private UsuarioDTO usuario = new UsuarioDTO();
+    private string mensaje = "";
+    private bool esError = false;
+
+    private void OnSave()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+
+            UsuarioDTO usuarioActual = usuarioActivo.UsuarioActual;
+
+            if (usuarioActual.Email == usuario.Email)
+            {
+                mensaje = "No puedes eliminar tu propia cuenta";
+                esError = true;
+                return;
+            }
+
+            ServicioUsuario.EliminarUsuario(usuario);
+            mensaje = "Usuario eliminado correctamente";
+            esError = false;
+            usuario = new UsuarioDTO();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+            esError = true;
+        }
+    }
+}
