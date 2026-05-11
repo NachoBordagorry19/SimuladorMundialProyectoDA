@@ -1,0 +1,51 @@
+@page "/EliminarEquipo"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioEquipo ServicioEquipo
+
+<h3>Eliminar Equipo</h3>
+<p>Eliminar equipo del sistema.</p>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label class="wcp-form-label">Nombre</label>
+        <input @bind="equipo.nombre" type="text" class="form-control" />
+    </div>
+</div>
+
+<div class="wcp-actions mt-3">
+    <button @onclick="Eliminar" class="wcp-btn-danger">Eliminar</button>
+    <NavLink href="/equipos" class="wcp-btn-secondary">Cancelar</NavLink>
+</div>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+        @mensaje
+    </div>
+}
+
+@code {
+    private EquipoDTO equipo = new EquipoDTO();
+    private string mensaje = "";
+    private bool esError = false;
+
+    private void Eliminar()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+    
+            ServicioEquipo.EliminarEquipo(equipo);
+            mensaje = "Equipo eliminado correctamente";
+            esError = false;
+            equipo = new EquipoDTO();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+            esError = true;
+        }
+    }
+}
