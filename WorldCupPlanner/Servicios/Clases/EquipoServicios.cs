@@ -253,10 +253,19 @@ public class EquipoServicios : IServicioEquipo
         {
             SemillaFixture = semillaFixture,
             FechaGeneracion = DateTime.UtcNow,
-            EquiposOrdenados = listaFinal,
+            EquiposOrdenados = RedistribuirPorConfederaciones(listaFinal),
             AuditoriaEmpates = auditoria
         };
 
+        return resultado;
+    }
+
+    private List<EquipoDTO> RedistribuirPorConfederaciones(List<EquipoDTO> equipos)
+    {
+        var resultado = equipos
+            .OrderBy(e => e.confederacion.ToString())
+            .ToList();
+        
         return resultado;
     }
 
@@ -275,7 +284,7 @@ public class EquipoServicios : IServicioEquipo
     {
         if (equipos == null) return new List<EquipoDTO>();
         var ordenBase = equipos
-            .OrderBy(e => e.rankingFifa)
+            .OrderByDescending(e => e.rankingFifa)
             .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
             .ToList();
         return ordenBase;
