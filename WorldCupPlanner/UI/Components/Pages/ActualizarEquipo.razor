@@ -2,22 +2,36 @@
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using Dominio.Enums
-@inject NavigationManager Navigation;
+@inject NavigationManager Navigation
 @inject IServicioEquipo ServicioEquipo
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Actualizar Equipo</h1>
-        <p class="wcp-subtitle">Actualizar datos del equipo.</p>
-        
+        <p class="wcp-subtitle">Seleccione un equipo registrado y actualice sus datos.</p>
+
         <div class="row g-3">
+            <div class="col-md-6">
+                <label class="wcp-form-label">Equipo a actualizar</label>
+                <select @bind="nombreOriginal" @bind:after="CargarEquipoSeleccionado" class="form-control">
+                    <option value="">Seleccionar equipo</option>
+
+                    @foreach (EquipoDTO equipoGuardado in equipos)
+                    {
+                        <option value="@equipoGuardado.nombre">
+                            @equipoGuardado.nombre - @equipoGuardado.confederacion - Ranking @equipoGuardado.rankingFifa
+                        </option>
+                    }
+                </select>
+            </div>
+
             <div class="col-md-6">
                 <label class="wcp-form-label">Nombre</label>
                 <input @bind="equipo.nombre" type="text" class="form-control" />
             </div>
 
             <div class="col-md-6">
-                <label class="wcp-form-label">Confederacion</label>
+                <label class="wcp-form-label">Confederación</label>
                 <select @bind="confederacionSeleccionada" class="form-control">
                     <option value="">Seleccionar confederación</option>
                     <option value="UEFA">UEFA</option>
@@ -50,32 +64,64 @@
 </div>
 
 @code {
+    private List<EquipoDTO> equipos = new List<EquipoDTO>();
     private EquipoDTO equipo = new EquipoDTO();
+    private string nombreOriginal = "";
     private string confederacionSeleccionada = "";
     private string mensaje = "";
     private bool esError = false;
 
     protected override void OnInitialized()
     {
-        CargarEquipo();
+        CargarEquipos();
+        CargarNombreDesdeUrl();
     }
 
-    private void CargarEquipo()
+    private void CargarEquipos()
     {
         try
         {
-            var queryParams = new Uri(Navigation.Uri).Query;
-            var nombreDelEquipo = System.Web.HttpUtility.ParseQueryString(queryParams).Get("nombre");
-            
-            if (!string.IsNullOrEmpty(nombreDelEquipo))
-            {
-                equipo = ServicioEquipo.ObtenerEquipo(nombreDelEquipo);
-                confederacionSeleccionada = equipo.confederacion.ToString();
-            }
+            equipos = ServicioEquipo.ObtenerEquipos();
         }
         catch (Exception ex)
         {
-            mensaje = $"Error al cargar equipo: {ex.Message}";
+            mensaje = "Error al cargar equipos: " + ex.Message;
+            esError = true;
+        }
+    }
+
+    private void CargarNombreDesdeUrl()
+    {
+        var queryParams = new Uri(Navigation.Uri).Query;
+        var nombreDelEquipo = System.Web.HttpUtility.ParseQueryString(queryParams).Get("nombre");
+
+        if (!string.IsNullOrWhiteSpace(nombreDelEquipo))
+        {
+            nombreOriginal = nombreDelEquipo;
+            CargarEquipoSeleccionado();
+        }
+    }
+
+    private void CargarEquipoSeleccionado()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+
+            if (string.IsNullOrWhiteSpace(nombreOriginal))
+            {
+                equipo = new EquipoDTO();
+                confederacionSeleccionada = "";
+                return;
+            }
+
+            equipo = ServicioEquipo.ObtenerEquipo(nombreOriginal);
+            confederacionSeleccionada = equipo.confederacion.ToString();
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al cargar equipo: " + ex.Message;
             esError = true;
         }
     }
@@ -87,14 +133,20 @@
             mensaje = "";
             esError = false;
 
-            if (string.IsNullOrEmpty(confederacionSeleccionada))
+            if (string.IsNullOrWhiteSpace(nombreOriginal))
             {
-                mensaje = "Debe seleccionar una confederación";
+                mensaje = "Debe seleccionar un equipo.";
                 esError = true;
                 return;
             }
 
-            // Convertir string a enum
+            if (string.IsNullOrWhiteSpace(confederacionSeleccionada))
+            {
+                mensaje = "Debe seleccionar una confederación.";
+                esError = true;
+                return;
+            }
+
             if (Enum.TryParse<Confederacion>(confederacionSeleccionada, out var confederacion))
             {
                 equipo.confederacion = confederacion;
@@ -106,11 +158,12 @@
                 return;
             }
 
-            ServicioEquipo.ActualizarEquipo(equipo);
+            ServicioEquipo.ActualizarEquipo(nombreOriginal, equipo);
+
             mensaje = "Equipo actualizado correctamente";
             esError = false;
-            equipo = new EquipoDTO();
-            confederacionSeleccionada = "";
+            nombreOriginal = equipo.nombre;
+            CargarEquipos();
         }
         catch (Exception ex)
         {

@@ -1,7 +1,7 @@
 @page "/estadios"
 @using Servicios.Interfaces
 @using Servicios.Modelo
-@inject IServicioEstadio ServicioEstadio;
+@inject IServicioEstadio ServicioEstadio
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -17,7 +17,7 @@
     @if (estadios != null && estadios.Count > 0)
     {
         <div class="wcp-card mt-4">
-            <table class="table table-striped">
+            <table class="wcp-table">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -36,8 +36,8 @@
                             <td>@estadio.Descripcion</td>
                             <td>@estadio.CapacidadLocativa?.ToString("N0")</td>
                             <td>
-                                <NavLink href="@($"/ActualizarEstadio?nombre={estadio.Nombre}")" class="btn btn-sm btn-primary">Editar</NavLink>
-                                <NavLink href="@($"/EliminarEstadio?nombre={estadio.Nombre}")" class="btn btn-sm btn-danger">Eliminar</NavLink>
+                                <NavLink href="@($"/ActualizarEstadio?nombre={Uri.EscapeDataString(estadio.Nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
+                                <NavLink href="@($"/EliminarEstadio?nombre={Uri.EscapeDataString(estadio.Nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
                             </td>
                         </tr>
                     }
