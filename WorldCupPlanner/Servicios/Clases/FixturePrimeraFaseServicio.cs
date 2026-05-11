@@ -72,42 +72,18 @@ public class FixturePrimeraFaseServicio
         
         var estadiosDTO = _estadioServicios.ObtenerEstadios();
         
-        for (int grupoIndex = 0; grupoIndex < 12; grupoIndex++)
+        for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
         {
             var grupo = grupos[grupoIndex];
-            var equiposDelGrupo = ConvertirEquiposADto(grupo.Equipos);
+            var fechaInicioGrupo = fechaBase.AddDays(grupoIndex * 9);
 
-            int jornada = 0;
-            for (int i = 0; i < equiposDelGrupo.Count; i++)
-            {
-                for (int j = i + 1; j < equiposDelGrupo.Count; j++)
-                {
-                    var fechaPartido = fechaBase.AddDays(jornada * 3);
-
-                    var partido = new PartidoDTO
-                    {
-                        idPartido = ++numeroPartido,
-                        equipoLocal = equiposDelGrupo[i],
-                        equipoVisitante = equiposDelGrupo[j],
-                        Fecha = fechaPartido,
-                        Estadio = estadiosDTO[estadioIndex % estadiosDTO.Count],
-                        fase = Fase.Grupos,
-                        estadoPartido = EstadoPartido.Pendiente,
-                        golesLocal = 0,
-                        golesVisitante = 0
-                    };
-
-                    _partidoServicios.AgregarPartido(
-                        partido,
-                        equiposDelGrupo[i],
-                        equiposDelGrupo[j],
-                        estadiosDTO[estadioIndex % estadiosDTO.Count]);
-
-                    partidos.Add(partido);
-                    estadioIndex++;
-                    jornada++;
-                }
-            }
+            AgregarPartidosDelGrupo(
+                grupo,
+                fechaInicioGrupo,
+                estadiosDTO,
+                partidos,
+                ref numeroPartido,
+                ref estadioIndex);
         }
 
         var resultado = new ResultadoFixture
@@ -190,5 +166,59 @@ public class FixturePrimeraFaseServicio
         }
 
         return equiposDto;
+    }
+    
+    private void AgregarPartidosDelGrupo(
+        Grupo grupo,
+        DateTime fechaInicioGrupo,
+        List<EstadioDTO> estadios,
+        List<PartidoDTO> partidos,
+        ref int numeroPartido,
+        ref int estadioIndex)
+    {
+        var equipos = ConvertirEquiposADto(grupo.Equipos);
+
+        var fechaJornada1 = fechaInicioGrupo.Date.AddHours(14);
+        var fechaJornada2 = fechaInicioGrupo.Date.AddDays(3).AddHours(14);
+        var fechaJornada3 = fechaInicioGrupo.Date.AddDays(6).AddHours(14);
+
+        AgregarPartido(partidos, ref numeroPartido, ref estadioIndex, equipos[0], equipos[3], fechaJornada1, estadios);
+        AgregarPartido(partidos, ref numeroPartido, ref estadioIndex, equipos[1], equipos[2], fechaJornada1.AddHours(4), estadios);
+
+        AgregarPartido(partidos, ref numeroPartido, ref estadioIndex, equipos[0], equipos[2], fechaJornada2, estadios);
+        AgregarPartido(partidos, ref numeroPartido, ref estadioIndex, equipos[1], equipos[3], fechaJornada2.AddHours(4), estadios);
+
+        AgregarPartido(partidos, ref numeroPartido, ref estadioIndex, equipos[0], equipos[1], fechaJornada3, estadios);
+        AgregarPartido(partidos, ref numeroPartido, ref estadioIndex, equipos[2], equipos[3], fechaJornada3, estadios);
+    }
+
+    private void AgregarPartido(
+        List<PartidoDTO> partidos,
+        ref int numeroPartido,
+        ref int estadioIndex,
+        EquipoDTO equipoLocal,
+        EquipoDTO equipoVisitante,
+        DateTime fechaPartido,
+        List<EstadioDTO> estadios)
+    {
+        var estadio = estadios[estadioIndex % estadios.Count];
+
+        var partido = new PartidoDTO
+        {
+            idPartido = ++numeroPartido,
+            equipoLocal = equipoLocal,
+            equipoVisitante = equipoVisitante,
+            Fecha = fechaPartido,
+            Estadio = estadio,
+            fase = Fase.Grupos,
+            estadoPartido = EstadoPartido.Pendiente,
+            golesLocal = 0,
+            golesVisitante = 0
+        };
+
+        _partidoServicios.AgregarPartido(partido, equipoLocal, equipoVisitante, estadio);
+        partidos.Add(partido);
+
+        estadioIndex++;
     }
 }
