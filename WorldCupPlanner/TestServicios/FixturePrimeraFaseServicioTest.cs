@@ -136,4 +136,24 @@ public class FixturePrimeraFaseServicioTest
             }
         }
     }
+
+    [TestMethod]
+    public void GenerarFixture_Las6JornadasTienenLosEnfrentamientosCorrectos()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        var jornada1 = resultado.Partidos
+            .Where(p => p.fase.ToString() == "Grupos")
+            .GroupBy(p => p.Fecha)
+            .First()
+            .ToList();
+        
+        Assert.AreEqual(6, jornada1.Count);
+    }
 }
