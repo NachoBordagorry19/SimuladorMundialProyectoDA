@@ -18,7 +18,25 @@ public class FixturePrimeraFaseServicioTest
     private EquipoServicios _equipoServicios;
     private EstadioServicios _estadioServicios;
     private PartidoServicios _partidoServicios;
+    
+    private bool PartidoPerteneceAlGrupo(PartidoDTO partido, Grupo grupo)
+    {
+        return EquipoPerteneceAlGrupo(partido.equipoLocal.nombre, grupo) &&
+               EquipoPerteneceAlGrupo(partido.equipoVisitante.nombre, grupo);
+    }
 
+    private bool EquipoPerteneceAlGrupo(string nombreEquipo, Grupo grupo)
+    {
+        return grupo.Equipos.Any(e => e.Nombre == nombreEquipo);
+    }
+
+    private bool ExistePartidoEntre(List<PartidoDTO> partidos, Equipo equipoA, Equipo equipoB)
+    {
+        return partidos.Any(p =>
+            p.equipoLocal.nombre == equipoA.Nombre && p.equipoVisitante.nombre == equipoB.Nombre ||
+            p.equipoLocal.nombre == equipoB.Nombre && p.equipoVisitante.nombre == equipoA.Nombre);
+    }
+    
     [TestInitialize]
     public void Inicializar()
     {
@@ -168,5 +186,52 @@ public class FixturePrimeraFaseServicioTest
             .ToList();
 
         Assert.AreEqual(6, jornada1.Count);
+    }
+    [TestMethod]
+    public void GenerarFixture_CadaGrupoTieneTresJornadasConEnfrentamientosCorrectos()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        foreach (var grupo in resultado.Grupos)
+        {
+            var equipos = grupo.Equipos;
+            var partidosDelGrupo = resultado.Partidos
+                .Where(p => PartidoPerteneceAlGrupo(p, grupo))
+                .ToList();
+
+            Assert.AreEqual(6, partidosDelGrupo.Count);
+
+            var fechas = partidosDelGrupo
+                .Select(p => p.Fecha.Date)
+                .Distinct()
+                .OrderBy(f => f)
+                .ToList();
+
+            Assert.AreEqual(3, fechas.Count);
+
+            foreach (var fecha in fechas)
+            {
+                Assert.AreEqual(2, partidosDelGrupo.Count(p => p.Fecha.Date == fecha));
+            }
+
+            var jornada1 = partidosDelGrupo.Where(p => p.Fecha.Date == fechas[0]).ToList();
+            var jornada2 = partidosDelGrupo.Where(p => p.Fecha.Date == fechas[1]).ToList();
+            var jornada3 = partidosDelGrupo.Where(p => p.Fecha.Date == fechas[2]).ToList();
+
+            Assert.IsTrue(ExistePartidoEntre(jornada1, equipos[0], equipos[3]));
+            Assert.IsTrue(ExistePartidoEntre(jornada1, equipos[1], equipos[2]));
+
+            Assert.IsTrue(ExistePartidoEntre(jornada2, equipos[0], equipos[2]));
+            Assert.IsTrue(ExistePartidoEntre(jornada2, equipos[1], equipos[3]));
+
+            Assert.IsTrue(ExistePartidoEntre(jornada3, equipos[0], equipos[1]));
+            Assert.IsTrue(ExistePartidoEntre(jornada3, equipos[2], equipos[3]));
+        }
     }
 }
