@@ -222,10 +222,10 @@ public class FixturePrimeraFaseServicioTest
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
-        Assert.AreEqual("Bombonera", resultado.Partidos[0].Estadio.nombre);
-        Assert.AreEqual("Campeón del Siglo", resultado.Partidos[1].Estadio.nombre);
-        Assert.AreEqual("Centenario", resultado.Partidos[2].Estadio.nombre);
-        Assert.AreEqual("Monumental", resultado.Partidos[3].Estadio.nombre);
-        Assert.AreEqual("Bombonera", resultado.Partidos[4].Estadio.nombre);
+        Assert.AreEqual("Bombonera", resultado.Partidos[0].Estadio.Nombre);
+        Assert.AreEqual("Campeón del Siglo", resultado.Partidos[1].Estadio.Nombre);
+        Assert.AreEqual("Centenario", resultado.Partidos[2].Estadio.Nombre);
+        Assert.AreEqual("Monumental", resultado.Partidos[3].Estadio.Nombre);
+        Assert.AreEqual("Bombonera", resultado.Partidos[4].Estadio.Nombre);
     }
 }

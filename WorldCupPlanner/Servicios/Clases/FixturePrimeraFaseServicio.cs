@@ -67,8 +67,10 @@ public class FixturePrimeraFaseServicio
 
         var fechaBase = fechaInicio ?? new DateTime(2026, 06, 01);
         var partidos = new List<PartidoDTO>();
-        var estadiosDTO = _estadioServicios.ObtenerEstadios();
-
+        var estadiosDTO = _estadioServicios.ObtenerEstadios()
+            .OrderBy(e => NormalizarNombre(e.Nombre))
+            .ToList();
+        
         for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
         {
             var grupo = grupos[grupoIndex];
@@ -210,5 +212,17 @@ public class FixturePrimeraFaseServicio
 
         _partidoServicios.AgregarPartido(partido, equipoLocal, equipoVisitante, estadio);
         partidos.Add(partido);
+    }
+    
+    private string NormalizarNombre(string texto)
+    {
+        return texto.ToLower()
+            .Replace("á", "a")
+            .Replace("é", "e")
+            .Replace("í", "i")
+            .Replace("ó", "o")
+            .Replace("ú", "u")
+            .Replace("ü", "u")
+            .Trim();
     }
 }
