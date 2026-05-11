@@ -99,16 +99,19 @@ public class FixturePrimeraFaseServicio
             var grupo = grupos[grupoIndex];
             char letraGrupo = (char)('A' + grupoIndex);
             
+            int jornada = 0;
             for (int i = 0; i < grupo.Count; i++)
             {
                 for (int j = i + 1; j < grupo.Count; j++)
                 {
+                    var fechaPartido = fechaBase.AddDays(jornada * 3);
+                    
                     var partido = new PartidoDTO
                     {
                         idPartido = ++numeroPartido,
                         equipoLocal = grupo[i],
                         equipoVisitante = grupo[j],
-                        Fecha = fechaBase.AddDays(numeroPartido / 2),
+                        Fecha = fechaPartido,
                         Estadio = estadiosDTO[estadioIndex % estadiosDTO.Count],
                         fase = Fase.Grupos,
                         estadoPartido = EstadoPartido.Pendiente,
@@ -119,6 +122,7 @@ public class FixturePrimeraFaseServicio
                     _partidoServicios.AgregarPartido(partido, grupo[i], grupo[j], estadiosDTO[estadioIndex % estadiosDTO.Count]);
                     partidos.Add(partido);
                     estadioIndex++;
+                    jornada++;
                 }
             }
         }

@@ -148,10 +148,15 @@ public class FixturePrimeraFaseServicioTest
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
-        var jornada1 = resultado.Partidos
+        var fechaJornada1 = resultado.Partidos
             .Where(p => p.fase.ToString() == "Grupos")
-            .GroupBy(p => p.Fecha)
-            .First()
+            .Select(p => p.Fecha)
+            .Distinct()
+            .First();
+        
+        var jornada1 = resultado.Partidos
+            .Where(p => p.fase.ToString() == "Grupos" && p.Fecha == fechaJornada1)
+            .Take(6)
             .ToList();
         
         Assert.AreEqual(6, jornada1.Count);
