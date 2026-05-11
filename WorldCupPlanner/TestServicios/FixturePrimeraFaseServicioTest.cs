@@ -228,4 +228,30 @@ public class FixturePrimeraFaseServicioTest
         Assert.AreEqual("Monumental", resultado.Partidos[3].Estadio.Nombre);
         Assert.AreEqual("Bombonera", resultado.Partidos[4].Estadio.Nombre);
     }
+    
+    [TestMethod]
+    public void GenerarFixture_AsignaGrupoACadaPartido()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        foreach (var grupo in resultado.Grupos)
+        {
+            var partidosDelGrupo = resultado.Partidos
+                .Where(p => p.Grupo == grupo.Nombre)
+                .ToList();
+
+            Assert.AreEqual(6, partidosDelGrupo.Count);
+
+            foreach (var partido in partidosDelGrupo)
+            {
+                Assert.IsTrue(PartidoPerteneceAlGrupo(partido, grupo));
+            }
+        }
+    }
 }
