@@ -18,13 +18,18 @@ public class EquipoServiciosTest
     private EquipoServicios _equipoServicios;
     private EquipoDTO _equipoDTO;
     private EquipoDTO _equipoDTO2;
+    private LogServicios _logServicio;
+    private LogRepositorio _logRepositorio;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
+        _logRepositorio = new LogRepositorio(_baseDeDatosEnMemoria);
+        _logServicio = new LogServicios(_logRepositorio);
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
-        _equipoServicios = new EquipoServicios(_equipoRepositorio);
+        _equipoServicios = new EquipoServicios(_equipoRepositorio,_logServicio);
+        
 
         Confederacion confederacion = new Confederacion();
         confederacion = Confederacion.UEFA;
@@ -307,5 +312,44 @@ public class EquipoServiciosTest
         }
 
         Assert.IsTrue(mensajeEncontrado);
+    }
+    
+    [TestMethod]
+    public void AgregarEquipo_GeneraLogDeAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        var logs = _logServicio.ObtenerLogs();
+
+        Assert.AreEqual(1, logs.Count);
+        StringAssert.Contains(logs[0].mensaje, _equipoDTO.nombre);
+    }
+    
+    [TestMethod]
+    public void EliminarEquipo_GeneraLogDeAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.EliminarEquipo(_equipoDTO);
+
+        var logs = _logServicio.ObtenerLogs();
+        Assert.AreEqual(2, logs.Count);
+        Assert.AreEqual(TipoLog.Advertencia, logs[1].tipo);
+        StringAssert.Contains(logs[1].mensaje, "eliminado");
+    }
+    
+    [TestMethod]
+    public void ActualizarEquipo_GeneraLogDeAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        var equipo = new EquipoDTO
+        {
+            nombre = _equipoDTO.nombre,
+            rankingFifa = 5, 
+            confederacion = _equipoDTO.confederacion
+        };
+        _equipoServicios.ActualizarEquipo(equipo);
+
+        var logs = _logServicio.ObtenerLogs();
+        Assert.AreEqual(2, logs.Count);
+        StringAssert.Contains(logs[1].mensaje, "actualizados");
     }
 }
