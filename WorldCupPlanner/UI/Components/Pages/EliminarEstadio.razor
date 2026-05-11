@@ -1,0 +1,57 @@
+@page "/EliminarEstadio"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioEstadio ServicioEstadio;
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Eliminar Estadio</h1>
+        <p class="wcp-subtitle">Eliminar estadio del sistema.</p>
+        
+        <EditForm Model="estadio" OnValidSubmit="OnSave" FormName="eliminarEstadioForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Nombre</label>
+                    <InputText @bind-Value="estadio.Nombre" class="form-control" />
+                </div>
+            </div>
+
+            <div class="wcp-actions">
+                <button type="submit" class="wcp-btn-danger">Eliminar</button>
+                <NavLink href="/estadios" class="wcp-btn-secondary">Cancelar</NavLink>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                @mensaje
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private EstadioDTO estadio = new EstadioDTO();
+    private string mensaje = "";
+    private bool esError = false;
+
+    private void OnSave()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+
+            ServicioEstadio.EliminarEstadio(estadio);
+            mensaje = "Estadio eliminado correctamente";
+            esError = false;
+            estadio = new EstadioDTO();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+            esError = true;
+        }
+    }
+}
