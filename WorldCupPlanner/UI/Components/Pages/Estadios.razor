@@ -1,0 +1,75 @@
+@page "/estadios"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioEstadio ServicioEstadio;
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Estadios</h1>
+                <p class="wcp-subtitle">Listado de estadios registrados en el sistema.</p>
+            </div>
+            <NavLink href="/AgregarEstadio" class="wcp-btn-primary">Agregar Estadio</NavLink>
+        </div>
+    </div>
+
+    @if (estadios != null && estadios.Count > 0)
+    {
+        <div class="wcp-card mt-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Ciudad</th>
+                        <th>Descripción</th>
+                        <th>Capacidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var estadio in estadios)
+                    {
+                        <tr>
+                            <td>@estadio.Nombre</td>
+                            <td>@estadio.Ciudad</td>
+                            <td>@estadio.Descripcion</td>
+                            <td>@estadio.CapacidadLocativa?.ToString("N0")</td>
+                            <td>
+                                <NavLink href="@($"/ActualizarEstadio?nombre={estadio.Nombre}")" class="btn btn-sm btn-primary">Editar</NavLink>
+                                <NavLink href="@($"/EliminarEstadio?nombre={estadio.Nombre}")" class="btn btn-sm btn-danger">Eliminar</NavLink>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="wcp-card mt-4">
+            <p class="text-center text-muted">No hay estadios registrados</p>
+        </div>
+    }
+</div>
+
+@code {
+    private List<EstadioDTO> estadios = new List<EstadioDTO>();
+
+    protected override void OnInitialized()
+    {
+        CargarEstadios();
+    }
+
+    private void CargarEstadios()
+    {
+        try
+        {
+            estadios = ServicioEstadio.ObtenerEstadios();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar estadios: {ex.Message}");
+        }
+    }
+}
