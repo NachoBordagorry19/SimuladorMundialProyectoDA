@@ -36,12 +36,6 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreNoExiste(equipoDTO.nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
-        _logServicio.GuardarLog(new LogDTO 
-        {
-            mensaje = $"Se ha creado el equipo: {equipo.Nombre}",
-            usuario = "Sistema_WC",
-            tipo = TipoLog.Info
-        });
     }
 
     public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
@@ -178,12 +172,6 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreExiste(equipoDto.nombre);
         Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
         _equipoRepositorio.EliminarEquipo(equipoExistente);
-        _logServicio.GuardarLog(new LogDTO 
-        {
-            mensaje = $"Equipo eliminado permanentemente: {equipoExistente.Nombre}",
-            usuario = "Admin_User",
-            tipo = TipoLog.Advertencia
-        });
     }
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
@@ -191,12 +179,6 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreExiste(equipoDto.nombre);
         Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
         _equipoRepositorio.ActualizarEquipo(equipoActualizado);
-        _logServicio.GuardarLog(new LogDTO 
-        {
-            mensaje = $"Datos actualizados para el equipo: {equipoActualizado.Nombre}",
-            usuario = "Editor_Sist",
-            tipo = TipoLog.Info
-        });
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)

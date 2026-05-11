@@ -66,6 +66,8 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.AgregarEquipo(_equipoDTO);
     }
+    
+    
 
     [TestMethod]
     public void ObtenerEquipos_DevuelveTodosLosEquipo()
@@ -312,44 +314,5 @@ public class EquipoServiciosTest
         }
 
         Assert.IsTrue(mensajeEncontrado);
-    }
-    
-    [TestMethod]
-    public void AgregarEquipo_GeneraLogDeAuditoria()
-    {
-        _equipoServicios.AgregarEquipo(_equipoDTO);
-        var logs = _logServicio.ObtenerLogs();
-
-        Assert.AreEqual(1, logs.Count);
-        StringAssert.Contains(logs[0].mensaje, _equipoDTO.nombre);
-    }
-    
-    [TestMethod]
-    public void EliminarEquipo_GeneraLogDeAuditoria()
-    {
-        _equipoServicios.AgregarEquipo(_equipoDTO);
-        _equipoServicios.EliminarEquipo(_equipoDTO);
-
-        var logs = _logServicio.ObtenerLogs();
-        Assert.AreEqual(2, logs.Count);
-        Assert.AreEqual(TipoLog.Advertencia, logs[1].tipo);
-        StringAssert.Contains(logs[1].mensaje, "eliminado");
-    }
-    
-    [TestMethod]
-    public void ActualizarEquipo_GeneraLogDeAuditoria()
-    {
-        _equipoServicios.AgregarEquipo(_equipoDTO);
-        var equipo = new EquipoDTO
-        {
-            nombre = _equipoDTO.nombre,
-            rankingFifa = 5, 
-            confederacion = _equipoDTO.confederacion
-        };
-        _equipoServicios.ActualizarEquipo(equipo);
-
-        var logs = _logServicio.ObtenerLogs();
-        Assert.AreEqual(2, logs.Count);
-        StringAssert.Contains(logs[1].mensaje, "actualizados");
     }
 }
