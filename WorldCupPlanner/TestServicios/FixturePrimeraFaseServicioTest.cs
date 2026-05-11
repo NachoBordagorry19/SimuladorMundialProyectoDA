@@ -255,7 +255,7 @@ public class FixturePrimeraFaseServicioTest
         }
     }
     [TestMethod]
-    public void GenerarFixture_CargaSeisPartidosEnCadaGrupo()
+    public void GenerarFixture_RespetaHorariosDeJornadas()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
         _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
@@ -267,7 +267,31 @@ public class FixturePrimeraFaseServicioTest
 
         foreach (var grupo in resultado.Grupos)
         {
-            Assert.AreEqual(6, grupo.Partidos.Count);
+            var partidosDelGrupo = resultado.Partidos
+                .Where(p => p.Grupo == grupo.Nombre)
+                .OrderBy(p => p.Fecha)
+                .ToList();
+
+            var fechas = partidosDelGrupo
+                .Select(p => p.Fecha.Date)
+                .Distinct()
+                .OrderBy(f => f)
+                .ToList();
+
+            var jornada1 = partidosDelGrupo.Where(p => p.Fecha.Date == fechas[0]).OrderBy(p => p.Fecha).ToList();
+            var jornada2 = partidosDelGrupo.Where(p => p.Fecha.Date == fechas[1]).OrderBy(p => p.Fecha).ToList();
+            var jornada3 = partidosDelGrupo.Where(p => p.Fecha.Date == fechas[2]).OrderBy(p => p.Fecha).ToList();
+
+            Assert.AreEqual(14, jornada1[0].Fecha.Hour);
+            Assert.AreEqual(18, jornada1[1].Fecha.Hour);
+
+            Assert.AreEqual(14, jornada2[0].Fecha.Hour);
+            Assert.AreEqual(18, jornada2[1].Fecha.Hour);
+
+            Assert.AreEqual(14, jornada3[0].Fecha.Hour);
+            Assert.AreEqual(14, jornada3[1].Fecha.Hour);
+
+            Assert.AreEqual(jornada3[0].Fecha, jornada3[1].Fecha);
         }
     }
 }
