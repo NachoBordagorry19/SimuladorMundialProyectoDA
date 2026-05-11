@@ -94,8 +94,10 @@ public class FixturePrimeraFaseServicioTest
         {
             string nombreGrupo = letra.ToString();
 
-            Assert.IsTrue(resultado.Grupos.ContainsKey(nombreGrupo));
-            Assert.AreEqual(4, resultado.Grupos[nombreGrupo].Count);
+            var grupo = resultado.Grupos.FirstOrDefault(g => g.Nombre == nombreGrupo);
+
+            Assert.IsNotNull(grupo);
+            Assert.AreEqual(4, grupo.Equipos.Count);
         }
     }
 

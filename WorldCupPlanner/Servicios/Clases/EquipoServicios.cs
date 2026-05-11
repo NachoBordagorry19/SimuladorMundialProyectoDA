@@ -79,7 +79,7 @@ public class EquipoServicios : IServicioEquipo
                 nuevoEquipo.nombre = nombreFormateado;
                 nuevoEquipo.confederacion = conf;
                 
-                nuevoEquipo.rankingFifa = random.Next(1, 201);
+                nuevoEquipo.rankingFifa = random.Next(300, 2501);
 
                 this.AgregarEquipo(nuevoEquipo);
             }
