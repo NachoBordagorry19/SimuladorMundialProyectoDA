@@ -105,7 +105,7 @@ public class FixturePrimeraFaseServicio
                 for (int j = i + 1; j < grupo.Count; j++)
                 {
                     var fechaPartido = fechaBase.AddDays(jornada * 3);
-                    
+
                     var partido = new PartidoDTO
                     {
                         idPartido = ++numeroPartido,
@@ -118,7 +118,7 @@ public class FixturePrimeraFaseServicio
                         golesLocal = 0,
                         golesVisitante = 0
                     };
-                    
+
                     _partidoServicios.AgregarPartido(partido, grupo[i], grupo[j], estadiosDTO[estadioIndex % estadiosDTO.Count]);
                     partidos.Add(partido);
                     estadioIndex++;
@@ -126,7 +126,7 @@ public class FixturePrimeraFaseServicio
                 }
             }
         }
-        
+
         var resultado = new ResultadoFixture
         {
             SemillaFixture = semillaFixture,

@@ -161,4 +161,28 @@ public class FixturePrimeraFaseServicioTest
         
         Assert.AreEqual(6, jornada1.Count);
     }
+
+    [TestMethod]
+    public void GenerarFixture_Las3JornadasTienenLosEnfrentamientosCorrectos()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+        
+        var partidos = _baseDeDatos.ObtenerPartidos();
+        Assert.AreEqual(72, partidos.Count);
+        
+        var fechas = partidos.Select(p => p.Fecha).Distinct().OrderBy(f => f).ToList();
+        Assert.AreEqual(3, fechas.Count);
+        
+        foreach (var fecha in fechas)
+        {
+            var partidosEnFecha = partidos.Where(p => p.Fecha == fecha).ToList();
+            Assert.AreEqual(12, partidosEnFecha.Count);
+        }
+    }
 }
