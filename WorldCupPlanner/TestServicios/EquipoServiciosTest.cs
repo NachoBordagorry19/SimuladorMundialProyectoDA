@@ -25,10 +25,8 @@ public class EquipoServiciosTest
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
-        _logRepositorio = new LogRepositorio(_baseDeDatosEnMemoria);
-        _logServicio = new LogServicios(_logRepositorio);
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
-        _equipoServicios = new EquipoServicios(_equipoRepositorio,_logServicio);
+        _equipoServicios = new EquipoServicios(_equipoRepositorio);
         
 
         Confederacion confederacion = new Confederacion();

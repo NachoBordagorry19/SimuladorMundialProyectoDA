@@ -13,12 +13,10 @@ namespace Servicios.Clases;
 public class EquipoServicios : IServicioEquipo
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
-    private readonly IServicioLog _logServicio;
 
-    public EquipoServicios(IEquipoRepositorio equipoRepo, IServicioLog logServicio)
+    public EquipoServicios(IEquipoRepositorio equipoRepo)
     {
         _equipoRepositorio = equipoRepo;
-        _logServicio = logServicio;
     }
     
 
