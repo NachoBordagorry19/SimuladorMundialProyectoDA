@@ -609,4 +609,63 @@ public class CrucesSegundaFaseServicioTest
             Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
         }
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarPartido_DespuesDeGenerarCruces_NoPermiteEditarFaseGrupos()
+    {
+        var equipoA = CrearEquipo("Equipo A");
+        var equipoB = CrearEquipo("Equipo B");
+        var estadio = CrearEstadio();
+
+        var partido = new PartidoDTO
+        {
+            Grupo = "A",
+            Fecha = new DateTime(2026, 06, 01),
+            Estadio = estadio,
+            equipoLocal = equipoA,
+            equipoVisitante = equipoB,
+            fase = Fase.Grupos,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 1,
+            golesVisitante = 0
+        };
+
+        _partidoServicios.AgregarPartido(partido, equipoA, equipoB, estadio);
+
+        var clasificados = new ClasificadosDTO();
+
+        for (int i = 1; i <= 12; i++)
+        {
+            clasificados.Primeros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Primero " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 30 - i
+            });
+
+            clasificados.Segundos.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Segundo " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 20 - i
+            });
+        }
+
+        for (int i = 1; i <= 8; i++)
+        {
+            clasificados.Terceros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Tercero " + i,
+                Grupo = ((char)('A' + i + 3)).ToString(),
+                Puntos = 8 - i
+            });
+        }
+
+        _crucesServicio.GenerarCrucesFase(clasificados, 123);
+
+        partido.Fecha = new DateTime(2026, 06, 02);
+
+        _partidoServicios.ActualizarPartido(partido);
+    }
 }
