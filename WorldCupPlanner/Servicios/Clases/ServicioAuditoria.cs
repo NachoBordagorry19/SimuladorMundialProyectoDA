@@ -23,6 +23,17 @@ public class ServicioAuditoria : IServicioAuditoria
         };
         _auditoriaRepo.AgregarRegistro(log);
     }
+    
+    public void RegistrarAltaEquipo(string nombre)
+    {
+        var log = new Auditoria
+        {
+            Usuario = _sessionService.ObtenerUsuarioLogeado().Email,
+            Accion = "Alta Equipo",
+            Detalle = $"Nombre: {nombre}"
+        };
+        _auditoriaRepo.AgregarRegistro(log);
+    }
 
     public List<string> ObtenerRegistrosFormateados()
     {

@@ -7,11 +7,6 @@ public class SessionServiceMock : ISessionService
 {
     public UsuarioDTO ObtenerUsuarioLogeado()
     {
-        return new UsuarioDTO 
-        { 
-            Email = "admin@worldcup.com",
-            Nombre = "Admin",
-            Apellido = "Sistema"
-        };
+        return new UsuarioDTO { Email = "admin@gmail.com" };
     }
 }
