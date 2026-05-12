@@ -65,13 +65,7 @@ public class CrucesSegundaFaseServicio
             posicionVisitante.Diferencia = posicionVisitante.GolesAFavor - posicionVisitante.GolesEnContra;
         }
 
-        var posicionesOrdenadas = posiciones
-            .OrderByDescending(p => p.Puntos)
-            .ThenByDescending(p => p.Diferencia)
-            .ThenByDescending(p => p.GolesAFavor)
-            .ToList();
-
-        return AplicarSorteoEnEmpates(posicionesOrdenadas, semillaCrucesFase);
+        return OrdenarPosiciones(posiciones, semillaCrucesFase);
     }
 
     private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, string nombreEquipo, string grupo)
@@ -142,5 +136,42 @@ public class CrucesSegundaFaseServicio
             equipos[i] = equipos[j];
             equipos[j] = auxiliar;
         }
+    }
+    
+    public ClasificadosDTO ObtenerClasificados(int semillaCrucesFase)
+    {
+        var primeros = new List<PosicionEquipoDTO>();
+        var segundos = new List<PosicionEquipoDTO>();
+        var terceros = new List<PosicionEquipoDTO>();
+
+        for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
+        {
+            string grupo = letraGrupo.ToString();
+            var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
+
+            primeros.Add(rankingGrupo[0]);
+            segundos.Add(rankingGrupo[1]);
+            terceros.Add(rankingGrupo[2]);
+        }
+
+        var clasificados = new ClasificadosDTO
+        {
+            Primeros = OrdenarPosiciones(primeros, semillaCrucesFase),
+            Segundos = OrdenarPosiciones(segundos, semillaCrucesFase),
+            Terceros = OrdenarPosiciones(terceros, semillaCrucesFase).Take(8).ToList()
+        };
+
+        return clasificados;
+    }
+    
+    private List<PosicionEquipoDTO> OrdenarPosiciones(List<PosicionEquipoDTO> posiciones, int semillaCrucesFase)
+    {
+        var posicionesOrdenadas = posiciones
+            .OrderByDescending(p => p.Puntos)
+            .ThenByDescending(p => p.Diferencia)
+            .ThenByDescending(p => p.GolesAFavor)
+            .ToList();
+
+        return AplicarSorteoEnEmpates(posicionesOrdenadas, semillaCrucesFase);
     }
 }
