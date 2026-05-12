@@ -32,4 +32,20 @@ public class AuditoriaServicioTest
         string fechaEsperada = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaEsperada));
     }
+    
+    [TestMethod]
+    public void RegistrarAltaEquipo_DebeGuardarRegistroCorrectamente()
+    {
+        string nombre = "Uruguay";
+        _servicio.RegistrarAltaEquipo(nombre);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.AreEqual(1, registros.Count);
+        string log = registros[0];
+        Assert.IsTrue(log.Contains("Alta Equipo"));
+        Assert.IsTrue(log.Contains(nombre));
+        Assert.IsTrue(log.Contains("admin@gmail.com"));
+        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+        Assert.IsTrue(log.StartsWith(fechaHoy));
+    }
 }
