@@ -99,7 +99,7 @@ public class CrucesSegundaFaseServicioTest
 
         _partidoServicios.AgregarPartido(partido, local, visitante, estadio);
     }
-    
+
     [TestMethod]
     public void ObtenerRankingGrupo_SiEmpatanEnPuntos_OrdenaPorDiferenciaDeGoles()
     {
@@ -128,7 +128,7 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual(6, ranking[1].Puntos);
         Assert.AreEqual(1, ranking[1].Diferencia);
     }
-    
+
     [TestMethod]
     public void ObtenerRankingGrupo_SiEmpatanEnPuntosYDiferencia_OrdenaPorGolesAFavor()
     {
@@ -159,7 +159,7 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual(2, ranking[1].Diferencia);
         Assert.AreEqual(4, ranking[1].GolesAFavor);
     }
-    
+
     [TestMethod]
     public void ObtenerRankingGrupo_SiPersisteEmpate_UsaSorteoDeterministico()
     {
@@ -203,7 +203,7 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.IsFalse(mismoOrdenConDistintaSemilla);
     }
-    
+
     [TestMethod]
     public void ObtenerRankingGrupo_AsignaGrupoALasPosiciones()
     {
@@ -229,7 +229,7 @@ public class CrucesSegundaFaseServicioTest
             Assert.AreEqual("A", posicion.Grupo);
         }
     }
-    
+
     [TestMethod]
     public void ObtenerClasificados_SeleccionaPrimerosSegundosYOchoMejoresTerceros()
     {
@@ -370,7 +370,7 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.AreEqual(32, totalClasificados);
     }
-    
+
     [TestMethod]
     public void GenerarCrucesPrimeraRonda_GeneraOchoCrucesEntreMejoresPrimerosYTerceros()
     {
@@ -406,7 +406,7 @@ public class CrucesSegundaFaseServicioTest
             Assert.AreNotEqual(cruces[i].EquipoLocal.Grupo, cruces[i].EquipoVisitante.Grupo);
         }
     }
-    
+
     [TestMethod]
     public void GenerarCrucesFase_ConClasificados_GeneraCrucesA1HastaA8()
     {
@@ -459,6 +459,76 @@ public class CrucesSegundaFaseServicioTest
         {
             Assert.IsTrue(cruce.EquipoLocal.EquipoNombre.StartsWith("Primero"));
             Assert.IsTrue(cruce.EquipoVisitante.EquipoNombre.StartsWith("Tercero"));
+            Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
+        }
+    }
+
+    [TestMethod]
+    public void GenerarCrucesFase_ConClasificados_GeneraCrucesB1HastaB4()
+    {
+        var clasificados = new ClasificadosDTO();
+
+        for (int i = 1; i <= 12; i++)
+        {
+            clasificados.Primeros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Primero " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 30 - i
+            });
+        }
+
+        for (int i = 1; i <= 8; i++)
+        {
+            clasificados.Segundos.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Segundo " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 20 - i
+            });
+        }
+
+        for (int i = 9; i <= 12; i++)
+        {
+            clasificados.Segundos.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Segundo " + i,
+                Grupo = ((char)('A' + i - 9)).ToString(),
+                Puntos = 1
+            });
+        }
+
+        for (int i = 1; i <= 8; i++)
+        {
+            clasificados.Terceros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Tercero " + i,
+                Grupo = ((char)('A' + i + 3)).ToString(),
+                Puntos = 8 - i
+            });
+        }
+
+        var cruces = _crucesServicio.GenerarCrucesFase(clasificados, 123);
+
+        var crucesB = cruces
+            .Where(c => c.Codigo == "B1" || c.Codigo == "B2" || c.Codigo == "B3" || c.Codigo == "B4")
+            .ToList();
+
+        Assert.AreEqual(4, crucesB.Count);
+
+        Assert.IsTrue(crucesB.Any(c => c.Codigo == "B1"));
+        Assert.IsTrue(crucesB.Any(c => c.Codigo == "B2"));
+        Assert.IsTrue(crucesB.Any(c => c.Codigo == "B3"));
+        Assert.IsTrue(crucesB.Any(c => c.Codigo == "B4"));
+
+        foreach (var cruce in crucesB)
+        {
+            Assert.IsTrue(cruce.EquipoLocal.EquipoNombre.StartsWith("Primero"));
+            Assert.IsTrue(cruce.EquipoVisitante.EquipoNombre == "Segundo 9" ||
+                          cruce.EquipoVisitante.EquipoNombre == "Segundo 10" ||
+                          cruce.EquipoVisitante.EquipoNombre == "Segundo 11" ||
+                          cruce.EquipoVisitante.EquipoNombre == "Segundo 12");
+
             Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
         }
     }
