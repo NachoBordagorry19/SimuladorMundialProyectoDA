@@ -179,7 +179,8 @@ public class CrucesSegundaFaseServicio
         List<PosicionEquipoDTO> equiposLocales,
         List<PosicionEquipoDTO> equiposVisitantes,
         string prefijoCodigo,
-        int semillaCrucesFase)
+        int semillaCrucesFase,
+        int numeroInicial = 1)
     {
         var locales = equiposLocales.ToList();
         var visitantes = equiposVisitantes.ToList();
@@ -201,7 +202,7 @@ public class CrucesSegundaFaseServicio
 
             var cruce = new CruceDTO
             {
-                Codigo = prefijoCodigo + (i + 1),
+                Codigo = prefijoCodigo + (numeroInicial + i),
                 EquipoLocal = local,
                 EquipoVisitante = visitante
             };
@@ -257,6 +258,28 @@ public class CrucesSegundaFaseServicio
             semillaCrucesFase);
 
         cruces.AddRange(crucesB1aB4);
+
+        var segundosRestantes = clasificados.Segundos
+            .Where(s => !segundosMenorPuntaje.Any(m => m.EquipoNombre == s.EquipoNombre))
+            .ToList();
+
+        var segundosLocales = segundosRestantes
+            .Take(4)
+            .ToList();
+
+        var segundosVisitantes = segundosRestantes
+            .Skip(4)
+            .Take(4)
+            .ToList();
+
+        var crucesB5aB8 = GenerarCrucesEntreListas(
+            segundosLocales,
+            segundosVisitantes,
+            "B",
+            semillaCrucesFase,
+            5);
+
+        cruces.AddRange(crucesB5aB8);
 
         return cruces;
     }
