@@ -285,4 +285,27 @@ public class CrucesSegundaFaseServicio
         _partidoServicios.BloquearEdicionFase(Fase.Grupos);
         return cruces;
     }
+    
+    public List<CruceDTO> GenerarOctavosDeFinal(List<CruceDTO> crucesDieciseisavos)
+    {
+        var octavos = new List<CruceDTO>();
+
+        for (int i = 1; i <= 8; i++)
+        {
+            var cruceA = crucesDieciseisavos.First(c => c.Codigo == "A" + i);
+            var cruceB = crucesDieciseisavos.First(c => c.Codigo == "B" + i);
+
+            var cruce = new CruceDTO
+            {
+                Codigo = "C" + i,
+                Fase = Fase.Octavos,
+                ReferenciaLocal = "Ganador " + cruceA.Codigo,
+                ReferenciaVisitante = "Ganador " + cruceB.Codigo
+            };
+
+            octavos.Add(cruce);
+        }
+
+        return octavos;
+    }
 }
