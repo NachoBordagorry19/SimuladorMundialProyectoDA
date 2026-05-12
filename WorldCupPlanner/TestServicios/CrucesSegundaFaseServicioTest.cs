@@ -159,4 +159,48 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual(2, ranking[1].Diferencia);
         Assert.AreEqual(4, ranking[1].GolesAFavor);
     }
+    
+    [TestMethod]
+    public void ObtenerRankingGrupo_SiPersisteEmpate_UsaSorteoDeterministico()
+    {
+        var equipoA = CrearEquipo("Equipo A");
+        var equipoB = CrearEquipo("Equipo B");
+        var equipoC = CrearEquipo("Equipo C");
+        var equipoD = CrearEquipo("Equipo D");
+        var estadio = CrearEstadio();
+
+        AgregarPartido(equipoA, equipoB, estadio, 0, 0);
+        AgregarPartido(equipoA, equipoC, estadio, 0, 0);
+        AgregarPartido(equipoA, equipoD, estadio, 0, 0);
+
+        AgregarPartido(equipoB, equipoC, estadio, 0, 0);
+        AgregarPartido(equipoB, equipoD, estadio, 0, 0);
+
+        AgregarPartido(equipoC, equipoD, estadio, 0, 0);
+
+        int semillaCrucesFase = 123;
+        int otraSemillaCrucesFase = 456;
+
+        var rankingSemillaCrucesFase = _crucesServicio.ObtenerRankingGrupo("A", semillaCrucesFase);
+        var rankingMismaSemillaCrucesFase = _crucesServicio.ObtenerRankingGrupo("A", semillaCrucesFase);
+        var rankingOtraSemillaCrucesFase = _crucesServicio.ObtenerRankingGrupo("A", otraSemillaCrucesFase);
+
+        var ordenSemillaCrucesFase = rankingSemillaCrucesFase.Select(e => e.EquipoNombre).ToList();
+        var ordenMismaSemillaCrucesFase = rankingMismaSemillaCrucesFase.Select(e => e.EquipoNombre).ToList();
+        var ordenOtraSemillaCrucesFase = rankingOtraSemillaCrucesFase.Select(e => e.EquipoNombre).ToList();
+
+        CollectionAssert.AreEqual(ordenSemillaCrucesFase, ordenMismaSemillaCrucesFase);
+
+        bool mismoOrdenConDistintaSemilla = true;
+
+        for (int i = 0; i < ordenSemillaCrucesFase.Count; i++)
+        {
+            if (ordenSemillaCrucesFase[i] != ordenOtraSemillaCrucesFase[i])
+            {
+                mismoOrdenConDistintaSemilla = false;
+            }
+        }
+
+        Assert.IsFalse(mismoOrdenConDistintaSemilla);
+    }
 }
