@@ -203,6 +203,7 @@ public class CrucesSegundaFaseServicio
             var cruce = new CruceDTO
             {
                 Codigo = prefijoCodigo + (numeroInicial + i),
+                Fase = Fase.Dieciseisavos,
                 EquipoLocal = local,
                 EquipoVisitante = visitante
             };

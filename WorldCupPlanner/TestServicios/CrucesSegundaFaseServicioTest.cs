@@ -460,6 +460,7 @@ public class CrucesSegundaFaseServicioTest
             Assert.IsTrue(cruce.EquipoLocal.EquipoNombre.StartsWith("Primero"));
             Assert.IsTrue(cruce.EquipoVisitante.EquipoNombre.StartsWith("Tercero"));
             Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
+            Assert.AreEqual(Fase.Dieciseisavos, cruce.Fase);
         }
     }
 
