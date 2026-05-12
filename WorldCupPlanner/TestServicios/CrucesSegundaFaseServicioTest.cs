@@ -669,4 +669,41 @@ public class CrucesSegundaFaseServicioTest
 
         _partidoServicios.ActualizarPartido(partido);
     }
+    
+    [TestMethod]
+    public void GenerarOctavosDeFinal_GeneraC1HastaC8()
+    {
+        var crucesDieciseisavos = new List<CruceDTO>();
+
+        for (int i = 1; i <= 8; i++)
+        {
+            crucesDieciseisavos.Add(new CruceDTO
+            {
+                Codigo = "A" + i,
+                Fase = Fase.Dieciseisavos
+            });
+        }
+
+        for (int i = 1; i <= 8; i++)
+        {
+            crucesDieciseisavos.Add(new CruceDTO
+            {
+                Codigo = "B" + i,
+                Fase = Fase.Dieciseisavos
+            });
+        }
+
+        var octavos = _crucesServicio.GenerarOctavosDeFinal(crucesDieciseisavos);
+
+        Assert.AreEqual(8, octavos.Count);
+
+        for (int i = 1; i <= 8; i++)
+        {
+            var cruce = octavos.First(c => c.Codigo == "C" + i);
+
+            Assert.AreEqual(Fase.Octavos, cruce.Fase);
+            Assert.AreEqual("Ganador A" + i, cruce.ReferenciaLocal);
+            Assert.AreEqual("Ganador B" + i, cruce.ReferenciaVisitante);
+        }
+    }
 }
