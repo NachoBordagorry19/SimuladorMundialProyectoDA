@@ -68,6 +68,7 @@ public class CrucesSegundaFaseServicio
         return posiciones
             .OrderByDescending(p => p.Puntos)
             .ThenByDescending(p => p.Diferencia)
+            .ThenByDescending(p => p.GolesAFavor)
             .ToList();
     }
 
