@@ -177,9 +177,7 @@ public class FixturePrimeraFaseServicioTest
         foreach (var grupo in resultado.Grupos)
         {
             var equipos = grupo.Equipos;
-            var partidosDelGrupo = resultado.Partidos
-                .Where(p => PartidoPerteneceAlGrupo(p, grupo))
-                .ToList();
+            var partidosDelGrupo = resultado.Partidos.Where(p => p.Grupo == grupo.Nombre).ToList();
 
             Assert.AreEqual(6, partidosDelGrupo.Count);
 
@@ -210,6 +208,7 @@ public class FixturePrimeraFaseServicioTest
             Assert.IsTrue(ExistePartidoEntre(jornada3, equipos[2], equipos[3]));
         }
     }
+    
     [TestMethod]
     public void GenerarFixture_AsignaEstadiosOrdenadosPorNombreNormalizado()
     {
@@ -254,6 +253,7 @@ public class FixturePrimeraFaseServicioTest
             }
         }
     }
+    
     [TestMethod]
     public void GenerarFixture_RespetaHorariosDeJornadas()
     {
