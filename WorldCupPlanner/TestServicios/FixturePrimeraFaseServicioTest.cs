@@ -294,4 +294,28 @@ public class FixturePrimeraFaseServicioTest
             Assert.AreEqual(jornada3[0].Fecha, jornada3[1].Fecha);
         }
     }
+    
+    [TestMethod]
+    public void GenerarFixture_NoSuperaTresPartidosPorDia()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        var fechas = resultado.Partidos
+            .Select(p => p.Fecha.Date)
+            .Distinct()
+            .ToList();
+
+        foreach (var fecha in fechas)
+        {
+            int cantidadPartidosEnElDia = resultado.Partidos.Count(p => p.Fecha.Date == fecha);
+
+            Assert.IsTrue(cantidadPartidosEnElDia <= 3);
+        }
+    }
 }
