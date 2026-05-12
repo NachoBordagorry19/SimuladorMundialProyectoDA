@@ -1,3 +1,4 @@
+using Dominio.Clases;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 
@@ -14,11 +15,24 @@ public class ServicioAuditoria : IServicioAuditoria
     }
     public void RegistrarAltaUsuario(string email, string roles)
     {
-        throw new NotImplementedException();
+        var log = new Auditoria
+        {
+            Usuario = _sessionService.ObtenerUsuarioLogeado().Email,
+            Accion = "Alta Usuario",
+            Detalle = $"Email: {email}, Roles: {roles}"
+        };
+        _auditoriaRepo.AgregarRegistro(log);
     }
 
     public List<string> ObtenerRegistrosFormateados()
     {
-        throw new NotImplementedException();
+        var logs = _auditoriaRepo.ObtenerTodosLosRegistros();
+        List<string> lista = new List<string>();
+        foreach (var log in logs)
+        {
+            string timestamp = log.FechaHora.ToString("yyyy-MM-ddTHH:mm:ss");
+            lista.Add($"{timestamp} | {log.Usuario} | {log.Accion} | {log.Detalle}");
+        }
+        return lista;
     }
 }

@@ -10,6 +10,6 @@ public class Auditoria
 
     public Auditoria()
     {
-        
+        FechaHora = DateTime.Now;
     }
 }

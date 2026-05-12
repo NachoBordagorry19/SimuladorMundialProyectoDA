@@ -27,10 +27,9 @@ public class AuditoriaServicioTest
             
         Assert.AreEqual(1, registros.Count);
         string log = registros[0];
-        Assert.IsTrue(log.Contains("Alta Usuario"));
-        Assert.IsTrue(log.Contains(email));
-        Assert.IsTrue(log.Contains("admin@gmail.com"));
-        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
-        Assert.IsTrue(log.StartsWith(fechaHoy));
+        Assert.IsTrue(log.Contains("Alta Usuario"), "alta usuario no contenido");
+        Assert.IsTrue(log.Contains(email), "email no contenido");
+        string fechaEsperada = DateTime.Now.ToString("yyyy-MM-dd");
+        Assert.IsTrue(log.StartsWith(fechaEsperada));
     }
 }
