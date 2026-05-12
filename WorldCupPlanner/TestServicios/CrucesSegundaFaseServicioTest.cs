@@ -1,7 +1,7 @@
-using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio;
 using Servicios.Clases;
+using Servicios.Interfaces;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -11,7 +11,7 @@ public class CrucesSegundaFaseServicioTest
 {
     private BaseDeDatosEnMemoria _baseDeDatos;
     private PartidoRepositorio _partidoRepositorio;
-    private PartidoServicios _partidoServicios;
+    private IServicioPartido _partidoServicios;
     private CrucesSegundaFaseServicio _crucesServicio;
 
     [TestInitialize]
