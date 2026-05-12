@@ -23,6 +23,7 @@ public class ServicioUsuario : IServicioUsuario
 
     public void AgregarUsuario(UsuarioDTO usuarioDto)
     {
+        ValidarContraseña(usuarioDto.Contraseña);
         Usuario usuario = UsuarioDTOAEntidad(usuarioDto);
         string emailAVerificar = usuario.Email;
         ValidarEmailExiste(emailAVerificar);
@@ -47,6 +48,11 @@ public class ServicioUsuario : IServicioUsuario
         {
             throw new ArgumentException("El usuario ya existe, porfavor agrege un usuario que no exista");
         }
+    }
+
+    private void ValidarContraseña(string contraseña)
+    {
+        var usuarioTemporal = new Usuario("temp", "temp", "temp@temp.com", DateTime.Today.AddYears(-18), contraseña, Rol.Editor);
     }
 
     private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
@@ -151,6 +157,7 @@ public class ServicioUsuario : IServicioUsuario
 
         if (!string.IsNullOrWhiteSpace(usuarioDto.Contraseña))
         {
+            ValidarContraseña(usuarioDto.Contraseña);
             contraseña = CifrarContraseña(usuarioDto.Contraseña);
         }
 
