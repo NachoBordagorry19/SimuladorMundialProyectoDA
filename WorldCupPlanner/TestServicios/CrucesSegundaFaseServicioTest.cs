@@ -370,4 +370,40 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.AreEqual(32, totalClasificados);
     }
+    
+    [TestMethod]
+    public void GenerarCrucesPrimeraRonda_GeneraOchoCrucesEntreMejoresPrimerosYTerceros()
+    {
+        var primeros = new List<PosicionEquipoDTO>();
+        var terceros = new List<PosicionEquipoDTO>();
+
+        for (int i = 1; i <= 8; i++)
+        {
+            primeros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Primero " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 9
+            });
+
+            terceros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Tercero " + i,
+                Grupo = ((char)('I' + i - 1)).ToString(),
+                Puntos = 4
+            });
+        }
+
+        var cruces = _crucesServicio.GenerarCrucesEntreListas(primeros, terceros, "A", 123);
+
+        Assert.AreEqual(8, cruces.Count);
+
+        for (int i = 0; i < 8; i++)
+        {
+            Assert.AreEqual("A" + (i + 1), cruces[i].Codigo);
+            Assert.IsTrue(cruces[i].EquipoLocal.EquipoNombre.StartsWith("Primero"));
+            Assert.IsTrue(cruces[i].EquipoVisitante.EquipoNombre.StartsWith("Tercero"));
+            Assert.AreNotEqual(cruces[i].EquipoLocal.Grupo, cruces[i].EquipoVisitante.Grupo);
+        }
+    }
 }
