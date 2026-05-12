@@ -308,4 +308,30 @@ public class CrucesSegundaFaseServicio
 
         return octavos;
     }
+    
+    public List<CruceDTO> GenerarCuartosDeFinal(List<CruceDTO> octavos)
+    {
+        var cuartos = new List<CruceDTO>();
+
+        for (int i = 1; i <= 4; i++)
+        {
+            int numeroCruceLocal = (i * 2) - 1;
+            int numeroCruceVisitante = i * 2;
+
+            var cruceLocal = octavos.First(c => c.Codigo == "C" + numeroCruceLocal);
+            var cruceVisitante = octavos.First(c => c.Codigo == "C" + numeroCruceVisitante);
+
+            var cruce = new CruceDTO
+            {
+                Codigo = "D" + i,
+                Fase = Fase.Cuartos,
+                ReferenciaLocal = "Ganador " + cruceLocal.Codigo,
+                ReferenciaVisitante = "Ganador " + cruceVisitante.Codigo
+            };
+
+            cuartos.Add(cruce);
+        }
+
+        return cuartos;
+    }
 }
