@@ -34,6 +34,8 @@ public class AuditoriaServicioTest
         Assert.IsTrue(log.StartsWith(fechaEsperada));
     }
     
+    
+    
     [TestMethod]
     public void RegistrarAltaEquipo_DebeGuardarRegistroCorrectamente()
     {
