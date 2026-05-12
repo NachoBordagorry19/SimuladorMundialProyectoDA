@@ -174,4 +174,54 @@ public class CrucesSegundaFaseServicio
 
         return AplicarSorteoEnEmpates(posicionesOrdenadas, semillaCrucesFase);
     }
+    
+    public List<CruceDTO> GenerarCrucesEntreListas(
+        List<PosicionEquipoDTO> equiposLocales,
+        List<PosicionEquipoDTO> equiposVisitantes,
+        string prefijoCodigo,
+        int semillaCrucesFase)
+    {
+        var locales = equiposLocales.ToList();
+        var visitantes = equiposVisitantes.ToList();
+
+        var random = new Random(semillaCrucesFase);
+
+        MezclarFisherYates(locales, random);
+        MezclarFisherYates(visitantes, random);
+
+        var cruces = new List<CruceDTO>();
+
+        for (int i = 0; i < locales.Count; i++)
+        {
+            var local = locales[i];
+            int indiceVisitante = BuscarIndiceVisitanteDisponible(visitantes, local);
+
+            var visitante = visitantes[indiceVisitante];
+            visitantes.RemoveAt(indiceVisitante);
+
+            var cruce = new CruceDTO
+            {
+                Codigo = prefijoCodigo + (i + 1),
+                EquipoLocal = local,
+                EquipoVisitante = visitante
+            };
+
+            cruces.Add(cruce);
+        }
+
+        return cruces;
+    }
+    
+    private int BuscarIndiceVisitanteDisponible(List<PosicionEquipoDTO> visitantes, PosicionEquipoDTO local)
+    {
+        for (int i = 0; i < visitantes.Count; i++)
+        {
+            if (visitantes[i].Grupo != local.Grupo)
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
 }
