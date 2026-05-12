@@ -706,4 +706,45 @@ public class CrucesSegundaFaseServicioTest
             Assert.AreEqual("Ganador B" + i, cruce.ReferenciaVisitante);
         }
     }
+    
+    [TestMethod]
+    public void GenerarCuartosDeFinal_GeneraD1HastaD4()
+    {
+        var octavos = new List<CruceDTO>();
+
+        for (int i = 1; i <= 8; i++)
+        {
+            octavos.Add(new CruceDTO
+            {
+                Codigo = "C" + i,
+                Fase = Fase.Octavos,
+                ReferenciaLocal = "Ganador A" + i,
+                ReferenciaVisitante = "Ganador B" + i
+            });
+        }
+
+        var cuartos = _crucesServicio.GenerarCuartosDeFinal(octavos);
+
+        Assert.AreEqual(4, cuartos.Count);
+
+        var d1 = cuartos.First(c => c.Codigo == "D1");
+        Assert.AreEqual(Fase.Cuartos, d1.Fase);
+        Assert.AreEqual("Ganador C1", d1.ReferenciaLocal);
+        Assert.AreEqual("Ganador C2", d1.ReferenciaVisitante);
+
+        var d2 = cuartos.First(c => c.Codigo == "D2");
+        Assert.AreEqual(Fase.Cuartos, d2.Fase);
+        Assert.AreEqual("Ganador C3", d2.ReferenciaLocal);
+        Assert.AreEqual("Ganador C4", d2.ReferenciaVisitante);
+
+        var d3 = cuartos.First(c => c.Codigo == "D3");
+        Assert.AreEqual(Fase.Cuartos, d3.Fase);
+        Assert.AreEqual("Ganador C5", d3.ReferenciaLocal);
+        Assert.AreEqual("Ganador C6", d3.ReferenciaVisitante);
+
+        var d4 = cuartos.First(c => c.Codigo == "D4");
+        Assert.AreEqual(Fase.Cuartos, d4.Fase);
+        Assert.AreEqual("Ganador C7", d4.ReferenciaLocal);
+        Assert.AreEqual("Ganador C8", d4.ReferenciaVisitante);
+    }
 }
