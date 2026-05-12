@@ -33,7 +33,7 @@ public class EquipoTest
     {
         Equipo equipoPrueba = new Equipo("Nacional", Confederacion.UEFA, 0);
     }
-    
+
     [TestMethod]
     public void CrearEquipo_ConRankingFifaMinimo_SeCreaCorrectamente()
     {

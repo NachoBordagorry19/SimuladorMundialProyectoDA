@@ -12,9 +12,9 @@ public class Log
 
     public Log()
     {
-        
+
     }
-    
+
     public void Validar()
     {
         if (string.IsNullOrWhiteSpace(Mensaje))

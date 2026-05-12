@@ -23,10 +23,10 @@ public class LogTest
         Log log = new Log();
         log.Mensaje = "Mensaje";
         log.Usuario = "";
-        
+
         log.Validar();
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Validar_CuandoMensajeSonSoloEspacios_LanzaExcepcion()
@@ -37,7 +37,7 @@ public class LogTest
 
         log.Validar();
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Validar_CuandoUsuarioSonSoloEspacios_LanzaExcepcion()
@@ -48,13 +48,14 @@ public class LogTest
 
         log.Validar();
     }
-    
+
     [TestMethod]
     public void Validar_ConDatosCorrectos_NoLanzaExcepcion()
     {
-        Log log = new Log { 
-            Mensaje = "Usuario logueado", 
-            Usuario = "admin@cup.com" 
+        Log log = new Log
+        {
+            Mensaje = "Usuario logueado",
+            Usuario = "admin@cup.com"
         };
 
         log.Validar();

@@ -10,6 +10,7 @@ public class PartidoDTO
     public EstadioDTO Estadio { get; set; }
     public EquipoDTO equipoLocal { get; set; }
     public EquipoDTO equipoVisitante { get; set; }
+    public string Grupo { get; set; }
     public Fase fase { get; set; }
     public EstadoPartido estadoPartido { get; set; }
     public int golesLocal { get; set; }

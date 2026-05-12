@@ -16,7 +16,7 @@ public class LogRepositorio : ILogRepositorio
     {
         return _BDEnMemoria.ObtenerLogs();
     }
-    
+
     public List<Log> ObtenerLogsPorTipo(TipoLog tipo)
     {
         List<Log> logs = _BDEnMemoria.ObtenerLogs();

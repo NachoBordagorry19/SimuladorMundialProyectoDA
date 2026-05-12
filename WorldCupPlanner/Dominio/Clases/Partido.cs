@@ -99,6 +99,8 @@ public class Partido
         }
     }
 
+    public string Grupo { get; set; }
+
     public Fase Fase
     {
         get => _fase;

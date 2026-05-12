@@ -110,7 +110,7 @@ public class BaseDeDatosEnMemoria
         var indicePartido = _listaDePartidos.IndexOf(partidoParaActualizar);
         _listaDePartidos[indicePartido] = partido;
     }
-    
+
     public List<Log> ObtenerLogs()
     {
         List<Log> copia = new List<Log>();
@@ -120,7 +120,7 @@ public class BaseDeDatosEnMemoria
         }
         return copia;
     }
-    
+
     public void AgregarLog(Log log)
     {
         log.Id = _listaDeLogs.Count + 1;

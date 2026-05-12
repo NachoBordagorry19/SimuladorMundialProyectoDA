@@ -11,6 +11,6 @@ public class LogDTO
 
     public LogDTO()
     {
-        
+
     }
 }

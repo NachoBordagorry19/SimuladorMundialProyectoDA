@@ -84,7 +84,7 @@ public class UsuarioTest
     {
         Usuario usuario = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "av34.A", Rol.Administrador);
     }
-    
+
     [TestMethod]
     public void CrearUsuario_PermiteRolesNoExcluyentes()
     {

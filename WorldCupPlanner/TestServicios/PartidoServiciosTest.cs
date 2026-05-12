@@ -43,14 +43,14 @@ public class PartidoServiciosTest
         {
             nombre = "Bayern Munich",
             confederacion = _confederacion,
-            rankingFifa = 2
+            rankingFifa = 2000
         };
 
         equipoVisitanteDTO = new EquipoDTO()
         {
             nombre = "Real Madrid",
             confederacion = _confederacion,
-            rankingFifa = 3
+            rankingFifa = 1900
         };
 
         _partidoDTO = new PartidoDTO
@@ -195,7 +195,7 @@ public class PartidoServiciosTest
         Assert.IsTrue(partidoSimulado.golesVisitante >= 0);
         Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void SimularResultado_SiPartidoEsNulo_LanzaExcepcion()
@@ -203,7 +203,7 @@ public class PartidoServiciosTest
         _servicioPartido.SimularResultado(null, 12345);
     }
 
-    
+
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]

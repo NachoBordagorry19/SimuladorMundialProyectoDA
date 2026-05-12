@@ -18,7 +18,7 @@ public class EquipoServicios : IServicioEquipo
     {
         _equipoRepositorio = equipoRepo;
     }
-    
+
 
     public void AgregarEquipo(EquipoDTO equipoDTO)
     {
@@ -38,7 +38,7 @@ public class EquipoServicios : IServicioEquipo
 
     public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
     {
-        List<String> registrosAuditoria = new List<String>(); 
+        List<String> registrosAuditoria = new List<String>();
         Random random = new Random(semillaCompletar);
         Array valoresEnum = Enum.GetValues(typeof(Confederacion));
 
@@ -54,7 +54,7 @@ public class EquipoServicios : IServicioEquipo
 
             int cantidadActual = 0;
             List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
-        
+
             foreach (EquipoDTO equipo in todosLosEquipos)
             {
                 if (equipo.confederacion == conf)
@@ -62,9 +62,9 @@ public class EquipoServicios : IServicioEquipo
                     cantidadActual++;
                 }
             }
-            
+
             int faltantes = cupoMaximo - cantidadActual;
-            
+
             if (faltantes > 0)
             {
                 string log = "Confederacion: " + conf.ToString() + " | Generados: " + faltantes + " | Semilla: " + semillaCompletar;
@@ -78,8 +78,8 @@ public class EquipoServicios : IServicioEquipo
                 EquipoDTO nuevoEquipo = new EquipoDTO();
                 nuevoEquipo.nombre = nombreFormateado;
                 nuevoEquipo.confederacion = conf;
-                
-                nuevoEquipo.rankingFifa = random.Next(1, 201);
+
+                nuevoEquipo.rankingFifa = random.Next(300, 2501);
 
                 this.AgregarEquipo(nuevoEquipo);
             }
@@ -98,11 +98,11 @@ public class EquipoServicios : IServicioEquipo
                 return 7;
             case Confederacion.CAF:
                 return 9;
-            case Confederacion.AFC: 
+            case Confederacion.AFC:
                 return 8;
             case Confederacion.OFC:
                 return 1;
-            default: 
+            default:
                 return 0;
         }
     }
@@ -217,8 +217,7 @@ public class EquipoServicios : IServicioEquipo
 
         var generadorDeNumerosPrincipal = new Random(semillaFixture);
 
-        var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderBy(g => g.Key);
-
+        var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderByDescending(g => g.Key);
         foreach (var grupo in grupos)
         {
             var listaGrupo = grupo.ToList();
@@ -260,21 +259,13 @@ public class EquipoServicios : IServicioEquipo
         {
             SemillaFixture = semillaFixture,
             FechaGeneracion = DateTime.UtcNow,
-            EquiposOrdenados = RedistribuirPorConfederaciones(listaFinal),
+            EquiposOrdenados = listaFinal,
             AuditoriaEmpates = auditoria
         };
 
         return resultado;
     }
 
-    private List<EquipoDTO> RedistribuirPorConfederaciones(List<EquipoDTO> equipos)
-    {
-        var resultado = equipos
-            .OrderBy(e => e.confederacion.ToString())
-            .ToList();
-        
-        return resultado;
-    }
 
     public void VerificarListaDeEquiposSinNulo(List<EquipoDTO> equipos)
     {
@@ -296,6 +287,6 @@ public class EquipoServicios : IServicioEquipo
             .ToList();
         return ordenBase;
     }
-    
-    
+
+
 }

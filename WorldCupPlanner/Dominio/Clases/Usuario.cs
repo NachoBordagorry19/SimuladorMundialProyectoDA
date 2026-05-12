@@ -129,7 +129,7 @@ public class Usuario
         Contraseña = contraseña;
         _roles.Add(rol);
     }
-    
+
     public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, List<Rol> roles)
     {
         Nombre = nombre;

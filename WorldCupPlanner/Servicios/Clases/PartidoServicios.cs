@@ -155,6 +155,7 @@ public class PartidoServicios
                 confederacion = partido.Visitante.Confederacion,
                 rankingFifa = partido.Visitante.RankingFifa
             },
+            Grupo = partido.Grupo,
             fase = partido.Fase,
             estadoPartido = partido.Estado,
             golesLocal = partido.GolesLocal,
@@ -169,6 +170,7 @@ public class PartidoServicios
         var visitante = EquipoDTOAEntidad(dto.equipoVisitante);
         var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
         var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
+        partido.Grupo = dto.Grupo;
         return partido;
     }
 
@@ -178,7 +180,7 @@ public class PartidoServicios
         {
             throw new ArgumentException("El partido recibido no puede ser nulo");
         }
-        
+
         Partido partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
 
         if (partidoExistente == null)
@@ -190,10 +192,10 @@ public class PartidoServicios
 
         int rankingLocal = partidoExistente.Local.RankingFifa;
         int rankingVisitante = partidoExistente.Visitante.RankingFifa;
-        
+
         double probabilidadLocal = CalcularProbabilidad(rankingLocal, rankingVisitante);
         double numeroAleatorio = random.NextDouble() * 100;
-        
+
         int golesLocal;
         int golesVisitante;
 
@@ -207,7 +209,7 @@ public class PartidoServicios
             golesLocal = GenerarGolesAleatorios(random, false);
             golesVisitante = GenerarGolesAleatorios(random, true);
         }
-        
+
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
         ActualizarPartido(partidoDTO);

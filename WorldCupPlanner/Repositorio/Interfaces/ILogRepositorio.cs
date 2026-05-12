@@ -7,6 +7,6 @@ public interface ILogRepositorio
 {
     List<Log> ObtenerLogs();
     List<Log> ObtenerLogsPorTipo(TipoLog tipo);
-    
+
     void AgregarLog(Log log);
 }
