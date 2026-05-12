@@ -229,4 +229,145 @@ public class CrucesSegundaFaseServicioTest
             Assert.AreEqual("A", posicion.Grupo);
         }
     }
+    
+    [TestMethod]
+    public void ObtenerClasificados_SeleccionaPrimerosSegundosYOchoMejoresTerceros()
+    {
+        var estadio = new EstadioDTO
+        {
+            Nombre = "Centenario",
+            Ciudad = "Montevideo",
+            Descripcion = "Estadio Centenario",
+            CapacidadLocativa = 60000
+        };
+
+        for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
+        {
+            string grupo = letraGrupo.ToString();
+
+            var equipo1 = new EquipoDTO
+            {
+                nombre = grupo + " Equipo 1",
+                confederacion = Confederacion.UEFA,
+                rankingFifa = 2000
+            };
+
+            var equipo2 = new EquipoDTO
+            {
+                nombre = grupo + " Equipo 2",
+                confederacion = Confederacion.CONMEBOL,
+                rankingFifa = 1900
+            };
+
+            var equipo3 = new EquipoDTO
+            {
+                nombre = grupo + " Equipo 3",
+                confederacion = Confederacion.CAF,
+                rankingFifa = 1800
+            };
+
+            var equipo4 = new EquipoDTO
+            {
+                nombre = grupo + " Equipo 4",
+                confederacion = Confederacion.AFC,
+                rankingFifa = 1700
+            };
+
+            var partido1 = new PartidoDTO
+            {
+                Grupo = grupo,
+                Fecha = new DateTime(2026, 06, 01),
+                Estadio = estadio,
+                equipoLocal = equipo1,
+                equipoVisitante = equipo2,
+                fase = Fase.Grupos,
+                estadoPartido = EstadoPartido.Jugado,
+                golesLocal = 3,
+                golesVisitante = 0
+            };
+            _partidoServicios.AgregarPartido(partido1, equipo1, equipo2, estadio);
+
+            var partido2 = new PartidoDTO
+            {
+                Grupo = grupo,
+                Fecha = new DateTime(2026, 06, 01),
+                Estadio = estadio,
+                equipoLocal = equipo1,
+                equipoVisitante = equipo3,
+                fase = Fase.Grupos,
+                estadoPartido = EstadoPartido.Jugado,
+                golesLocal = 3,
+                golesVisitante = 0
+            };
+            _partidoServicios.AgregarPartido(partido2, equipo1, equipo3, estadio);
+
+            var partido3 = new PartidoDTO
+            {
+                Grupo = grupo,
+                Fecha = new DateTime(2026, 06, 01),
+                Estadio = estadio,
+                equipoLocal = equipo1,
+                equipoVisitante = equipo4,
+                fase = Fase.Grupos,
+                estadoPartido = EstadoPartido.Jugado,
+                golesLocal = 3,
+                golesVisitante = 0
+            };
+            _partidoServicios.AgregarPartido(partido3, equipo1, equipo4, estadio);
+
+            var partido4 = new PartidoDTO
+            {
+                Grupo = grupo,
+                Fecha = new DateTime(2026, 06, 01),
+                Estadio = estadio,
+                equipoLocal = equipo2,
+                equipoVisitante = equipo3,
+                fase = Fase.Grupos,
+                estadoPartido = EstadoPartido.Jugado,
+                golesLocal = 2,
+                golesVisitante = 0
+            };
+            _partidoServicios.AgregarPartido(partido4, equipo2, equipo3, estadio);
+
+            var partido5 = new PartidoDTO
+            {
+                Grupo = grupo,
+                Fecha = new DateTime(2026, 06, 01),
+                Estadio = estadio,
+                equipoLocal = equipo2,
+                equipoVisitante = equipo4,
+                fase = Fase.Grupos,
+                estadoPartido = EstadoPartido.Jugado,
+                golesLocal = 2,
+                golesVisitante = 0
+            };
+            _partidoServicios.AgregarPartido(partido5, equipo2, equipo4, estadio);
+
+            var partido6 = new PartidoDTO
+            {
+                Grupo = grupo,
+                Fecha = new DateTime(2026, 06, 01),
+                Estadio = estadio,
+                equipoLocal = equipo3,
+                equipoVisitante = equipo4,
+                fase = Fase.Grupos,
+                estadoPartido = EstadoPartido.Jugado,
+                golesLocal = 1,
+                golesVisitante = 0
+            };
+            _partidoServicios.AgregarPartido(partido6, equipo3, equipo4, estadio);
+        }
+
+        var clasificados = _crucesServicio.ObtenerClasificados(123);
+
+        Assert.AreEqual(12, clasificados.Primeros.Count);
+        Assert.AreEqual(12, clasificados.Segundos.Count);
+        Assert.AreEqual(8, clasificados.Terceros.Count);
+
+        int totalClasificados = clasificados.Primeros.Count
+                                + clasificados.Segundos.Count
+                                + clasificados.Terceros.Count;
+
+        Assert.AreEqual(32, totalClasificados);
+    }
 }
