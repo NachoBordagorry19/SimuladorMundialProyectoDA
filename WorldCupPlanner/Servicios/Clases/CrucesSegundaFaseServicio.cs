@@ -224,4 +224,22 @@ public class CrucesSegundaFaseServicio
 
         return 0;
     }
+    
+    public List<CruceDTO> GenerarCrucesFase(ClasificadosDTO clasificados, int semillaCrucesFase)
+    {
+        var mejoresPrimeros = clasificados.Primeros
+            .Take(8)
+            .ToList();
+
+        var terceros = clasificados.Terceros
+            .ToList();
+
+        var cruces = GenerarCrucesEntreListas(
+            mejoresPrimeros,
+            terceros,
+            "A",
+            semillaCrucesFase);
+
+        return cruces;
+    }
 }
