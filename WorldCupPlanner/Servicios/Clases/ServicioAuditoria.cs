@@ -13,26 +13,26 @@ public class ServicioAuditoria : IServicioAuditoria
         _sessionService = sessionService;
         _auditoriaRepo = auditoriaRepo;
     }
-    public void RegistrarAltaUsuario(string email, string roles)
+    private void Registrar(string accion, string detalle)
     {
         var log = new Auditoria
         {
             Usuario = _sessionService.ObtenerUsuarioLogeado().Email,
-            Accion = "Alta Usuario",
-            Detalle = $"Email: {email}, Roles: {roles}"
+            Accion = accion,
+            Detalle = detalle,
+            FechaHora = DateTime.Now
         };
         _auditoriaRepo.AgregarRegistro(log);
+    }
+
+    public void RegistrarAltaUsuario(string email, string roles)
+    {
+        Registrar("Alta Usuario", $"Email: {email}, Roles: {roles}");
     }
     
     public void RegistrarAltaEquipo(string nombre)
     {
-        var log = new Auditoria
-        {
-            Usuario = _sessionService.ObtenerUsuarioLogeado().Email,
-            Accion = "Alta Equipo",
-            Detalle = $"Nombre: {nombre}"
-        };
-        _auditoriaRepo.AgregarRegistro(log);
+        Registrar("Alta Equipo", $"Nombre: {nombre}");
     }
 
     public List<string> ObtenerRegistrosFormateados()
