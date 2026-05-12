@@ -65,11 +65,13 @@ public class CrucesSegundaFaseServicio
             posicionVisitante.Diferencia = posicionVisitante.GolesAFavor - posicionVisitante.GolesEnContra;
         }
 
-        return posiciones
+        var posicionesOrdenadas = posiciones
             .OrderByDescending(p => p.Puntos)
             .ThenByDescending(p => p.Diferencia)
             .ThenByDescending(p => p.GolesAFavor)
             .ToList();
+
+        return AplicarSorteoEnEmpates(posicionesOrdenadas, semillaCrucesFase);
     }
 
     private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, string nombreEquipo)
@@ -88,5 +90,56 @@ public class CrucesSegundaFaseServicio
     private PosicionEquipoDTO BuscarPosicion(List<PosicionEquipoDTO> posiciones, string nombreEquipo)
     {
         return posiciones.First(p => p.EquipoNombre == nombreEquipo);
+    }
+    
+    private List<PosicionEquipoDTO> AplicarSorteoEnEmpates(List<PosicionEquipoDTO> posiciones, int semillaCrucesFase)
+    {
+        var resultado = new List<PosicionEquipoDTO>();
+        var random = new Random(semillaCrucesFase);
+
+        int i = 0;
+
+        while (i < posiciones.Count)
+        {
+            var grupoEmpatado = new List<PosicionEquipoDTO>();
+            var posicionActual = posiciones[i];
+
+            grupoEmpatado.Add(posicionActual);
+            i++;
+
+            while (i < posiciones.Count && EstanEmpatados(posicionActual, posiciones[i]))
+            {
+                grupoEmpatado.Add(posiciones[i]);
+                i++;
+            }
+
+            if (grupoEmpatado.Count > 1)
+            {
+                MezclarFisherYates(grupoEmpatado, random);
+            }
+
+            resultado.AddRange(grupoEmpatado);
+        }
+
+        return resultado;
+    }
+
+    private bool EstanEmpatados(PosicionEquipoDTO equipoA, PosicionEquipoDTO equipoB)
+    {
+        return equipoA.Puntos == equipoB.Puntos &&
+               equipoA.Diferencia == equipoB.Diferencia &&
+               equipoA.GolesAFavor == equipoB.GolesAFavor;
+    }
+
+    private void MezclarFisherYates(List<PosicionEquipoDTO> equipos, Random random)
+    {
+        for (int i = equipos.Count - 1; i > 0; i--)
+        {
+            int j = random.Next(i + 1);
+
+            var auxiliar = equipos[i];
+            equipos[i] = equipos[j];
+            equipos[j] = auxiliar;
+        }
     }
 }
