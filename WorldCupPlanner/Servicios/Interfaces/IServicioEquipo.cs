@@ -1,4 +1,5 @@
 using Dominio.Enums;
+using Dominio.Clases;
 using Servicios.Modelo;
 
 namespace Servicios.Interfaces;
@@ -16,4 +17,8 @@ public interface IServicioEquipo
     EquipoDTO ObtenerEquipo(string nombre);
 
     void EliminarEquipo(EquipoDTO equipoDTO);
+    
+    ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture);
+    Equipo EquipoDTOAEntidad(EquipoDTO equipoDto);
+    EquipoDTO EquipoEntidadAEquipoDTO(Equipo equipo);
 }

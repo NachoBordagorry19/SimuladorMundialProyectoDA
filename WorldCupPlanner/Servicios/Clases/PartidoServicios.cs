@@ -2,10 +2,11 @@ using Repositorio.Interfaces;
 using Servicios.Modelo;
 using Dominio.Clases;
 using Dominio.Enums;
+using Servicios.Interfaces;
 
 namespace Servicios.Clases;
 
-public class PartidoServicios
+public class PartidoServicios : IServicioPartido
 {
     private readonly IPartidoRepositorio _partidoRepositorio;
 

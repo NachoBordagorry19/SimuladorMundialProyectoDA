@@ -129,7 +129,7 @@ public class EquipoServicios : IServicioEquipo
         return equiposDTOS;
     }
 
-    public static EquipoDTO EquipoEntidadAEquipoDTO(Equipo equipo)
+    public EquipoDTO EquipoEntidadAEquipoDTO(Equipo equipo)
     {
         EquipoDTO equipoDto = new EquipoDTO()
         {

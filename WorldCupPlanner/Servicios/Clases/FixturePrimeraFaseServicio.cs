@@ -2,6 +2,7 @@ using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio.Interfaces;
 using Servicios.Modelo;
+using Servicios.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,17 @@ public class FixturePrimeraFaseServicio
     private readonly IEquipoRepositorio _equipoRepositorio;
     private readonly IEstadioRepositorio _estadioRepositorio;
     private readonly IPartidoRepositorio _partidoRepositorio;
-    private readonly EquipoServicios _equipoServicios;
-    private readonly EstadioServicios _estadioServicios;
-    private readonly PartidoServicios _partidoServicios;
+    private readonly IServicioEquipo _equipoServicios;
+    private readonly IServicioEstadio _estadioServicios;
+    private readonly IServicioPartido _partidoServicios;
 
     public FixturePrimeraFaseServicio(
         IEquipoRepositorio equipoRepositorio,
         IEstadioRepositorio estadioRepositorio,
         IPartidoRepositorio partidoRepositorio,
-        EquipoServicios equipoServicios,
-        EstadioServicios estadioServicios,
-        PartidoServicios partidoServicios)
+        IServicioEquipo equipoServicios,
+        IServicioEstadio estadioServicios,
+        IServicioPartido partidoServicios)
     {
         _equipoRepositorio = equipoRepositorio;
         _estadioRepositorio = estadioRepositorio;
@@ -159,7 +160,7 @@ public class FixturePrimeraFaseServicio
 
         foreach (var equipo in equipos)
         {
-            equiposDto.Add(EquipoServicios.EquipoEntidadAEquipoDTO(equipo));
+            equiposDto.Add(_equipoServicios.EquipoEntidadAEquipoDTO(equipo));
         }
 
         return equiposDto;
