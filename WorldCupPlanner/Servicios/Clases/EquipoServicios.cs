@@ -174,9 +174,36 @@ public class EquipoServicios : IServicioEquipo
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
     {
-        ValidarNombreExiste(equipoDto.nombre);
+        ActualizarEquipo(equipoDto.nombre, equipoDto);
+    }
+
+    public void ActualizarEquipo(string nombreOriginal, EquipoDTO equipoDto)
+    {
+        ValidarNombreExiste(nombreOriginal);
+
+        Equipo equipoOriginal = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombreOriginal);
+
+        if (nombreOriginal != equipoDto.nombre)
+        {
+            ValidarNombreNoExiste(equipoDto.nombre);
+        }
+
+        if (equipoOriginal.Confederacion != equipoDto.confederacion)
+        {
+            int cupo = ObtenerCupo(equipoDto.confederacion);
+            int cantidadActual = _equipoRepositorio.ObtenerEquipos()
+                .Count(e => e.Confederacion == equipoDto.confederacion);
+
+            if (cantidadActual >= cupo)
+            {
+                throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDto.confederacion}");
+            }
+        }
+
         Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
-        _equipoRepositorio.ActualizarEquipo(equipoActualizado);
+
+        _equipoRepositorio.EliminarEquipo(equipoOriginal);
+        _equipoRepositorio.AgregarEquipo(equipoActualizado);
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)

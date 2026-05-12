@@ -19,12 +19,12 @@ public class EstadioServicios : IServicioEstadio
 
     public void AgregarEstadio(EstadioDTO estadioDTO)
     {
+        ValidarNombreNoExiste(estadioDTO.Nombre);
         Estadio estadio = EstadioDTOAEntidad(estadioDTO);
-        NombreValido(estadio.Nombre);
         _estadioRepositorio.AgregarEstadio(estadio);
     }
 
-    public void NombreValido(string nombre)
+    private void ValidarNombreNoExiste(string nombre)
     {
         Estadio? estadioExiste = _estadioRepositorio.ObtenerEstadioPorNombre(nombre);
         if (estadioExiste != null)

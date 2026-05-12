@@ -1,0 +1,106 @@
+@page "/EliminarEstadio"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioEstadio ServicioEstadio
+@inject NavigationManager Navigation
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Eliminar Estadio</h1>
+        <p class="wcp-subtitle">Seleccione un estadio registrado para eliminarlo del sistema.</p>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="wcp-form-label">Estadio</label>
+                <select @bind="nombreSeleccionado" class="form-control">
+                    <option value="">Seleccionar estadio</option>
+
+                    @foreach (EstadioDTO estadioGuardado in estadios)
+                    {
+                        <option value="@estadioGuardado.Nombre">
+                            @estadioGuardado.Nombre - @estadioGuardado.Ciudad - Capacidad @estadioGuardado.CapacidadLocativa?.ToString("N0")
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="wcp-actions mt-3">
+            <button @onclick="Eliminar" class="wcp-btn-danger">Eliminar</button>
+            <NavLink href="/estadios" class="wcp-btn-secondary">Cancelar</NavLink>
+        </div>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                @mensaje
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<EstadioDTO> estadios = new List<EstadioDTO>();
+    private string nombreSeleccionado = "";
+    private string mensaje = "";
+    private bool esError = false;
+
+    protected override void OnInitialized()
+    {
+        CargarEstadios();
+        SeleccionarNombreDesdeUrl();
+    }
+
+    private void CargarEstadios()
+    {
+        try
+        {
+            estadios = ServicioEstadio.ObtenerEstadios();
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al cargar estadios: " + ex.Message;
+            esError = true;
+        }
+    }
+
+    private void SeleccionarNombreDesdeUrl()
+    {
+        var queryParams = new Uri(Navigation.Uri).Query;
+        var nombreDelEstadio = System.Web.HttpUtility.ParseQueryString(queryParams).Get("nombre");
+
+        if (!string.IsNullOrWhiteSpace(nombreDelEstadio))
+        {
+            nombreSeleccionado = nombreDelEstadio;
+        }
+    }
+
+    private void Eliminar()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+
+            if (string.IsNullOrWhiteSpace(nombreSeleccionado))
+            {
+                mensaje = "Debe seleccionar un estadio.";
+                esError = true;
+                return;
+            }
+
+            EstadioDTO estadio = ServicioEstadio.ObtenerEstadioPorNombre(nombreSeleccionado);
+            ServicioEstadio.EliminarEstadio(estadio);
+
+            mensaje = "Estadio eliminado correctamente";
+            esError = false;
+            nombreSeleccionado = "";
+            CargarEstadios();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+            esError = true;
+        }
+    }
+}

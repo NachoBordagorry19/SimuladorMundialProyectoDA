@@ -10,22 +10,24 @@
     top: 0;
     width: 100%;
     z-index: 1000;
+    box-shadow: 0 6px 18px rgba(10, 25, 47, 0.25);
 }
 
 .logo {
     margin-left: 15px;
-    font-weight: bold;
+    font-weight: 800;
     font-size: 1.3rem;
+    color: #ccd6f6;
 }
 
 .hamburguesa {
     width: 30px;
-    height: 20px;
+    height: 22px;
     display: block;
     cursor: pointer;
     position: relative;
     margin-right: 10px;
-    z-index: 1001;
+    z-index: 1002;
 }
 
 .hamburguesa span {
@@ -33,25 +35,34 @@
     width: 100%;
     height: 3px;
     background-color: #ccd6f6;
+    border-radius: 9px;
     position: absolute;
-    transition: .3s ease;
+    transition: 0.3s ease;
 }
 
-.hamburguesa span:nth-child(1) { top: 0; }
-.hamburguesa span:nth-child(2) { top: 50%; transform: translateY(-50%); }
-.hamburguesa span:nth-child(3) { bottom: 0; }
+.hamburguesa span:nth-child(1) {
+    top: 0;
+}
 
-.hamburguesa.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-.hamburguesa.active span:nth-child(2) { opacity: 0; }
-.hamburguesa.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+.hamburguesa span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+}
 
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    color: #ccd6f6;
-    font-size: 1.5rem;
-    cursor: pointer;
+.hamburguesa span:nth-child(3) {
+    bottom: 0;
+}
+
+.hamburguesa.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburguesa.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburguesa.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
 }
 
 .sidebar-menu {
@@ -59,11 +70,12 @@
     top: 60px;
     left: -300px;
     width: 260px;
+    height: calc(100vh - 60px);
     background-color: #112240;
-    transition: .4s ease;
+    transition: 0.3s ease;
     z-index: 999;
-    border-bottom-right-radius: 15px;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    border-bottom-right-radius: 18px;
+    box-shadow: 5px 0 18px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-menu.active {
@@ -72,11 +84,11 @@
 
 .menu-overlay {
     position: fixed;
-    top: 0;
+    top: 60px;
     left: 0;
     width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
+    height: calc(100vh - 60px);
+    background-color: rgba(10, 25, 47, 0.35);
     z-index: 998;
 }
 
@@ -91,16 +103,20 @@
     text-decoration: none;
     padding: 14px 20px;
     font-size: 1.05rem;
-    border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+    font-weight: 700;
+    border-radius: 12px;
+    margin-bottom: 0.35rem;
     display: block;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .nav-links ::deep a:hover {
-    background-color: rgba(100, 255, 218, 0.1);
+    background-color: rgba(204, 214, 246, 0.12);
+    color: #ffffff;
+    transform: translateX(3px);
 }
 
 .nav-links ::deep a.active {
-    background-color: rgba(100, 255, 218, 0.2);
-    color: #ccd6f6;
+    background-color: #ccd6f6;
+    color: #0a192f;
 }

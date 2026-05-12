@@ -21,7 +21,7 @@ builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorio>();
 builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
 
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
-builder.Services.AddScoped<EquipoServicios>();
+builder.Services.AddScoped<IServicioEquipo,EquipoServicios>();
 builder.Services.AddScoped<IServicioEstadio, EstadioServicios>();
 builder.Services.AddScoped<PartidoServicios>();
 

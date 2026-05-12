@@ -1,0 +1,73 @@
+@page "/equipos"
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioEquipo ServicioEquipo
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Equipos</h1>
+                <p class="wcp-subtitle">Listado de equipos registrados en el sistema.</p>
+            </div>
+            <NavLink href="/AgregarEquipo" class="wcp-btn-primary">Agregar Equipo</NavLink>
+        </div>
+    </div>
+
+    @if (equipos != null && equipos.Count > 0)
+    {
+        <div class="wcp-card mt-4">
+            <table class="wcp-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Confederación</th>
+                        <th>Ranking FIFA</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var equipo in equipos)
+                    {
+                        <tr>
+                            <td>@equipo.nombre</td>
+                            <td>@equipo.confederacion</td>
+                            <td>@equipo.rankingFifa</td>
+                            <td>
+                            <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
+                            <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="wcp-card mt-4">
+            <p class="text-center text-muted">No hay equipos registrados</p>
+        </div>
+    }
+</div>
+
+@code {
+    private List<EquipoDTO> equipos = new List<EquipoDTO>();
+
+    protected override void OnInitialized()
+    {
+        CargarEquipos();
+    }
+
+    private void CargarEquipos()
+    {
+        try
+        {
+            equipos = ServicioEquipo.ObtenerEquipos();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar equipos: {ex.Message}");
+        }
+    }
+}

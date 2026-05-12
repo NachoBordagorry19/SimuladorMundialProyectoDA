@@ -1,11 +1,29 @@
 @page "/importar"
 
-<div class="home-container">
-    <h1 class="hero-title">Importar Datos</h1>
-    <div class="home-section">
-        <p>Seleccione un archivo CSV o JSON para cargar equipos o estadios.</p>
-        <div class="home-actions">
-            <button class="btn">Subir Archivo</button>
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Importación</h1>
+        <p class="wcp-subtitle">Importar datos desde un archivo para cargar información al sistema.</p>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="wcp-form-label">Archivo</label>
+                <input type="file" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="wcp-form-label">Tipo de importación</label>
+                <select class="form-control">
+                    <option value="">Seleccionar tipo</option>
+                    <option value="equipos">Equipos</option>
+                    <option value="estadios">Estadios</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="wcp-actions mt-3">
+            <button class="wcp-btn-primary">Importar</button>
+            <NavLink href="/home" class="wcp-btn-secondary">Cancelar</NavLink>
         </div>
     </div>
 </div>

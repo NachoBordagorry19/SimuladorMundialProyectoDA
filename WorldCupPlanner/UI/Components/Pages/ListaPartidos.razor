@@ -1,12 +1,19 @@
 @page "/partidos"
 @using Dominio.Clases
 
-<div class="home-container">
-    <h1 class="hero-title">Calendario de Partidos</h1>
-    
-    <div class="home-sections" style="grid-template-columns: 1fr;">
-        <div class="home-section">
-            <p>No hay partidos programados actualmente.</p>
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Partidos</h1>
+                <p class="wcp-subtitle">Listado de partidos programados en el sistema.</p>
+            </div>
+
+            <NavLink href="/fixture" class="wcp-btn-primary">Ver Fixture</NavLink>
         </div>
+    </div>
+
+    <div class="wcp-card mt-4">
+        <p class="text-center text-muted mb-0">No hay partidos programados actualmente.</p>
     </div>
 </div>
