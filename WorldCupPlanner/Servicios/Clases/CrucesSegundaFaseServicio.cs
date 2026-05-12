@@ -23,8 +23,8 @@ public class CrucesSegundaFaseServicio
 
         foreach (var partido in partidos)
         {
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal.nombre);
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante.nombre);
+            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal.nombre, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante.nombre, grupo);
 
             var posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
             var posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
@@ -74,7 +74,7 @@ public class CrucesSegundaFaseServicio
         return AplicarSorteoEnEmpates(posicionesOrdenadas, semillaCrucesFase);
     }
 
-    private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, string nombreEquipo)
+    private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, string nombreEquipo, string grupo)
     {
         if (posiciones.Any(p => p.EquipoNombre == nombreEquipo))
         {
@@ -83,7 +83,8 @@ public class CrucesSegundaFaseServicio
 
         posiciones.Add(new PosicionEquipoDTO
         {
-            EquipoNombre = nombreEquipo
+            EquipoNombre = nombreEquipo,
+            Grupo = grupo
         });
     }
 
