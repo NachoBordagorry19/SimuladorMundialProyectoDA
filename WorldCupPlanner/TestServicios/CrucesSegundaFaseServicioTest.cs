@@ -532,4 +532,81 @@ public class CrucesSegundaFaseServicioTest
             Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
         }
     }
+
+    [TestMethod]
+    public void GenerarCrucesFase_ConClasificados_GeneraCrucesB5HastaB8()
+    {
+        var clasificados = new ClasificadosDTO();
+
+        for (int i = 1; i <= 12; i++)
+        {
+            clasificados.Primeros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Primero " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 30 - i
+            });
+        }
+
+        for (int i = 1; i <= 8; i++)
+        {
+            clasificados.Segundos.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Segundo " + i,
+                Grupo = ((char)('A' + i - 1)).ToString(),
+                Puntos = 20 - i
+            });
+        }
+
+        for (int i = 9; i <= 12; i++)
+        {
+            clasificados.Segundos.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Segundo " + i,
+                Grupo = ((char)('A' + i - 9)).ToString(),
+                Puntos = 1
+            });
+        }
+
+        for (int i = 1; i <= 8; i++)
+        {
+            clasificados.Terceros.Add(new PosicionEquipoDTO
+            {
+                EquipoNombre = "Tercero " + i,
+                Grupo = ((char)('A' + i + 3)).ToString(),
+                Puntos = 8 - i
+            });
+        }
+
+        var cruces = _crucesServicio.GenerarCrucesFase(clasificados, 123);
+
+        var crucesB5aB8 = cruces
+            .Where(c => c.Codigo == "B5" || c.Codigo == "B6" || c.Codigo == "B7" || c.Codigo == "B8")
+            .ToList();
+
+        Assert.AreEqual(4, crucesB5aB8.Count);
+
+        Assert.IsTrue(crucesB5aB8.Any(c => c.Codigo == "B5"));
+        Assert.IsTrue(crucesB5aB8.Any(c => c.Codigo == "B6"));
+        Assert.IsTrue(crucesB5aB8.Any(c => c.Codigo == "B7"));
+        Assert.IsTrue(crucesB5aB8.Any(c => c.Codigo == "B8"));
+
+        foreach (var cruce in crucesB5aB8)
+        {
+            Assert.IsTrue(cruce.EquipoLocal.EquipoNombre.StartsWith("Segundo"));
+            Assert.IsTrue(cruce.EquipoVisitante.EquipoNombre.StartsWith("Segundo"));
+
+            Assert.IsFalse(cruce.EquipoLocal.EquipoNombre == "Segundo 9");
+            Assert.IsFalse(cruce.EquipoLocal.EquipoNombre == "Segundo 10");
+            Assert.IsFalse(cruce.EquipoLocal.EquipoNombre == "Segundo 11");
+            Assert.IsFalse(cruce.EquipoLocal.EquipoNombre == "Segundo 12");
+
+            Assert.IsFalse(cruce.EquipoVisitante.EquipoNombre == "Segundo 9");
+            Assert.IsFalse(cruce.EquipoVisitante.EquipoNombre == "Segundo 10");
+            Assert.IsFalse(cruce.EquipoVisitante.EquipoNombre == "Segundo 11");
+            Assert.IsFalse(cruce.EquipoVisitante.EquipoNombre == "Segundo 12");
+
+            Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
+        }
+    }
 }
