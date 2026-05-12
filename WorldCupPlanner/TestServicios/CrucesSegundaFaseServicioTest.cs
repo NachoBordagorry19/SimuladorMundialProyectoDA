@@ -203,4 +203,30 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.IsFalse(mismoOrdenConDistintaSemilla);
     }
+    
+    [TestMethod]
+    public void ObtenerRankingGrupo_AsignaGrupoALasPosiciones()
+    {
+        var equipoA = CrearEquipo("Equipo A");
+        var equipoB = CrearEquipo("Equipo B");
+        var equipoC = CrearEquipo("Equipo C");
+        var equipoD = CrearEquipo("Equipo D");
+        var estadio = CrearEstadio();
+
+        AgregarPartido(equipoA, equipoB, estadio, 2, 0);
+        AgregarPartido(equipoA, equipoC, estadio, 1, 0);
+        AgregarPartido(equipoA, equipoD, estadio, 3, 0);
+
+        AgregarPartido(equipoB, equipoC, estadio, 2, 0);
+        AgregarPartido(equipoB, equipoD, estadio, 1, 0);
+
+        AgregarPartido(equipoC, equipoD, estadio, 1, 0);
+
+        var ranking = _crucesServicio.ObtenerRankingGrupo("A", 123);
+
+        foreach (var posicion in ranking)
+        {
+            Assert.AreEqual("A", posicion.Grupo);
+        }
+    }
 }
