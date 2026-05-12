@@ -27,7 +27,7 @@ public class EquipoServiciosTest
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
         _equipoServicios = new EquipoServicios(_equipoRepositorio);
-        
+
 
         Confederacion confederacion = new Confederacion();
         confederacion = Confederacion.UEFA;
@@ -64,8 +64,8 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.AgregarEquipo(_equipoDTO);
     }
-    
-    
+
+
 
     [TestMethod]
     public void ObtenerEquipos_DevuelveTodosLosEquipo()
@@ -181,7 +181,7 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(EquipoDTOPrueba);
         _equipoServicios.AgregarEquipo(Equipodto2Prueba);
     }
-    
+
     [TestMethod]
     public void OrdenaYNoGeneraAuditoriaSiNoHayEmpate()
     {
@@ -257,7 +257,7 @@ public class EquipoServiciosTest
         var equipos = _equipoServicios.ObtenerEquipos();
         Assert.AreEqual(48, equipos.Count);
     }
-    
+
     [TestMethod]
     public void GenerarEquiposAutomaticamente_DebeGenerarNombresConFormatoCorrecto()
     {
@@ -275,7 +275,7 @@ public class EquipoServiciosTest
 
         Assert.IsTrue(existeNombreFormateado);
     }
-    
+
     [TestMethod]
     public void GenerarEquiposAutomaticamente_DebeRegistrarAuditoria()
     {
@@ -284,7 +284,7 @@ public class EquipoServiciosTest
 
         Assert.IsNotNull(auditoria);
         Assert.IsTrue(auditoria.Count > 0);
-    
+
         bool registroCorrecto = false;
         foreach (string log in auditoria)
         {
@@ -295,7 +295,7 @@ public class EquipoServiciosTest
         }
         Assert.IsTrue(registroCorrecto);
     }
-    
+
     [TestMethod]
     public void GenerarEquiposAutomaticamente_SiYaEstaLleno_InformaEnAuditoria()
     {

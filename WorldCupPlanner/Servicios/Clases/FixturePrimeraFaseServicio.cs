@@ -70,7 +70,7 @@ public class FixturePrimeraFaseServicio
         var estadiosDTO = _estadioServicios.ObtenerEstadios()
             .OrderBy(e => NormalizarNombre(e.Nombre))
             .ToList();
-        
+
         for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
         {
             var grupo = grupos[grupoIndex];
@@ -215,7 +215,7 @@ public class FixturePrimeraFaseServicio
         _partidoServicios.AgregarPartido(partido, equipoLocal, equipoVisitante, estadio);
         partidos.Add(partido);
     }
-    
+
     private string NormalizarNombre(string texto)
     {
         return texto.ToLower()

@@ -18,7 +18,7 @@ public class FixturePrimeraFaseServicioTest
     private EquipoServicios _equipoServicios;
     private EstadioServicios _estadioServicios;
     private PartidoServicios _partidoServicios;
-    
+
     private bool PartidoPerteneceAlGrupo(PartidoDTO partido, Grupo grupo)
     {
         return EquipoPerteneceAlGrupo(partido.equipoLocal.nombre, grupo) &&
@@ -36,7 +36,7 @@ public class FixturePrimeraFaseServicioTest
             p.equipoLocal.nombre == equipoA.Nombre && p.equipoVisitante.nombre == equipoB.Nombre ||
             p.equipoLocal.nombre == equipoB.Nombre && p.equipoVisitante.nombre == equipoA.Nombre);
     }
-    
+
     [TestInitialize]
     public void Inicializar()
     {
@@ -162,7 +162,7 @@ public class FixturePrimeraFaseServicioTest
             }
         }
     }
-    
+
     [TestMethod]
     public void GenerarFixture_CadaGrupoTieneTresJornadasConEnfrentamientosCorrectos()
     {
@@ -208,7 +208,7 @@ public class FixturePrimeraFaseServicioTest
             Assert.IsTrue(ExistePartidoEntre(jornada3, equipos[2], equipos[3]));
         }
     }
-    
+
     [TestMethod]
     public void GenerarFixture_AsignaEstadiosOrdenadosPorNombreNormalizado()
     {
@@ -227,7 +227,7 @@ public class FixturePrimeraFaseServicioTest
         Assert.AreEqual("Monumental", resultado.Partidos[3].Estadio.Nombre);
         Assert.AreEqual("Bombonera", resultado.Partidos[4].Estadio.Nombre);
     }
-    
+
     [TestMethod]
     public void GenerarFixture_AsignaGrupoACadaPartido()
     {
@@ -253,7 +253,7 @@ public class FixturePrimeraFaseServicioTest
             }
         }
     }
-    
+
     [TestMethod]
     public void GenerarFixture_RespetaHorariosDeJornadas()
     {
@@ -294,7 +294,7 @@ public class FixturePrimeraFaseServicioTest
             Assert.AreEqual(jornada3[0].Fecha, jornada3[1].Fecha);
         }
     }
-    
+
     [TestMethod]
     public void GenerarFixture_NoSuperaTresPartidosPorDia()
     {
@@ -318,7 +318,7 @@ public class FixturePrimeraFaseServicioTest
             Assert.IsTrue(cantidadPartidosEnElDia <= 3);
         }
     }
-    
+
     [TestMethod]
     public void GenerarFixture_UsaFechaInicioDefaultYSeparaJornadasTresDias()
     {
@@ -341,7 +341,7 @@ public class FixturePrimeraFaseServicioTest
         Assert.AreEqual(new DateTime(2026, 06, 04), fechasGrupoA[1]);
         Assert.AreEqual(new DateTime(2026, 06, 07), fechasGrupoA[2]);
     }
-    
+
     [TestMethod]
     public void GenerarFixture_UsaFechaInicioIndicada()
     {

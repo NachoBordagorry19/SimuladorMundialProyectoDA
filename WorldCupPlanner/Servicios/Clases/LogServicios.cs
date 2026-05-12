@@ -14,7 +14,7 @@ public class LogServicios : IServicioLog
     {
         _logRepo = logRepo;
     }
-    
+
     public void RegistrarAltaEquipo(string nombre, string confederacion)
     {
         throw new NotImplementedException();

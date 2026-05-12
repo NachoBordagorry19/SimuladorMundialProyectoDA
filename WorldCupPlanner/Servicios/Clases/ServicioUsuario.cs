@@ -13,9 +13,9 @@ namespace Servicios.Clases;
 public class ServicioUsuario : IServicioUsuario
 {
     private readonly IUsuarioRepositorio _usuarioRepositorio;
-    
+
     private const string ContraseñaPorDefecto = "Usuario123!";
-    
+
     public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio)
     {
         _usuarioRepositorio = usuarioRepositorio;
@@ -130,7 +130,7 @@ public class ServicioUsuario : IServicioUsuario
 
         return usuario;
     }
-    
+
     public UsuarioDTO AutenticarUsuario(string email, string contraseña)
     {
         Usuario usuario = ObtenerEntidadPorEmail(email);

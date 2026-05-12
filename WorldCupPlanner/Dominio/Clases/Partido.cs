@@ -98,7 +98,7 @@ public class Partido
             return null;
         }
     }
-    
+
     public string Grupo { get; set; }
 
     public Fase Fase

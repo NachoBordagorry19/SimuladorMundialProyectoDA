@@ -106,7 +106,7 @@ public class UsuarioServicioTest
     {
         _servicioUsuario.EliminarUsuario(_usuarioDTO);
     }
-    
+
     [TestMethod]
     public void AgregarUsuario_GuardaContraseñaCifrada()
     {
@@ -117,7 +117,7 @@ public class UsuarioServicioTest
         Assert.IsNotNull(usuarioGuardado);
         Assert.AreNotEqual("Password123!", usuarioGuardado.Contraseña);
     }
-    
+
     [TestMethod]
     public void AutenticarUsuario_SiDatosSonCorrectos_DevuelveUsuario()
     {

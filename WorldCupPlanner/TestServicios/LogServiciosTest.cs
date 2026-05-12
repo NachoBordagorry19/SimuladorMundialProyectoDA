@@ -30,5 +30,5 @@ public class LogServiciosTest
             fechaISO8601 = DateTime.Now.ToString("o")
         };
     }
-   
+
 }
