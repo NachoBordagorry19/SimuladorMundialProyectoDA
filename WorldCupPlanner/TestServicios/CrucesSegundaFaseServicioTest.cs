@@ -99,4 +99,33 @@ public class CrucesSegundaFaseServicioTest
 
         _partidoServicios.AgregarPartido(partido, local, visitante, estadio);
     }
+    
+    [TestMethod]
+    public void ObtenerRankingGrupo_SiEmpatanEnPuntos_OrdenaPorDiferenciaDeGoles()
+    {
+        var equipoA = CrearEquipo("Equipo A");
+        var equipoB = CrearEquipo("Equipo B");
+        var equipoC = CrearEquipo("Equipo C");
+        var equipoD = CrearEquipo("Equipo D");
+        var estadio = CrearEstadio();
+
+        AgregarPartido(equipoA, equipoB, estadio, 1, 0);
+        AgregarPartido(equipoA, equipoC, estadio, 1, 0);
+        AgregarPartido(equipoD, equipoA, estadio, 1, 0);
+
+        AgregarPartido(equipoB, equipoC, estadio, 5, 0);
+        AgregarPartido(equipoB, equipoD, estadio, 5, 0);
+
+        AgregarPartido(equipoC, equipoD, estadio, 1, 0);
+
+        var ranking = _crucesServicio.ObtenerRankingGrupo("A", 123);
+
+        Assert.AreEqual("Equipo B", ranking[0].EquipoNombre);
+        Assert.AreEqual(6, ranking[0].Puntos);
+        Assert.AreEqual(9, ranking[0].Diferencia);
+
+        Assert.AreEqual("Equipo A", ranking[1].EquipoNombre);
+        Assert.AreEqual(6, ranking[1].Puntos);
+        Assert.AreEqual(1, ranking[1].Diferencia);
+    }
 }
