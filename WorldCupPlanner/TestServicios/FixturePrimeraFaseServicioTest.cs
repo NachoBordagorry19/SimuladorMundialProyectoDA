@@ -318,4 +318,52 @@ public class FixturePrimeraFaseServicioTest
             Assert.IsTrue(cantidadPartidosEnElDia <= 3);
         }
     }
+    
+    [TestMethod]
+    public void GenerarFixture_UsaFechaInicioDefaultYSeparaJornadasTresDias()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        var grupoA = resultado.Grupos.First(g => g.Nombre == "A");
+
+        var fechasGrupoA = resultado.Partidos
+            .Where(p => p.Grupo == grupoA.Nombre)
+            .Select(p => p.Fecha.Date)
+            .Distinct()
+            .OrderBy(f => f)
+            .ToList();
+
+        Assert.AreEqual(new DateTime(2026, 06, 01), fechasGrupoA[0]);
+        Assert.AreEqual(new DateTime(2026, 06, 04), fechasGrupoA[1]);
+        Assert.AreEqual(new DateTime(2026, 06, 07), fechasGrupoA[2]);
+    }
+    
+    [TestMethod]
+    public void GenerarFixture_UsaFechaInicioDefaultYSeparaJornadasTresDias()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+
+        var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
+
+        var fechasGrupoA = resultado.Partidos
+            .Where(p => p.Grupo == "A")
+            .Select(p => p.Fecha.Date)
+            .Distinct()
+            .OrderBy(f => f)
+            .ToList();
+
+        Assert.AreEqual(new DateTime(2026, 06, 01), fechasGrupoA[0]);
+        Assert.AreEqual(new DateTime(2026, 06, 04), fechasGrupoA[1]);
+        Assert.AreEqual(new DateTime(2026, 06, 07), fechasGrupoA[2]);
+    }
 }
