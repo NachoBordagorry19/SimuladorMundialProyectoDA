@@ -32,6 +32,13 @@ public class PartidoServicios : IServicioPartido
             partidoDto.golesLocal,
             partidoDto.golesVisitante
         );
+        
+        partido.Grupo = partidoDto.Grupo;
+
+        if (partidoDto.estadoPartido == EstadoPartido.Jugado)
+        {
+            partido.MarcarComoJugado();
+        }
 
         _partidoRepositorio.AgregarPartido(partido);
         partidoDto.idPartido = partido.Id;
