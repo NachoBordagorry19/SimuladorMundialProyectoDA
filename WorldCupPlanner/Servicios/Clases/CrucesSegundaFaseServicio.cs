@@ -280,7 +280,8 @@ public class CrucesSegundaFaseServicio
             5);
 
         cruces.AddRange(crucesB5aB8);
-
+    
+        _partidoServicios.BloquearEdicionFase(Fase.Grupos);
         return cruces;
     }
 }
