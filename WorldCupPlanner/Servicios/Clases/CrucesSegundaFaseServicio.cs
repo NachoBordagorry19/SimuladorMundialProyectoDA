@@ -86,7 +86,7 @@ public class CrucesSegundaFaseServicio
     {
         return posiciones.First(p => p.EquipoNombre == nombreEquipo);
     }
-    
+
     private List<PosicionEquipoDTO> AplicarSorteoEnEmpates(List<PosicionEquipoDTO> posiciones, int semillaCrucesFase)
     {
         var resultado = new List<PosicionEquipoDTO>();
@@ -137,7 +137,7 @@ public class CrucesSegundaFaseServicio
             equipos[j] = auxiliar;
         }
     }
-    
+
     public ClasificadosDTO ObtenerClasificados(int semillaCrucesFase)
     {
         var primeros = new List<PosicionEquipoDTO>();
@@ -163,7 +163,7 @@ public class CrucesSegundaFaseServicio
 
         return clasificados;
     }
-    
+
     private List<PosicionEquipoDTO> OrdenarPosiciones(List<PosicionEquipoDTO> posiciones, int semillaCrucesFase)
     {
         var posicionesOrdenadas = posiciones
@@ -174,7 +174,7 @@ public class CrucesSegundaFaseServicio
 
         return AplicarSorteoEnEmpates(posicionesOrdenadas, semillaCrucesFase);
     }
-    
+
     public List<CruceDTO> GenerarCrucesEntreListas(
         List<PosicionEquipoDTO> equiposLocales,
         List<PosicionEquipoDTO> equiposVisitantes,
@@ -211,7 +211,7 @@ public class CrucesSegundaFaseServicio
 
         return cruces;
     }
-    
+
     private int BuscarIndiceVisitanteDisponible(List<PosicionEquipoDTO> visitantes, PosicionEquipoDTO local)
     {
         for (int i = 0; i < visitantes.Count; i++)
@@ -224,7 +224,7 @@ public class CrucesSegundaFaseServicio
 
         return 0;
     }
-    
+
     public List<CruceDTO> GenerarCrucesFase(ClasificadosDTO clasificados, int semillaCrucesFase)
     {
         var mejoresPrimeros = clasificados.Primeros
@@ -239,6 +239,24 @@ public class CrucesSegundaFaseServicio
             terceros,
             "A",
             semillaCrucesFase);
+
+        var primerosRestantes = clasificados.Primeros
+            .Skip(8)
+            .Take(4)
+            .ToList();
+
+        var segundosMenorPuntaje = clasificados.Segundos
+            .OrderBy(s => s.Puntos)
+            .Take(4)
+            .ToList();
+
+        var crucesB1aB4 = GenerarCrucesEntreListas(
+            primerosRestantes,
+            segundosMenorPuntaje,
+            "B",
+            semillaCrucesFase);
+
+        cruces.AddRange(crucesB1aB4);
 
         return cruces;
     }
