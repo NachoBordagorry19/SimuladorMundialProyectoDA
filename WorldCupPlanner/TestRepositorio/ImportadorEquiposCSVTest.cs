@@ -142,6 +142,31 @@ public class ImportadorEquiposCSVTest
         }
     }
 
+    [TestMethod]
+    public void ImportarCSV_ConColumnasEnOrdenDiferente_CreaEquipoCorrectamente()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal(
+            "RankingFIFA,Nombre,Confederación\n" +
+            "1500,Argentina,CONMEBOL"
+        );
+
+
+        try
+        {
+            List<Equipo> equiposImportados = _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+
+
+            Assert.AreEqual(1, equiposImportados.Count);
+            Assert.AreEqual("Argentina", equiposImportados[0].Nombre);
+            Assert.AreEqual(Confederacion.CONMEBOL, equiposImportados[0].Confederacion);
+            Assert.AreEqual(1500, equiposImportados[0].RankingFifa);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+
 
     
     private string CrearArchivoCSVTemporal(string contenido)
