@@ -161,4 +161,20 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
+    
+    [TestMethod]
+    public void RegistrarModificacionPartido_DebeGuardarRegistroCorrectamente()
+    {
+        string detalleModificacion = "Resultado: Uruguay 2 - Argentina 1";
+        _servicio.RegistrarModificacionPartido(detalleModificacion);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.AreEqual(1, registros.Count);
+        string log = registros[0];
+        Assert.IsTrue(log.Contains("Modificación de Partido"));
+        Assert.IsTrue(log.Contains(detalleModificacion));
+        Assert.IsTrue(log.Contains("admin@gmail.com"));
+        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+        Assert.IsTrue(log.StartsWith(fechaHoy));
+    }
 }
