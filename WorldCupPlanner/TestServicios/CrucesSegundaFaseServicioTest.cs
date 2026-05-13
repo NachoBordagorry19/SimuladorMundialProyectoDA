@@ -23,7 +23,7 @@ public class CrucesSegundaFaseServicioTest
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
-        _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios);
+        _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios, _auditoriaMock.Object);
     }
 
     [TestMethod]
