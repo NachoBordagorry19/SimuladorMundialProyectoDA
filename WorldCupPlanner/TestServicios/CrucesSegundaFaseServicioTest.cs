@@ -814,4 +814,45 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual("Ganador S1", final.ReferenciaLocal);
         Assert.AreEqual("Ganador S2", final.ReferenciaVisitante);
     }
+    [TestMethod]
+    public void ObtenerCampeon_FinalJugada_RetornaGanador()
+    {
+        var equipoLocal = new EquipoDTO
+        {
+            nombre = "Uruguay",
+            confederacion = Confederacion.CONMEBOL,
+            rankingFifa = 2000
+        };
+
+        var equipoVisitante = new EquipoDTO
+        {
+            nombre = "Brasil",
+            confederacion = Confederacion.CONMEBOL,
+            rankingFifa = 2100
+        };
+
+        var estadio = new EstadioDTO
+        {
+            Nombre = "Centenario",
+            Ciudad = "Montevideo",
+            Descripcion = "Estadio Centenario",
+            CapacidadLocativa = 60000
+        };
+
+        var final = new PartidoDTO
+        {
+            Fecha = new DateTime(2026, 07, 19),
+            Estadio = estadio,
+            equipoLocal = equipoLocal,
+            equipoVisitante = equipoVisitante,
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 2,
+            golesVisitante = 1
+        };
+
+        var campeon = _crucesServicio.ObtenerCampeon(final);
+
+        Assert.AreEqual("Uruguay", campeon.nombre);
+    }
 }
