@@ -41,8 +41,8 @@ public class ServicioAutorizacion : IServicioAutorizacion
         return usuario.Roles.Contains(Rol.Editor);
     }
 
-    public bool PuedeEliminarUsuario(UsuarioDTO? usuarioActual, string emailAEliminar)
+    public bool PuedeEliminarUsuario(UsuarioDTO usuarioActual, string emailAEliminar)
     {
-        throw new NotImplementedException();
+        return usuarioActual.Roles.Contains(Rol.Administrador);
     }
 }
