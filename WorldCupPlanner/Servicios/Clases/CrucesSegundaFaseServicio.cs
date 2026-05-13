@@ -25,8 +25,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         foreach (var partido in partidos)
         {
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal.nombre, grupo);
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante.nombre, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante, grupo);
 
             if (partido.estadoPartido != EstadoPartido.Jugado)
             {
@@ -75,17 +75,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         return OrdenarPosiciones(posiciones, semillaCrucesFase);
     }
 
-    private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, string nombreEquipo, string grupo)
+    private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, EquipoDTO equipo, string grupo)
     {
-        if (posiciones.Any(p => p.EquipoNombre == nombreEquipo))
+        if (posiciones.Any(p => p.EquipoNombre == equipo.nombre))
         {
             return;
         }
 
         posiciones.Add(new PosicionEquipoDTO
         {
-            EquipoNombre = nombreEquipo,
-            Grupo = grupo
+            EquipoNombre = equipo.nombre,
+            Grupo = grupo,
+            Equipo = equipo
         });
     }
 
@@ -442,6 +443,9 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         var clasificados = ObtenerClasificados(semillaCrucesFase);
 
         var dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
+
+        AgregarPartidosDieciseisavos(dieciseisavos);
+
         var octavos = GenerarOctavosDeFinal(dieciseisavos);
         var cuartos = GenerarCuartosDeFinal(octavos);
         var semifinales = GenerarSemifinales(cuartos);
@@ -456,4 +460,88 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             PartidosFinales = partidosFinales
         };
     }
+    
+    private void AgregarPartidosDieciseisavos(List<CruceDTO> dieciseisavos)
+{
+    var partidos = _partidoServicios.ObtenerPartidos();
+
+    if (partidos.Any(p => p.fase == Fase.Dieciseisavos))
+    {
+        return;
+    }
+
+    var estadios = ObtenerEstadiosDisponibles(partidos);
+    var fechaInicio = ObtenerFechaInicioDieciseisavos(partidos);
+
+    for (int i = 0; i < dieciseisavos.Count; i++)
+    {
+        var cruce = dieciseisavos[i];
+
+        if (string.IsNullOrWhiteSpace(cruce.EquipoLocal.Equipo.nombre) ||
+            string.IsNullOrWhiteSpace(cruce.EquipoVisitante.Equipo.nombre))
+        {
+            continue;
+        }
+
+        var estadio = estadios[i % estadios.Count];
+
+        var partido = new PartidoDTO
+        {
+            Grupo = cruce.Codigo,
+            Fecha = fechaInicio.AddHours(i * 4),
+            Estadio = estadio,
+            equipoLocal = cruce.EquipoLocal.Equipo,
+            equipoVisitante = cruce.EquipoVisitante.Equipo,
+            fase = Fase.Dieciseisavos,
+            estadoPartido = EstadoPartido.Pendiente,
+            golesLocal = 0,
+            golesVisitante = 0
+        };
+
+        _partidoServicios.AgregarPartido(
+            partido,
+            partido.equipoLocal,
+            partido.equipoVisitante,
+            partido.Estadio);
+    }
+}
+
+private List<EstadioDTO> ObtenerEstadiosDisponibles(List<PartidoDTO> partidos)
+{
+    var estadios = new List<EstadioDTO>();
+
+    foreach (var partido in partidos)
+    {
+        if (!estadios.Any(e => e.Nombre == partido.Estadio.Nombre))
+        {
+            estadios.Add(partido.Estadio);
+        }
+    }
+
+    if (estadios.Count == 0)
+    {
+        throw new ArgumentException("No se pueden generar partidos de dieciseisavos sin estadios disponibles.");
+    }
+
+    return estadios;
+}
+
+private DateTime ObtenerFechaInicioDieciseisavos(List<PartidoDTO> partidos)
+{
+    var partidosGrupos = partidos
+        .Where(p => p.fase == Fase.Grupos)
+        .ToList();
+
+    if (partidosGrupos.Count == 0)
+    {
+        throw new ArgumentException("No se pueden generar partidos de dieciseisavos sin partidos de grupos.");
+    }
+
+    var ultimaFechaGrupos = partidosGrupos
+        .OrderByDescending(p => p.Fecha)
+        .First()
+        .Fecha;
+
+    return ultimaFechaGrupos.Date.AddDays(3).AddHours(14);
+}
 }
