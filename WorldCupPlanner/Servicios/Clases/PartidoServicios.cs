@@ -33,7 +33,7 @@ public class PartidoServicios : IServicioPartido
             partidoDto.golesLocal,
             partidoDto.golesVisitante
         );
-        
+
         partido.Grupo = partidoDto.Grupo;
 
         if (partidoDto.estadoPartido == EstadoPartido.Jugado)
@@ -112,7 +112,7 @@ public class PartidoServicios : IServicioPartido
             _fasesBloqueadas.Add(fase);
         }
     }
-    
+
     public void ActualizarPartido(PartidoDTO partidoDTO)
     {
 
@@ -127,7 +127,7 @@ public class PartidoServicios : IServicioPartido
         {
             throw new ArgumentException("El partido a actualizar no existe");
         }
-        
+
         if (_fasesBloqueadas.Contains(partidoExistente.Fase))
         {
             throw new ArgumentException("No se puede editar un partido de una fase anterior");

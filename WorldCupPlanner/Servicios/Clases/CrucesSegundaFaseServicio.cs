@@ -281,11 +281,11 @@ public class CrucesSegundaFaseServicio
             5);
 
         cruces.AddRange(crucesB5aB8);
-    
+
         _partidoServicios.BloquearEdicionFase(Fase.Grupos);
         return cruces;
     }
-    
+
     public List<CruceDTO> GenerarOctavosDeFinal(List<CruceDTO> crucesDieciseisavos)
     {
         var octavos = new List<CruceDTO>();
@@ -308,7 +308,7 @@ public class CrucesSegundaFaseServicio
 
         return octavos;
     }
-    
+
     public List<CruceDTO> GenerarCuartosDeFinal(List<CruceDTO> octavos)
     {
         var cuartos = new List<CruceDTO>();
@@ -334,7 +334,7 @@ public class CrucesSegundaFaseServicio
 
         return cuartos;
     }
-    
+
     public List<CruceDTO> GenerarSemifinales(List<CruceDTO> cuartos)
     {
         var semifinales = new List<CruceDTO>();
@@ -362,7 +362,7 @@ public class CrucesSegundaFaseServicio
 
         return semifinales;
     }
-    
+
     public List<CruceDTO> GenerarTercerPuestoYFinal(List<CruceDTO> semifinales)
     {
         var partidosFinales = new List<CruceDTO>();
