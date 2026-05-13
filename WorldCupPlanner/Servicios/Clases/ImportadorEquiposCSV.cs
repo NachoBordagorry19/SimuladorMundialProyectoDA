@@ -26,12 +26,10 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
 {
     try
     {
-        // 1. Validaciones de ruta
         ValidarRutaArchivo(rutaArchivo);
 
         using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
         {
-            // 2. Validaciones de encabezado
             string lineaEncabezados = lectorArchivo.ReadLine();
             ValidarEncabezados(lineaEncabezados);
 
@@ -42,7 +40,6 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
             string linea;
             int numeroLinea = 2;
 
-            // 3. Procesamiento de líneas
             while ((linea = lectorArchivo.ReadLine()) != null)
             {
                 if (string.IsNullOrWhiteSpace(linea))
@@ -58,7 +55,6 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                 }
                 catch (Exception excepcion)
                 {
-                    // Este error específico también debe ser auditado antes de lanzarse
                     string mensajeErrorFila = $"Error al importar equipo en línea {numeroLinea}: {excepcion.Message}";
                     _auditoria.RegistrarImportacionEquipos(mensajeErrorFila, false);
                     
@@ -68,7 +64,6 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                 numeroLinea++;
             }
 
-            // 4. Auditoría de Éxito
             _auditoria.RegistrarImportacionEquipos(
                 $"Importación exitosa de {equiposImportados.Count} equipos desde el archivo: {rutaArchivo}", 
                 true
@@ -85,8 +80,6 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
     }
     catch (ArgumentException ex)
     {
-        // Capturamos las excepciones de validación (ruta, encabezados, etc.) 
-        // para asegurar que queden en el log antes de salir.
         _auditoria.RegistrarImportacionEquipos(ex.Message, false);
         throw;
     }
