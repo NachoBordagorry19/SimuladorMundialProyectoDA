@@ -51,34 +51,34 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
             throw new ArgumentException("Debe haber al menos 4 estadios para generar el fixture");
         }
 
-        var equiposDTO = _equipoServicios.ObtenerEquipos();
-        var resultadoOrdenamiento = _equipoServicios.ResolverEmpatesYOrdenar(equiposDTO, semillaFixture);
-        var equiposOrdenados = resultadoOrdenamiento.EquiposOrdenados;
+        List<EquipoDTO> equiposDTO = _equipoServicios.ObtenerEquipos();
+        ResultadoFixture resultadoOrdenamiento = _equipoServicios.ResolverEmpatesYOrdenar(equiposDTO, semillaFixture);
+        List<EquipoDTO> equiposOrdenados = resultadoOrdenamiento.EquiposOrdenados;
 
-        var grupos = CrearGruposVacios();
+        List<Grupo> grupos = CrearGruposVacios();
 
         for (int bombo = 0; bombo < 4; bombo++)
         {
             for (int pos = 0; pos < 12; pos++)
-            {
-                var equipoDto = equiposOrdenados[bombo * 12 + pos];
-                var equipo = _equipoServicios.EquipoDTOAEntidad(equipoDto);
+            { 
+                EquipoDTO equipoDto = equiposOrdenados[bombo * 12 + pos];
+                Equipo equipo = _equipoServicios.EquipoDTOAEntidad(equipoDto);
                 int grupoFinal = BuscarGrupoParaEquipo(grupos, equipo, pos);
 
                 grupos[grupoFinal].Equipos.Add(equipo);
             }
         }
 
-        var fechaBase = fechaInicio ?? new DateTime(2026, 06, 01);
+        DateTime fechaBase = fechaInicio ?? new DateTime(2026, 06, 01);
         var partidos = new List<PartidoDTO>();
-        var estadiosDTO = _estadioServicios.ObtenerEstadios()
+        List<EstadioDTO> estadiosDTO = _estadioServicios.ObtenerEstadios()
             .OrderBy(e => NormalizarNombre(e.Nombre))
             .ToList();
 
         for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
         {
-            var grupo = grupos[grupoIndex];
-            var fechaInicioGrupo = fechaBase.AddDays(grupoIndex * 9);
+            Grupo grupo = grupos[grupoIndex];
+            DateTime fechaInicioGrupo = fechaBase.AddDays(grupoIndex * 9);
 
             AgregarPartidosDelGrupo(
                 grupo,
@@ -148,7 +148,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
             return false;
         }
 
-        var confederacion = equipo.Confederacion;
+        Confederacion confederacion = equipo.Confederacion;
         int cantidadMismaConfederacion = grupo.Equipos.Count(e => e.Confederacion == confederacion);
 
         if (confederacion == Confederacion.UEFA)
@@ -177,11 +177,11 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
         List<EstadioDTO> estadios,
         List<PartidoDTO> partidos)
     {
-        var equipos = ConvertirEquiposADto(grupo.Equipos);
+        List<EquipoDTO> equipos = ConvertirEquiposADto(grupo.Equipos);
 
-        var fechaJornada1 = fechaInicioGrupo.Date.AddHours(14);
-        var fechaJornada2 = fechaInicioGrupo.Date.AddDays(3).AddHours(14);
-        var fechaJornada3 = fechaInicioGrupo.Date.AddDays(6).AddHours(14);
+        DateTime fechaJornada1 = fechaInicioGrupo.Date.AddHours(14);
+        DateTime fechaJornada2 = fechaInicioGrupo.Date.AddDays(3).AddHours(14);
+        DateTime fechaJornada3 = fechaInicioGrupo.Date.AddDays(6).AddHours(14);
 
         AgregarPartido(partidos, equipos[0], equipos[3], grupo.Nombre, fechaJornada1, estadios);
         AgregarPartido(partidos, equipos[1], equipos[2], grupo.Nombre, fechaJornada1.AddHours(4), estadios);
