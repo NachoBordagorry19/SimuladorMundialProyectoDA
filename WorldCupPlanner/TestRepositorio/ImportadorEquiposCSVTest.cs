@@ -167,6 +167,26 @@ public class ImportadorEquiposCSVTest
         }
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConNombreVacio_LanzaExcepcion()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal(
+            "Nombre,Confederación,RankingFIFA\n" +
+            ",CONMEBOL,1500"
+        );
+
+
+        try
+        {
+            _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+
 
     
     private string CrearArchivoCSVTemporal(string contenido)
