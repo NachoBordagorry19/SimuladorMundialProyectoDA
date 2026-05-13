@@ -42,6 +42,7 @@ public class ImportadorEquiposCSVTest
         }
     }
     
+    
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");
