@@ -1,3 +1,4 @@
+using Moq;
 using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
@@ -13,6 +14,7 @@ public class EstadioServiciosTest
     private IEstadioRepositorio _estadioRepositorio;
     private IServicioEstadio _servicioEstadio;
     private EstadioDTO _estadioDTO;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
 
     [TestInitialize]
@@ -20,7 +22,8 @@ public class EstadioServiciosTest
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
-        _servicioEstadio = new EstadioServicios(_estadioRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _servicioEstadio = new EstadioServicios(_estadioRepositorio, _auditoriaMock);
 
         _estadioDTO = new EstadioDTO()
         {
