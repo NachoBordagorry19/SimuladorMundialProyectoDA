@@ -177,4 +177,15 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
+    
+    [TestMethod]
+    public void RegistrarImportacionEquipos_Error_DebeGuardarRegistroCorrectamente()
+    {
+        string error = "Archivo con formato inválido en línea 5";
+        _servicio.RegistrarImportacionEquipos(error, false);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.IsTrue(registros[0].Contains("Importación de Equipos (Error)"));
+        Assert.IsTrue(registros[0].Contains(error));
+    }
 }
