@@ -24,6 +24,7 @@ public class EstadioServicios : IServicioEstadio
         ValidarNombreNoExiste(estadioDTO.Nombre);
         Estadio estadio = EstadioDTOAEntidad(estadioDTO);
         _estadioRepositorio.AgregarEstadio(estadio);
+        _auditoria.RegistrarAltaEstadio(estadioDTO.Nombre);
     }
 
     private void ValidarNombreNoExiste(string nombre)
