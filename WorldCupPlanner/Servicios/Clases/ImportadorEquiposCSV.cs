@@ -22,67 +22,81 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    {
        _auditoria = auditoria;
    }
-   public List<Equipo> ImportarDesdeCSV(string rutaArchivo) 
-   {
-       ValidarRutaArchivo(rutaArchivo);
-       try
-       {
-           using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
-           {
-               string lineaEncabezados = lectorArchivo.ReadLine();
-               ValidarEncabezados(lineaEncabezados);
+   public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
+{
+    try
+    {
+        // 1. Validaciones de ruta
+        ValidarRutaArchivo(rutaArchivo);
 
-               Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
-              
-               List<Equipo> equiposImportados = new List<Equipo>();
-               HashSet<string> nombresVistos = new HashSet<string>();
-              
-               string linea;
-               int numeroLinea = 2;
+        using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
+        {
+            // 2. Validaciones de encabezado
+            string lineaEncabezados = lectorArchivo.ReadLine();
+            ValidarEncabezados(lineaEncabezados);
 
-               while ((linea = lectorArchivo.ReadLine()) != null)
-               {
-                   if (string.IsNullOrWhiteSpace(linea))
-                   {
-                       numeroLinea++;
-                       continue;
-                   }
+            Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
+            List<Equipo> equiposImportados = new List<Equipo>();
+            HashSet<string> nombresVistos = new HashSet<string>();
 
-                   try
-                   {
-                       Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas, nombresVistos);
-                       equiposImportados.Add(equipoImportado);
-                   }
-                   catch (Exception excepcion)
-                   {
-                       throw new ArgumentException(
-                           $"Error al importar equipo en línea {numeroLinea}: {excepcion.Message}",
-                           excepcion
-                       );
-                   }
+            string linea;
+            int numeroLinea = 2;
 
-                   numeroLinea++;
-               }
-               _auditoria.RegistrarImportacionEquipos(
-                   $"Importación exitosa de {equiposImportados.Count} equipos.", 
-                   true
-               );
-               return equiposImportados;
-           }
-       }
-       catch (FileNotFoundException)
-       {
-           string mensajeError = $"El archivo CSV no existe en la ruta: {rutaArchivo}";
-           _auditoria.RegistrarImportacionEquipos(mensajeError, false);
-           throw new ArgumentException(mensajeError);
-       }
-       catch (Exception excepcion) when (!(excepcion is ArgumentException))
-       {
-           string mensajeError = "Ocurrió un error inesperado al leer el archivo CSV";
-           _auditoria.RegistrarImportacionEquipos($"{mensajeError}: {excepcion.Message}", false);
-           throw new ArgumentException(mensajeError, excepcion);
-       }
-   }
+            // 3. Procesamiento de líneas
+            while ((linea = lectorArchivo.ReadLine()) != null)
+            {
+                if (string.IsNullOrWhiteSpace(linea))
+                {
+                    numeroLinea++;
+                    continue;
+                }
+
+                try
+                {
+                    Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas, nombresVistos);
+                    equiposImportados.Add(equipoImportado);
+                }
+                catch (Exception excepcion)
+                {
+                    // Este error específico también debe ser auditado antes de lanzarse
+                    string mensajeErrorFila = $"Error al importar equipo en línea {numeroLinea}: {excepcion.Message}";
+                    _auditoria.RegistrarImportacionEquipos(mensajeErrorFila, false);
+                    
+                    throw new ArgumentException(mensajeErrorFila, excepcion);
+                }
+
+                numeroLinea++;
+            }
+
+            // 4. Auditoría de Éxito
+            _auditoria.RegistrarImportacionEquipos(
+                $"Importación exitosa de {equiposImportados.Count} equipos desde el archivo: {rutaArchivo}", 
+                true
+            );
+
+            return equiposImportados;
+        }
+    }
+    catch (FileNotFoundException)
+    {
+        string mensajeError = $"El archivo CSV no existe en la ruta: {rutaArchivo}";
+        _auditoria.RegistrarImportacionEquipos(mensajeError, false);
+        throw new ArgumentException(mensajeError);
+    }
+    catch (ArgumentException ex)
+    {
+        // Capturamos las excepciones de validación (ruta, encabezados, etc.) 
+        // para asegurar que queden en el log antes de salir.
+        _auditoria.RegistrarImportacionEquipos(ex.Message, false);
+        throw;
+    }
+    catch (Exception excepcion)
+    {
+        string mensajeError = "Ocurrió un error inesperado al leer el archivo CSV";
+        _auditoria.RegistrarImportacionEquipos($"{mensajeError}: {excepcion.Message}", false);
+        throw new ArgumentException(mensajeError, excepcion);
+    }
+}
    
    private void ValidarRutaArchivo(string rutaArchivo)
    {
