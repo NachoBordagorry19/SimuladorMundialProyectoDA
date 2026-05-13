@@ -1,5 +1,6 @@
 using Dominio.Clases;
 using Dominio.Enums;
+using Moq;
 using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Clases;
@@ -13,11 +14,13 @@ public class ImportadorEquiposCSVTest
 {
 
     private IImportadorEquiposCSV _importadorEquipos;
+    private Mock<IServicioAuditoria> _mockAuditoria;
     
     [TestInitialize]
     public void Inicializar()
     {
-        _importadorEquipos = new ImportadorEquiposCSV();
+        _mockAuditoria = new Mock<IServicioAuditoria>();
+        _importadorEquipos = new ImportadorEquiposCSV(_mockAuditoria.Object);
     }
     
     [TestMethod]
