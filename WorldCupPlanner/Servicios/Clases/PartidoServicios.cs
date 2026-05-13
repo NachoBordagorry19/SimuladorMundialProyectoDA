@@ -151,6 +151,8 @@ public class PartidoServicios : IServicioPartido
             partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
             partidoExistente.MarcarComoJugado();
         }
+        string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
+        _auditoria.RegistrarModificacionPartido(detalle);
     }
 
     private PartidoDTO PartidoEntidadADto(Partido partido)
