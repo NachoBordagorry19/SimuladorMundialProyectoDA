@@ -48,6 +48,21 @@ public class ImportadorEquiposCSVTest
     {
         _importadorEquipos.ImportarDesdeCSV(null);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConRutaVacia_LanzaExcepcion()
+    {
+        _importadorEquipos.ImportarDesdeCSV("");
+    }
+  
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConRutaSoloEspacios_LanzaExcepcion()
+    {
+        _importadorEquipos.ImportarDesdeCSV("   ");
+    }
+
 
     
     private string CrearArchivoCSVTemporal(string contenido)
