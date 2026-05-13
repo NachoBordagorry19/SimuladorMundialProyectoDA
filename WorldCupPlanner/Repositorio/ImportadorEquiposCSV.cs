@@ -13,6 +13,8 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    private const int CANTIDAD_COLUMNAS_ESPERADAS = 3;
    private const int NOMBRE_MAXIMO_CARACTERES = 60;
    private const int NOMBRE_MINIMO_CARACTERES = 1;
+   private const int RANKING_FIFA_MINIMO = 300;
+   private const int RANKING_FIFA_MAXIMO = 2500;
   
    public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
    {
@@ -122,15 +124,16 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        string[] campos = linea.Split(',');
       
        string nombre = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_NOMBRE);
-       
        ValidarNombre(nombre);
        
        string confederacionTexto = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_CONFEDERACION);
-       string rankingFifaTexto = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_RANKING_FIFA);
-      
+       ValidarConfederacion(confederacionTexto);
        Confederacion confederacion = ConvertirTextoAConfederacion(confederacionTexto);
-      
+       
+       string rankingFifaTexto = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_RANKING_FIFA);
+       ValidarRankingFifaTexto(rankingFifaTexto);
        int rankingFifa = ConvertirTextoAEntero(rankingFifaTexto, ENCABEZADO_RANKING_FIFA);
+       ValidarRankingFifaRango(rankingFifa);
       
        return new Equipo(nombre, confederacion, rankingFifa);
    }
@@ -141,7 +144,7 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        {
            throw new ArgumentException("El nombre del equipo no puede estar vacío");
        }
-       
+
        if (nombre.Length < NOMBRE_MINIMO_CARACTERES)
        {
            throw new ArgumentException($"El nombre debe tener al menos {NOMBRE_MINIMO_CARACTERES} carácter");
@@ -150,6 +153,32 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        if (nombre.Length > NOMBRE_MAXIMO_CARACTERES)
        {
            throw new ArgumentException($"El nombre no puede superar los {NOMBRE_MAXIMO_CARACTERES} caracteres");
+       }
+   }
+   
+   private void ValidarConfederacion(string confederacionTexto)
+   {
+       if (string.IsNullOrWhiteSpace(confederacionTexto))
+       {
+           throw new ArgumentException("La confederación no puede estar vacía");
+       }
+   }
+   
+   private void ValidarRankingFifaTexto(string rankingFifaTexto)
+   {
+       if (string.IsNullOrWhiteSpace(rankingFifaTexto))
+       {
+           throw new ArgumentException("El ranking FIFA no puede estar vacío");
+       }
+   }
+   
+   private void ValidarRankingFifaRango(int rankingFifa)
+   {
+       if (rankingFifa < RANKING_FIFA_MINIMO || rankingFifa > RANKING_FIFA_MAXIMO)
+       {
+           throw new ArgumentException(
+               $"El ranking FIFA debe estar entre {RANKING_FIFA_MINIMO} y {RANKING_FIFA_MAXIMO}"
+           );
        }
    }
   

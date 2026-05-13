@@ -186,9 +186,151 @@ public class ImportadorEquiposCSVTest
             LimpiarArchivoCSV(rutaArchivoCSV);
         }
     }
-
-
     
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConConfederacionVacia_LanzaExcepcion()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal(
+            "Nombre,Confederación,RankingFIFA\n" +
+            "Argentina,,1500"
+        );
+
+
+        try
+        {
+            _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConRankingFifaVacio_LanzaExcepcion()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal(
+            "Nombre,Confederación,RankingFIFA\n" +
+            "Argentina,CONMEBOL,"
+        );
+
+
+        try
+        {
+            _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+    
+     [TestMethod]
+   [ExpectedException(typeof(ArgumentException))]
+   public void ImportarCSV_ConConfederacionInvalida_LanzaExcepcion()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Argentina,INVALID,1500"
+       );
+
+
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+
+
+   [TestMethod]
+   [ExpectedException(typeof(ArgumentException))]
+   public void ImportarCSV_ConRankingFifaNoNumerico_LanzaExcepcion()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Argentina,CONMEBOL,abc"
+       );
+
+
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+
+
+   [TestMethod]
+   [ExpectedException(typeof(ArgumentException))]
+   public void ImportarCSV_ConRankingFifaMenorAlMinimo_LanzaExcepcion()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Argentina,CONMEBOL,250"
+       );
+
+
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+
+
+   [TestMethod]
+   [ExpectedException(typeof(ArgumentException))]
+   public void ImportarCSV_ConRankingFifaMayorAlMaximo_LanzaExcepcion()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Argentina,CONMEBOL,3000"
+       );
+
+
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+
+
+   [TestMethod]
+   [ExpectedException(typeof(ArgumentException))]
+   public void ImportarCSV_ConNombreMayorA60Caracteres_LanzaExcepcion()
+   {
+       string nombreLargo = "Este nombre tiene mas de sesenta caracteres y debe ser rechazado!!!";
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           $"Nombre,Confederación,RankingFIFA\n" +
+           $"{nombreLargo},CONMEBOL,1500"
+       );
+
+
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");
