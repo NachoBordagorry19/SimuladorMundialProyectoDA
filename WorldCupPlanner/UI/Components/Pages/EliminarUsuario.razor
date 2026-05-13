@@ -46,9 +46,9 @@
             mensaje = "";
             esError = false;
 
-            UsuarioDTO usuarioActual = usuarioActivo.UsuarioActual;
+            UsuarioDTO? usuarioActual = usuarioActivo.UsuarioActual;
 
-            if (usuarioActual.Email == usuario.Email)
+            if (usuarioActual != null && usuarioActual.Email == usuario.Email)
             {
                 mensaje = "No puedes eliminar tu propia cuenta";
                 esError = true;

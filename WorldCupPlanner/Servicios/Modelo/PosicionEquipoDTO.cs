@@ -3,7 +3,7 @@ namespace Servicios.Modelo;
 public class PosicionEquipoDTO
 {
     public string EquipoNombre { get; set; } = string.Empty;
-    public string Grupo { get; set; }
+    public string Grupo { get; set; } = string.Empty;
     public int PartidosJugados { get; set; }
     public int Ganados { get; set; }
     public int Empatados { get; set; }

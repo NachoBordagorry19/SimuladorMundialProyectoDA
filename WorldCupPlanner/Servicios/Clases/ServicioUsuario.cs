@@ -48,7 +48,7 @@ public class ServicioUsuario : IServicioUsuario
 
     public void ValidarEmailExiste(string email)
     {
-        Usuario usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+        Usuario? usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
         if (usuarioExistente != null)
         {
             throw new ArgumentException("El usuario ya existe, porfavor agrege un usuario que no exista");
@@ -98,14 +98,14 @@ public class ServicioUsuario : IServicioUsuario
 
     public UsuarioDTO ObtenerUsuario(string email)
     {
-        ValidarEmailNoExiste(email);
-        Usuario? usuario = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+        // Reuse the guarded lookup that throws if not found
+        Usuario usuario = ObtenerEntidadPorEmail(email);
         return desdeEntidad(usuario);
     }
 
     public void ValidarEmailNoExiste(string email)
     {
-        Usuario usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
+        Usuario? usuarioExistente = _usuarioRepositorio.ObtenerUsuario(u => u.Email == email);
         if (usuarioExistente == null)
         {
             throw new ArgumentException("El usuario no existe, porfavor ingrese un usuario que exista");

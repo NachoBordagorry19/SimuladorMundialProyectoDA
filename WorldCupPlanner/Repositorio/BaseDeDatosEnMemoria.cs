@@ -30,8 +30,9 @@ public class BaseDeDatosEnMemoria
 
     public void ActualizarUsuario(Usuario usuario)
     {
-        Usuario? usuarioParaActualizar = _listaDeUsuarios.Find(u => u.Email == usuario.Email);
-        var indiceUsuario = _listaDeUsuarios.IndexOf(usuarioParaActualizar);
+        if (usuario == null) throw new ArgumentNullException(nameof(usuario));
+        int indiceUsuario = _listaDeUsuarios.FindIndex(u => u.Email == usuario.Email);
+        if (indiceUsuario == -1) throw new ArgumentException("Usuario a actualizar no encontrado");
         _listaDeUsuarios[indiceUsuario] = usuario;
     }
 
@@ -52,8 +53,9 @@ public class BaseDeDatosEnMemoria
 
     public void ActualizarEquipo(Equipo equipo)
     {
-        Equipo? equipoParaActualizar = _listaDeEquipos.Find(e => e.Nombre == equipo.Nombre);
-        var indiceEquipo = _listaDeEquipos.IndexOf(equipoParaActualizar);
+        if (equipo == null) throw new ArgumentNullException(nameof(equipo));
+        int indiceEquipo = _listaDeEquipos.FindIndex(e => e.Nombre == equipo.Nombre);
+        if (indiceEquipo == -1) throw new ArgumentException("Equipo a actualizar no encontrado");
         _listaDeEquipos[indiceEquipo] = equipo;
     }
 
@@ -104,8 +106,9 @@ public class BaseDeDatosEnMemoria
 
     public void ActualizarPartido(Partido partido)
     {
-        Partido? partidoParaActualizar = _listaDePartidos.Find(p => p.Id == partido.Id);
-        var indicePartido = _listaDePartidos.IndexOf(partidoParaActualizar);
+        if (partido == null) throw new ArgumentNullException(nameof(partido));
+        int indicePartido = _listaDePartidos.FindIndex(p => p.Id == partido.Id);
+        if (indicePartido == -1) throw new ArgumentException("Partido a actualizar no encontrado");
         _listaDePartidos[indicePartido] = partido;
     }
 }
