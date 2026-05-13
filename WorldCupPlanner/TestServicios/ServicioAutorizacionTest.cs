@@ -156,5 +156,46 @@ public class ServicioAutorizacionTest
 
         Assert.IsFalse(resultado);
     }
+    [TestMethod]
+    public void Editor_NoPuedeGestionarUsuarios()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "editor@gmail.com",
+            Roles = new List<Rol> { Rol.Editor }
+        };
+
+        bool resultado = _servicioAutorizacion.PuedeGestionarUsuarios(usuario);
+
+        Assert.IsFalse(resultado);
+    }
+    
+    [TestMethod]
+    public void Administrador_NoPuedeImportar()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "admin@gmail.com",
+            Roles = new List<Rol> { Rol.Administrador }
+        };
+
+        bool resultado = _servicioAutorizacion.PuedeImportar(usuario);
+
+        Assert.IsFalse(resultado);
+    }
+    
+    [TestMethod]
+    public void Editor_NoPuedeEliminarUsuarios()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "editor@gmail.com",
+            Roles = new List<Rol> { Rol.Editor }
+        };
+
+        bool resultado = _servicioAutorizacion.PuedeEliminarUsuario(usuario, "otro@gmail.com");
+
+        Assert.IsFalse(resultado);
+    }
     
 }
