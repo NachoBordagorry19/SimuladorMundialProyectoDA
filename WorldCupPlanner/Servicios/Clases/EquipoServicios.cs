@@ -36,6 +36,7 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreNoExiste(equipoDTO.nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
+        _auditoria.RegistrarAltaEquipo(equipoDTO.nombre);
     }
 
     public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
