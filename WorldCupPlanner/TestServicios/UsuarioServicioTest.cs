@@ -172,6 +172,20 @@ public class UsuarioServicioTest
         Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Administrador));
         Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Editor));
     }
+    
+    [TestMethod]
+    public void ActualizarUsuario_DebeRegistrarAuditoria()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        var usuarioEditado = new UsuarioDTO { 
+            Email = "a@gmail.com", 
+            Nombre = "Fede Editado", 
+            Roles = new List<Rol> { Rol.Editor } 
+        };
+
+        _servicioUsuario.ActualizarUsuario(usuarioEditado);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionUsuario("a@gmail.com"), Times.Once);
+    }
 
     [TestMethod]
     public void ReiniciarContraseña_PermiteAutenticarConContraseñaPorDefecto()
