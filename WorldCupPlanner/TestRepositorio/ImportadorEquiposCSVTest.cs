@@ -79,6 +79,28 @@ public class ImportadorEquiposCSVTest
             LimpiarArchivoCSV(rutaArchivoCSV);
         }
     }
+    
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConDosColumnasEnEncabezado_LanzaExcepcion()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal(
+            "Nombre,Confederación\n" +
+            "Argentina,CONMEBOL"
+        );
+
+
+        try
+        {
+            _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+
 
 
     
