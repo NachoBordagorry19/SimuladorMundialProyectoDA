@@ -71,4 +71,18 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
+    
+    [TestMethod]
+    public void Editor_PuedeUsarFixture()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "editor@gmail.com",
+            Roles = new List<Rol> { Rol.Editor }
+        };
+
+        bool resultado = _servicioAutorizacion.PuedeUsarFixture(usuario);
+
+        Assert.IsTrue(resultado);
+    }
 }
