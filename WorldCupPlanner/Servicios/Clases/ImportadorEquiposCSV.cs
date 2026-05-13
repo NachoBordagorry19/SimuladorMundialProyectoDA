@@ -1,10 +1,11 @@
 using Dominio.Clases;
 using Dominio.Enums;
+using Repositorio.Interfaces;
 using Servicios.Interfaces;
 
 namespace Repositorio;
 
-public class ImportadorEquiposCSV : IImportadorEquiposCSV
+public class ImportadorEquiposCSV : IImportadorEquiposCSV 
 {
    private const string ENCABEZADO_NOMBRE = "Nombre";
    private const string ENCABEZADO_CONFEDERACION = "Confederación";
@@ -15,8 +16,16 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    private const int NOMBRE_MINIMO_CARACTERES = 1;
    private const int RANKING_FIFA_MINIMO = 300;
    private const int RANKING_FIFA_MAXIMO = 2500;
-  
-   public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
+   
+   private readonly IServicioEquipo _servicioEquipo;
+   private readonly IEquipoRepositorio _equipoRepositorio;
+
+   public ImportadorEquiposCSV(IServicioEquipo servicioEquipo, IEquipoRepositorio equipoRepositorio)
+   {
+       _servicioEquipo = servicioEquipo;
+       _equipoRepositorio = equipoRepositorio;
+   }
+   public List<Equipo> ImportarDesdeCSV(string rutaArchivo) 
    {
        ValidarRutaArchivo(rutaArchivo);
        try
@@ -58,6 +67,18 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                    numeroLinea++;
                }
 
+               foreach (Equipo equipo in equiposImportados)
+               {
+                   int cupo = ValidarCuposConfederacion(equipo.Confederacion);
+                   if (cupo > 0)
+                   {
+                       var cantidadActual = _equipoRepositorio.ObtenerEquipos().Count(e => e.Confederacion == equipo.Confederacion);
+                       if (cantidadActual >= cupo)
+                       {
+                           throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipo.Confederacion}");
+                       }
+                   }
+               }
                return equiposImportados;
            }
        }
@@ -71,6 +92,27 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                "Ocurrió un error inesperado al leer el archivo CSV",
                excepcion
            );
+       }
+   }
+
+   private int ValidarCuposConfederacion(Confederacion confederacion)
+   {
+       switch (confederacion)
+       {
+           case Confederacion.UEFA:
+               return 16;
+           case Confederacion.CONMEBOL:
+               return 7;
+           case Confederacion.CONCACAF:
+               return 7;
+           case Confederacion.CAF:
+               return 9;
+           case Confederacion.AFC:
+               return 8;
+           case Confederacion.OFC:
+               return 1;
+           default:
+               return 0;
        }
    }
    
