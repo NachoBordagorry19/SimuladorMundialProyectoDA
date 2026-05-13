@@ -77,7 +77,11 @@ public class ServicioAuditoria : IServicioAuditoria
     
     public void RegistrarImportacionEquipos(string mensaje, bool esExito)
     {
-        string etiqueta = esExito ? "Éxito" : "Error";
+        string etiqueta = "Error";
+        if (esExito)
+        {
+            etiqueta = "Éxito";    
+        }
         Registrar($"Importación de Equipos ({etiqueta})", mensaje);
     }
     
@@ -95,6 +99,8 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Realización de sorteo para cruces", "Proceso completado");
     }
+    
+    
     
     public List<string> ObtenerRegistrosFormateados()
     {

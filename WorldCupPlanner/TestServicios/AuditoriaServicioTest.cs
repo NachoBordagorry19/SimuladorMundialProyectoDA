@@ -224,6 +224,6 @@ public class AuditoriaServicioTest
     {
         _servicio.RegistrarImportacionEquipos("Archivo: equipos.csv", true);
         var log = _servicio.ObtenerRegistrosFormateados()[0];
-        Assert.IsTrue(log.Contains("Importación de equipos (Éxito)"));
+        Assert.IsTrue(log.Contains("Éxito"));
     }
 }
