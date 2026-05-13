@@ -122,7 +122,26 @@ public class ImportadorEquiposCSVTest
     }
 
 
-    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConEncabezadoIncorrecto_LanzaExcepcion()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal(
+            "Name,Confederation,FIFA\n" +
+            "Argentina,CONMEBOL,1500"
+        );
+
+
+        try
+        {
+            _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+
 
     
     private string CrearArchivoCSVTemporal(string contenido)
