@@ -163,15 +163,26 @@ public class EquipoServiciosTest
     public void ActualizarEquipo_DebeRegistrarEnAuditoria()
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
-        var equipoActualizadoDto = new EquipoDTO()
-        {
-            nombre = _equipoDTO.nombre,
-            confederacion = Confederacion.CONMEBOL,
-            rankingFifa = 1700
+        string nombreNuevo = "Allianz Stadium";
+        var dtoNuevoNombre = new EquipoDTO 
+        { 
+            nombre = nombreNuevo, 
+            confederacion = _equipoDTO.confederacion, 
+            rankingFifa = _equipoDTO.rankingFifa 
         };
-        _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
 
-        _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(equipoActualizadoDto.nombre), Times.Once);
+        _equipoServicios.ActualizarEquipo(_equipoDTO.nombre, dtoNuevoNombre);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(nombreNuevo), Times.Once);
+
+        var dtoCambioRanking = new EquipoDTO 
+        { 
+            nombre = nombreNuevo,
+            confederacion = _equipoDTO.confederacion, 
+            rankingFifa = 2500
+        };
+
+        _equipoServicios.ActualizarEquipo(dtoCambioRanking);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(nombreNuevo), Times.Exactly(2));
     }
 
     [TestMethod]

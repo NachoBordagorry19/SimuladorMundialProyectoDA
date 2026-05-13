@@ -208,6 +208,7 @@ public class EquipoServicios : IServicioEquipo
 
         _equipoRepositorio.EliminarEquipo(equipoOriginal);
         _equipoRepositorio.AgregarEquipo(equipoActualizado);
+        _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
