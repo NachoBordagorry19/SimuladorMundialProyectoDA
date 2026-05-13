@@ -210,4 +210,12 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Generación de fixture"));
     }
+    
+    [TestMethod]
+    public void RegistrarSorteoCruces_DebeGuardarRegistroCorrectamente()
+    {
+        _servicio.RegistrarSorteoCruces();
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Realización de sorteo para cruces"));
+    }
 }
