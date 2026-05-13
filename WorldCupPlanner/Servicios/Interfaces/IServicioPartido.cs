@@ -12,6 +12,6 @@ public interface IServicioPartido
     List<PartidoDTO> ObtenerPartidos();
 
     void ActualizarPartido(PartidoDTO partidoDTO);
-
+    void SimularResultado(PartidoDTO partidoDTO, int semillaSimulacion);
     void BloquearEdicionFase(Fase fase);
 }

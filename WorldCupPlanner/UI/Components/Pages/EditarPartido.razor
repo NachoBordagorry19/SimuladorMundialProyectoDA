@@ -59,11 +59,20 @@
                     <label class="wcp-form-label">Goles visitante</label>
                     <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
                 </div>
+                
+                <div class="col-md-4">
+                    <label class="wcp-form-label">Semilla Simulación</label>
+                    <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
+                </div>
             </div>
 
             <div class="wcp-actions">
                 <button class="wcp-btn-primary" @onclick="GuardarCambios">
                     Guardar Cambios
+                </button>
+                
+                <button class="wcp-btn-secondary" @onclick="SimularResultado">
+                    Simular Resultado
                 </button>
 
                 <NavLink href="/partidos" class="wcp-btn-secondary">
@@ -81,6 +90,8 @@
     private PartidoDTO? partido;
     private List<EstadioDTO> estadios = new List<EstadioDTO>();
     private string nombreEstadioSeleccionado = "";
+
+    private int semillaSimulacion = 123;
 
     private string mensajeError = "";
     private string mensajeExito = "";
@@ -131,6 +142,37 @@
             ServicioPartido.ActualizarPartido(partido);
 
             mensajeExito = "Partido actualizado correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+    
+    private void SimularResultado()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            if (partido == null)
+            {
+                mensajeError = "No hay partido seleccionado.";
+                return;
+            }
+
+            ServicioPartido.SimularResultado(partido, semillaSimulacion);;
+
+            partido = ServicioPartido.ObtenerPartido(IdPartido);
+
+            if (partido.Estadio != null)
+            {
+                nombreEstadioSeleccionado = partido.Estadio.Nombre;
+            }
+
+            mensajeExito = "Resultado simulado correctamente.";
         }
         catch (Exception ex)
         {
