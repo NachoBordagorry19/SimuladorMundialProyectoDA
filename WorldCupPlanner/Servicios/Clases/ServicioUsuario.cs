@@ -13,12 +13,14 @@ namespace Servicios.Clases;
 public class ServicioUsuario : IServicioUsuario
 {
     private readonly IUsuarioRepositorio _usuarioRepositorio;
+    private readonly IServicioAuditoria _auditoria;
 
     private const string ContraseñaPorDefecto = "Usuario123!";
 
-    public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio)
+    public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio, IServicioAuditoria auditoria)
     {
         _usuarioRepositorio = usuarioRepositorio;
+        _auditoria = auditoria;
     }
 
     public void AgregarUsuario(UsuarioDTO usuarioDto)
