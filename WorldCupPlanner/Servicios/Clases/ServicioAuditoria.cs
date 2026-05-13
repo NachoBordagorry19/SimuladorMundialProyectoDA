@@ -85,7 +85,11 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Generación automática de equipos", $"Cantidad: {cantidad}");
     }
-
+    
+    public void RegistrarGeneracionFixture()
+    {
+        Registrar("Generación de fixture", "Proceso completado");
+    }
     public List<string> ObtenerRegistrosFormateados()
     {
         var logs = _auditoriaRepo.ObtenerTodosLosRegistros();
