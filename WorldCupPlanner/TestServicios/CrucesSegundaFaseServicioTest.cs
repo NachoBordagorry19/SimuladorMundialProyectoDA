@@ -1,4 +1,5 @@
 using Dominio.Enums;
+using Moq;
 using Repositorio;
 using Servicios.Clases;
 using Servicios.Interfaces;
@@ -13,13 +14,15 @@ public class CrucesSegundaFaseServicioTest
     private PartidoRepositorio _partidoRepositorio;
     private IServicioPartido _partidoServicios;
     private CrucesSegundaFaseServicio _crucesServicio;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatos = new BaseDeDatosEnMemoria();
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
-        _partidoServicios = new PartidoServicios(_partidoRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
         _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios);
     }
 
