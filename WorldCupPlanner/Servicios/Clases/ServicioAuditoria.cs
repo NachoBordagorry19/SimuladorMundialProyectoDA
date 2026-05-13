@@ -30,6 +30,11 @@ public class ServicioAuditoria : IServicioAuditoria
         Registrar("Alta Usuario", $"Email: {email}, Roles: {roles}");
     }
     
+    public void RegistrarEdicionUsuario(string email)
+    {
+        Registrar("Edición Usuario", $"Email: {email}");
+    }
+    
     public void RegistrarEliminacionUsuario(string email)
     {
         Registrar("Eliminación Usuario", $"Email: {email}");
