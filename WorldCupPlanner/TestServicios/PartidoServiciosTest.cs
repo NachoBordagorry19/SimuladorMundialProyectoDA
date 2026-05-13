@@ -6,6 +6,8 @@ using Servicios.Clases;
 using Servicios.Modelo;
 using Dominio.Clases;
 using Dominio.Enums;
+using Moq;
+using Servicios.Interfaces;
 
 namespace TestServicios;
 
@@ -20,13 +22,15 @@ public class PartidoServiciosTest
     private EquipoDTO equipoLocalDTO;
     private EquipoDTO equipoVisitanteDTO;
     private Partido partido;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatosEnMemoria);
-        _servicioPartido = new PartidoServicios(_partidoRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _servicioPartido = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
 
         estadioDTO = new EstadioDTO()
         {
