@@ -20,7 +20,7 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                string lineaEncabezados = lectorArchivo.ReadLine();
                ValidarEncabezados(lineaEncabezados);
 
-    
+
                Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
               
                List<Equipo> equiposImportados = new List<Equipo>();
@@ -45,7 +45,7 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                    }
                    catch (Exception excepcion)
                    {
-                      
+
                    }
 
 
@@ -67,6 +67,7 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    
    private void ValidarEncabezados(string lineaEncabezados)
    {
+
        if (string.IsNullOrWhiteSpace(lineaEncabezados))
        {
            throw new ArgumentException("El archivo CSV debe contener una fila de encabezados");
@@ -80,11 +81,23 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
               $"El CSV debe tener exactamente {CANTIDAD_COLUMNAS_ESPERADAS} columnas"
           );
        }
+       
        string[] encabezadosTrimmed = encabezados.Select(e => e.Trim()).ToArray();
+       
+       if (!ContieneTodosLosEncabezados(encabezadosTrimmed))
+       {
+           throw new ArgumentException(
+               $"El CSV debe contener los encabezados: {ENCABEZADO_NOMBRE}, " +
+               $"{ENCABEZADO_CONFEDERACION}, {ENCABEZADO_RANKING_FIFA}"
+           );
+       }
    }
-
-
-   
+   private bool ContieneTodosLosEncabezados(string[] encabezados)
+   {
+       return encabezados.Contains(ENCABEZADO_NOMBRE) &&
+              encabezados.Contains(ENCABEZADO_CONFEDERACION) &&
+              encabezados.Contains(ENCABEZADO_RANKING_FIFA);
+   }
   
    private Dictionary<string, int> ObtenerIndicesColumnas(string lineaEncabezados)
    {
