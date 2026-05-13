@@ -80,6 +80,11 @@ public class ServicioAuditoria : IServicioAuditoria
         string etiqueta = esExito ? "Éxito" : "Error";
         Registrar($"Importación de Equipos ({etiqueta})", mensaje);
     }
+    
+    public void RegistrarGeneracionAutomaticaEquipos(int cantidad)
+    {
+        Registrar("Generación automática de equipos", $"Cantidad: {cantidad}");
+    }
 
     public List<string> ObtenerRegistrosFormateados()
     {
