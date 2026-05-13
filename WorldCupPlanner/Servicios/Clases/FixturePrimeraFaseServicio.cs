@@ -17,14 +17,16 @@ public class FixturePrimeraFaseServicio
     private readonly IServicioEquipo _equipoServicios;
     private readonly IServicioEstadio _estadioServicios;
     private readonly IServicioPartido _partidoServicios;
-
+    private readonly IServicioAuditoria _auditoria;
+    
     public FixturePrimeraFaseServicio(
         IEquipoRepositorio equipoRepositorio,
         IEstadioRepositorio estadioRepositorio,
         IPartidoRepositorio partidoRepositorio,
         IServicioEquipo equipoServicios,
         IServicioEstadio estadioServicios,
-        IServicioPartido partidoServicios)
+        IServicioPartido partidoServicios,
+        IServicioAuditoria auditoria)
     {
         _equipoRepositorio = equipoRepositorio;
         _estadioRepositorio = estadioRepositorio;
@@ -32,6 +34,7 @@ public class FixturePrimeraFaseServicio
         _equipoServicios = equipoServicios;
         _estadioServicios = estadioServicios;
         _partidoServicios = partidoServicios;
+        _auditoria = auditoria;
     }
 
     public ResultadoFixture GenerarFixturePrimeraFase(int semillaFixture, DateTime? fechaInicio = null)
