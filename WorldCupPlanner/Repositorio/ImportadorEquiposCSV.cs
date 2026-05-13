@@ -74,6 +74,12 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        
        string[] encabezados = lineaEncabezados.Split(',');
        
+       if (encabezados.Length != CANTIDAD_COLUMNAS_ESPERADAS)
+       {
+          throw new ArgumentException(
+              $"El CSV debe tener exactamente {CANTIDAD_COLUMNAS_ESPERADAS} columnas"
+          );
+       }
        string[] encabezadosTrimmed = encabezados.Select(e => e.Trim()).ToArray();
    }
 
