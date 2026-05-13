@@ -176,6 +176,7 @@ public class ServicioUsuario : IServicioUsuario
         );
 
         _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _auditoria.RegistrarEdicionUsuario(usuarioDto.Email);
     }
 
     public void ReiniciarContraseña(string email)

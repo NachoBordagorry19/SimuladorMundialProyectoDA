@@ -177,10 +177,14 @@ public class UsuarioServicioTest
     public void ActualizarUsuario_DebeRegistrarAuditoria()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
         var usuarioEditado = new UsuarioDTO { 
-            Email = "a@gmail.com", 
+            Email = "a@gmail.com",
+            FechaNacimiento = new DateTime(1999, 10, 10),
             Nombre = "Fede Editado", 
-            Roles = new List<Rol> { Rol.Editor } 
+            Apellido = "Rodriguez",
+            Roles = new List<Rol> { Rol.Editor },
+            Contraseña = ""
         };
 
         _servicioUsuario.ActualizarUsuario(usuarioEditado);
