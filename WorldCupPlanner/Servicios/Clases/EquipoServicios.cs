@@ -80,6 +80,7 @@ public class EquipoServicios : IServicioEquipo
             this.AgregarEquipo(nuevoEquipo);
         }
     }
+    _auditoria.RegistrarGeneracionAutomaticaEquipos(48);
 }
     public int ObtenerCupo(Confederacion confederacion)
     {
