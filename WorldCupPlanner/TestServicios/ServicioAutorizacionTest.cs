@@ -85,4 +85,18 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
+    
+    [TestMethod]
+    public void Editor_PuedeEditarPartidos()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "editor@gmail.com",
+            Roles = new List<Rol> { Rol.Editor }
+        };
+
+        bool resultado = _servicioAutorizacion.PuedeEditarPartidos(usuario);
+
+        Assert.IsTrue(resultado);
+    }
 }
