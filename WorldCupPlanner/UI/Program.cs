@@ -18,8 +18,10 @@ builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorio>();
 builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorio>();
 builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
+builder.Services.AddScoped<IAuditoriaRepositorio, AuditoriaRepositorio>();
 
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
+builder.Services.AddScoped<IServicioAuditoria, ServicioAuditoria>();
 builder.Services.AddScoped<IServicioEquipo, EquipoServicios>();
 builder.Services.AddScoped<IServicioEstadio, EstadioServicios>();
 builder.Services.AddScoped<IServicioPartido, PartidoServicios>();
@@ -27,6 +29,7 @@ builder.Services.AddScoped<IServicioFixturePrimeraFase, FixturePrimeraFaseServic
 builder.Services.AddScoped<IServicioCrucesSegundaFase, CrucesSegundaFaseServicio>();
 
 builder.Services.AddScoped<UsuarioSesion>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<FixtureEstado>();
 
 var app = builder.Build();

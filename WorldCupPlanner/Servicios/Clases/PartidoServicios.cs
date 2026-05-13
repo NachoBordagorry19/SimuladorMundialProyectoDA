@@ -70,11 +70,11 @@ public class PartidoServicios : IServicioPartido
 
     public PartidoDTO ObtenerPartido(int id)
     {
-        if (_partidoRepositorio.ObtenerPartidoPorId(id) == null)
+        var partido = _partidoRepositorio.ObtenerPartidoPorId(id);
+        if (partido == null)
         {
             throw new ArgumentException("El partido a consultar no existe");
         }
-        Partido? partido = _partidoRepositorio.ObtenerPartidoPorId(id);
         return PartidoEntidadADto(partido);
     }
 
@@ -123,8 +123,7 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido no puede ser nulo");
         }
 
-        Partido partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
-
+        Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
         if (partidoExistente == null)
         {
             throw new ArgumentException("El partido a actualizar no existe");
@@ -207,8 +206,7 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido recibido no puede ser nulo");
         }
 
-        Partido partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
-
+        Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
         if (partidoExistente == null)
         {
             throw new ArgumentException("El partido no existe, porfavor ingrese un partido existente");

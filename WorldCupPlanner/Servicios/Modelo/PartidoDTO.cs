@@ -7,10 +7,10 @@ public class PartidoDTO
 {
     public int idPartido { get; set; }
     public DateTime Fecha { get; set; }
-    public EstadioDTO Estadio { get; set; }
-    public EquipoDTO equipoLocal { get; set; }
-    public EquipoDTO equipoVisitante { get; set; }
-    public string Grupo { get; set; }
+    public EstadioDTO Estadio { get; set; } = new EstadioDTO();
+    public EquipoDTO equipoLocal { get; set; } = new EquipoDTO();
+    public EquipoDTO equipoVisitante { get; set; } = new EquipoDTO();
+    public string Grupo { get; set; } = string.Empty;
     public Fase fase { get; set; }
     public EstadoPartido estadoPartido { get; set; }
     public int golesLocal { get; set; }

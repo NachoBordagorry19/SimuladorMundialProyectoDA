@@ -2,9 +2,9 @@ namespace Dominio.Clases;
 
 public class Estadio
 {
-    private string _nombre;
-    private string _ciudad;
-    private string _descripcion;
+    private string _nombre = string.Empty;
+    private string _ciudad = string.Empty;
+    private string _descripcion = string.Empty;
     private int? _capacidadLocativa;
 
     public string Nombre

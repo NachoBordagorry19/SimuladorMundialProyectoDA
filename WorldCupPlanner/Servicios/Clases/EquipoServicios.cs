@@ -140,12 +140,13 @@ public class EquipoServicios : IServicioEquipo
     {
         ValidarNombreExiste(nombre);
         Equipo? equipo = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        if (equipo == null) throw new ArgumentException("El equipo a consultar no existe");
         return EquipoEntidadAEquipoDTO(equipo);
     }
 
     public void ValidarNombreExiste(string nombre)
     {
-        Equipo equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
         if (equipoExistente == null)
         {
             throw new ArgumentException("El equipo a buscar no existe por favor ingrese uno que exista");
@@ -154,7 +155,7 @@ public class EquipoServicios : IServicioEquipo
 
     public void ValidarNombreNoExiste(string nombre)
     {
-        Equipo equipoNoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
+        Equipo? equipoNoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
         if (equipoNoExistente != null)
         {
             throw new ArgumentException("El equipo a agregar ya existe porfavor ingrese otro");
@@ -165,6 +166,7 @@ public class EquipoServicios : IServicioEquipo
     {
         ValidarNombreExiste(equipoDto.nombre);
         Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
+        if (equipoExistente == null) throw new ArgumentException("El equipo a eliminar no existe");
         _equipoRepositorio.EliminarEquipo(equipoExistente);
         _auditoria.RegistrarEliminacionEquipo(equipoDto.nombre);
     }
@@ -178,7 +180,8 @@ public class EquipoServicios : IServicioEquipo
     {
         ValidarNombreExiste(nombreOriginal);
 
-        Equipo equipoOriginal = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombreOriginal);
+        Equipo? equipoOriginal = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombreOriginal);
+        if (equipoOriginal == null) throw new ArgumentException("El equipo original no existe");
 
         if (nombreOriginal != equipoDto.nombre)
         {
