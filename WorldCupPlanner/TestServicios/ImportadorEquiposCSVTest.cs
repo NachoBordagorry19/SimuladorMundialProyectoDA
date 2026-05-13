@@ -404,6 +404,24 @@ public class ImportadorEquiposCSVTest
        }
    }
    
+   [TestMethod]
+   public void ImportarCSV_ArchivoInexistente_DeberiaRegistrarAuditoriaFallida()
+   {
+       string rutaInvalida = "ruta_que_no_existe.csv";
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaInvalida);
+       }
+       catch (ArgumentException)
+       {
+       }
+
+       _mockAuditoria.Verify(a => a.RegistrarImportacionEquipos(
+           It.Is<string>(s => s.Contains("no existe") || s.Contains("Error")), 
+           false
+       ), Times.Once);
+   }
+   
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");
