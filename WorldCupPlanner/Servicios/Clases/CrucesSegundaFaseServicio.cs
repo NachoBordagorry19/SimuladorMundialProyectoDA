@@ -7,10 +7,12 @@ namespace Servicios.Clases;
 public class CrucesSegundaFaseServicio
 {
     private readonly IServicioPartido _partidoServicios;
+    private readonly IServicioAuditoria _auditoria;
 
-    public CrucesSegundaFaseServicio(IServicioPartido partidoServicios)
+    public CrucesSegundaFaseServicio(IServicioPartido partidoServicios,  IServicioAuditoria auditoria)
     {
         _partidoServicios = partidoServicios;
+        _auditoria = auditoria;
     }
 
     public List<PosicionEquipoDTO> ObtenerRankingGrupo(string grupo, int semillaCrucesFase)
