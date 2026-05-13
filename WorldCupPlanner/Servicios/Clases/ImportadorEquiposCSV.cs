@@ -16,10 +16,11 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    private const int NOMBRE_MINIMO_CARACTERES = 1;
    private const int RANKING_FIFA_MINIMO = 300;
    private const int RANKING_FIFA_MAXIMO = 2500;
+   private readonly IServicioAuditoria _auditoria;
    
-   public ImportadorEquiposCSV()
+   public ImportadorEquiposCSV(IServicioAuditoria auditoria)
    {
-       
+       _auditoria = auditoria;
    }
    public List<Equipo> ImportarDesdeCSV(string rutaArchivo) 
    {
