@@ -13,10 +13,12 @@ namespace Servicios.Clases;
 public class EquipoServicios : IServicioEquipo
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
+    private readonly IServicioAuditoria _auditoria;
 
-    public EquipoServicios(IEquipoRepositorio equipoRepo)
+    public EquipoServicios(IEquipoRepositorio equipoRepo, IServicioAuditoria auditoria)
     {
         _equipoRepositorio = equipoRepo;
+        _auditoria = auditoria;
     }
 
 
@@ -34,58 +36,52 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreNoExiste(equipoDTO.nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
+        _auditoria.RegistrarAltaEquipo(equipoDTO.nombre);
     }
 
-    public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
+    public void GenerarEquiposAutomaticamente(int semillaCompletar)
+{
+    Random random = new Random(semillaCompletar);
+    Array valoresEnum = Enum.GetValues(typeof(Confederacion));
+
+    List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
+    
+    if (todosLosExistentes.Count >= 48)
     {
-        List<String> registrosAuditoria = new List<String>();
-        Random random = new Random(semillaCompletar);
-        Array valoresEnum = Enum.GetValues(typeof(Confederacion));
-
-        List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
-        if (todosLosExistentes.Count >= 48)
-        {
-            registrosAuditoria.Add("El cupo total de 48 equipos ya está completo.");
-            return registrosAuditoria;
-        }
-        foreach (Confederacion conf in valoresEnum)
-        {
-            int cupoMaximo = ObtenerCupo(conf);
-
-            int cantidadActual = 0;
-            List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
-
-            foreach (EquipoDTO equipo in todosLosEquipos)
-            {
-                if (equipo.confederacion == conf)
-                {
-                    cantidadActual++;
-                }
-            }
-
-            int faltantes = cupoMaximo - cantidadActual;
-
-            if (faltantes > 0)
-            {
-                string log = "Confederacion: " + conf.ToString() + " | Generados: " + faltantes + " | Semilla: " + semillaCompletar;
-                registrosAuditoria.Add(log);
-            }
-
-            for (int i = 1; i <= faltantes; i++)
-            {
-                int numeroEquipo = cantidadActual + i;
-                string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
-                EquipoDTO nuevoEquipo = new EquipoDTO();
-                nuevoEquipo.nombre = nombreFormateado;
-                nuevoEquipo.confederacion = conf;
-
-                nuevoEquipo.rankingFifa = random.Next(300, 2501);
-
-                this.AgregarEquipo(nuevoEquipo);
-            }
-        }
-        return registrosAuditoria;
+        return;
     }
+
+    foreach (Confederacion conf in valoresEnum)
+    {
+        int cupoMaximo = ObtenerCupo(conf);
+        List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
+        
+        int cantidadActual = 0;
+        foreach (EquipoDTO equipo in todosLosEquipos)
+        {
+            if (equipo.confederacion == conf)
+            {
+                cantidadActual++;
+            }
+        }
+
+        int faltantes = cupoMaximo - cantidadActual;
+
+        for (int i = 1; i <= faltantes; i++)
+        {
+            int numeroEquipo = cantidadActual + i;
+            string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
+            
+            EquipoDTO nuevoEquipo = new EquipoDTO();
+            nuevoEquipo.nombre = nombreFormateado;
+            nuevoEquipo.confederacion = conf;
+            nuevoEquipo.rankingFifa = random.Next(300, 2501);
+
+            this.AgregarEquipo(nuevoEquipo);
+        }
+    }
+    _auditoria.RegistrarGeneracionAutomaticaEquipos(48);
+}
     public int ObtenerCupo(Confederacion confederacion)
     {
         switch (confederacion)
@@ -170,6 +166,7 @@ public class EquipoServicios : IServicioEquipo
         ValidarNombreExiste(equipoDto.nombre);
         Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
         _equipoRepositorio.EliminarEquipo(equipoExistente);
+        _auditoria.RegistrarEliminacionEquipo(equipoDto.nombre);
     }
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
@@ -204,6 +201,7 @@ public class EquipoServicios : IServicioEquipo
 
         _equipoRepositorio.EliminarEquipo(equipoOriginal);
         _equipoRepositorio.AgregarEquipo(equipoActualizado);
+        _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)

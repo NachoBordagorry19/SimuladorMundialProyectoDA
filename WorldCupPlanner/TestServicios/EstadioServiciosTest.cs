@@ -1,3 +1,4 @@
+using Moq;
 using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
@@ -11,8 +12,9 @@ public class EstadioServiciosTest
 {
     private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
     private IEstadioRepositorio _estadioRepositorio;
-    private IServicioEstadio _servicioEstadio;
+    private IServicioEstadio _estadioServicios;
     private EstadioDTO _estadioDTO;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
 
     [TestInitialize]
@@ -20,7 +22,8 @@ public class EstadioServiciosTest
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
-        _servicioEstadio = new EstadioServicios(_estadioRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _estadioServicios = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
 
         _estadioDTO = new EstadioDTO()
         {
@@ -34,7 +37,7 @@ public class EstadioServiciosTest
     [TestMethod]
     public void AgregarEstadio_NombreUnicoEnSistema()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicios.AgregarEstadio(_estadioDTO);
         Assert.AreEqual("CDS", _estadioDTO.Nombre);
         Assert.AreEqual("Montevideo", _estadioDTO.Ciudad);
         Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
@@ -45,14 +48,21 @@ public class EstadioServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void AgregarEstadio_SiNombreExiste_LanzaExcepcion()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+    }
+    
+    [TestMethod]
+    public void AgregarEstadio_DebeRegistrarAuditoria()
+    {
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+        _auditoriaMock.Verify(a => a.RegistrarAltaEstadio(_estadioDTO.Nombre), Times.Once);
     }
 
     [TestMethod]
     public void ObtenerEstadio_DevuelveCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicios.AgregarEstadio(_estadioDTO);
 
         EstadioDTO estadio2 = new EstadioDTO()
         {
@@ -62,16 +72,16 @@ public class EstadioServiciosTest
             CapacidadLocativa = 50000,
         };
 
-        _servicioEstadio.AgregarEstadio(estadio2);
+        _estadioServicios.AgregarEstadio(estadio2);
 
-        var estadios = _servicioEstadio.ObtenerEstadios();
+        var estadios = _estadioServicios.ObtenerEstadios();
         Assert.AreEqual(2, estadios.Count);
     }
 
     [TestMethod]
     public void ObtenerEstadioPorNombre_DevuelveCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicios.AgregarEstadio(_estadioDTO);
 
         EstadioDTO estadio2 = new EstadioDTO()
         {
@@ -81,9 +91,9 @@ public class EstadioServiciosTest
             CapacidadLocativa = 30000
         };
 
-        _servicioEstadio.AgregarEstadio(estadio2);
+        _estadioServicios.AgregarEstadio(estadio2);
 
-        EstadioDTO obtenido = _servicioEstadio.ObtenerEstadioPorNombre("Monumental");
+        EstadioDTO obtenido = _estadioServicios.ObtenerEstadioPorNombre("Monumental");
 
         Assert.AreEqual("Monumental", obtenido.Nombre);
     }
@@ -92,15 +102,15 @@ public class EstadioServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void ObtenerEstadioPorNombre_SiNoExiste_LanzaExcepcion()
     {
-        _servicioEstadio.ObtenerEstadioPorNombre("NoExiste");
+        _estadioServicios.ObtenerEstadioPorNombre("NoExiste");
     }
 
     [TestMethod]
     public void EliminarEstadio_DevuelveCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
-        _servicioEstadio.EliminarEstadio(_estadioDTO);
-        var estadios = _servicioEstadio.ObtenerEstadios();
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+        _estadioServicios.EliminarEstadio(_estadioDTO);
+        var estadios = _estadioServicios.ObtenerEstadios();
         Assert.AreEqual(0, estadios.Count);
     }
 
@@ -108,13 +118,22 @@ public class EstadioServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void EliminarEstadio_SiNoExiste_LanzaExcepcion()
     {
-        _servicioEstadio.EliminarEstadio(_estadioDTO);
+        _estadioServicios.EliminarEstadio(_estadioDTO);
+    }
+    
+    [TestMethod]
+    public void EliminarEstadio_DebeRegistrarAuditoria()
+    {
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+        _estadioServicios.EliminarEstadio(_estadioDTO);
+        
+        _auditoriaMock.Verify(a => a.RegistrarEliminacionEstadio(_estadioDTO.Nombre), Times.Once);
     }
 
     [TestMethod]
     public void ActualizarEstadio_ModificaDatosCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicios.AgregarEstadio(_estadioDTO);
 
         EstadioDTO estadioActualizado = new EstadioDTO()
         {
@@ -124,8 +143,8 @@ public class EstadioServiciosTest
             CapacidadLocativa = 60000
         };
 
-        _servicioEstadio.ActualizarEstadio(estadioActualizado);
-        EstadioDTO obtenido = _servicioEstadio.ObtenerEstadioPorNombre("CDS");
+        _estadioServicios.ActualizarEstadio(estadioActualizado);
+        EstadioDTO obtenido = _estadioServicios.ObtenerEstadioPorNombre("CDS");
 
         Assert.AreEqual("Nueva Ciudad", obtenido.Ciudad);
         Assert.AreEqual("Nueva Descripcion", obtenido.Descripcion);
@@ -144,6 +163,23 @@ public class EstadioServiciosTest
             CapacidadLocativa = 30000
         };
 
-        _servicioEstadio.ActualizarEstadio(estadio);
+        _estadioServicios.ActualizarEstadio(estadio);
+    }
+    
+    [TestMethod]
+    public void ActualizarEstadio_DebeRegistrarAuditoria()
+    {
+        var estadioInicial = new EstadioDTO { Nombre = "Lusail", Ciudad = "Lusail", CapacidadLocativa = 80000 };;
+    
+        _estadioServicios.AgregarEstadio(estadioInicial);
+
+        var estadioEditado = new EstadioDTO { 
+            Nombre = "Lusail", 
+            Ciudad = "Lusail City", 
+            CapacidadLocativa = 85000 
+        };
+        
+        _estadioServicios.ActualizarEstadio(estadioEditado);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEstadio(estadioEditado.Nombre), Times.Once);
     }
 }

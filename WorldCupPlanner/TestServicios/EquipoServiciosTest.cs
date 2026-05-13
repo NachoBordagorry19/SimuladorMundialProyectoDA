@@ -7,6 +7,8 @@ using Servicios.Clases;
 using Servicios.Modelo;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
+using Servicios.Interfaces;
 
 namespace TestServicios;
 
@@ -18,13 +20,15 @@ public class EquipoServiciosTest
     private EquipoServicios _equipoServicios;
     private EquipoDTO _equipoDTO;
     private EquipoDTO _equipoDTO2;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
-        _equipoServicios = new EquipoServicios(_equipoRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
 
 
         Confederacion confederacion = new Confederacion();
@@ -62,8 +66,13 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.AgregarEquipo(_equipoDTO);
     }
-
-
+    
+    [TestMethod]
+    public void AgregarEquipo_DebeLlamarAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _auditoriaMock.Verify(a => a.RegistrarAltaEquipo(_equipoDTO.nombre), Times.Once);
+    }
 
     [TestMethod]
     public void ObtenerEquipos_DevuelveTodosLosEquipo()
@@ -110,6 +119,15 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.EliminarEquipo(_equipoDTO2);
     }
+    
+    [TestMethod]
+    public void EliminarEquipo_DebeRegistrarEnAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.EliminarEquipo(_equipoDTO);
+
+        _auditoriaMock.Verify(a => a.RegistrarEliminacionEquipo(_equipoDTO.nombre), Times.Once);
+    }
 
     [TestMethod]
     public void ActualizarEquipo_SiExiste_SeActualiza()
@@ -139,6 +157,32 @@ public class EquipoServiciosTest
             rankingFifa = 1700
         };
         _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
+    }
+    
+    [TestMethod]
+    public void ActualizarEquipo_DebeRegistrarEnAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        string nombreNuevo = "Allianz Stadium";
+        var dtoNuevoNombre = new EquipoDTO 
+        { 
+            nombre = nombreNuevo, 
+            confederacion = _equipoDTO.confederacion, 
+            rankingFifa = _equipoDTO.rankingFifa 
+        };
+
+        _equipoServicios.ActualizarEquipo(_equipoDTO.nombre, dtoNuevoNombre);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(nombreNuevo), Times.Once);
+
+        var dtoCambioRanking = new EquipoDTO 
+        { 
+            nombre = nombreNuevo,
+            confederacion = _equipoDTO.confederacion, 
+            rankingFifa = 2500
+        };
+
+        _equipoServicios.ActualizarEquipo(dtoCambioRanking);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(nombreNuevo), Times.Exactly(2));
     }
 
     [TestMethod]
@@ -273,43 +317,11 @@ public class EquipoServiciosTest
 
         Assert.IsTrue(existeNombreFormateado);
     }
-
+    
     [TestMethod]
-    public void GenerarEquiposAutomaticamente_DebeRegistrarAuditoria()
+    public void GenerarEquiposAutomaticamente_DebeLlamarAuditoria()
     {
-        int semilla = 666;
-        List<string> auditoria = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
-
-        Assert.IsNotNull(auditoria);
-        Assert.IsTrue(auditoria.Count > 0);
-
-        bool registroCorrecto = false;
-        foreach (string log in auditoria)
-        {
-            if (log.Contains("666"))
-            {
-                registroCorrecto = true;
-            }
-        }
-        Assert.IsTrue(registroCorrecto);
-    }
-
-    [TestMethod]
-    public void GenerarEquiposAutomaticamente_SiYaEstaLleno_InformaEnAuditoria()
-    {
-        int semilla = 666;
-        _equipoServicios.GenerarEquiposAutomaticamente(semilla);
-        List<string> resultado = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
-
-        bool mensajeEncontrado = false;
-        foreach (string linea in resultado)
-        {
-            if (linea.Contains("El cupo total de 48 equipos ya está completo."))
-            {
-                mensajeEncontrado = true;
-            }
-        }
-
-        Assert.IsTrue(mensajeEncontrado);
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+        _auditoriaMock.Verify(a => a.RegistrarGeneracionAutomaticaEquipos(48), Times.Once);
     }
 }

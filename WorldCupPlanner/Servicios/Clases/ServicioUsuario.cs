@@ -13,12 +13,14 @@ namespace Servicios.Clases;
 public class ServicioUsuario : IServicioUsuario
 {
     private readonly IUsuarioRepositorio _usuarioRepositorio;
+    private readonly IServicioAuditoria _auditoria;
 
     private const string ContraseñaPorDefecto = "Usuario123!";
 
-    public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio)
+    public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio, IServicioAuditoria auditoria)
     {
         _usuarioRepositorio = usuarioRepositorio;
+        _auditoria = auditoria;
     }
 
     public void AgregarUsuario(UsuarioDTO usuarioDto)
@@ -29,6 +31,9 @@ public class ServicioUsuario : IServicioUsuario
         ValidarEmailExiste(emailAVerificar);
         ValidarRoles(usuarioDto);
         _usuarioRepositorio.AgregarUsuario(usuario);
+        
+        string rolesString = string.Join(", ", usuarioDto.Roles.Select(r => r.ToString()));
+        _auditoria.RegistrarAltaUsuario(usuarioDto.Email, rolesString);
     }
 
     public void ValidarRoles(UsuarioDTO usuarioDto)
@@ -171,6 +176,7 @@ public class ServicioUsuario : IServicioUsuario
         );
 
         _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _auditoria.RegistrarEdicionUsuario(usuarioDto.Email);
     }
 
     public void ReiniciarContraseña(string email)
@@ -187,6 +193,7 @@ public class ServicioUsuario : IServicioUsuario
         );
 
         _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _auditoria.RegistrarEdicionUsuario(email);
     }
 
 

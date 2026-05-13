@@ -8,7 +8,7 @@ public interface IServicioEquipo
 {
     void AgregarEquipo(EquipoDTO equipoDTO);
     List<EquipoDTO> ObtenerEquipos();
-    List<String> GenerarEquiposAutomaticamente(int semillaCompletar);
+    void GenerarEquiposAutomaticamente(int semillaCompletar);
     int ObtenerCupo(Confederacion confederacion);
 
     void ActualizarEquipo(EquipoDTO equipoDTO);

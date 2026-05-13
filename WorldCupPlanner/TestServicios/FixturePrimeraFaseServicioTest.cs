@@ -3,6 +3,8 @@ using Repositorio;
 using Servicios.Clases;
 using System.Linq;
 using Dominio.Enums;
+using Moq;
+using Servicios.Interfaces;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -18,6 +20,7 @@ public class FixturePrimeraFaseServicioTest
     private EquipoServicios _equipoServicios;
     private EstadioServicios _estadioServicios;
     private PartidoServicios _partidoServicios;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     private bool PartidoPerteneceAlGrupo(PartidoDTO partido, Grupo grupo)
     {
@@ -44,9 +47,10 @@ public class FixturePrimeraFaseServicioTest
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatos);
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatos);
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
-        _equipoServicios = new EquipoServicios(_equipoRepositorio);
-        _estadioServicios = new EstadioServicios(_estadioRepositorio);
-        _partidoServicios = new PartidoServicios(_partidoRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
+        _estadioServicios = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
+        _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
 
         _fixtureServicio = new FixturePrimeraFaseServicio(
             _equipoRepositorio,
@@ -54,7 +58,8 @@ public class FixturePrimeraFaseServicioTest
             _partidoRepositorio,
             _equipoServicios,
             _estadioServicios,
-            _partidoServicios);
+            _partidoServicios,
+            _auditoriaMock.Object);
     }
 
     [TestMethod]
@@ -362,5 +367,21 @@ public class FixturePrimeraFaseServicioTest
             .First();
 
         Assert.AreEqual(fechaInicio, primeraFechaGrupoA);
+    }
+    
+    [TestMethod]
+    public void GenerarFixturePrimeraFase_DebeRegistrarAuditoria()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+    
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 1", "Ciudad 1", "Desc", 40000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 2", "Ciudad 2", "Desc", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 3", "Ciudad 3", "Desc", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 4", "Ciudad 4", "Desc", 70000));
+
+        int semilla = 456;
+        _fixtureServicio.GenerarFixturePrimeraFase(semilla);
+
+        _auditoriaMock.Verify(a => a.RegistrarGeneracionFixture(), Times.Once);
     }
 }

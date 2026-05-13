@@ -1,4 +1,5 @@
 using Dominio.Enums;
+using Moq;
 using Repositorio;
 using Servicios.Clases;
 using Servicios.Interfaces;
@@ -13,14 +14,16 @@ public class CrucesSegundaFaseServicioTest
     private PartidoRepositorio _partidoRepositorio;
     private IServicioPartido _partidoServicios;
     private CrucesSegundaFaseServicio _crucesServicio;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatos = new BaseDeDatosEnMemoria();
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
-        _partidoServicios = new PartidoServicios(_partidoRepositorio);
-        _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
+        _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios, _auditoriaMock.Object);
     }
 
     [TestMethod]
@@ -687,6 +690,22 @@ public class CrucesSegundaFaseServicioTest
 
             Assert.AreNotEqual(cruce.EquipoLocal.Grupo, cruce.EquipoVisitante.Grupo);
         }
+    }
+    
+    [TestMethod]
+    public void GenerarCrucesFase_DebeRegistrarAuditoria()
+    {
+        var clasificados = new ClasificadosDTO();
+        for (int i = 1; i <= 12; i++) {
+            clasificados.Primeros.Add(new PosicionEquipoDTO { EquipoNombre = $"P{i}", Grupo = "A" });
+            clasificados.Segundos.Add(new PosicionEquipoDTO { EquipoNombre = $"S{i}", Grupo = "B" });
+        }
+        for (int i = 1; i <= 8; i++) {
+            clasificados.Terceros.Add(new PosicionEquipoDTO { EquipoNombre = $"T{i}", Grupo = "C" });
+        }
+
+        _crucesServicio.GenerarCrucesFase(clasificados, 123);
+        _auditoriaMock.Verify(a => a.RegistrarSorteoCruces(), Times.Once);
     }
 
     [TestMethod]

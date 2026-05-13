@@ -4,6 +4,7 @@ using Servicios.Interfaces;
 using Servicios.Modelo;
 using Servicios.Clases;
 using Dominio.Enums;
+using Moq;
 
 namespace TestServicios;
 
@@ -14,13 +15,15 @@ public class UsuarioServicioTest
     private IUsuarioRepositorio _usuarioRepositorio;
     private ServicioUsuario _servicioUsuario;
     private UsuarioDTO _usuarioDTO;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _usuarioRepositorio = new UsuarioRepositorio(_baseDeDatosEnMemoria);
-        _servicioUsuario = new ServicioUsuario(_usuarioRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _servicioUsuario = new ServicioUsuario(_usuarioRepositorio, _auditoriaMock.Object);
 
         _usuarioDTO = new UsuarioDTO()
         {
@@ -57,6 +60,13 @@ public class UsuarioServicioTest
     {
         _usuarioDTO.Roles = new List<Rol> { Rol.Administrador, Rol.Administrador };
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+    
+    [TestMethod]
+    public void AgregarUsuario_DebeRegistrarAuditoria()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        _auditoriaMock.Verify(a => a.RegistrarAltaUsuario("a@gmail.com", "Administrador"), Times.Once);
     }
 
     [TestMethod]
@@ -162,6 +172,24 @@ public class UsuarioServicioTest
         Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Administrador));
         Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Editor));
     }
+    
+    [TestMethod]
+    public void ActualizarUsuario_DebeRegistrarAuditoria()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        var usuarioEditado = new UsuarioDTO { 
+            Email = "a@gmail.com",
+            FechaNacimiento = new DateTime(1999, 10, 10),
+            Nombre = "Fede Editado", 
+            Apellido = "Rodriguez",
+            Roles = new List<Rol> { Rol.Editor },
+            Contraseña = ""
+        };
+
+        _servicioUsuario.ActualizarUsuario(usuarioEditado);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionUsuario("a@gmail.com"), Times.Once);
+    }
 
     [TestMethod]
     public void ReiniciarContraseña_PermiteAutenticarConContraseñaPorDefecto()
@@ -173,5 +201,13 @@ public class UsuarioServicioTest
         UsuarioDTO usuarioAutenticado = _servicioUsuario.AutenticarUsuario("a@gmail.com", "Usuario123!");
 
         Assert.AreEqual("a@gmail.com", usuarioAutenticado.Email);
+    }
+    
+    [TestMethod]
+    public void ReiniciarContraseña_DebeRegistrarAuditoria()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        _servicioUsuario.ReiniciarContraseña("a@gmail.com");
+        _auditoriaMock.Verify(a => a.RegistrarEdicionUsuario("a@gmail.com"), Times.AtLeast(1));
     }
 }

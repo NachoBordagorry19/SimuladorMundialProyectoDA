@@ -9,11 +9,13 @@ namespace Servicios.Clases;
 public class PartidoServicios : IServicioPartido
 {
     private readonly IPartidoRepositorio _partidoRepositorio;
+    private readonly IServicioAuditoria _auditoria;
     private readonly List<Fase> _fasesBloqueadas = new List<Fase>();
 
-    public PartidoServicios(IPartidoRepositorio partidoRepositorio)
+    public PartidoServicios(IPartidoRepositorio partidoRepositorio, IServicioAuditoria auditoria)
     {
         _partidoRepositorio = partidoRepositorio;
+        _auditoria = auditoria;
     }
 
     public void AgregarPartido(PartidoDTO partidoDto, EquipoDTO equipoLocal, EquipoDTO equipoVisitante, EstadioDTO estadio)
@@ -149,6 +151,8 @@ public class PartidoServicios : IServicioPartido
             partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
             partidoExistente.MarcarComoJugado();
         }
+        string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
+        _auditoria.RegistrarModificacionPartido(detalle);
     }
 
     private PartidoDTO PartidoEntidadADto(Partido partido)

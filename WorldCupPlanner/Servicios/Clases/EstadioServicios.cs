@@ -11,10 +11,12 @@ namespace Servicios.Clases;
 public class EstadioServicios : IServicioEstadio
 {
     private readonly IEstadioRepositorio _estadioRepositorio;
+    private readonly IServicioAuditoria _auditoria;
 
-    public EstadioServicios(IEstadioRepositorio estadioRepositorio)
+    public EstadioServicios(IEstadioRepositorio estadioRepositorio, IServicioAuditoria auditoria)
     {
         _estadioRepositorio = estadioRepositorio;
+        _auditoria = auditoria;
     }
 
     public void AgregarEstadio(EstadioDTO estadioDTO)
@@ -22,6 +24,7 @@ public class EstadioServicios : IServicioEstadio
         ValidarNombreNoExiste(estadioDTO.Nombre);
         Estadio estadio = EstadioDTOAEntidad(estadioDTO);
         _estadioRepositorio.AgregarEstadio(estadio);
+        _auditoria.RegistrarAltaEstadio(estadioDTO.Nombre);
     }
 
     private void ValidarNombreNoExiste(string nombre)
@@ -73,6 +76,7 @@ public class EstadioServicios : IServicioEstadio
             throw new ArgumentException("El estadio no existe");
         }
         _estadioRepositorio.EliminarEstadio(estadioExistente);
+        _auditoria.RegistrarEliminacionEstadio(estadioExistente.Nombre);
     }
 
     public void ActualizarEstadio(EstadioDTO estadioDTO)
@@ -84,6 +88,7 @@ public class EstadioServicios : IServicioEstadio
         }
         Estadio estadio = EstadioDTOAEntidad(estadioDTO);
         _estadioRepositorio.ActualizarEstadio(estadio);
+        _auditoria.RegistrarEdicionEstadio(estadio.Nombre);
     }
 
     private EstadioDTO DesdeEntidad(Estadio estadio)
