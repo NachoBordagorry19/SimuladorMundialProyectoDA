@@ -1,6 +1,5 @@
 @page "/partidos"
 @rendermode InteractiveServer
-@using Dominio.Enums
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @inject IServicioPartido ServicioPartido
@@ -21,6 +20,11 @@
             <div class="alert alert-danger wcp-alert mt-3">@mensajeError</div>
         }
 
+        @if (!string.IsNullOrWhiteSpace(mensajeExito))
+        {
+            <div class="alert alert-success wcp-alert mt-3">@mensajeExito</div>
+        }
+
         <div class="row g-3 mt-3">
             <div class="col-md-3">
                 <label class="wcp-form-label">Fecha</label>
@@ -31,7 +35,7 @@
                 <label class="wcp-form-label">Estadio</label>
                 <select class="form-control" @bind="estadioFiltro">
                     <option value="">Todos</option>
-                    @foreach (var estadio in ObtenerEstadios())
+                    @foreach (var estadio in estadios)
                     {
                         <option value="@estadio">@estadio</option>
                     }
@@ -42,7 +46,7 @@
                 <label class="wcp-form-label">Grupo</label>
                 <select class="form-control" @bind="grupoFiltro">
                     <option value="">Todos</option>
-                    @foreach (var grupo in ObtenerGrupos())
+                    @foreach (var grupo in grupos)
                     {
                         <option value="@grupo">@grupo</option>
                     }
@@ -53,22 +57,35 @@
                 <label class="wcp-form-label">Fase</label>
                 <select class="form-control" @bind="faseFiltro">
                     <option value="">Todas</option>
-                    @foreach (Fase fase in Enum.GetValues<Fase>())
+                    @foreach (var fase in fases)
                     {
-                        <option value="@fase.ToString()">@fase</option>
+                        <option value="@fase">@fase</option>
                     }
                 </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="wcp-form-label">Semilla Simulación</label>
+                <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
             </div>
         </div>
 
         <div class="wcp-actions">
+            <button class="wcp-btn-secondary" @onclick="AplicarFiltros">
+                Aplicar filtros
+            </button>
+
             <button class="wcp-btn-secondary" @onclick="LimpiarFiltros">
                 Limpiar filtros
+            </button>
+
+            <button class="wcp-btn-primary" @onclick="SimularTodosLosPartidos">
+                Simular partidos pendientes
             </button>
         </div>
     </div>
 
-    @if (ObtenerPartidosFiltrados().Count > 0)
+    @if (partidos.Count > 0)
     {
         <div class="wcp-card mt-4">
             <table class="wcp-table">
@@ -86,7 +103,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var partido in ObtenerPartidosFiltrados())
+                @foreach (var partido in partidos)
                 {
                     <tr>
                         <td>@partido.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
@@ -118,89 +135,108 @@
 
 @code {
     private List<PartidoDTO> partidos = new List<PartidoDTO>();
+    private List<string> estadios = new List<string>();
+    private List<string> grupos = new List<string>();
+    private List<string> fases = new List<string>();
 
     private DateTime? fechaFiltro;
     private string estadioFiltro = "";
     private string grupoFiltro = "";
     private string faseFiltro = "";
 
+    private int semillaSimulacion = 123;
+
     private string mensajeError = "";
+    private string mensajeExito = "";
 
     protected override void OnInitialized()
     {
-        CargarPartidos();
+        CargarDatos();
     }
 
-    private void CargarPartidos()
+    private void CargarDatos()
     {
         try
         {
             mensajeError = "";
-            partidos = ServicioPartido.ObtenerPartidos();
+            mensajeExito = "";
+
+            estadios = ServicioPartido.ObtenerEstadiosDePartidos();
+            grupos = ServicioPartido.ObtenerGruposDePartidos();
+            fases = ServicioPartido.ObtenerFasesDePartidos();
+
+            CargarPartidos();
         }
         catch (Exception ex)
         {
             mensajeError = ex.Message;
+            mensajeExito = "";
         }
     }
 
-    private List<PartidoDTO> ObtenerPartidosFiltrados()
+    private void CargarPartidos()
     {
-        var partidosFiltrados = partidos.AsEnumerable();
-
-        if (fechaFiltro != null)
-        {
-            partidosFiltrados = partidosFiltrados
-                .Where(p => p.Fecha.Date == fechaFiltro.Value.Date);
-        }
-
-        if (!string.IsNullOrWhiteSpace(estadioFiltro))
-        {
-            partidosFiltrados = partidosFiltrados
-                .Where(p => p.Estadio.Nombre == estadioFiltro);
-        }
-
-        if (!string.IsNullOrWhiteSpace(grupoFiltro))
-        {
-            partidosFiltrados = partidosFiltrados
-                .Where(p => p.Grupo == grupoFiltro);
-        }
-
-        if (!string.IsNullOrWhiteSpace(faseFiltro))
-        {
-            partidosFiltrados = partidosFiltrados
-                .Where(p => p.fase.ToString() == faseFiltro);
-        }
-
-        return partidosFiltrados
-            .OrderBy(p => p.Fecha)
-            .ToList();
+        partidos = ServicioPartido.ObtenerPartidosFiltrados(
+            fechaFiltro,
+            estadioFiltro,
+            grupoFiltro,
+            faseFiltro);
     }
 
-    private List<string> ObtenerEstadios()
+    private void AplicarFiltros()
     {
-        return partidos
-            .Select(p => p.Estadio.Nombre)
-            .Distinct()
-            .OrderBy(nombre => nombre)
-            .ToList();
-    }
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
 
-    private List<string> ObtenerGrupos()
-    {
-        return partidos
-            .Where(p => !string.IsNullOrWhiteSpace(p.Grupo))
-            .Select(p => p.Grupo)
-            .Distinct()
-            .OrderBy(grupo => grupo)
-            .ToList();
+            CargarPartidos();
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
     }
 
     private void LimpiarFiltros()
     {
-        fechaFiltro = null;
-        estadioFiltro = "";
-        grupoFiltro = "";
-        faseFiltro = "";
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            fechaFiltro = null;
+            estadioFiltro = "";
+            grupoFiltro = "";
+            faseFiltro = "";
+
+            CargarPartidos();
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void SimularTodosLosPartidos()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            ServicioPartido.SimularTodosLosPartidos(semillaSimulacion);
+
+            CargarDatos();
+
+            mensajeExito = "Partidos pendientes simulados correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
     }
 }
