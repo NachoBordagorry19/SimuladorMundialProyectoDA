@@ -188,4 +188,18 @@ public class AuditoriaServicioTest
         Assert.IsTrue(registros[0].Contains("Importación de Equipos (Error)"));
         Assert.IsTrue(registros[0].Contains(error));
     }
+    
+    [TestMethod]
+    public void RegistrarGeneracionAutomaticaEquipos_DebeGuardarRegistroCorrectamente()
+    {
+        int cantidad = 32;
+        _servicio.RegistrarGeneracionAutomaticaEquipos(cantidad);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.AreEqual(1, registros.Count);
+        string log = registros[0];
+        Assert.IsTrue(log.Contains("Generación automática de equipos"));
+        Assert.IsTrue(log.Contains(cantidad.ToString()));
+        Assert.IsTrue(log.Contains("admin@gmail.com"));
+    }
 }
