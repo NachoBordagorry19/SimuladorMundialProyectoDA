@@ -218,4 +218,12 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Realización de sorteo para cruces"));
     }
+    
+    [TestMethod]
+    public void RegistrarImportacionEquipos_Exito_DebeGuardarRegistroCorrectamente()
+    {
+        _servicio.RegistrarImportacionEquipos("Archivo: equipos.csv", true);
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Importación de equipos (Éxito)"));
+    }
 }
