@@ -1,0 +1,141 @@
+@page "/EditarPartido/{IdPartido:int}"
+@rendermode InteractiveServer
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioPartido ServicioPartido
+@inject IServicioEstadio ServicioEstadio
+@inject NavigationManager Navigation
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Editar Partido</h1>
+        <p class="wcp-subtitle">Modificar fecha, estadio o cargar resultado del partido.</p>
+
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger wcp-alert">@mensajeError</div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(mensajeExito))
+        {
+            <div class="alert alert-success wcp-alert">@mensajeExito</div>
+        }
+
+        @if (partido != null)
+        {
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Equipo local</label>
+                    <input class="form-control" value="@partido.equipoLocal.nombre" disabled />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Equipo visitante</label>
+                    <input class="form-control" value="@partido.equipoVisitante.nombre" disabled />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="wcp-form-label">Fecha</label>
+                    <InputDate @bind-Value="partido.Fecha" class="form-control" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="wcp-form-label">Estadio</label>
+                    <select class="form-control" @bind="nombreEstadioSeleccionado">
+                        @foreach (var estadio in estadios)
+                        {
+                            <option value="@estadio.Nombre">@estadio.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="wcp-form-label">Goles local</label>
+                    <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="wcp-form-label">Goles visitante</label>
+                    <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
+                </div>
+            </div>
+
+            <div class="wcp-actions">
+                <button class="wcp-btn-primary" @onclick="GuardarCambios">
+                    Guardar Cambios
+                </button>
+
+                <NavLink href="/partidos" class="wcp-btn-secondary">
+                    Volver
+                </NavLink>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int IdPartido { get; set; }
+
+    private PartidoDTO? partido;
+    private List<EstadioDTO> estadios = new List<EstadioDTO>();
+    private string nombreEstadioSeleccionado = "";
+
+    private string mensajeError = "";
+    private string mensajeExito = "";
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            estadios = ServicioEstadio.ObtenerEstadios();
+            partido = ServicioPartido.ObtenerPartido(IdPartido);
+
+            if (partido.Estadio != null)
+            {
+                nombreEstadioSeleccionado = partido.Estadio.Nombre;
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void GuardarCambios()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            if (partido == null)
+            {
+                mensajeError = "No hay partido seleccionado.";
+                return;
+            }
+
+            var estadioSeleccionado = estadios.FirstOrDefault(e => e.Nombre == nombreEstadioSeleccionado);
+
+            if (estadioSeleccionado == null)
+            {
+                mensajeError = "Debe seleccionar un estadio válido.";
+                return;
+            }
+
+            partido.Estadio = estadioSeleccionado;
+            partido.estadoPartido = EstadoPartido.Jugado;
+
+            ServicioPartido.ActualizarPartido(partido);
+
+            mensajeExito = "Partido actualizado correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+}

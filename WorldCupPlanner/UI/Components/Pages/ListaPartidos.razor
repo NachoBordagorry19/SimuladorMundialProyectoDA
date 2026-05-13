@@ -86,6 +86,7 @@
                     <th>Estadio</th>
                     <th>Estado</th>
                     <th>Resultado</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -100,6 +101,11 @@
                         <td>@partido.Estadio.Nombre</td>
                         <td>@partido.estadoPartido</td>
                         <td>@partido.golesLocal - @partido.golesVisitante</td>
+                        <td>
+                            <NavLink href="@($"/EditarPartido/{partido.idPartido}")" class="wcp-action-link wcp-action-edit">
+                                Editar
+                            </NavLink>
+                        </td>
                     </tr>
                 }
                 </tbody>
