@@ -63,6 +63,10 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
 
                    numeroLinea++;
                }
+               _auditoria.RegistrarImportacionEquipos(
+                   $"Importación exitosa de {equiposImportados.Count} equipos.", 
+                   true
+               );
                return equiposImportados;
            }
        }
