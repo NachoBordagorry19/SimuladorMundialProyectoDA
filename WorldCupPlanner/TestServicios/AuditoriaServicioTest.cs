@@ -190,6 +190,17 @@ public class AuditoriaServicioTest
     }
     
     [TestMethod]
+    public void RegistrarImportacionEquipos_Exito_DebeGuardarRegistroCorrectamente()
+    {
+        string exito = "Archivo válido";
+        _servicio.RegistrarImportacionEquipos(exito, true);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.IsTrue(registros[0].Contains("Importación de Equipos (Éxito)"));
+        Assert.IsTrue(registros[0].Contains(exito));
+    }
+    
+    [TestMethod]
     public void RegistrarGeneracionAutomaticaEquipos_DebeGuardarRegistroCorrectamente()
     {
         int cantidad = 32;
@@ -217,13 +228,5 @@ public class AuditoriaServicioTest
         _servicio.RegistrarSorteoCruces();
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Realización de sorteo para cruces"));
-    }
-    
-    [TestMethod]
-    public void RegistrarImportacionEquipos_Exito_DebeGuardarRegistroCorrectamente()
-    {
-        _servicio.RegistrarImportacionEquipos("Archivo: equipos.csv", true);
-        var log = _servicio.ObtenerRegistrosFormateados()[0];
-        Assert.IsTrue(log.Contains("Éxito"));
     }
 }
