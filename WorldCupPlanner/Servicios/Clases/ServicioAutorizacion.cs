@@ -26,9 +26,9 @@ public class ServicioAutorizacion : IServicioAutorizacion
         return usuario.Roles.Contains(Rol.Administrador);
     }
 
-    public bool PuedeUsarFixture(UsuarioDTO? usuario)
+    public bool PuedeUsarFixture(UsuarioDTO usuario)
     {
-        throw new NotImplementedException();
+        return usuario.Roles.Contains(Rol.Editor);
     }
 
     public bool PuedeEditarPartidos(UsuarioDTO? usuario)
