@@ -96,7 +96,9 @@ public class FixturePrimeraFaseServicio
             Partidos = partidos,
             Grupos = grupos
         };
-
+        
+        _auditoria.RegistrarGeneracionFixture();
+        
         return resultado;
     }
 
