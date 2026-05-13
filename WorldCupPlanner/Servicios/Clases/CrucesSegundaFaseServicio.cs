@@ -362,4 +362,30 @@ public class CrucesSegundaFaseServicio
 
         return semifinales;
     }
+    
+    public List<CruceDTO> GenerarTercerPuestoYFinal(List<CruceDTO> semifinales)
+    {
+        var partidosFinales = new List<CruceDTO>();
+
+        var s1 = semifinales.First(c => c.Codigo == "S1");
+        var s2 = semifinales.First(c => c.Codigo == "S2");
+
+        partidosFinales.Add(new CruceDTO
+        {
+            Codigo = "TercerPuesto",
+            Fase = Fase.Tercero,
+            ReferenciaLocal = "Perdedor " + s1.Codigo,
+            ReferenciaVisitante = "Perdedor " + s2.Codigo
+        });
+
+        partidosFinales.Add(new CruceDTO
+        {
+            Codigo = "Final",
+            Fase = Fase.Final,
+            ReferenciaLocal = "Ganador " + s1.Codigo,
+            ReferenciaVisitante = "Ganador " + s2.Codigo
+        });
+
+        return partidosFinales;
+    }
 }
