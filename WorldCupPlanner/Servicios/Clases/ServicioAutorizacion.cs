@@ -16,9 +16,9 @@ public class ServicioAutorizacion : IServicioAutorizacion
         return usuario.Roles.Contains(Rol.Administrador);
     }
 
-    public bool PuedeGestionarEstadios(UsuarioDTO? usuario)
+    public bool PuedeGestionarEstadios(UsuarioDTO usuario)
     {
-        throw new NotImplementedException();
+        return usuario.Roles.Contains(Rol.Administrador);
     }
 
     public bool PuedeVisualizarLogs(UsuarioDTO? usuario)
