@@ -9,6 +9,7 @@ namespace Servicios.Clases;
 public class PartidoServicios : IServicioPartido
 {
     private readonly IPartidoRepositorio _partidoRepositorio;
+    private readonly List<Fase> _fasesBloqueadas = new List<Fase>();
 
     public PartidoServicios(IPartidoRepositorio partidoRepositorio)
     {
@@ -32,7 +33,7 @@ public class PartidoServicios : IServicioPartido
             partidoDto.golesLocal,
             partidoDto.golesVisitante
         );
-        
+
         partido.Grupo = partidoDto.Grupo;
 
         if (partidoDto.estadoPartido == EstadoPartido.Jugado)
@@ -104,6 +105,14 @@ public class PartidoServicios : IServicioPartido
         }
     }
 
+    public void BloquearEdicionFase(Fase fase)
+    {
+        if (!_fasesBloqueadas.Contains(fase))
+        {
+            _fasesBloqueadas.Add(fase);
+        }
+    }
+
     public void ActualizarPartido(PartidoDTO partidoDTO)
     {
 
@@ -117,6 +126,11 @@ public class PartidoServicios : IServicioPartido
         if (partidoExistente == null)
         {
             throw new ArgumentException("El partido a actualizar no existe");
+        }
+
+        if (_fasesBloqueadas.Contains(partidoExistente.Fase))
+        {
+            throw new ArgumentException("No se puede editar un partido de una fase anterior");
         }
 
         if (partidoDTO.Fecha != default)
