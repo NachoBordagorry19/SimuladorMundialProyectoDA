@@ -67,8 +67,6 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
     }
 
-
-
     [TestMethod]
     public void ObtenerEquipos_DevuelveTodosLosEquipo()
     {

@@ -3,6 +3,8 @@ using Repositorio;
 using Servicios.Clases;
 using System.Linq;
 using Dominio.Enums;
+using Moq;
+using Servicios.Interfaces;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -18,6 +20,7 @@ public class FixturePrimeraFaseServicioTest
     private EquipoServicios _equipoServicios;
     private EstadioServicios _estadioServicios;
     private PartidoServicios _partidoServicios;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     private bool PartidoPerteneceAlGrupo(PartidoDTO partido, Grupo grupo)
     {
@@ -44,7 +47,8 @@ public class FixturePrimeraFaseServicioTest
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatos);
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatos);
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
-        _equipoServicios = new EquipoServicios(_equipoRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
         _estadioServicios = new EstadioServicios(_estadioRepositorio);
         _partidoServicios = new PartidoServicios(_partidoRepositorio);
 
