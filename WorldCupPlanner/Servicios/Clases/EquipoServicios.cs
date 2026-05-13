@@ -208,7 +208,7 @@ public class EquipoServicios : IServicioEquipo
     {
         VerificarListaDeEquiposSinNulo(equipos);
 
-        List<EquipoDTO> ordenBase = OrdenoPorRankinFifa(equipos);
+        var ordenBase = OrdenoPorRankinFifa(equipos);
 
         var auditoria = new List<EntradaAuditoria>();
         var listaFinal = new List<EquipoDTO>();
@@ -218,19 +218,19 @@ public class EquipoServicios : IServicioEquipo
         var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderByDescending(g => g.Key);
         foreach (var grupo in grupos)
         {
-            List<EquipoDTO> listaGrupo = grupo.ToList();
+            var listaGrupo = grupo.ToList();
             if (listaGrupo.Count <= 1)
             {
                 listaFinal.AddRange(listaGrupo);
                 continue;
             }
 
-            List<string> ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
+            var ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
 
             int semillaGrupo = generadorDeNumerosPrincipal.Next();
             var generadorDeNumerosGrupo = new Random(semillaGrupo);
 
-            List<EquipoDTO> copiaGrupo = listaGrupo.ToList();
+            var copiaGrupo = listaGrupo.ToList();
             for (int i = copiaGrupo.Count - 1; i > 0; i--)
             {
                 int j = generadorDeNumerosGrupo.Next(i + 1);
@@ -239,7 +239,7 @@ public class EquipoServicios : IServicioEquipo
                 copiaGrupo[j] = copiaTemporal;
             }
 
-            List<string> ordenResuelto = copiaGrupo.Select(x => x.nombre).ToList();
+            var ordenResuelto = copiaGrupo.Select(x => x.nombre).ToList();
 
             auditoria.Add(new EntradaAuditoria
             {
@@ -279,7 +279,7 @@ public class EquipoServicios : IServicioEquipo
     public List<EquipoDTO> OrdenoPorRankinFifa(List<EquipoDTO> equipos)
     {
         if (equipos == null) return new List<EquipoDTO>();
-        List<EquipoDTO> ordenBase = equipos
+        var ordenBase = equipos
             .OrderByDescending(e => e.rankingFifa)
             .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
             .ToList();
