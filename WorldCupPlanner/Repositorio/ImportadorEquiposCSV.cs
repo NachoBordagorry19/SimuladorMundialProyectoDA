@@ -11,6 +11,8 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    private const string ENCABEZADO_RANKING_FIFA = "RankingFIFA";
   
    private const int CANTIDAD_COLUMNAS_ESPERADAS = 3;
+   private const int NOMBRE_MAXIMO_CARACTERES = 60;
+   private const int NOMBRE_MINIMO_CARACTERES = 1;
   
    public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
    {
@@ -37,7 +39,6 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                        continue;
                    }
 
-
                    try
                    {
                        Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas);
@@ -45,9 +46,11 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                    }
                    catch (Exception excepcion)
                    {
-
+                       throw new ArgumentException(
+                           $"Error al importar equipo en línea {numeroLinea}: {excepcion.Message}",
+                           excepcion
+                       );
                    }
-
 
                    numeroLinea++;
                }
@@ -118,8 +121,10 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    {
        string[] campos = linea.Split(',');
       
-      
        string nombre = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_NOMBRE);
+       
+       ValidarNombre(nombre);
+       
        string confederacionTexto = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_CONFEDERACION);
        string rankingFifaTexto = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_RANKING_FIFA);
       
@@ -129,19 +134,29 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
       
        return new Equipo(nombre, confederacion, rankingFifa);
    }
+   
+   private void ValidarNombre(string nombre)
+   {
+       if (string.IsNullOrWhiteSpace(nombre))
+       {
+           throw new ArgumentException("El nombre del equipo no puede estar vacío");
+       }
+       
+       if (nombre.Length < NOMBRE_MINIMO_CARACTERES)
+       {
+           throw new ArgumentException($"El nombre debe tener al menos {NOMBRE_MINIMO_CARACTERES} carácter");
+       }
+       
+       if (nombre.Length > NOMBRE_MAXIMO_CARACTERES)
+       {
+           throw new ArgumentException($"El nombre no puede superar los {NOMBRE_MAXIMO_CARACTERES} caracteres");
+       }
+   }
   
    private string ExtraerYValidarCampo(string[] campos, Dictionary<string, int> indicesColumnas, string nombreCampo)
    {
        int indice = indicesColumnas[nombreCampo];
        string valor = campos[indice].Trim();
-
-
-       if (string.IsNullOrWhiteSpace(valor))
-       {
-           throw new ArgumentException($"El campo '{nombreCampo}' no puede estar vacío");
-       }
-
-
        return valor;
    }
   
