@@ -39,56 +39,50 @@ public class EquipoServicios : IServicioEquipo
         _auditoria.RegistrarAltaEquipo(equipoDTO.nombre);
     }
 
-    public List<String> GenerarEquiposAutomaticamente(int semillaCompletar)
+    public void GenerarEquiposAutomaticamente(int semillaCompletar)
+{
+    Random random = new Random(semillaCompletar);
+    Array valoresEnum = Enum.GetValues(typeof(Confederacion));
+
+    List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
+    
+    if (todosLosExistentes.Count >= 48)
     {
-        List<String> registrosAuditoria = new List<String>();
-        Random random = new Random(semillaCompletar);
-        Array valoresEnum = Enum.GetValues(typeof(Confederacion));
-
-        List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
-        if (todosLosExistentes.Count >= 48)
-        {
-            registrosAuditoria.Add("El cupo total de 48 equipos ya está completo.");
-            return registrosAuditoria;
-        }
-        foreach (Confederacion conf in valoresEnum)
-        {
-            int cupoMaximo = ObtenerCupo(conf);
-
-            int cantidadActual = 0;
-            List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
-
-            foreach (EquipoDTO equipo in todosLosEquipos)
-            {
-                if (equipo.confederacion == conf)
-                {
-                    cantidadActual++;
-                }
-            }
-
-            int faltantes = cupoMaximo - cantidadActual;
-
-            if (faltantes > 0)
-            {
-                string log = "Confederacion: " + conf.ToString() + " | Generados: " + faltantes + " | Semilla: " + semillaCompletar;
-                registrosAuditoria.Add(log);
-            }
-
-            for (int i = 1; i <= faltantes; i++)
-            {
-                int numeroEquipo = cantidadActual + i;
-                string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
-                EquipoDTO nuevoEquipo = new EquipoDTO();
-                nuevoEquipo.nombre = nombreFormateado;
-                nuevoEquipo.confederacion = conf;
-
-                nuevoEquipo.rankingFifa = random.Next(300, 2501);
-
-                this.AgregarEquipo(nuevoEquipo);
-            }
-        }
-        return registrosAuditoria;
+        return;
     }
+
+    foreach (Confederacion conf in valoresEnum)
+    {
+        int cupoMaximo = ObtenerCupo(conf);
+        List<EquipoDTO> todosLosEquipos = ObtenerEquipos();
+        
+        int cantidadActual = 0;
+        foreach (EquipoDTO equipo in todosLosEquipos)
+        {
+            if (equipo.confederacion == conf)
+            {
+                cantidadActual++;
+            }
+        }
+
+        int faltantes = cupoMaximo - cantidadActual;
+
+        for (int i = 1; i <= faltantes; i++)
+        {
+            int numeroEquipo = cantidadActual + i;
+            string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
+            
+            EquipoDTO nuevoEquipo = new EquipoDTO();
+            nuevoEquipo.nombre = nombreFormateado;
+            nuevoEquipo.confederacion = conf;
+            nuevoEquipo.rankingFifa = random.Next(300, 2501);
+
+            this.AgregarEquipo(nuevoEquipo);
+        }
+    }
+
+    _auditoria.RegistrarGeneracionAutomaticaEquipos(48);
+}
     public int ObtenerCupo(Confederacion confederacion)
     {
         switch (confederacion)

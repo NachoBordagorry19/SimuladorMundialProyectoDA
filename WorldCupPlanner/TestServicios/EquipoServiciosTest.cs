@@ -317,43 +317,4 @@ public class EquipoServiciosTest
 
         Assert.IsTrue(existeNombreFormateado);
     }
-
-    [TestMethod]
-    public void GenerarEquiposAutomaticamente_DebeRegistrarAuditoria()
-    {
-        int semilla = 666;
-        List<string> auditoria = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
-
-        Assert.IsNotNull(auditoria);
-        Assert.IsTrue(auditoria.Count > 0);
-
-        bool registroCorrecto = false;
-        foreach (string log in auditoria)
-        {
-            if (log.Contains("666"))
-            {
-                registroCorrecto = true;
-            }
-        }
-        Assert.IsTrue(registroCorrecto);
-    }
-
-    [TestMethod]
-    public void GenerarEquiposAutomaticamente_SiYaEstaLleno_InformaEnAuditoria()
-    {
-        int semilla = 666;
-        _equipoServicios.GenerarEquiposAutomaticamente(semilla);
-        List<string> resultado = _equipoServicios.GenerarEquiposAutomaticamente(semilla);
-
-        bool mensajeEncontrado = false;
-        foreach (string linea in resultado)
-        {
-            if (linea.Contains("El cupo total de 48 equipos ya está completo."))
-            {
-                mensajeEncontrado = true;
-            }
-        }
-
-        Assert.IsTrue(mensajeEncontrado);
-    }
 }
