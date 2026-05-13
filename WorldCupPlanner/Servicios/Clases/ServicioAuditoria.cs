@@ -64,6 +64,11 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Edición Estadio", $"Nombre: {nombre}");
     }
+    
+    public void RegistrarEliminacionEstadio(string nombre)
+    {
+        Registrar("Eliminación Estadio", $"Nombre: {nombre}");
+    }
 
     public List<string> ObtenerRegistrosFormateados()
     {
