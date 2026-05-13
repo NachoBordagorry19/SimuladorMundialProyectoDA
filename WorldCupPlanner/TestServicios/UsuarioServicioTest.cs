@@ -202,4 +202,12 @@ public class UsuarioServicioTest
 
         Assert.AreEqual("a@gmail.com", usuarioAutenticado.Email);
     }
+    
+    [TestMethod]
+    public void ReiniciarContraseña_DebeRegistrarAuditoria()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        _servicioUsuario.ReiniciarContraseña("a@gmail.com");
+        _auditoriaMock.Verify(a => a.RegistrarEdicionUsuario("a@gmail.com"), Times.AtLeast(1));
+    }
 }
