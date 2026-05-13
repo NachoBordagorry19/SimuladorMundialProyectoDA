@@ -74,6 +74,12 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Modificación de Partido", detalle);
     }
+    
+    public void RegistrarImportacionEquipos(string mensaje, bool esExito)
+    {
+        string etiqueta = esExito ? "Éxito" : "Error";
+        Registrar($"Importación de Equipos ({etiqueta})", mensaje);
+    }
 
     public List<string> ObtenerRegistrosFormateados()
     {
