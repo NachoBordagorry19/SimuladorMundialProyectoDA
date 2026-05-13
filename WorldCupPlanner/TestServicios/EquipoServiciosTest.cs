@@ -7,6 +7,8 @@ using Servicios.Clases;
 using Servicios.Modelo;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
+using Servicios.Interfaces;
 
 namespace TestServicios;
 
@@ -18,13 +20,15 @@ public class EquipoServiciosTest
     private EquipoServicios _equipoServicios;
     private EquipoDTO _equipoDTO;
     private EquipoDTO _equipoDTO2;
+    private Mock<IServicioAuditoria> _auditoriaMock;
 
     [TestInitialize]
     public void Inicializar()
     {
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _equipoRepositorio = new EquipoRepositorio(_baseDeDatosEnMemoria);
-        _equipoServicios = new EquipoServicios(_equipoRepositorio);
+        _auditoriaMock = new Mock<IServicioAuditoria>();
+        _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
 
 
         Confederacion confederacion = new Confederacion();
