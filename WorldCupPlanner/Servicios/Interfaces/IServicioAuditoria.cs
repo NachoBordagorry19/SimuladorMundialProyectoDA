@@ -9,4 +9,5 @@ public interface IServicioAuditoria
     void RegistrarEdicionUsuario(string email);
     void RegistrarEliminacionUsuario(string email);
     void RegistrarAltaEstadio(string nombre);
+    void RegistrarEdicionEstadio(string nombre);
 }
