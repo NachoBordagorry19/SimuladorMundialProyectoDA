@@ -422,6 +422,21 @@ public class ImportadorEquiposCSVTest
        ), Times.Once);
    }
    
+   [TestMethod]
+   public void ImportarCSV_ConEncabezadoInvalido_DeberiaRegistrarAuditoriaFallida()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal("Columna1,Columna2,Columna3");
+
+       try {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       } catch (ArgumentException) { }
+
+       _mockAuditoria.Verify(a => a.RegistrarImportacionEquipos(
+           It.Is<string>(s => s.Contains("columnas")), 
+           false
+       ), Times.Once);
+   }
+   
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");
