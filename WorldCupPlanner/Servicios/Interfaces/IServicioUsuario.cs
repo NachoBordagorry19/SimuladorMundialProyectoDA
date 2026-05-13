@@ -13,5 +13,6 @@ public interface IServicioUsuario
     public void EliminarUsuario(string emailSeleccionado, string emailConfirmado, string emailUsuarioActual);
     public UsuarioDTO AutenticarUsuario(string email, string contraseña);
     public void ActualizarUsuario(UsuarioDTO usuarioDto);
+    public void ActualizarUsuario(string emailOriginal, UsuarioDTO usuarioDto);
     public void ReiniciarContraseña(string email);
 }

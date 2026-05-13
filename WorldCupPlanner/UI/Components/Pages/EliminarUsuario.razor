@@ -1,44 +1,41 @@
 @page "/EliminarUsuario"
-@using Dominio.Enums
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using UI.Estado
 @inject IServicioUsuario ServicioUsuario
-@inject UsuarioSesion usuarioActivo
+@inject UsuarioSesion UsuarioActivo
 @inject NavigationManager Navigation
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Eliminar Usuario</h1>
-        <p class="wcp-subtitle">Seleccione un usuario registrado y confirme el email para eliminarlo del sistema.</p>
+        <p class="wcp-subtitle">Seleccione un usuario y confirme su email para eliminarlo.</p>
 
-        <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="eliminarUsuarioForm">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Usuario</label>
-                    <select @bind="emailSeleccionado" class="form-control">
-                        <option value="">Seleccionar usuario</option>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="wcp-form-label">Usuario</label>
+                <select @bind="emailSeleccionado" class="form-control">
+                    <option value="">Seleccionar usuario</option>
 
-                        @foreach (UsuarioDTO usuarioGuardado in usuariosEliminables)
-                        {
-                            <option value="@usuarioGuardado.Email">
-                                @usuarioGuardado.Nombre @usuarioGuardado.Apellido - @usuarioGuardado.Email
-                            </option>
-                        }
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Confirmar email</label>
-                    <InputText @bind-Value="usuario.Email" class="form-control" />
-                </div>
+                    @foreach (UsuarioDTO usuario in usuariosEliminables)
+                    {
+                        <option value="@usuario.Email">
+                            @usuario.Nombre @usuario.Apellido - @usuario.Email
+                        </option>
+                    }
+                </select>
             </div>
 
-            <div class="wcp-actions">
-                <button type="submit" class="wcp-btn-danger">Eliminar</button>
-                <NavLink href="/usuarios" class="wcp-btn-secondary">Volver</NavLink>
+            <div class="col-md-6">
+                <label class="wcp-form-label">Confirmar email</label>
+                <input @bind="emailConfirmado" class="form-control" />
             </div>
-        </EditForm>
+        </div>
+
+        <div class="wcp-actions mt-3">
+            <button @onclick="Eliminar" class="wcp-btn-danger">Eliminar</button>
+            <NavLink href="/usuarios" class="wcp-btn-secondary">Volver</NavLink>
+        </div>
 
         @if (!string.IsNullOrEmpty(mensaje))
         {
@@ -50,104 +47,50 @@
 </div>
 
 @code {
-    private UsuarioDTO usuario = new UsuarioDTO();
     private List<UsuarioDTO> usuariosEliminables = new List<UsuarioDTO>();
     private string emailSeleccionado = "";
+    private string emailConfirmado = "";
     private string mensaje = "";
     private bool esError = false;
 
     protected override void OnInitialized()
     {
-        if (usuarioActivo.UsuarioActual == null)
-        {
-            Navigation.NavigateTo("/login");
-            return;
-        }
-
-        if (!usuarioActivo.UsuarioActual.Roles.Contains(Rol.Administrador))
-        {
-            Navigation.NavigateTo("/home");
-            return;
-        }
-
-        CargarUsuariosEliminables();
-        SeleccionarEmailDesdeUrl();
+        CargarUsuarios();
+        CargarEmailDesdeUrl();
     }
 
-    private void CargarUsuariosEliminables()
+    private void CargarUsuarios()
+    {
+        usuariosEliminables = ServicioUsuario.ObtenerUsuariosEliminables(UsuarioActivo.UsuarioActual.Email);
+    }
+
+    private void CargarEmailDesdeUrl()
+    {
+        string query = new Uri(Navigation.Uri).Query;
+        string? email = System.Web.HttpUtility.ParseQueryString(query).Get("email");
+
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            emailSeleccionado = email;
+        }
+    }
+
+    private void Eliminar()
     {
         try
         {
-            UsuarioDTO? usuarioActual = usuarioActivo.UsuarioActual;
-
-            usuariosEliminables = ServicioUsuario.ObtenerUsuarios()
-                .Where(usuarioGuardado => usuarioActual == null || usuarioGuardado.Email != usuarioActual.Email)
-                .ToList();
-        }
-        catch (Exception ex)
-        {
-            mensaje = "Error al cargar usuarios: " + ex.Message;
-            esError = true;
-        }
-    }
-
-    private void SeleccionarEmailDesdeUrl()
-    {
-        var queryParams = new Uri(Navigation.Uri).Query;
-        var emailDelUsuario = System.Web.HttpUtility.ParseQueryString(queryParams).Get("email");
-
-        if (!string.IsNullOrWhiteSpace(emailDelUsuario))
-        {
-            emailSeleccionado = emailDelUsuario;
-        }
-    }
-
-    private void OnSave()
-    {
-        try
-        {
-            mensaje = "";
-            esError = false;
-
-            if (string.IsNullOrWhiteSpace(emailSeleccionado))
-            {
-                mensaje = "Debe seleccionar un usuario.";
-                esError = true;
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(usuario.Email))
-            {
-                mensaje = "Debe confirmar el email del usuario.";
-                esError = true;
-                return;
-            }
-
-            if (!string.Equals(emailSeleccionado, usuario.Email.Trim(), StringComparison.OrdinalIgnoreCase))
-            {
-                mensaje = "El email confirmado no coincide con el usuario seleccionado.";
-                esError = true;
-                return;
-            }
-
-            UsuarioDTO? usuarioAEliminar = usuariosEliminables
-                .FirstOrDefault(usuarioGuardado => usuarioGuardado.Email == emailSeleccionado);
-
-            if (usuarioAEliminar == null)
-            {
-                mensaje = "El usuario seleccionado no existe o no se puede eliminar.";
-                esError = true;
-                return;
-            }
-
-            ServicioUsuario.EliminarUsuario(usuarioAEliminar);
+            ServicioUsuario.EliminarUsuario(
+                emailSeleccionado,
+                emailConfirmado,
+                UsuarioActivo.UsuarioActual.Email
+            );
 
             mensaje = "Usuario eliminado correctamente";
             esError = false;
-            usuario = new UsuarioDTO();
             emailSeleccionado = "";
+            emailConfirmado = "";
 
-            CargarUsuariosEliminables();
+            CargarUsuarios();
         }
         catch (Exception ex)
         {

@@ -189,7 +189,19 @@ public class ServicioUsuario : IServicioUsuario
 
     public void ActualizarUsuario(UsuarioDTO usuarioDto)
     {
-        Usuario usuarioExistente = ObtenerEntidadPorEmail(usuarioDto.Email);
+        ActualizarUsuario(usuarioDto.Email, usuarioDto);
+    }
+
+    public void ActualizarUsuario(string emailOriginal, UsuarioDTO usuarioDto)
+    {
+        Usuario usuarioExistente = ObtenerEntidadPorEmail(emailOriginal);
+
+        if (!string.Equals(emailOriginal, usuarioDto.Email, StringComparison.OrdinalIgnoreCase))
+        {
+            ValidarEmailExiste(usuarioDto.Email);
+        }
+
+        ValidarRoles(usuarioDto);
 
         string contraseña = usuarioExistente.Contraseña;
 
@@ -208,7 +220,9 @@ public class ServicioUsuario : IServicioUsuario
             usuarioDto.Roles
         );
 
-        _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _usuarioRepositorio.EliminarUsuario(usuarioExistente);
+        _usuarioRepositorio.AgregarUsuario(usuarioActualizado);
+
         _auditoria.RegistrarEdicionUsuario(usuarioDto.Email);
     }
 
