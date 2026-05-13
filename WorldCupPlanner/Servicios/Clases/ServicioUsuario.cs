@@ -193,6 +193,7 @@ public class ServicioUsuario : IServicioUsuario
         );
 
         _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _auditoria.RegistrarEdicionUsuario(email);
     }
 
 
