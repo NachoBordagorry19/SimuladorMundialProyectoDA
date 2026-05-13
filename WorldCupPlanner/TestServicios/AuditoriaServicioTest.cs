@@ -202,4 +202,12 @@ public class AuditoriaServicioTest
         Assert.IsTrue(log.Contains(cantidad.ToString()));
         Assert.IsTrue(log.Contains("admin@gmail.com"));
     }
+    
+    [TestMethod]
+    public void RegistrarGeneracionFixture_DebeGuardarRegistroCorrectamente()
+    {
+        _servicio.RegistrarGeneracionFixture();
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Generación de fixture"));
+    }
 }
