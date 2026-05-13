@@ -88,6 +88,7 @@ public class EstadioServicios : IServicioEstadio
         }
         Estadio estadio = EstadioDTOAEntidad(estadioDTO);
         _estadioRepositorio.ActualizarEstadio(estadio);
+        _auditoria.RegistrarEdicionEstadio(estadio.Nombre);
     }
 
     private EstadioDTO DesdeEntidad(Estadio estadio)

@@ -169,16 +169,17 @@ public class EstadioServiciosTest
     [TestMethod]
     public void ActualizarEstadio_DebeRegistrarAuditoria()
     {
-        _estadioServicios.AgregarEstadio(_estadioDTO);
+        var estadioInicial = new EstadioDTO { Nombre = "Lusail", Ciudad = "Lusail", CapacidadLocativa = 80000 };;
     
-        var estadioActualizadoDto = new EstadioDTO 
-        { 
-            Nombre = "Lusail Iconic",
-            Ciudad = "Lusail", 
-            CapacidadLocativa = 85000
-        };
+        _estadioServicios.AgregarEstadio(estadioInicial);
 
-        _estadioServicios.ActualizarEstadio(estadioActualizadoDto);
-        _auditoriaMock.Verify(a => a.RegistrarEdicionEstadio(estadioActualizadoDto.Nombre), Times.Once);
+        var estadioEditado = new EstadioDTO { 
+            Nombre = "Lusail", 
+            Ciudad = "Lusail City", 
+            CapacidadLocativa = 85000 
+        };
+        
+        _estadioServicios.ActualizarEstadio(estadioEditado);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEstadio(estadioEditado.Nombre), Times.Once);
     }
 }
