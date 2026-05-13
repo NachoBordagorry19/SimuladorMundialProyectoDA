@@ -43,6 +43,7 @@ public class ServicioAutorizacion : IServicioAutorizacion
 
     public bool PuedeEliminarUsuario(UsuarioDTO usuarioActual, string emailAEliminar)
     {
-        return usuarioActual.Roles.Contains(Rol.Administrador);
+        return usuarioActual.Roles.Contains(Rol.Administrador)
+               && usuarioActual.Email != emailAEliminar;
     }
 }
