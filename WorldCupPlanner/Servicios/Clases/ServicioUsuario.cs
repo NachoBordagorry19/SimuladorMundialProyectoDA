@@ -31,6 +31,9 @@ public class ServicioUsuario : IServicioUsuario
         ValidarEmailExiste(emailAVerificar);
         ValidarRoles(usuarioDto);
         _usuarioRepositorio.AgregarUsuario(usuario);
+        
+        string rolesString = string.Join(", ", usuarioDto.Roles.Select(r => r.ToString()));
+        _auditoria.RegistrarAltaUsuario(usuarioDto.Email, rolesString);
     }
 
     public void ValidarRoles(UsuarioDTO usuarioDto)
