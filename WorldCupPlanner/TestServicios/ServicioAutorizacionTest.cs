@@ -57,4 +57,18 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
+    
+    [TestMethod]
+    public void Administrador_PuedeVisualizarLogs()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "admin@gmail.com",
+            Roles = new List<Rol> { Rol.Administrador }
+        };
+
+        bool resultado = _servicioAutorizacion.PuedeVisualizarLogs(usuario);
+
+        Assert.IsTrue(resultado);
+    }
 }
