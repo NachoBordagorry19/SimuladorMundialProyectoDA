@@ -13,4 +13,5 @@ public interface IServicioAuditoria
     void RegistrarEliminacionEstadio(string nombre);
     void RegistrarModificacionPartido(string detalle);
     void RegistrarImportacionEquipos(string mensaje, bool esExito);
+    void RegistrarGeneracionAutomaticaEquipos(int cantidad);
 }
