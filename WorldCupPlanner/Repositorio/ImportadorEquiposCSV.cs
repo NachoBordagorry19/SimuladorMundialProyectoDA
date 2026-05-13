@@ -14,10 +14,9 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
   
    public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
    {
-      
+       ValidarRutaArchivo(rutaArchivo);
            using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
            {
-             
                string lineaEncabezados = lectorArchivo.ReadLine();
 
 
@@ -57,6 +56,15 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                return equiposImportados;
            }
    }
+   
+   private void ValidarRutaArchivo(string rutaArchivo)
+   {
+       if (string.IsNullOrWhiteSpace(rutaArchivo))
+       {
+           throw new ArgumentException("La ruta del archivo CSV no puede ser nula");
+       }
+   }
+
    
   
    private Dictionary<string, int> ObtenerIndicesColumnas(string lineaEncabezados)
