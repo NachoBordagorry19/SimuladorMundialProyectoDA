@@ -16,8 +16,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     }
 
     public List<PosicionEquipoDTO> ObtenerRankingGrupo(string grupo, int semillaCrucesFase)
-    {
-        var partidos = _partidoServicios.ObtenerPartidos()
+    { 
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos()
             .Where(p => p.Grupo == grupo && p.fase == Fase.Grupos)
             .ToList();
 
@@ -33,8 +33,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                 continue;
             }
 
-            var posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
-            var posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
+            PosicionEquipoDTO posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
+            PosicionEquipoDTO posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
 
             posicionLocal.PartidosJugados++;
             posicionVisitante.PartidosJugados++;
@@ -104,7 +104,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         while (i < posiciones.Count)
         {
             var grupoEmpatado = new List<PosicionEquipoDTO>();
-            var posicionActual = posiciones[i];
+            PosicionEquipoDTO posicionActual = posiciones[i];
 
             grupoEmpatado.Add(posicionActual);
             i++;
@@ -139,7 +139,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         {
             int j = random.Next(i + 1);
 
-            var auxiliar = equipos[i];
+            PosicionEquipoDTO auxiliar = equipos[i];
             equipos[i] = equipos[j];
             equipos[j] = auxiliar;
         }
@@ -165,7 +165,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                 throw new ArgumentException("No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
             }
 
-            var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
+            List<PosicionEquipoDTO> rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
 
             primeros.Add(rankingGrupo[0]);
             segundos.Add(rankingGrupo[1]);
@@ -184,7 +184,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private List<PosicionEquipoDTO> OrdenarPosiciones(List<PosicionEquipoDTO> posiciones, int semillaCrucesFase)
     {
-        var posicionesOrdenadas = posiciones
+        List<PosicionEquipoDTO> posicionesOrdenadas = posiciones
             .OrderByDescending(p => p.Puntos)
             .ThenByDescending(p => p.Diferencia)
             .ThenByDescending(p => p.GolesAFavor)
@@ -200,8 +200,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         int semillaCrucesFase,
         int numeroInicial = 1)
     {
-        var locales = equiposLocales.ToList();
-        var visitantes = equiposVisitantes.ToList();
+        List<PosicionEquipoDTO> locales = equiposLocales.ToList();
+        List<PosicionEquipoDTO> visitantes = equiposVisitantes.ToList();
 
         var random = new Random(semillaCrucesFase);
 
@@ -212,10 +212,10 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         for (int i = 0; i < locales.Count; i++)
         {
-            var local = locales[i];
+            PosicionEquipoDTO local = locales[i];
             int indiceVisitante = BuscarIndiceVisitanteDisponible(visitantes, local);
 
-            var visitante = visitantes[indiceVisitante];
+            PosicionEquipoDTO visitante = visitantes[indiceVisitante];
             visitantes.RemoveAt(indiceVisitante);
 
             var cruce = new CruceDTO
@@ -247,58 +247,58 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     public List<CruceDTO> GenerarCrucesFase(ClasificadosDTO clasificados, int semillaCrucesFase)
     {
-        var mejoresPrimeros = clasificados.Primeros
+        List<PosicionEquipoDTO> mejoresPrimeros = clasificados.Primeros
             .Take(8)
             .ToList();
 
-        var terceros = clasificados.Terceros
+        List<PosicionEquipoDTO> terceros = clasificados.Terceros
             .ToList();
 
-        var cruces = GenerarCrucesEntreListas(
+        List<CruceDTO> cruces = GenerarCrucesEntreListas(
             mejoresPrimeros,
             terceros,
             "A",
             semillaCrucesFase);
 
-        var primerosRestantes = clasificados.Primeros
+        List<PosicionEquipoDTO> primerosRestantes = clasificados.Primeros
             .Skip(8)
             .Take(4)
             .ToList();
 
-        var segundosMenorPuntaje = clasificados.Segundos
+        List<PosicionEquipoDTO> segundosMenorPuntaje = clasificados.Segundos
             .OrderBy(s => s.Puntos)
             .Take(4)
             .ToList();
 
-        var crucesB1aB4 = GenerarCrucesEntreListas(
+        List<CruceDTO> crucesB1Ab4 = GenerarCrucesEntreListas(
             primerosRestantes,
             segundosMenorPuntaje,
             "B",
             semillaCrucesFase);
 
-        cruces.AddRange(crucesB1aB4);
+        cruces.AddRange(crucesB1Ab4);
 
-        var segundosRestantes = clasificados.Segundos
+        List<PosicionEquipoDTO> segundosRestantes = clasificados.Segundos
             .Where(s => !segundosMenorPuntaje.Any(m => m.EquipoNombre == s.EquipoNombre))
             .ToList();
 
-        var segundosLocales = segundosRestantes
+        List<PosicionEquipoDTO> segundosLocales = segundosRestantes
             .Take(4)
             .ToList();
 
-        var segundosVisitantes = segundosRestantes
+        List<PosicionEquipoDTO> segundosVisitantes = segundosRestantes
             .Skip(4)
             .Take(4)
             .ToList();
 
-        var crucesB5aB8 = GenerarCrucesEntreListas(
+        List<CruceDTO> crucesB5Ab8 = GenerarCrucesEntreListas(
             segundosLocales,
             segundosVisitantes,
             "B",
             semillaCrucesFase,
             5);
 
-        cruces.AddRange(crucesB5aB8);
+        cruces.AddRange(crucesB5Ab8);
 
         _partidoServicios.BloquearEdicionFase(Fase.Grupos);
         _auditoria.RegistrarSorteoCruces();
@@ -338,8 +338,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             int numeroCruceLocal = (i * 2) - 1;
             int numeroCruceVisitante = i * 2;
 
-            var cruceLocal = octavos.First(c => c.Codigo == "C" + numeroCruceLocal);
-            var cruceVisitante = octavos.First(c => c.Codigo == "C" + numeroCruceVisitante);
+            CruceDTO cruceLocal = octavos.First(c => c.Codigo == "C" + numeroCruceLocal);
+            CruceDTO cruceVisitante = octavos.First(c => c.Codigo == "C" + numeroCruceVisitante);
 
             var cruce = new CruceDTO
             {
@@ -359,10 +359,10 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         var semifinales = new List<CruceDTO>();
 
-        var d1 = cuartos.First(c => c.Codigo == "D1");
-        var d2 = cuartos.First(c => c.Codigo == "D2");
-        var d3 = cuartos.First(c => c.Codigo == "D3");
-        var d4 = cuartos.First(c => c.Codigo == "D4");
+        CruceDTO d1 = cuartos.First(c => c.Codigo == "D1");
+        CruceDTO d2 = cuartos.First(c => c.Codigo == "D2");
+        CruceDTO d3 = cuartos.First(c => c.Codigo == "D3");
+        CruceDTO d4 = cuartos.First(c => c.Codigo == "D4");
 
         semifinales.Add(new CruceDTO
         {
@@ -387,8 +387,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         var partidosFinales = new List<CruceDTO>();
 
-        var s1 = semifinales.First(c => c.Codigo == "S1");
-        var s2 = semifinales.First(c => c.Codigo == "S2");
+        CruceDTO s1 = semifinales.First(c => c.Codigo == "S1");
+        CruceDTO s2 = semifinales.First(c => c.Codigo == "S2");
 
         partidosFinales.Add(new CruceDTO
         {
@@ -441,11 +441,11 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         var clasificados = ObtenerClasificados(semillaCrucesFase);
 
-        var dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
-        var octavos = GenerarOctavosDeFinal(dieciseisavos);
-        var cuartos = GenerarCuartosDeFinal(octavos);
-        var semifinales = GenerarSemifinales(cuartos);
-        var partidosFinales = GenerarTercerPuestoYFinal(semifinales);
+        List<CruceDTO> dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
+        List<CruceDTO> octavos = GenerarOctavosDeFinal(dieciseisavos);
+        List<CruceDTO> cuartos = GenerarCuartosDeFinal(octavos);
+        List<CruceDTO> semifinales = GenerarSemifinales(cuartos);
+        List<CruceDTO> partidosFinales = GenerarTercerPuestoYFinal(semifinales);
 
         return new CuadroSegundaFaseDTO
         {

@@ -39,7 +39,7 @@ public class ServicioUsuario : IServicioUsuario
     public void ValidarRoles(UsuarioDTO usuarioDto)
     {
         var roles = usuarioDto.Roles;
-        var duplicados = roles.GroupBy(r => r).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+        List<Rol> duplicados = roles.GroupBy(r => r).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
         if (duplicados.Any())
         {
             throw new ArgumentException("El usuario no puede tener roles duplicados");
