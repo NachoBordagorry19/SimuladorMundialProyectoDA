@@ -69,6 +69,11 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Eliminación Estadio", $"Nombre: {nombre}");
     }
+    
+    public void RegistrarModificacionPartido(string detalle)
+    {
+        Registrar("Modificación de Partido", detalle);
+    }
 
     public List<string> ObtenerRegistrosFormateados()
     {
