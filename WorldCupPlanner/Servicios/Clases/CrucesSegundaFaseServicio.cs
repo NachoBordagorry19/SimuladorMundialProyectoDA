@@ -388,4 +388,33 @@ public class CrucesSegundaFaseServicio
 
         return partidosFinales;
     }
+    public EquipoDTO ObtenerCampeon(PartidoDTO partidoFinal)
+    {
+        if (partidoFinal == null)
+        {
+            throw new ArgumentException("La final no puede ser nula");
+        }
+
+        if (partidoFinal.fase != Fase.Final)
+        {
+            throw new ArgumentException("El partido debe ser la final");
+        }
+
+        if (partidoFinal.estadoPartido != EstadoPartido.Jugado)
+        {
+            throw new ArgumentException("La final debe estar jugada");
+        }
+
+        if (partidoFinal.golesLocal > partidoFinal.golesVisitante)
+        {
+            return partidoFinal.equipoLocal;
+        }
+
+        if (partidoFinal.golesVisitante > partidoFinal.golesLocal)
+        {
+            return partidoFinal.equipoVisitante;
+        }
+
+        throw new ArgumentException("La final no puede terminar empatada");
+    }
 }
