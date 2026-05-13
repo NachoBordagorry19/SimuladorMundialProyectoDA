@@ -158,6 +158,21 @@ public class EquipoServiciosTest
         };
         _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
     }
+    
+    [TestMethod]
+    public void ActualizarEquipo_DebeRegistrarEnAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        var equipoActualizadoDto = new EquipoDTO()
+        {
+            nombre = _equipoDTO.nombre,
+            confederacion = Confederacion.CONMEBOL,
+            rankingFifa = 1700
+        };
+        _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
+
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(equipoActualizadoDto.nombre), Times.Once);
+    }
 
     [TestMethod]
     public void AgregarEquipo_OFC_Cupo1_PermiteUnEquipo()
