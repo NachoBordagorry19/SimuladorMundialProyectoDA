@@ -1,29 +1,130 @@
 @page "/importar"
+@using Servicios.Interfaces
+@using Dominio.Clases
+@using Microsoft.AspNetCore.Components.Forms
+@using Servicios.Modelo
+@inject IImportadorEquiposCSV ImportadorEquipos
+@inject IServicioEquipo ServicioEquipo
 
 <div class="wcp-page">
     <div class="wcp-card">
-        <h1 class="wcp-title">Importación</h1>
-        <p class="wcp-subtitle">Importar datos desde un archivo para cargar información al sistema.</p>
+        <h1 class="wcp-title">Importación de Equipos</h1>
+        <p class="wcp-subtitle">Importar equipos desde un archivo CSV.</p>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                @mensaje
+            </div>
+        }
 
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="wcp-form-label">Archivo</label>
-                <input type="file" class="form-control" />
-            </div>
-
-            <div class="col-md-6">
-                <label class="wcp-form-label">Tipo de importación</label>
-                <select class="form-control">
-                    <option value="">Seleccionar tipo</option>
-                    <option value="equipos">Equipos</option>
-                    <option value="estadios">Estadios</option>
-                </select>
+                <label class="wcp-form-label">Archivo CSV</label>
+                <InputFile class="form-control" OnChange="SeleccionarArchivo" accept=".csv" />
             </div>
         </div>
 
         <div class="wcp-actions mt-3">
-            <button class="wcp-btn-primary">Importar</button>
-            <NavLink href="/home" class="wcp-btn-secondary">Cancelar</NavLink>
+            <button class="wcp-btn-primary" @onclick="Importar" disabled="@(archivoSeleccionado == null)">Importar</button>
+            <NavLink href="/equipos" class="wcp-btn-secondary">Cancelar</NavLink>
         </div>
+
+        @if (equipos != null && equipos.Count > 0)
+        {
+            <div class="mt-4">
+                <h5>Equipos importados: @equipos.Count</h5>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Confederación</th>
+                            <th>Ranking FIFA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var equipo in equipos)
+                        {
+                            <tr>
+                                <td>@equipo.Nombre</td>
+                                <td>@equipo.Confederacion</td>
+                                <td>@equipo.RankingFifa</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>
+
+@code {
+    
+    private IBrowserFile? archivoSeleccionado = null;
+    private string mensaje = "";
+    private bool esError = false;
+    private List<Equipo>? equipos = null;
+    
+    private Task SeleccionarArchivo(InputFileChangeEventArgs e)
+    {
+        var archivos = e.GetMultipleFiles();
+        if (archivos.Count > 0)
+        {
+            archivoSeleccionado = archivos[0];
+            mensaje = "";
+            esError = false;
+        }
+        else
+        {
+            archivoSeleccionado = null;
+            mensaje = "No se seleccionó ningún archivo";
+            esError = true;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task Importar()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+
+            string rutaArchivo = Path.Combine(Path.GetTempPath(), $"import_{Guid.NewGuid()}.csv");
+
+            using (var stream = archivoSeleccionado!.OpenReadStream())
+            using (var fileStream = new FileStream(rutaArchivo, FileMode.Create))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
+            equipos = ImportadorEquipos.ImportarDesdeCSV(rutaArchivo);
+
+            List<EquipoDTO> equiposDtos = new List<EquipoDTO>();
+            foreach (Equipo equipo in equipos)
+            {
+                EquipoDTO equipoDto = ServicioEquipo.EquipoEntidadAEquipoDTO(equipo);
+                equiposDtos.Add(equipoDto);
+            }
+            
+            foreach (EquipoDTO equipo in equiposDtos)
+            {
+                ServicioEquipo.AgregarEquipo(equipo);
+            }
+            mensaje = $"Importación exitosa: {equipos.Count} equipos importados";
+
+            File.Delete(rutaArchivo);
+        }
+        catch (ArgumentException ex)
+        {
+            mensaje = $"Error: {ex.Message}";
+            esError = true;
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"Error: {ex.Message}";
+            esError = true;
+        }
+    }
+}

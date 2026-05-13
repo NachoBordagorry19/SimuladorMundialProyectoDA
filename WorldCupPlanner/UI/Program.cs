@@ -25,6 +25,7 @@ builder.Services.AddScoped<IServicioAuditoria, ServicioAuditoria>();
 builder.Services.AddScoped<IServicioEquipo, EquipoServicios>();
 builder.Services.AddScoped<IServicioEstadio, EstadioServicios>();
 builder.Services.AddScoped<IServicioPartido, PartidoServicios>();
+builder.Services.AddScoped<IImportadorEquiposCSV, ImportadorEquiposCSV>();
 builder.Services.AddScoped<IServicioFixturePrimeraFase, FixturePrimeraFaseServicio>();
 builder.Services.AddScoped<IServicioCrucesSegundaFase, CrucesSegundaFaseServicio>();
 
