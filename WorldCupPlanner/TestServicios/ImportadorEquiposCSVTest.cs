@@ -2,6 +2,7 @@ using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio;
 using Repositorio.Interfaces;
+using Servicios.Clases;
 using Servicios.Interfaces;
 
 
@@ -12,13 +13,11 @@ public class ImportadorEquiposCSVTest
 {
 
     private IImportadorEquiposCSV _importadorEquipos;
-    private IServicioEquipo _servicioEquipo;
-    private IEquipoRepositorio _equipoRepositorio;
     
     [TestInitialize]
     public void Inicializar()
     {
-        _importadorEquipos = new ImportadorEquiposCSV(_servicioEquipo,_equipoRepositorio);
+        _importadorEquipos = new ImportadorEquiposCSV();
     }
     
     [TestMethod]
