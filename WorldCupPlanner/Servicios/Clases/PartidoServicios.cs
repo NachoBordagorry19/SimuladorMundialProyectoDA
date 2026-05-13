@@ -191,10 +191,10 @@ public class PartidoServicios : IServicioPartido
 
     private Partido PartidoDTOAEntidad(PartidoDTO dto)
     {
-        Estadio estadio = EstadioDTOAEntidad(dto.Estadio);
-        Equipo local = EquipoDTOAEntidad(dto.equipoLocal);
-        Equipo visitante = EquipoDTOAEntidad(dto.equipoVisitante);
-        DateTime fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
+        var estadio = EstadioDTOAEntidad(dto.Estadio);
+        var local = EquipoDTOAEntidad(dto.equipoLocal);
+        var visitante = EquipoDTOAEntidad(dto.equipoVisitante);
+        var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
         var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
         partido.Grupo = dto.Grupo;
         return partido;
