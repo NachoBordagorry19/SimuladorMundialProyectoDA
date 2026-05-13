@@ -368,4 +368,20 @@ public class FixturePrimeraFaseServicioTest
 
         Assert.AreEqual(fechaInicio, primeraFechaGrupoA);
     }
+    
+    [TestMethod]
+    public void GenerarFixturePrimeraFase_DebeRegistrarAuditoria()
+    {
+        _equipoServicios.GenerarEquiposAutomaticamente(123);
+    
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 1", "Ciudad 1", "Desc", 40000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 2", "Ciudad 2", "Desc", 50000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 3", "Ciudad 3", "Desc", 60000));
+        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 4", "Ciudad 4", "Desc", 70000));
+
+        int semilla = 456;
+        _fixtureServicio.GenerarFixturePrimeraFase(semilla);
+
+        _auditoriaMock.Verify(a => a.RegistrarGeneracionFixture(), Times.Once);
+    }
 }
