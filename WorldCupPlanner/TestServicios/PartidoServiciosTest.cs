@@ -184,6 +184,18 @@ public class PartidoServiciosTest
         Assert.AreEqual(2, partidoActualizado.golesVisitante);
         Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.estadoPartido);
     }
+    
+    [TestMethod]
+    public void ActualizarPartido_DebeRegistrarAuditoria()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+    
+        _partidoDTO.golesLocal = 2;
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+
+        string detalleEsperado = "Bayern Munich vs Real Madrid";
+        _auditoriaMock.Verify(a => a.RegistrarModificacionPartido(detalleEsperado), Times.Once);
+    }
 
     [TestMethod]
     public void SimularResultado_SiPartidoValido_SimulaCorrectamente()
