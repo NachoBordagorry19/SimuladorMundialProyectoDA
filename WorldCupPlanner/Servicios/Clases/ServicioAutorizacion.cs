@@ -21,9 +21,9 @@ public class ServicioAutorizacion : IServicioAutorizacion
         return usuario.Roles.Contains(Rol.Administrador);
     }
 
-    public bool PuedeVisualizarLogs(UsuarioDTO? usuario)
+    public bool PuedeVisualizarLogs(UsuarioDTO usuario)
     {
-        throw new NotImplementedException();
+        return usuario.Roles.Contains(Rol.Administrador);
     }
 
     public bool PuedeUsarFixture(UsuarioDTO? usuario)
