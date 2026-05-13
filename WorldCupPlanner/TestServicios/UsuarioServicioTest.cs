@@ -61,6 +61,13 @@ public class UsuarioServicioTest
         _usuarioDTO.Roles = new List<Rol> { Rol.Administrador, Rol.Administrador };
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
+    
+    [TestMethod]
+    public void AgregarUsuario_DebeRegistrarAuditoria()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+        _auditoriaMock.Verify(a => a.RegistrarAltaUsuario("a@gmail.com", "Administrador"), Times.Once);
+    }
 
     [TestMethod]
     public void ObtenerUsuarios_SeDevuelvenCorrectamente()
