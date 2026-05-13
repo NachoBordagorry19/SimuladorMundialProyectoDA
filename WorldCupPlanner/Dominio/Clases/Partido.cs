@@ -7,9 +7,9 @@ public class Partido
     private static int _contadorId = 0;
     private int _id;
     private DateTime _fecha;
-    private Estadio _estadio;
-    private Equipo _local;
-    private Equipo _visitante;
+    private Estadio _estadio = null!;
+    private Equipo _local = null!;
+    private Equipo _visitante = null!;
     private Fase _fase;
     private EstadoPartido _estado;
     private int _golesLocal;
@@ -99,7 +99,7 @@ public class Partido
         }
     }
 
-    public string Grupo { get; set; }
+    public string Grupo { get; set; } = string.Empty;
 
     public Fase Fase
     {

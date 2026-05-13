@@ -8,11 +8,11 @@ namespace Dominio.Clases;
 
 public class Usuario
 {
-    private string _nombre;
-    private string _apellido;
-    private string _email;
+    private string _nombre = string.Empty;
+    private string _apellido = string.Empty;
+    private string _email = string.Empty;
     private DateTime _fechaNacimiento;
-    private string _contraseña;
+    private string _contraseña = string.Empty;
     public IReadOnlyList<Rol> Roles => _roles.AsReadOnly();
     private readonly List<Rol> _roles = new();
 
