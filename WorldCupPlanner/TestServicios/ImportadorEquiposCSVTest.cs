@@ -382,6 +382,28 @@ public class ImportadorEquiposCSVTest
            LimpiarArchivoCSV(rutaArchivoCSV);
        }
    }
+   
+   [TestMethod]
+   public void ImportarCSV_Exitoso_DeberiaLlamarAlServicioDeAuditoria()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Uruguay,CONMEBOL,1800"
+       );
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+           _mockAuditoria.Verify(a => a.RegistrarImportacionEquipos(
+               It.Is<string>(s => s.Contains("Importación")), 
+               true
+           ), Times.Once);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+   
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");
