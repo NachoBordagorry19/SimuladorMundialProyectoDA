@@ -76,6 +76,7 @@ public class EstadioServicios : IServicioEstadio
             throw new ArgumentException("El estadio no existe");
         }
         _estadioRepositorio.EliminarEstadio(estadioExistente);
+        _auditoria.RegistrarEliminacionEstadio(estadioExistente.Nombre);
     }
 
     public void ActualizarEstadio(EstadioDTO estadioDTO)
