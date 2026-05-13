@@ -4,7 +4,7 @@ using Servicios.Modelo;
 
 namespace Servicios.Clases;
 
-public class CrucesSegundaFaseServicio
+public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 {
     private readonly IServicioPartido _partidoServicios;
     private readonly IServicioAuditoria _auditoria;
@@ -27,6 +27,11 @@ public class CrucesSegundaFaseServicio
         {
             AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal.nombre, grupo);
             AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante.nombre, grupo);
+
+            if (partido.estadoPartido != EstadoPartido.Jugado)
+            {
+                continue;
+            }
 
             var posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
             var posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
@@ -149,6 +154,17 @@ public class CrucesSegundaFaseServicio
         for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
         {
             string grupo = letraGrupo.ToString();
+
+            int partidosJugados = _partidoServicios.ObtenerPartidos()
+                .Count(p => p.Grupo == grupo &&
+                            p.fase == Fase.Grupos &&
+                            p.estadoPartido == EstadoPartido.Jugado);
+
+            if (partidosJugados < 6)
+            {
+                throw new ArgumentException("No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
+            }
+
             var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
 
             primeros.Add(rankingGrupo[0]);
@@ -420,5 +436,24 @@ public class CrucesSegundaFaseServicio
         }
 
         throw new ArgumentException("La final no puede terminar empatada");
+    }
+    public CuadroSegundaFaseDTO GenerarCuadroSegundaFase(int semillaCrucesFase)
+    {
+        var clasificados = ObtenerClasificados(semillaCrucesFase);
+
+        var dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
+        var octavos = GenerarOctavosDeFinal(dieciseisavos);
+        var cuartos = GenerarCuartosDeFinal(octavos);
+        var semifinales = GenerarSemifinales(cuartos);
+        var partidosFinales = GenerarTercerPuestoYFinal(semifinales);
+
+        return new CuadroSegundaFaseDTO
+        {
+            Dieciseisavos = dieciseisavos,
+            Octavos = octavos,
+            Cuartos = cuartos,
+            Semifinales = semifinales,
+            PartidosFinales = partidosFinales
+        };
     }
 }

@@ -6,5 +6,5 @@ public interface IAuditoriaRepositorio
 {
     void AgregarRegistro(Auditoria registro);
     List<Auditoria> ObtenerTodosLosRegistros();
-    
+
 }

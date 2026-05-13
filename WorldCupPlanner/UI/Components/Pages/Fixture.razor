@@ -1,10 +1,390 @@
 @page "/fixture"
+@rendermode InteractiveServer
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject FixtureEstado EstadoFixture
+@inject IServicioPartido ServicioPartido
+@inject IServicioFixturePrimeraFase ServicioFixture
+@inject IServicioCrucesSegundaFase ServicioCruces
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Fixture</h1>
-        <p class="wcp-subtitle">Generación y visualización del fixture del torneo.</p>
+        <p class="wcp-subtitle">Generación y visualización del fixture y cruces del torneo.</p>
 
-        <p>Esta pantalla está pendiente de implementación.</p>
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger wcp-alert">@mensajeError</div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(mensajeExito))
+        {
+            <div class="alert alert-success wcp-alert">@mensajeExito</div>
+        }
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="wcp-form-label">Semilla Fixture</label>
+                <InputNumber @bind-Value="semillaFixture" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="wcp-form-label">Fecha inicio torneo</label>
+                <InputDate @bind-Value="fechaInicioTorneo" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="wcp-form-label">Semilla Cruces Fase</label>
+                <InputNumber @bind-Value="semillaCrucesFase" class="form-control" />
+            </div>
+        </div>
+
+        <div class="wcp-actions">
+            <button class="wcp-btn-primary" @onclick="GenerarFixture">
+                Generar Fixture
+            </button>
+
+            <button class="wcp-btn-secondary" @onclick="GenerarCruces">
+                Generar Cruces
+            </button>
+
+            <NavLink href="/equipos" class="wcp-btn-secondary">
+                Ir a Equipos
+            </NavLink>
+
+            <NavLink href="/estadios" class="wcp-btn-secondary">
+                Ir a Estadios
+            </NavLink>
+
+            <NavLink href="/partidos" class="wcp-btn-secondary">
+                Ver Lista de Partidos
+            </NavLink>
+        </div>
     </div>
+
+    @if (EstadoFixture.ResultadoFixture != null)
+    {
+        <div class="wcp-card mt-4">
+            <h2 class="wcp-title">Grupos</h2>
+            <p class="wcp-subtitle">Seleccione un grupo para ver sus equipos y partidos.</p>
+
+            <div class="wcp-actions">
+                @foreach (var grupo in EstadoFixture.ResultadoFixture.Grupos)
+                {
+                    <button class="wcp-btn-secondary" @onclick="() => SeleccionarGrupo(grupo.Nombre)">
+                        Grupo @grupo.Nombre
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (EstadoFixture.GrupoSeleccionado != null)
+        {
+            var grupo = EstadoFixture.ResultadoFixture.Grupos.First(g => g.Nombre == EstadoFixture.GrupoSeleccionado);
+            var partidosGrupo = ObtenerPartidosGrupo();
+            var tablaGrupo = ObtenerTablaGrupo();
+
+            <div class="wcp-card mt-4">
+                <h2 class="wcp-title">Grupo @grupo.Nombre</h2>
+
+                <h3 class="mt-4">Equipos</h3>
+
+                <table class="wcp-table">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Confederación</th>
+                        <th>Ranking FIFA</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var equipo in grupo.Equipos)
+                    {
+                        <tr>
+                            <td>@equipo.Nombre</td>
+                            <td>@equipo.Confederacion</td>
+                            <td>@equipo.RankingFifa</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                
+                <h3 class="mt-4">Tabla de posiciones</h3>
+
+                <table class="wcp-table">
+                    <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>PJ</th>
+                        <th>Pts</th>
+                        <th>DG</th>
+                        <th>GF</th>
+                        <th>GC</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var posicion in tablaGrupo)
+                    {
+                        <tr>
+                            <td>@posicion.EquipoNombre</td>
+                            <td>@posicion.PartidosJugados</td>
+                            <td>@posicion.Puntos</td>
+                            <td>@posicion.Diferencia</td>
+                            <td>@posicion.GolesAFavor</td>
+                            <td>@posicion.GolesEnContra</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+                <h3 class="mt-4">Partidos</h3>
+
+                <table class="wcp-table">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Local</th>
+                        <th>Visitante</th>
+                        <th>Estadio</th>
+                        <th>Fase</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var partido in partidosGrupo)
+                    {
+                        <tr>
+                            <td>@partido.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@partido.equipoLocal.nombre</td>
+                            <td>@partido.equipoVisitante.nombre</td>
+                            <td>@partido.Estadio.Nombre</td>
+                            <td>@partido.fase</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+
+    @if (EstadoFixture.CuadroSegundaFase != null)
+    {
+        <div class="wcp-card mt-4">
+            <h2 class="wcp-title">Cruces de Segunda Fase</h2>
+            <p class="wcp-subtitle">Cuadro generado con la semilla de cruces indicada.</p>
+
+            <h3>Dieciseisavos</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Dieciseisavos)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Octavos</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Octavos)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Cuartos</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Cuartos)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Semifinales</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Semifinales)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Tercer puesto y final</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.PartidosFinales)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
+
+@code {
+    private int semillaFixture = 123;
+    private int semillaCrucesFase = 456;
+    private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
+
+    private string mensajeError = "";
+    private string mensajeExito = "";
+
+    private void GenerarFixture()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            EstadoFixture.ResultadoFixture = ServicioFixture.GenerarFixturePrimeraFase(
+                semillaFixture,
+                fechaInicioTorneo);
+
+            EstadoFixture.GrupoSeleccionado = EstadoFixture.ResultadoFixture.Grupos.First().Nombre;
+            EstadoFixture.CuadroSegundaFase = null;
+
+            mensajeExito = "Fixture generado correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void GenerarCruces()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            EstadoFixture.CuadroSegundaFase = ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
+
+            mensajeExito = "Cruces generados correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void SeleccionarGrupo(string grupo)
+    {
+        EstadoFixture.GrupoSeleccionado = grupo;
+    }
+
+    private string MostrarLocal(CruceDTO cruce)
+    {
+        if (cruce.EquipoLocal != null)
+        {
+            return cruce.EquipoLocal.EquipoNombre;
+        }
+
+        return cruce.ReferenciaLocal;
+    }
+
+    private string MostrarVisitante(CruceDTO cruce)
+    {
+        if (cruce.EquipoVisitante != null)
+        {
+            return cruce.EquipoVisitante.EquipoNombre;
+        }
+
+        return cruce.ReferenciaVisitante;
+    }
+    private List<PartidoDTO> ObtenerPartidosGrupo()
+    {
+        if (string.IsNullOrWhiteSpace(EstadoFixture.GrupoSeleccionado))
+        {
+            return new List<PartidoDTO>();
+        }
+
+        return ServicioPartido.ObtenerPartidos()
+            .Where(p => p.Grupo == EstadoFixture.GrupoSeleccionado && p.fase == Fase.Grupos)
+            .OrderBy(p => p.Fecha)
+            .ToList();
+    }
+
+    private List<PosicionEquipoDTO> ObtenerTablaGrupo()
+    {
+        if (string.IsNullOrWhiteSpace(EstadoFixture.GrupoSeleccionado))
+        {
+            return new List<PosicionEquipoDTO>();
+        }
+
+        return ServicioCruces.ObtenerRankingGrupo(EstadoFixture.GrupoSeleccionado, semillaCrucesFase);
+    }
+}

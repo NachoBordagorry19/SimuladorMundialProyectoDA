@@ -5,7 +5,6 @@ using Servicios.Clases;
 using Servicios.Interfaces;
 using UI.Estado;
 using Dominio.Enums;
-using Servicios.Interfaces;
 using Servicios.Modelo;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,9 +22,12 @@ builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
 builder.Services.AddScoped<IServicioEquipo, EquipoServicios>();
 builder.Services.AddScoped<IServicioEstadio, EstadioServicios>();
-builder.Services.AddScoped<PartidoServicios>();
+builder.Services.AddScoped<IServicioPartido, PartidoServicios>();
+builder.Services.AddScoped<IServicioFixturePrimeraFase, FixturePrimeraFaseServicio>();
+builder.Services.AddScoped<IServicioCrucesSegundaFase, CrucesSegundaFaseServicio>();
 
 builder.Services.AddScoped<UsuarioSesion>();
+builder.Services.AddScoped<FixtureEstado>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

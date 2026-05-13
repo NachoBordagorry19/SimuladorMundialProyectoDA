@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Servicios.Clases;
 
-public class FixturePrimeraFaseServicio
+public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
     private readonly IEstadioRepositorio _estadioRepositorio;

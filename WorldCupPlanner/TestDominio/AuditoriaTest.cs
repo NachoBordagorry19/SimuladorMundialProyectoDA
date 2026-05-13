@@ -9,7 +9,7 @@ public class AuditoriaTest
     public void CrearAuditoria_AsignaPropiedadesCorrectamente()
     {
         DateTime ahora = DateTime.Now;
-        
+
         var auditoria = new Auditoria
         {
             Usuario = "admin@cup.com",

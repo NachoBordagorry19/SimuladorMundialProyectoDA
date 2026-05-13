@@ -1,5 +1,9 @@
 @page "/partidos"
-@using Dominio.Clases
+@rendermode InteractiveServer
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioPartido ServicioPartido
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -11,9 +15,192 @@
 
             <NavLink href="/fixture" class="wcp-btn-primary">Ver Fixture</NavLink>
         </div>
+
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger wcp-alert mt-3">@mensajeError</div>
+        }
+
+        <div class="row g-3 mt-3">
+            <div class="col-md-3">
+                <label class="wcp-form-label">Fecha</label>
+                <InputDate @bind-Value="fechaFiltro" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="wcp-form-label">Estadio</label>
+                <select class="form-control" @bind="estadioFiltro">
+                    <option value="">Todos</option>
+                    @foreach (var estadio in ObtenerEstadios())
+                    {
+                        <option value="@estadio">@estadio</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="wcp-form-label">Grupo</label>
+                <select class="form-control" @bind="grupoFiltro">
+                    <option value="">Todos</option>
+                    @foreach (var grupo in ObtenerGrupos())
+                    {
+                        <option value="@grupo">@grupo</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="wcp-form-label">Fase</label>
+                <select class="form-control" @bind="faseFiltro">
+                    <option value="">Todas</option>
+                    @foreach (Fase fase in Enum.GetValues<Fase>())
+                    {
+                        <option value="@fase.ToString()">@fase</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="wcp-actions">
+            <button class="wcp-btn-secondary" @onclick="LimpiarFiltros">
+                Limpiar filtros
+            </button>
+        </div>
     </div>
 
-    <div class="wcp-card mt-4">
-        <p class="text-center text-muted mb-0">No hay partidos programados actualmente.</p>
-    </div>
+    @if (ObtenerPartidosFiltrados().Count > 0)
+    {
+        <div class="wcp-card mt-4">
+            <table class="wcp-table">
+                <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Grupo</th>
+                    <th>Fase</th>
+                    <th>Local</th>
+                    <th>Visitante</th>
+                    <th>Estadio</th>
+                    <th>Estado</th>
+                    <th>Resultado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var partido in ObtenerPartidosFiltrados())
+                {
+                    <tr>
+                        <td>@partido.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@partido.Grupo</td>
+                        <td>@partido.fase</td>
+                        <td>@partido.equipoLocal.nombre</td>
+                        <td>@partido.equipoVisitante.nombre</td>
+                        <td>@partido.Estadio.Nombre</td>
+                        <td>@partido.estadoPartido</td>
+                        <td>@partido.golesLocal - @partido.golesVisitante</td>
+                        <td>
+                            <NavLink href="@($"/EditarPartido/{partido.idPartido}")" class="wcp-action-link wcp-action-edit">
+                                Editar
+                            </NavLink>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="wcp-card mt-4">
+            <p class="text-center text-muted mb-0">No hay partidos para mostrar.</p>
+        </div>
+    }
 </div>
+
+@code {
+    private List<PartidoDTO> partidos = new List<PartidoDTO>();
+
+    private DateTime? fechaFiltro;
+    private string estadioFiltro = "";
+    private string grupoFiltro = "";
+    private string faseFiltro = "";
+
+    private string mensajeError = "";
+
+    protected override void OnInitialized()
+    {
+        CargarPartidos();
+    }
+
+    private void CargarPartidos()
+    {
+        try
+        {
+            mensajeError = "";
+            partidos = ServicioPartido.ObtenerPartidos();
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
+    }
+
+    private List<PartidoDTO> ObtenerPartidosFiltrados()
+    {
+        var partidosFiltrados = partidos.AsEnumerable();
+
+        if (fechaFiltro != null)
+        {
+            partidosFiltrados = partidosFiltrados
+                .Where(p => p.Fecha.Date == fechaFiltro.Value.Date);
+        }
+
+        if (!string.IsNullOrWhiteSpace(estadioFiltro))
+        {
+            partidosFiltrados = partidosFiltrados
+                .Where(p => p.Estadio.Nombre == estadioFiltro);
+        }
+
+        if (!string.IsNullOrWhiteSpace(grupoFiltro))
+        {
+            partidosFiltrados = partidosFiltrados
+                .Where(p => p.Grupo == grupoFiltro);
+        }
+
+        if (!string.IsNullOrWhiteSpace(faseFiltro))
+        {
+            partidosFiltrados = partidosFiltrados
+                .Where(p => p.fase.ToString() == faseFiltro);
+        }
+
+        return partidosFiltrados
+            .OrderBy(p => p.Fecha)
+            .ToList();
+    }
+
+    private List<string> ObtenerEstadios()
+    {
+        return partidos
+            .Select(p => p.Estadio.Nombre)
+            .Distinct()
+            .OrderBy(nombre => nombre)
+            .ToList();
+    }
+
+    private List<string> ObtenerGrupos()
+    {
+        return partidos
+            .Where(p => !string.IsNullOrWhiteSpace(p.Grupo))
+            .Select(p => p.Grupo)
+            .Distinct()
+            .OrderBy(grupo => grupo)
+            .ToList();
+    }
+
+    private void LimpiarFiltros()
+    {
+        fechaFiltro = null;
+        estadioFiltro = "";
+        grupoFiltro = "";
+        faseFiltro = "";
+    }
+}
