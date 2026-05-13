@@ -119,6 +119,15 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.EliminarEquipo(_equipoDTO2);
     }
+    
+    [TestMethod]
+    public void EliminarEquipo_DebeRegistrarEnAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _equipoServicios.EliminarEquipo(_equipoDTO);
+
+        _auditoriaMock.Verify(a => a.RegistrarEliminacionEquipo(_equipoDTO.nombre), Times.Once);
+    }
 
     [TestMethod]
     public void ActualizarEquipo_SiExiste_SeActualiza()
