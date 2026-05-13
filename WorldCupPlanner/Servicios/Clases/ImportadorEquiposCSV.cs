@@ -72,14 +72,15 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        }
        catch (FileNotFoundException)
        {
-           throw new ArgumentException($"El archivo CSV no existe en la ruta: {rutaArchivo}");
+           string mensajeError = $"El archivo CSV no existe en la ruta: {rutaArchivo}";
+           _auditoria.RegistrarImportacionEquipos(mensajeError, false);
+           throw new ArgumentException(mensajeError);
        }
        catch (Exception excepcion) when (!(excepcion is ArgumentException))
        {
-           throw new ArgumentException(
-               "Ocurrió un error inesperado al leer el archivo CSV",
-               excepcion
-           );
+           string mensajeError = "Ocurrió un error inesperado al leer el archivo CSV";
+           _auditoria.RegistrarImportacionEquipos($"{mensajeError}: {excepcion.Message}", false);
+           throw new ArgumentException(mensajeError, excepcion);
        }
    }
    
