@@ -165,4 +165,20 @@ public class EstadioServiciosTest
 
         _estadioServicios.ActualizarEstadio(estadio);
     }
+    
+    [TestMethod]
+    public void ActualizarEstadio_DebeRegistrarAuditoria()
+    {
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+    
+        var estadioActualizadoDto = new EstadioDTO 
+        { 
+            Nombre = "Lusail Iconic",
+            Ciudad = "Lusail", 
+            CapacidadLocativa = 85000
+        };
+
+        _estadioServicios.ActualizarEstadio(estadioActualizadoDto);
+        _auditoriaMock.Verify(a => a.RegistrarEdicionEstadio(estadioActualizadoDto.Nombre), Times.Once);
+    }
 }
