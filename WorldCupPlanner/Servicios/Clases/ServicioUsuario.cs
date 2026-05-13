@@ -144,7 +144,9 @@ public class ServicioUsuario : IServicioUsuario
 
     public UsuarioDTO AutenticarUsuario(string email, string contraseña)
     {
-        Usuario usuario = ObtenerEntidadPorEmail(email);
+        string emailNormalizado = email.Trim();
+
+        Usuario usuario = ObtenerEntidadPorEmail(emailNormalizado);
 
         if (usuario.Contraseña != CifrarContraseña(contraseña))
         {
