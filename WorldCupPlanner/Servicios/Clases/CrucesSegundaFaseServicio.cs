@@ -4,7 +4,7 @@ using Servicios.Modelo;
 
 namespace Servicios.Clases;
 
-public class CrucesSegundaFaseServicio
+public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 {
     private readonly IServicioPartido _partidoServicios;
 
