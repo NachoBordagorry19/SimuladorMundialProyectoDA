@@ -1,5 +1,6 @@
 using Dominio.Clases;
 using Dominio.Enums;
+using Moq;
 using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Clases;
@@ -13,11 +14,13 @@ public class ImportadorEquiposCSVTest
 {
 
     private IImportadorEquiposCSV _importadorEquipos;
+    private Mock<IServicioAuditoria> _mockAuditoria;
     
     [TestInitialize]
     public void Inicializar()
     {
-        _importadorEquipos = new ImportadorEquiposCSV();
+        _mockAuditoria = new Mock<IServicioAuditoria>();
+        _importadorEquipos = new ImportadorEquiposCSV(_mockAuditoria.Object);
     }
     
     [TestMethod]
@@ -379,6 +382,63 @@ public class ImportadorEquiposCSVTest
            LimpiarArchivoCSV(rutaArchivoCSV);
        }
    }
+   
+   [TestMethod]
+   public void ImportarCSV_Exitoso_DeberiaLlamarAlServicioDeAuditoria()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Uruguay,CONMEBOL,1800"
+       );
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+           _mockAuditoria.Verify(a => a.RegistrarImportacionEquipos(
+               It.Is<string>(s => s.Contains("Importación")), 
+               true
+           ), Times.Once);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+   
+   [TestMethod]
+   public void ImportarCSV_ArchivoInexistente_DeberiaRegistrarAuditoriaFallida()
+   {
+       string rutaInvalida = "ruta_que_no_existe.csv";
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaInvalida);
+       }
+       catch (ArgumentException)
+       {
+       }
+
+       _mockAuditoria.Verify(a => a.RegistrarImportacionEquipos(
+           It.Is<string>(s => s.Contains("no existe") || s.Contains("Error")), 
+           false
+       ), Times.Once);
+   }
+   
+   [TestMethod]
+   public void ImportarCSV_ConEncabezadoInvalido_DeberiaRegistrarAuditoriaFallida()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal("Columna1,Columna2,Columna3"); 
+
+       try {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       } 
+       catch (ArgumentException) {
+       }
+
+       _mockAuditoria.Verify(a => a.RegistrarImportacionEquipos(
+           It.IsAny<string>(), 
+           false
+       ), Times.Once, "La auditoría debería haberse registrado con éxito = false");
+   }
+   
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");

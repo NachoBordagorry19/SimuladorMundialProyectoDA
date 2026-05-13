@@ -16,67 +16,80 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    private const int NOMBRE_MINIMO_CARACTERES = 1;
    private const int RANKING_FIFA_MINIMO = 300;
    private const int RANKING_FIFA_MAXIMO = 2500;
+   private readonly IServicioAuditoria _auditoria;
    
-   public ImportadorEquiposCSV()
+   public ImportadorEquiposCSV(IServicioAuditoria auditoria)
    {
-       
+       _auditoria = auditoria;
    }
-   public List<Equipo> ImportarDesdeCSV(string rutaArchivo) 
-   {
-       ValidarRutaArchivo(rutaArchivo);
-       try
-       {
-           using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
-           {
-               string lineaEncabezados = lectorArchivo.ReadLine();
-               ValidarEncabezados(lineaEncabezados);
+   public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
+{
+    try
+    {
+        ValidarRutaArchivo(rutaArchivo);
 
-               Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
-              
-               List<Equipo> equiposImportados = new List<Equipo>();
-               HashSet<string> nombresVistos = new HashSet<string>();
-              
-               string linea;
-               int numeroLinea = 2;
+        using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
+        {
+            string lineaEncabezados = lectorArchivo.ReadLine();
+            ValidarEncabezados(lineaEncabezados);
 
-               while ((linea = lectorArchivo.ReadLine()) != null)
-               {
-                   if (string.IsNullOrWhiteSpace(linea))
-                   {
-                       numeroLinea++;
-                       continue;
-                   }
+            Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
+            List<Equipo> equiposImportados = new List<Equipo>();
+            HashSet<string> nombresVistos = new HashSet<string>();
 
-                   try
-                   {
-                       Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas, nombresVistos);
-                       equiposImportados.Add(equipoImportado);
-                   }
-                   catch (Exception excepcion)
-                   {
-                       throw new ArgumentException(
-                           $"Error al importar equipo en línea {numeroLinea}: {excepcion.Message}",
-                           excepcion
-                       );
-                   }
+            string linea;
+            int numeroLinea = 2;
 
-                   numeroLinea++;
-               }
-               return equiposImportados;
-           }
-       }
-       catch (FileNotFoundException)
-       {
-           throw new ArgumentException($"El archivo CSV no existe en la ruta: {rutaArchivo}");
-       }
-       catch (Exception excepcion) when (!(excepcion is ArgumentException))
-       {
-           throw new ArgumentException(
-               "Ocurrió un error inesperado al leer el archivo CSV",
-               excepcion
-           );
-       }
-   }
+            while ((linea = lectorArchivo.ReadLine()) != null)
+            {
+                if (string.IsNullOrWhiteSpace(linea))
+                {
+                    numeroLinea++;
+                    continue;
+                }
+
+                try
+                {
+                    Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas, nombresVistos);
+                    equiposImportados.Add(equipoImportado);
+                }
+                catch (Exception excepcion)
+                {
+                    string mensajeErrorFila = $"Error al importar equipo en línea {numeroLinea}: {excepcion.Message}";
+                    _auditoria.RegistrarImportacionEquipos(mensajeErrorFila, false);
+                    
+                    throw new ArgumentException(mensajeErrorFila, excepcion);
+                }
+
+                numeroLinea++;
+            }
+
+            _auditoria.RegistrarImportacionEquipos(
+                $"Importación exitosa de {equiposImportados.Count} equipos desde el archivo: {rutaArchivo}", 
+                true
+            );
+
+            return equiposImportados;
+        }
+    }
+    catch (FileNotFoundException)
+    {
+        string mensajeError = $"El archivo CSV no existe en la ruta: {rutaArchivo}";
+        _auditoria.RegistrarImportacionEquipos(mensajeError, false);
+        throw new ArgumentException(mensajeError);
+    }
+    catch (ArgumentException ex)
+    {
+        _auditoria.RegistrarImportacionEquipos(ex.Message, false);
+        throw;
+    }
+    catch (Exception excepcion)
+    {
+        string mensajeError = "Ocurrió un error inesperado al leer el archivo CSV";
+        _auditoria.RegistrarImportacionEquipos($"{mensajeError}: {excepcion.Message}", false);
+        throw new ArgumentException(mensajeError, excepcion);
+    }
+}
    
    private void ValidarRutaArchivo(string rutaArchivo)
    {
