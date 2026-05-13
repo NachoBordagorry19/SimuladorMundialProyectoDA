@@ -16,9 +16,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     public List<PosicionEquipoDTO> ObtenerRankingGrupo(string grupo, int semillaCrucesFase)
     {
         var partidos = _partidoServicios.ObtenerPartidos()
-            .Where(p => p.Grupo == grupo &&
-                        p.fase == Fase.Grupos &&
-                        p.estadoPartido == EstadoPartido.Jugado)
+            .Where(p => p.Grupo == grupo && p.fase == Fase.Grupos)
             .ToList();
 
         var posiciones = new List<PosicionEquipoDTO>();
@@ -27,6 +25,11 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         {
             AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal.nombre, grupo);
             AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante.nombre, grupo);
+
+            if (partido.estadoPartido != EstadoPartido.Jugado)
+            {
+                continue;
+            }
 
             var posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
             var posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
@@ -149,12 +152,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
         {
             string grupo = letraGrupo.ToString();
-            var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
 
-            if (rankingGrupo.Count < 4)
+            int partidosJugados = _partidoServicios.ObtenerPartidos()
+                .Count(p => p.Grupo == grupo &&
+                            p.fase == Fase.Grupos &&
+                            p.estadoPartido == EstadoPartido.Jugado);
+
+            if (partidosJugados < 6)
             {
                 throw new ArgumentException("No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
             }
+
+            var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
 
             primeros.Add(rankingGrupo[0]);
             segundos.Add(rankingGrupo[1]);

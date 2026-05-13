@@ -1,9 +1,11 @@
 @page "/fixture"
 @rendermode InteractiveServer
+@using Dominio.Enums
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using UI.Estado
 @inject FixtureEstado EstadoFixture
+@inject IServicioPartido ServicioPartido
 @inject IServicioFixturePrimeraFase ServicioFixture
 @inject IServicioCrucesSegundaFase ServicioCruces
 
@@ -81,10 +83,8 @@
         @if (EstadoFixture.GrupoSeleccionado != null)
         {
             var grupo = EstadoFixture.ResultadoFixture.Grupos.First(g => g.Nombre == EstadoFixture.GrupoSeleccionado);
-            var partidosGrupo = EstadoFixture.ResultadoFixture.Partidos
-                .Where(p => p.Grupo == EstadoFixture.GrupoSeleccionado)
-                .OrderBy(p => p.Fecha)
-                .ToList();
+            var partidosGrupo = ObtenerPartidosGrupo();
+            var tablaGrupo = ObtenerTablaGrupo();
 
             <div class="wcp-card mt-4">
                 <h2 class="wcp-title">Grupo @grupo.Nombre</h2>
@@ -106,6 +106,34 @@
                             <td>@equipo.Nombre</td>
                             <td>@equipo.Confederacion</td>
                             <td>@equipo.RankingFifa</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                
+                <h3 class="mt-4">Tabla de posiciones</h3>
+
+                <table class="wcp-table">
+                    <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>PJ</th>
+                        <th>Pts</th>
+                        <th>DG</th>
+                        <th>GF</th>
+                        <th>GC</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var posicion in tablaGrupo)
+                    {
+                        <tr>
+                            <td>@posicion.EquipoNombre</td>
+                            <td>@posicion.PartidosJugados</td>
+                            <td>@posicion.Puntos</td>
+                            <td>@posicion.Diferencia</td>
+                            <td>@posicion.GolesAFavor</td>
+                            <td>@posicion.GolesEnContra</td>
                         </tr>
                     }
                     </tbody>
@@ -336,5 +364,27 @@
         }
 
         return cruce.ReferenciaVisitante;
+    }
+    private List<PartidoDTO> ObtenerPartidosGrupo()
+    {
+        if (string.IsNullOrWhiteSpace(EstadoFixture.GrupoSeleccionado))
+        {
+            return new List<PartidoDTO>();
+        }
+
+        return ServicioPartido.ObtenerPartidos()
+            .Where(p => p.Grupo == EstadoFixture.GrupoSeleccionado && p.fase == Fase.Grupos)
+            .OrderBy(p => p.Fecha)
+            .ToList();
+    }
+
+    private List<PosicionEquipoDTO> ObtenerTablaGrupo()
+    {
+        if (string.IsNullOrWhiteSpace(EstadoFixture.GrupoSeleccionado))
+        {
+            return new List<PosicionEquipoDTO>();
+        }
+
+        return ServicioCruces.ObtenerRankingGrupo(EstadoFixture.GrupoSeleccionado, semillaCrucesFase);
     }
 }
