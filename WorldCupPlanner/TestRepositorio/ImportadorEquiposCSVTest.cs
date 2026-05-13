@@ -63,6 +63,23 @@ public class ImportadorEquiposCSVTest
         _importadorEquipos.ImportarDesdeCSV("   ");
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_SinEncabezados_LanzaExcepcion()
+    {
+        string rutaArchivoCSV = CrearArchivoCSVTemporal("");
+
+
+        try
+        {
+            _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+        }
+        finally
+        {
+            LimpiarArchivoCSV(rutaArchivoCSV);
+        }
+    }
+
 
     
     private string CrearArchivoCSVTemporal(string contenido)
