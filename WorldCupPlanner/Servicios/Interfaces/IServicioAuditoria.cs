@@ -6,4 +6,6 @@ public interface IServicioAuditoria
     List<string> ObtenerRegistrosFormateados();
     void RegistrarEdicionEquipo(string nombre);
     void RegistrarEliminacionEquipo(string nombre);
+    void RegistrarEdicionUsuario(string email);
+    void RegistrarEliminacionUsuario(string email);
 }
