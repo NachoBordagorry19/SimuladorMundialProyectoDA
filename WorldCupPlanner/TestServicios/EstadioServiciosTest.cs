@@ -12,7 +12,7 @@ public class EstadioServiciosTest
 {
     private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
     private IEstadioRepositorio _estadioRepositorio;
-    private IServicioEstadio _servicioEstadio;
+    private IServicioEstadio _estadioServicio;
     private EstadioDTO _estadioDTO;
     private Mock<IServicioAuditoria> _auditoriaMock;
 
@@ -23,7 +23,7 @@ public class EstadioServiciosTest
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
         _auditoriaMock = new Mock<IServicioAuditoria>();
-        _servicioEstadio = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
+        _estadioServicio = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
 
         _estadioDTO = new EstadioDTO()
         {
@@ -37,7 +37,7 @@ public class EstadioServiciosTest
     [TestMethod]
     public void AgregarEstadio_NombreUnicoEnSistema()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.AgregarEstadio(_estadioDTO);
         Assert.AreEqual("CDS", _estadioDTO.Nombre);
         Assert.AreEqual("Montevideo", _estadioDTO.Ciudad);
         Assert.AreEqual("descripcion", _estadioDTO.Descripcion);
@@ -48,14 +48,21 @@ public class EstadioServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void AgregarEstadio_SiNombreExiste_LanzaExcepcion()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.AgregarEstadio(_estadioDTO);
+    }
+    
+    [TestMethod]
+    public void AgregarEstadio_DebeRegistrarAuditoria()
+    {
+        _estadioServicio.AgregarEstadio(_estadioDTO);
+        _auditoriaMock.Verify(a => a.RegistrarAltaEstadio(_estadioDTO.Nombre), Times.Once);
     }
 
     [TestMethod]
     public void ObtenerEstadio_DevuelveCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.AgregarEstadio(_estadioDTO);
 
         EstadioDTO estadio2 = new EstadioDTO()
         {
@@ -65,16 +72,16 @@ public class EstadioServiciosTest
             CapacidadLocativa = 50000,
         };
 
-        _servicioEstadio.AgregarEstadio(estadio2);
+        _estadioServicio.AgregarEstadio(estadio2);
 
-        var estadios = _servicioEstadio.ObtenerEstadios();
+        var estadios = _estadioServicio.ObtenerEstadios();
         Assert.AreEqual(2, estadios.Count);
     }
 
     [TestMethod]
     public void ObtenerEstadioPorNombre_DevuelveCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.AgregarEstadio(_estadioDTO);
 
         EstadioDTO estadio2 = new EstadioDTO()
         {
@@ -84,9 +91,9 @@ public class EstadioServiciosTest
             CapacidadLocativa = 30000
         };
 
-        _servicioEstadio.AgregarEstadio(estadio2);
+        _estadioServicio.AgregarEstadio(estadio2);
 
-        EstadioDTO obtenido = _servicioEstadio.ObtenerEstadioPorNombre("Monumental");
+        EstadioDTO obtenido = _estadioServicio.ObtenerEstadioPorNombre("Monumental");
 
         Assert.AreEqual("Monumental", obtenido.Nombre);
     }
@@ -95,15 +102,15 @@ public class EstadioServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void ObtenerEstadioPorNombre_SiNoExiste_LanzaExcepcion()
     {
-        _servicioEstadio.ObtenerEstadioPorNombre("NoExiste");
+        _estadioServicio.ObtenerEstadioPorNombre("NoExiste");
     }
 
     [TestMethod]
     public void EliminarEstadio_DevuelveCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
-        _servicioEstadio.EliminarEstadio(_estadioDTO);
-        var estadios = _servicioEstadio.ObtenerEstadios();
+        _estadioServicio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.EliminarEstadio(_estadioDTO);
+        var estadios = _estadioServicio.ObtenerEstadios();
         Assert.AreEqual(0, estadios.Count);
     }
 
@@ -111,13 +118,13 @@ public class EstadioServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void EliminarEstadio_SiNoExiste_LanzaExcepcion()
     {
-        _servicioEstadio.EliminarEstadio(_estadioDTO);
+        _estadioServicio.EliminarEstadio(_estadioDTO);
     }
 
     [TestMethod]
     public void ActualizarEstadio_ModificaDatosCorrectamente()
     {
-        _servicioEstadio.AgregarEstadio(_estadioDTO);
+        _estadioServicio.AgregarEstadio(_estadioDTO);
 
         EstadioDTO estadioActualizado = new EstadioDTO()
         {
@@ -127,8 +134,8 @@ public class EstadioServiciosTest
             CapacidadLocativa = 60000
         };
 
-        _servicioEstadio.ActualizarEstadio(estadioActualizado);
-        EstadioDTO obtenido = _servicioEstadio.ObtenerEstadioPorNombre("CDS");
+        _estadioServicio.ActualizarEstadio(estadioActualizado);
+        EstadioDTO obtenido = _estadioServicio.ObtenerEstadioPorNombre("CDS");
 
         Assert.AreEqual("Nueva Ciudad", obtenido.Ciudad);
         Assert.AreEqual("Nueva Descripcion", obtenido.Descripcion);
@@ -147,6 +154,6 @@ public class EstadioServiciosTest
             CapacidadLocativa = 30000
         };
 
-        _servicioEstadio.ActualizarEstadio(estadio);
+        _estadioServicio.ActualizarEstadio(estadio);
     }
 }
