@@ -36,9 +36,9 @@ public class ServicioAutorizacion : IServicioAutorizacion
         return usuario.Roles.Contains(Rol.Editor);
     }
 
-    public bool PuedeImportar(UsuarioDTO? usuario)
+    public bool PuedeImportar(UsuarioDTO usuario)
     {
-        throw new NotImplementedException();
+        return usuario.Roles.Contains(Rol.Editor);
     }
 
     public bool PuedeEliminarUsuario(UsuarioDTO? usuarioActual, string emailAEliminar)

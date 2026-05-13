@@ -113,4 +113,20 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
+    [TestMethod]
+    public void UsuarioConAmbosRoles_PuedeGestionarUsuariosYUsarFixture()
+    {
+        UsuarioDTO usuario = new UsuarioDTO
+        {
+            Email = "admineditor@gmail.com",
+            Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
+        };
+
+        bool puedeGestionarUsuarios = _servicioAutorizacion.PuedeGestionarUsuarios(usuario);
+        bool puedeUsarFixture = _servicioAutorizacion.PuedeUsarFixture(usuario);
+
+        Assert.IsTrue(puedeGestionarUsuarios);
+        Assert.IsTrue(puedeUsarFixture);
+    }
+    
 }
