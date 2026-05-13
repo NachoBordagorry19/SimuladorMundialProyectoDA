@@ -285,6 +285,8 @@ public class CrucesSegundaFaseServicio
         cruces.AddRange(crucesB5aB8);
 
         _partidoServicios.BloquearEdicionFase(Fase.Grupos);
+        _auditoria.RegistrarSorteoCruces();
+        
         return cruces;
     }
 
