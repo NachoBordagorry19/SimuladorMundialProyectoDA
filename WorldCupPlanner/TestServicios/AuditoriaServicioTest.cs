@@ -34,7 +34,37 @@ public class AuditoriaServicioTest
         Assert.IsTrue(log.StartsWith(fechaEsperada));
     }
     
-    
+    [TestMethod]
+    public void RegistrarEdicionUsuario_DebeGuardarRegistroCorrectamente()
+    {
+        string email = "editado@gmail.com";
+        _servicio.RegistrarEdicionUsuario(email);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.AreEqual(1, registros.Count);
+        string log = registros[0];
+        Assert.IsTrue(log.Contains("Edición Usuario"));
+        Assert.IsTrue(log.Contains(email));
+        Assert.IsTrue(log.Contains("admin@gmail.com"));
+        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+        Assert.IsTrue(log.StartsWith(fechaHoy));
+    }
+
+    [TestMethod]
+    public void RegistrarEliminacionUsuario_DebeGuardarRegistroCorrectamente()
+    {
+        string email = "borrado@gmail.com";
+        _servicio.RegistrarEliminacionUsuario(email);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.AreEqual(1, registros.Count);
+        string log = registros[0];
+        Assert.IsTrue(log.Contains("Eliminación Usuario"));
+        Assert.IsTrue(log.Contains(email));
+        Assert.IsTrue(log.Contains("admin@gmail.com"));
+        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+        Assert.IsTrue(log.StartsWith(fechaHoy));
+    }
     
     [TestMethod]
     public void RegistrarAltaEquipo_DebeGuardarRegistroCorrectamente()
