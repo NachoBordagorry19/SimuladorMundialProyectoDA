@@ -18,7 +18,7 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
            using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
            {
                string lineaEncabezados = lectorArchivo.ReadLine();
-
+               ValidarEncabezados(lineaEncabezados);
 
     
                Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
@@ -64,6 +64,19 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
            throw new ArgumentException("La ruta del archivo CSV no puede ser nula");
        }
    }
+   
+   private void ValidarEncabezados(string lineaEncabezados)
+   {
+       if (string.IsNullOrWhiteSpace(lineaEncabezados))
+       {
+           throw new ArgumentException("El archivo CSV debe contener una fila de encabezados");
+       }
+       
+       string[] encabezados = lineaEncabezados.Split(',');
+       
+       string[] encabezadosTrimmed = encabezados.Select(e => e.Trim()).ToArray();
+   }
+
 
    
   
