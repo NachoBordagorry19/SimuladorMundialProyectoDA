@@ -19,19 +19,20 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
    public List<Equipo> ImportarDesdeCSV(string rutaArchivo)
    {
        ValidarRutaArchivo(rutaArchivo);
+       try
+       {
            using (StreamReader lectorArchivo = new StreamReader(rutaArchivo))
            {
                string lineaEncabezados = lectorArchivo.ReadLine();
                ValidarEncabezados(lineaEncabezados);
 
-
                Dictionary<string, int> indicesColumnas = ObtenerIndicesColumnas(lineaEncabezados);
               
                List<Equipo> equiposImportados = new List<Equipo>();
+               HashSet<string> nombresVistos = new HashSet<string>();
               
                string linea;
                int numeroLinea = 2;
-
 
                while ((linea = lectorArchivo.ReadLine()) != null)
                {
@@ -43,7 +44,7 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
 
                    try
                    {
-                       Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas);
+                       Equipo equipoImportado = ConvertirLineaAEquipo(linea, indicesColumnas, nombresVistos);
                        equiposImportados.Add(equipoImportado);
                    }
                    catch (Exception excepcion)
@@ -57,9 +58,20 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
                    numeroLinea++;
                }
 
-
                return equiposImportados;
            }
+       }
+       catch (FileNotFoundException)
+       {
+           throw new ArgumentException($"El archivo CSV no existe en la ruta: {rutaArchivo}");
+       }
+       catch (Exception excepcion) when (!(excepcion is ArgumentException))
+       {
+           throw new ArgumentException(
+               "Ocurrió un error inesperado al leer el archivo CSV",
+               excepcion
+           );
+       }
    }
    
    private void ValidarRutaArchivo(string rutaArchivo)
@@ -119,12 +131,12 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        return indices;
    }
   
-   private Equipo ConvertirLineaAEquipo(string linea, Dictionary<string, int> indicesColumnas)
+   private Equipo ConvertirLineaAEquipo(string linea, Dictionary<string, int> indicesColumnas, HashSet<string> nombresVistos)
    {
        string[] campos = linea.Split(',');
       
        string nombre = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_NOMBRE);
-       ValidarNombre(nombre);
+       ValidarNombre(nombre, nombresVistos);
        
        string confederacionTexto = ExtraerYValidarCampo(campos, indicesColumnas, ENCABEZADO_CONFEDERACION);
        ValidarConfederacion(confederacionTexto);
@@ -138,13 +150,22 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        return new Equipo(nombre, confederacion, rankingFifa);
    }
    
-   private void ValidarNombre(string nombre)
+   private void ValidarNombre(string nombre, HashSet<string> nombresVistos)
+   {
+       ValidarNombreNoVacio(nombre);
+       ValidarNombreLongitud(nombre);
+       ValidarNombreUnico(nombre, nombresVistos);
+   }
+ 
+   private void ValidarNombreNoVacio(string nombre)
    {
        if (string.IsNullOrWhiteSpace(nombre))
        {
            throw new ArgumentException("El nombre del equipo no puede estar vacío");
        }
-
+   }
+   private void ValidarNombreLongitud(string nombre)
+   {
        if (nombre.Length < NOMBRE_MINIMO_CARACTERES)
        {
            throw new ArgumentException($"El nombre debe tener al menos {NOMBRE_MINIMO_CARACTERES} carácter");
@@ -153,6 +174,14 @@ public class ImportadorEquiposCSV : IImportadorEquiposCSV
        if (nombre.Length > NOMBRE_MAXIMO_CARACTERES)
        {
            throw new ArgumentException($"El nombre no puede superar los {NOMBRE_MAXIMO_CARACTERES} caracteres");
+       }
+   }
+   
+   private void ValidarNombreUnico(string nombre, HashSet<string> nombresVistos)
+   {
+       if (!nombresVistos.Add(nombre))
+       {
+           throw new ArgumentException($"El nombre del equipo debe ser único, el nombre '{nombre}' ya fue visto");
        }
    }
    

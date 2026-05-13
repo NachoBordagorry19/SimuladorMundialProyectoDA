@@ -331,6 +331,51 @@ public class ImportadorEquiposCSVTest
            LimpiarArchivoCSV(rutaArchivoCSV);
        }
    }
+
+   [TestMethod]
+   [ExpectedException(typeof(ArgumentException))]
+   public void ImportarCSV_ConNombreDuplicado_LanzaExcepcion()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Argentina,CONMEBOL,1500\n" +
+           "Argentina,UEFA,1600"
+       );
+
+       try
+       {
+           _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
+
+   [TestMethod]
+   public void ImportarCSV_ConNombresUnicos_CreaVariosEquiposCorrectamente()
+   {
+       string rutaArchivoCSV = CrearArchivoCSVTemporal(
+           "Nombre,Confederación,RankingFIFA\n" +
+           "Argentina,CONMEBOL,1500\n" +
+           "Brasil,CONMEBOL,1600\n" +
+           "Alemania,UEFA,1800"
+       );
+
+       try
+       {
+           List<Equipo> equiposImportados = _importadorEquipos.ImportarDesdeCSV(rutaArchivoCSV);
+
+           Assert.AreEqual(3, equiposImportados.Count);
+           Assert.AreEqual("Argentina", equiposImportados[0].Nombre);
+           Assert.AreEqual("Brasil", equiposImportados[1].Nombre);
+           Assert.AreEqual("Alemania", equiposImportados[2].Nombre);
+       }
+       finally
+       {
+           LimpiarArchivoCSV(rutaArchivoCSV);
+       }
+   }
     private string CrearArchivoCSVTemporal(string contenido)
     {
         string rutaArchivo = Path.Combine(Path.GetTempPath(), $"equipos_test_{Guid.NewGuid()}.csv");
