@@ -29,79 +29,79 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Alta Usuario", $"Email: {email}, Roles: {roles}");
     }
-    
+
     public void RegistrarEdicionUsuario(string email)
     {
         Registrar("Edición Usuario", $"Email: {email}");
     }
-    
+
     public void RegistrarEliminacionUsuario(string email)
     {
         Registrar("Eliminación Usuario", $"Email: {email}");
     }
-    
+
     public void RegistrarAltaEquipo(string nombre)
     {
         Registrar("Alta Equipo", $"Nombre: {nombre}");
     }
-    
+
     public void RegistrarEdicionEquipo(string nombre)
     {
         Registrar("Edición Equipo", $"Nombre: {nombre}");
     }
-    
+
     public void RegistrarEliminacionEquipo(string nombre)
     {
         Registrar("Eliminación Equipo", $"Nombre: {nombre}");
     }
-    
+
     public void RegistrarAltaEstadio(string nombre)
     {
         Registrar("Alta Estadio", $"Nombre: {nombre}");
     }
-    
+
     public void RegistrarEdicionEstadio(string nombre)
     {
         Registrar("Edición Estadio", $"Nombre: {nombre}");
     }
-    
+
     public void RegistrarEliminacionEstadio(string nombre)
     {
         Registrar("Eliminación Estadio", $"Nombre: {nombre}");
     }
-    
+
     public void RegistrarModificacionPartido(string detalle)
     {
         Registrar("Modificación de Partido", detalle);
     }
-    
+
     public void RegistrarImportacionEquipos(string mensaje, bool esExito)
     {
         string etiqueta = "Error";
         if (esExito)
         {
-            etiqueta = "Éxito";    
+            etiqueta = "Éxito";
         }
         Registrar($"Importación de Equipos ({etiqueta})", mensaje);
     }
-    
+
     public void RegistrarGeneracionAutomaticaEquipos(int cantidad)
     {
         Registrar("Generación automática de equipos", $"Cantidad: {cantidad}");
     }
-    
+
     public void RegistrarGeneracionFixture()
     {
         Registrar("Generación de fixture", "Proceso completado");
     }
-    
+
     public void RegistrarSorteoCruces()
     {
         Registrar("Realización de sorteo para cruces", "Proceso completado");
     }
-    
-    
-    
+
+
+
     public List<string> ObtenerRegistrosFormateados()
     {
         var logs = _auditoriaRepo.ObtenerTodosLosRegistros();

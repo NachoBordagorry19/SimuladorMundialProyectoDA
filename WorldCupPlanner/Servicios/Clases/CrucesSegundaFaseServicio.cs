@@ -16,7 +16,9 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     public List<PosicionEquipoDTO> ObtenerRankingGrupo(string grupo, int semillaCrucesFase)
     {
         var partidos = _partidoServicios.ObtenerPartidos()
-            .Where(p => p.Grupo == grupo && p.fase == Fase.Grupos)
+            .Where(p => p.Grupo == grupo &&
+                        p.fase == Fase.Grupos &&
+                        p.estadoPartido == EstadoPartido.Jugado)
             .ToList();
 
         var posiciones = new List<PosicionEquipoDTO>();
@@ -148,6 +150,11 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         {
             string grupo = letraGrupo.ToString();
             var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
+
+            if (rankingGrupo.Count < 4)
+            {
+                throw new ArgumentException("No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
+            }
 
             primeros.Add(rankingGrupo[0]);
             segundos.Add(rankingGrupo[1]);
@@ -416,5 +423,24 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         }
 
         throw new ArgumentException("La final no puede terminar empatada");
+    }
+    public CuadroSegundaFaseDTO GenerarCuadroSegundaFase(int semillaCrucesFase)
+    {
+        var clasificados = ObtenerClasificados(semillaCrucesFase);
+
+        var dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
+        var octavos = GenerarOctavosDeFinal(dieciseisavos);
+        var cuartos = GenerarCuartosDeFinal(octavos);
+        var semifinales = GenerarSemifinales(cuartos);
+        var partidosFinales = GenerarTercerPuestoYFinal(semifinales);
+
+        return new CuadroSegundaFaseDTO
+        {
+            Dieciseisavos = dieciseisavos,
+            Octavos = octavos,
+            Cuartos = cuartos,
+            Semifinales = semifinales,
+            PartidosFinales = partidosFinales
+        };
     }
 }

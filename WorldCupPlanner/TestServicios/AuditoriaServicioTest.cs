@@ -8,7 +8,7 @@ public class AuditoriaServicioTest
     private AuditoriaRepositorioMock _repoMock;
     private SessionServiceMock _sessionMock;
     private ServicioAuditoria _servicio;
-    
+
     [TestInitialize]
     public void Setup()
     {
@@ -16,7 +16,7 @@ public class AuditoriaServicioTest
         _sessionMock = new SessionServiceMock();
         _servicio = new ServicioAuditoria(_sessionMock, _repoMock);
     }
-    
+
     [TestMethod]
     public void RegistrarAltaUsuario_DebeGuardarRegistroCorrectamente()
     {
@@ -24,7 +24,7 @@ public class AuditoriaServicioTest
         string rol = "Administrador";
         _servicio.RegistrarAltaUsuario(email, rol);
         var registros = _servicio.ObtenerRegistrosFormateados();
-            
+
         Assert.AreEqual(1, registros.Count);
         string log = registros[0];
         Assert.IsTrue(log.Contains("Alta Usuario"));
@@ -33,7 +33,7 @@ public class AuditoriaServicioTest
         string fechaEsperada = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaEsperada));
     }
-    
+
     [TestMethod]
     public void RegistrarEdicionUsuario_DebeGuardarRegistroCorrectamente()
     {
@@ -65,7 +65,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarAltaEquipo_DebeGuardarRegistroCorrectamente()
     {
@@ -81,7 +81,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarEdicionEquipo_DebeGuardarRegistroCorrectamente()
     {
@@ -97,7 +97,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarEliminacionEquipo_DebeGuardarRegistroCorrectamente()
     {
@@ -113,7 +113,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarAltaEstadio_DebeGuardarRegistroCorrectamente()
     {
@@ -129,7 +129,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarEdicionEstadio_DebeGuardarRegistroCorrectamente()
     {
@@ -145,7 +145,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarEliminacionEstadio_DebeGuardarRegistroCorrectamente()
     {
@@ -161,7 +161,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarModificacionPartido_DebeGuardarRegistroCorrectamente()
     {
@@ -177,7 +177,7 @@ public class AuditoriaServicioTest
         string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
         Assert.IsTrue(log.StartsWith(fechaHoy));
     }
-    
+
     [TestMethod]
     public void RegistrarImportacionEquipos_Error_DebeGuardarRegistroCorrectamente()
     {
@@ -188,7 +188,7 @@ public class AuditoriaServicioTest
         Assert.IsTrue(registros[0].Contains("Importación de Equipos (Error)"));
         Assert.IsTrue(registros[0].Contains(error));
     }
-    
+
     [TestMethod]
     public void RegistrarImportacionEquipos_Exito_DebeGuardarRegistroCorrectamente()
     {
@@ -199,7 +199,7 @@ public class AuditoriaServicioTest
         Assert.IsTrue(registros[0].Contains("Importación de Equipos (Éxito)"));
         Assert.IsTrue(registros[0].Contains(exito));
     }
-    
+
     [TestMethod]
     public void RegistrarGeneracionAutomaticaEquipos_DebeGuardarRegistroCorrectamente()
     {
@@ -213,7 +213,7 @@ public class AuditoriaServicioTest
         Assert.IsTrue(log.Contains(cantidad.ToString()));
         Assert.IsTrue(log.Contains("admin@gmail.com"));
     }
-    
+
     [TestMethod]
     public void RegistrarGeneracionFixture_DebeGuardarRegistroCorrectamente()
     {
@@ -221,7 +221,7 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Generación de fixture"));
     }
-    
+
     [TestMethod]
     public void RegistrarSorteoCruces_DebeGuardarRegistroCorrectamente()
     {

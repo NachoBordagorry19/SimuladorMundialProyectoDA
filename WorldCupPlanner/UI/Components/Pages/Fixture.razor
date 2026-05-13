@@ -1,14 +1,14 @@
 @page "/fixture"
 @rendermode InteractiveServer
-@using Dominio.Clases
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @inject IServicioFixturePrimeraFase ServicioFixture
+@inject IServicioCrucesSegundaFase ServicioCruces
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Fixture</h1>
-        <p class="wcp-subtitle">Generación y visualización del fixture del torneo.</p>
+        <p class="wcp-subtitle">Generación y visualización del fixture y cruces del torneo.</p>
 
         @if (!string.IsNullOrWhiteSpace(mensajeError))
         {
@@ -30,12 +30,29 @@
                 <label class="wcp-form-label">Fecha inicio torneo</label>
                 <InputDate @bind-Value="fechaInicioTorneo" class="form-control" />
             </div>
+
+            <div class="col-md-4">
+                <label class="wcp-form-label">Semilla Cruces Fase</label>
+                <InputNumber @bind-Value="semillaCrucesFase" class="form-control" />
+            </div>
         </div>
 
         <div class="wcp-actions">
             <button class="wcp-btn-primary" @onclick="GenerarFixture">
                 Generar Fixture
             </button>
+
+            <button class="wcp-btn-secondary" @onclick="GenerarCruces">
+                Generar Cruces
+            </button>
+
+            <NavLink href="/equipos" class="wcp-btn-secondary">
+                Ir a Equipos
+            </NavLink>
+
+            <NavLink href="/estadios" class="wcp-btn-secondary">
+                Ir a Estadios
+            </NavLink>
 
             <NavLink href="/partidos" class="wcp-btn-secondary">
                 Ver Lista de Partidos
@@ -120,13 +137,138 @@
             </div>
         }
     }
+
+    @if (cuadroSegundaFase != null)
+    {
+        <div class="wcp-card mt-4">
+            <h2 class="wcp-title">Cruces de Segunda Fase</h2>
+            <p class="wcp-subtitle">Cuadro generado con la semilla de cruces indicada.</p>
+
+            <h3>Dieciseisavos</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in cuadroSegundaFase.Dieciseisavos)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Octavos</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in cuadroSegundaFase.Octavos)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Cuartos</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in cuadroSegundaFase.Cuartos)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Semifinales</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in cuadroSegundaFase.Semifinales)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Tercer puesto y final</h3>
+            <table class="wcp-table mb-3">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fase</th>
+                    <th>Local / Referencia</th>
+                    <th>Visitante / Referencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var cruce in cuadroSegundaFase.PartidosFinales)
+                {
+                    <tr>
+                        <td>@cruce.Codigo</td>
+                        <td>@cruce.Fase</td>
+                        <td>@MostrarLocal(cruce)</td>
+                        <td>@MostrarVisitante(cruce)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
 
 @code {
     private int semillaFixture = 123;
+    private int semillaCrucesFase = 456;
     private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
 
     private ResultadoFixture? resultadoFixture;
+    private CuadroSegundaFaseDTO? cuadroSegundaFase;
     private string? grupoSeleccionado;
 
     private string mensajeError = "";
@@ -144,7 +286,27 @@
                 fechaInicioTorneo);
 
             grupoSeleccionado = resultadoFixture.Grupos.First().Nombre;
+            cuadroSegundaFase = null;
+
             mensajeExito = "Fixture generado correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void GenerarCruces()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            cuadroSegundaFase = ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
+
+            mensajeExito = "Cruces generados correctamente.";
         }
         catch (Exception ex)
         {
@@ -156,5 +318,25 @@
     private void SeleccionarGrupo(string grupo)
     {
         grupoSeleccionado = grupo;
+    }
+
+    private string MostrarLocal(CruceDTO cruce)
+    {
+        if (cruce.EquipoLocal != null)
+        {
+            return cruce.EquipoLocal.EquipoNombre;
+        }
+
+        return cruce.ReferenciaLocal;
+    }
+
+    private string MostrarVisitante(CruceDTO cruce)
+    {
+        if (cruce.EquipoVisitante != null)
+        {
+            return cruce.EquipoVisitante.EquipoNombre;
+        }
+
+        return cruce.ReferenciaVisitante;
     }
 }
