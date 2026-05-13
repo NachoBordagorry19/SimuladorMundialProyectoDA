@@ -334,4 +334,32 @@ public class CrucesSegundaFaseServicio
 
         return cuartos;
     }
+    
+    public List<CruceDTO> GenerarSemifinales(List<CruceDTO> cuartos)
+    {
+        var semifinales = new List<CruceDTO>();
+
+        var d1 = cuartos.First(c => c.Codigo == "D1");
+        var d2 = cuartos.First(c => c.Codigo == "D2");
+        var d3 = cuartos.First(c => c.Codigo == "D3");
+        var d4 = cuartos.First(c => c.Codigo == "D4");
+
+        semifinales.Add(new CruceDTO
+        {
+            Codigo = "S1",
+            Fase = Fase.Semifinal,
+            ReferenciaLocal = "Ganador " + d1.Codigo,
+            ReferenciaVisitante = "Ganador " + d2.Codigo
+        });
+
+        semifinales.Add(new CruceDTO
+        {
+            Codigo = "S2",
+            Fase = Fase.Semifinal,
+            ReferenciaLocal = "Ganador " + d3.Codigo,
+            ReferenciaVisitante = "Ganador " + d4.Codigo
+        });
+
+        return semifinales;
+    }
 }
