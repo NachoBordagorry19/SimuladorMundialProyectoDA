@@ -42,6 +42,13 @@ public class ImportadorEquiposCSVTest
         }
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ImportarCSV_ConRutaNula_LanzaExcepcion()
+    {
+        _importadorEquipos.ImportarDesdeCSV(null);
+    }
+
     
     private string CrearArchivoCSVTemporal(string contenido)
     {
