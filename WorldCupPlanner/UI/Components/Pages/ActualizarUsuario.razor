@@ -1,17 +1,31 @@
 @page "/ActualizarUsuario"
+@using Dominio.Enums
 @using Servicios.Interfaces
 @using Servicios.Modelo
-@using UI.Estado
-@inject IServicioUsuario ServicioUsuario;
-@inject UsuarioSesion usuarioActivo;
+@inject IServicioUsuario ServicioUsuario
+@inject NavigationManager Navigation
 
 <div class="wcp-page">
     <div class="wcp-card">
-        <h1 class="wcp-title">Actualizar Usuario</h1>
-        <p class="wcp-subtitle">Actualizar datos del usuario.</p>
-        
-        <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="actualizarUsuarioForm">
+        <h1 class="wcp-title">Editar Usuario</h1>
+        <p class="wcp-subtitle">Seleccione un usuario registrado y actualice sus datos.</p>
+
+        <EditForm Model="usuario" OnValidSubmit="Guardar" FormName="actualizarUsuarioForm">
             <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Usuario a editar</label>
+                    <select @bind="emailOriginal" @bind:after="CargarUsuarioSeleccionado" class="form-control">
+                        <option value="">Seleccionar usuario</option>
+
+                        @foreach (UsuarioDTO usuarioGuardado in usuarios)
+                        {
+                            <option value="@usuarioGuardado.Email">
+                                @usuarioGuardado.Nombre @usuarioGuardado.Apellido - @usuarioGuardado.Email
+                            </option>
+                        }
+                    </select>
+                </div>
+
                 <div class="col-md-6">
                     <label class="wcp-form-label">Nombre</label>
                     <InputText @bind-Value="usuario.Nombre" class="form-control" />
@@ -33,12 +47,27 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="wcp-form-label">Contraseña</label>
+                    <label class="wcp-form-label">Nueva contraseña</label>
                     <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control" />
+                    <small class="text-muted">Dejar vacía para mantener la contraseña actual.</small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Roles</label>
+
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="esAdministrador" class="form-check-input" />
+                        <label class="form-check-label">Administrador</label>
+                    </div>
+
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="esEditor" class="form-check-input" />
+                        <label class="form-check-label">Editor</label>
+                    </div>
                 </div>
             </div>
 
-            <div class="wcp-actions">
+            <div class="wcp-actions mt-3">
                 <button type="submit" class="wcp-btn-primary">Guardar</button>
                 <NavLink href="/usuarios" class="wcp-btn-secondary">Cancelar</NavLink>
             </div>
@@ -54,21 +83,99 @@
 </div>
 
 @code {
+    private List<UsuarioDTO> usuarios = new List<UsuarioDTO>();
     private UsuarioDTO usuario = new UsuarioDTO();
+    private string emailOriginal = "";
     private string mensaje = "";
     private bool esError = false;
+    private bool esAdministrador;
+    private bool esEditor;
 
-    private void OnSave()
+    protected override void OnInitialized()
+    {
+        CargarUsuarios();
+        CargarEmailDesdeUrl();
+    }
+
+    private void CargarUsuarios()
+    {
+        try
+        {
+            usuarios = ServicioUsuario.ObtenerUsuarios();
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al cargar usuarios: " + ex.Message;
+            esError = true;
+        }
+    }
+
+    private void CargarEmailDesdeUrl()
+    {
+        var queryParams = new Uri(Navigation.Uri).Query;
+        var emailDelUsuario = System.Web.HttpUtility.ParseQueryString(queryParams).Get("email");
+
+        if (!string.IsNullOrWhiteSpace(emailDelUsuario))
+        {
+            emailOriginal = emailDelUsuario;
+            CargarUsuarioSeleccionado();
+        }
+    }
+
+    private void CargarUsuarioSeleccionado()
     {
         try
         {
             mensaje = "";
             esError = false;
-            
-            ServicioUsuario.ActualizarUsuario(usuario);
+
+            if (string.IsNullOrWhiteSpace(emailOriginal))
+            {
+                usuario = new UsuarioDTO();
+                esAdministrador = false;
+                esEditor = false;
+                return;
+            }
+
+            usuario = ServicioUsuario.ObtenerUsuario(emailOriginal);
+            usuario.Contraseña = "";
+
+            esAdministrador = usuario.Roles.Contains(Rol.Administrador);
+            esEditor = usuario.Roles.Contains(Rol.Editor);
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al cargar usuario: " + ex.Message;
+            esError = true;
+        }
+    }
+
+    private void Guardar()
+    {
+        try
+        {
+            mensaje = "";
+            esError = false;
+
+            usuario.Roles = new List<Rol>();
+
+            if (esAdministrador)
+            {
+                usuario.Roles.Add(Rol.Administrador);
+            }
+
+            if (esEditor)
+            {
+                usuario.Roles.Add(Rol.Editor);
+            }
+
+            ServicioUsuario.ActualizarUsuario(emailOriginal, usuario);
+
             mensaje = "Usuario actualizado correctamente";
             esError = false;
-            usuario = new UsuarioDTO();
+            emailOriginal = usuario.Email;
+
+            CargarUsuarios();
         }
         catch (Exception ex)
         {

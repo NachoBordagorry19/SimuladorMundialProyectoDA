@@ -2,27 +2,40 @@
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using UI.Estado
-@inject IServicioUsuario ServicioUsuario;
-@inject UsuarioSesion usuarioActivo;
+@inject IServicioUsuario ServicioUsuario
+@inject UsuarioSesion UsuarioActivo
+@inject NavigationManager Navigation
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Eliminar Usuario</h1>
-        <p class="wcp-subtitle">Eliminar usuario del sistema.</p>
-        
-        <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="eliminarUsuarioForm">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Email</label>
-                    <InputText @bind-Value="usuario.Email" class="form-control" />
-                </div>
+        <p class="wcp-subtitle">Seleccione un usuario y confirme su email para eliminarlo.</p>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="wcp-form-label">Usuario</label>
+                <select @bind="emailSeleccionado" class="form-control">
+                    <option value="">Seleccionar usuario</option>
+
+                    @foreach (UsuarioDTO usuario in usuariosEliminables)
+                    {
+                        <option value="@usuario.Email">
+                            @usuario.Nombre @usuario.Apellido - @usuario.Email
+                        </option>
+                    }
+                </select>
             </div>
 
-            <div class="wcp-actions">
-                <button type="submit" class="wcp-btn-danger">Eliminar</button>
-                <NavLink href="/usuarios" class="wcp-btn-secondary">Volver</NavLink>
+            <div class="col-md-6">
+                <label class="wcp-form-label">Confirmar email</label>
+                <input @bind="emailConfirmado" class="form-control" />
             </div>
-        </EditForm>
+        </div>
+
+        <div class="wcp-actions mt-3">
+            <button @onclick="Eliminar" class="wcp-btn-danger">Eliminar</button>
+            <NavLink href="/usuarios" class="wcp-btn-secondary">Volver</NavLink>
+        </div>
 
         @if (!string.IsNullOrEmpty(mensaje))
         {
@@ -33,32 +46,51 @@
     </div>
 </div>
 
-
 @code {
-    private UsuarioDTO usuario = new UsuarioDTO();
+    private List<UsuarioDTO> usuariosEliminables = new List<UsuarioDTO>();
+    private string emailSeleccionado = "";
+    private string emailConfirmado = "";
     private string mensaje = "";
     private bool esError = false;
 
-    private void OnSave()
+    protected override void OnInitialized()
+    {
+        CargarUsuarios();
+        CargarEmailDesdeUrl();
+    }
+
+    private void CargarUsuarios()
+    {
+        usuariosEliminables = ServicioUsuario.ObtenerUsuariosEliminables(UsuarioActivo.UsuarioActual.Email);
+    }
+
+    private void CargarEmailDesdeUrl()
+    {
+        string query = new Uri(Navigation.Uri).Query;
+        string? email = System.Web.HttpUtility.ParseQueryString(query).Get("email");
+
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            emailSeleccionado = email;
+        }
+    }
+
+    private void Eliminar()
     {
         try
         {
-            mensaje = "";
-            esError = false;
+            ServicioUsuario.EliminarUsuario(
+                emailSeleccionado,
+                emailConfirmado,
+                UsuarioActivo.UsuarioActual.Email
+            );
 
-            UsuarioDTO? usuarioActual = usuarioActivo.UsuarioActual;
-
-            if (usuarioActual != null && usuarioActual.Email == usuario.Email)
-            {
-                mensaje = "No puedes eliminar tu propia cuenta";
-                esError = true;
-                return;
-            }
-
-            ServicioUsuario.EliminarUsuario(usuario);
             mensaje = "Usuario eliminado correctamente";
             esError = false;
-            usuario = new UsuarioDTO();
+            emailSeleccionado = "";
+            emailConfirmado = "";
+
+            CargarUsuarios();
         }
         catch (Exception ex)
         {

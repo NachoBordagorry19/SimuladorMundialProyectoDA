@@ -147,6 +147,16 @@ public class UsuarioServicioTest
 
         _servicioUsuario.AutenticarUsuario("a@gmail.com", "Incorrecta123!");
     }
+    
+    [TestMethod]
+    public void AutenticarUsuario_SiEmailTieneEspaciosAlPrincipioOFinal_DevuelveUsuario()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuarioAutenticado = _servicioUsuario.AutenticarUsuario("  a@gmail.com  ", "Password123!");
+
+        Assert.AreEqual("a@gmail.com", usuarioAutenticado.Email);
+    }
 
     [TestMethod]
     public void ActualizarUsuario_ModificaDatos()

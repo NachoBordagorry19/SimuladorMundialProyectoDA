@@ -98,7 +98,6 @@ public class ServicioUsuario : IServicioUsuario
 
     public UsuarioDTO ObtenerUsuario(string email)
     {
-        // Reuse the guarded lookup that throws if not found
         Usuario usuario = ObtenerEntidadPorEmail(email);
         return desdeEntidad(usuario);
     }
@@ -120,6 +119,38 @@ public class ServicioUsuario : IServicioUsuario
         {
             _usuarioRepositorio.EliminarUsuario(usuarioExistente);
         }
+    }
+    
+    public List<UsuarioDTO> ObtenerUsuariosEliminables(string emailUsuarioActual)
+    {
+        return ObtenerUsuarios()
+            .Where(usuario => !string.Equals(usuario.Email, emailUsuarioActual, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
+
+    public void EliminarUsuario(string emailSeleccionado, string emailConfirmado, string emailUsuarioActual)
+    {
+        if (string.IsNullOrWhiteSpace(emailSeleccionado))
+        {
+            throw new ArgumentException("Debe seleccionar un usuario");
+        }
+
+        if (string.IsNullOrWhiteSpace(emailConfirmado))
+        {
+            throw new ArgumentException("Debe confirmar el email");
+        }
+
+        if (!string.Equals(emailSeleccionado.Trim(), emailConfirmado.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException("El email confirmado no coincide con el usuario seleccionado");
+        }
+
+        if (string.Equals(emailSeleccionado.Trim(), emailUsuarioActual.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException("No puedes eliminar tu propia cuenta");
+        }
+
+        EliminarUsuario(new UsuarioDTO { Email = emailSeleccionado.Trim() });
     }
 
     private string CifrarContraseña(string contraseña)
@@ -144,7 +175,9 @@ public class ServicioUsuario : IServicioUsuario
 
     public UsuarioDTO AutenticarUsuario(string email, string contraseña)
     {
-        Usuario usuario = ObtenerEntidadPorEmail(email);
+        string emailNormalizado = email.Trim();
+
+        Usuario usuario = ObtenerEntidadPorEmail(emailNormalizado);
 
         if (usuario.Contraseña != CifrarContraseña(contraseña))
         {
@@ -156,7 +189,19 @@ public class ServicioUsuario : IServicioUsuario
 
     public void ActualizarUsuario(UsuarioDTO usuarioDto)
     {
-        Usuario usuarioExistente = ObtenerEntidadPorEmail(usuarioDto.Email);
+        ActualizarUsuario(usuarioDto.Email, usuarioDto);
+    }
+
+    public void ActualizarUsuario(string emailOriginal, UsuarioDTO usuarioDto)
+    {
+        Usuario usuarioExistente = ObtenerEntidadPorEmail(emailOriginal);
+
+        if (!string.Equals(emailOriginal, usuarioDto.Email, StringComparison.OrdinalIgnoreCase))
+        {
+            ValidarEmailExiste(usuarioDto.Email);
+        }
+
+        ValidarRoles(usuarioDto);
 
         string contraseña = usuarioExistente.Contraseña;
 
@@ -175,7 +220,9 @@ public class ServicioUsuario : IServicioUsuario
             usuarioDto.Roles
         );
 
-        _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _usuarioRepositorio.EliminarUsuario(usuarioExistente);
+        _usuarioRepositorio.AgregarUsuario(usuarioActualizado);
+
         _auditoria.RegistrarEdicionUsuario(usuarioDto.Email);
     }
 
@@ -195,7 +242,4 @@ public class ServicioUsuario : IServicioUsuario
         _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
         _auditoria.RegistrarEdicionUsuario(email);
     }
-
-
-
 }
