@@ -1,4 +1,5 @@
 @page "/equipos"
+@rendermode InteractiveServer
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @inject IServicioEquipo ServicioEquipo
@@ -10,7 +11,31 @@
                 <h1 class="wcp-title">Equipos</h1>
                 <p class="wcp-subtitle">Listado de equipos registrados en el sistema.</p>
             </div>
+
             <NavLink href="/AgregarEquipo" class="wcp-btn-primary">Agregar Equipo</NavLink>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger wcp-alert mt-3">@mensajeError</div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(mensajeExito))
+        {
+            <div class="alert alert-success wcp-alert mt-3">@mensajeExito</div>
+        }
+
+        <div class="row g-3 mt-3">
+            <div class="col-md-4">
+                <label class="wcp-form-label">Semilla Completar</label>
+                <InputNumber @bind-Value="semillaCompletar" class="form-control" />
+            </div>
+        </div>
+
+        <div class="wcp-actions">
+            <button class="wcp-btn-secondary" @onclick="CompletarEquipos">
+                Completar 48 Equipos
+            </button>
         </div>
     </div>
 
@@ -34,8 +59,8 @@
                             <td>@equipo.confederacion</td>
                             <td>@equipo.rankingFifa</td>
                             <td>
-                            <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
-                            <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                                <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
+                                <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
                             </td>
                         </tr>
                     }
@@ -46,13 +71,18 @@
     else
     {
         <div class="wcp-card mt-4">
-            <p class="text-center text-muted">No hay equipos registrados</p>
+            <p class="text-center text-muted mb-0">No hay equipos registrados</p>
         </div>
     }
 </div>
 
 @code {
     private List<EquipoDTO> equipos = new List<EquipoDTO>();
+
+    private int semillaCompletar = 789;
+
+    private string mensajeError = "";
+    private string mensajeExito = "";
 
     protected override void OnInitialized()
     {
@@ -67,7 +97,28 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al cargar equipos: {ex.Message}");
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void CompletarEquipos()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            ServicioEquipo.GenerarEquiposAutomaticamente(semillaCompletar);
+
+            CargarEquipos();
+
+            mensajeExito = "Equipos completados correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
         }
     }
 }

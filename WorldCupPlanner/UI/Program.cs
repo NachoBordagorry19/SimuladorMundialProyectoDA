@@ -27,6 +27,7 @@ builder.Services.AddScoped<IServicioFixturePrimeraFase, FixturePrimeraFaseServic
 builder.Services.AddScoped<IServicioCrucesSegundaFase, CrucesSegundaFaseServicio>();
 
 builder.Services.AddScoped<UsuarioSesion>();
+builder.Services.AddScoped<FixtureEstado>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

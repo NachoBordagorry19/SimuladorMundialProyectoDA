@@ -2,6 +2,8 @@
 @rendermode InteractiveServer
 @using Servicios.Interfaces
 @using Servicios.Modelo
+@using UI.Estado
+@inject FixtureEstado EstadoFixture
 @inject IServicioFixturePrimeraFase ServicioFixture
 @inject IServicioCrucesSegundaFase ServicioCruces
 
@@ -60,14 +62,14 @@
         </div>
     </div>
 
-    @if (resultadoFixture != null)
+    @if (EstadoFixture.ResultadoFixture != null)
     {
         <div class="wcp-card mt-4">
             <h2 class="wcp-title">Grupos</h2>
             <p class="wcp-subtitle">Seleccione un grupo para ver sus equipos y partidos.</p>
 
             <div class="wcp-actions">
-                @foreach (var grupo in resultadoFixture.Grupos)
+                @foreach (var grupo in EstadoFixture.ResultadoFixture.Grupos)
                 {
                     <button class="wcp-btn-secondary" @onclick="() => SeleccionarGrupo(grupo.Nombre)">
                         Grupo @grupo.Nombre
@@ -76,11 +78,11 @@
             </div>
         </div>
 
-        @if (grupoSeleccionado != null)
+        @if (EstadoFixture.GrupoSeleccionado != null)
         {
-            var grupo = resultadoFixture.Grupos.First(g => g.Nombre == grupoSeleccionado);
-            var partidosGrupo = resultadoFixture.Partidos
-                .Where(p => p.Grupo == grupoSeleccionado)
+            var grupo = EstadoFixture.ResultadoFixture.Grupos.First(g => g.Nombre == EstadoFixture.GrupoSeleccionado);
+            var partidosGrupo = EstadoFixture.ResultadoFixture.Partidos
+                .Where(p => p.Grupo == EstadoFixture.GrupoSeleccionado)
                 .OrderBy(p => p.Fecha)
                 .ToList();
 
@@ -138,7 +140,7 @@
         }
     }
 
-    @if (cuadroSegundaFase != null)
+    @if (EstadoFixture.CuadroSegundaFase != null)
     {
         <div class="wcp-card mt-4">
             <h2 class="wcp-title">Cruces de Segunda Fase</h2>
@@ -155,7 +157,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var cruce in cuadroSegundaFase.Dieciseisavos)
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Dieciseisavos)
                 {
                     <tr>
                         <td>@cruce.Codigo</td>
@@ -178,7 +180,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var cruce in cuadroSegundaFase.Octavos)
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Octavos)
                 {
                     <tr>
                         <td>@cruce.Codigo</td>
@@ -201,7 +203,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var cruce in cuadroSegundaFase.Cuartos)
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Cuartos)
                 {
                     <tr>
                         <td>@cruce.Codigo</td>
@@ -224,7 +226,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var cruce in cuadroSegundaFase.Semifinales)
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.Semifinales)
                 {
                     <tr>
                         <td>@cruce.Codigo</td>
@@ -247,7 +249,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var cruce in cuadroSegundaFase.PartidosFinales)
+                @foreach (var cruce in EstadoFixture.CuadroSegundaFase.PartidosFinales)
                 {
                     <tr>
                         <td>@cruce.Codigo</td>
@@ -267,10 +269,6 @@
     private int semillaCrucesFase = 456;
     private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
 
-    private ResultadoFixture? resultadoFixture;
-    private CuadroSegundaFaseDTO? cuadroSegundaFase;
-    private string? grupoSeleccionado;
-
     private string mensajeError = "";
     private string mensajeExito = "";
 
@@ -281,12 +279,12 @@
             mensajeError = "";
             mensajeExito = "";
 
-            resultadoFixture = ServicioFixture.GenerarFixturePrimeraFase(
+            EstadoFixture.ResultadoFixture = ServicioFixture.GenerarFixturePrimeraFase(
                 semillaFixture,
                 fechaInicioTorneo);
 
-            grupoSeleccionado = resultadoFixture.Grupos.First().Nombre;
-            cuadroSegundaFase = null;
+            EstadoFixture.GrupoSeleccionado = EstadoFixture.ResultadoFixture.Grupos.First().Nombre;
+            EstadoFixture.CuadroSegundaFase = null;
 
             mensajeExito = "Fixture generado correctamente.";
         }
@@ -304,7 +302,7 @@
             mensajeError = "";
             mensajeExito = "";
 
-            cuadroSegundaFase = ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
+            EstadoFixture.CuadroSegundaFase = ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
 
             mensajeExito = "Cruces generados correctamente.";
         }
@@ -317,7 +315,7 @@
 
     private void SeleccionarGrupo(string grupo)
     {
-        grupoSeleccionado = grupo;
+        EstadoFixture.GrupoSeleccionado = grupo;
     }
 
     private string MostrarLocal(CruceDTO cruce)
