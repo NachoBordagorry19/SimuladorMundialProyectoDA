@@ -747,4 +747,35 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual("Ganador C7", d4.ReferenciaLocal);
         Assert.AreEqual("Ganador C8", d4.ReferenciaVisitante);
     }
+    
+    [TestMethod]
+    public void GenerarSemifinales_GeneraS1YS2()
+    {
+        var cuartos = new List<CruceDTO>();
+
+        for (int i = 1; i <= 4; i++)
+        {
+            cuartos.Add(new CruceDTO
+            {
+                Codigo = "D" + i,
+                Fase = Fase.Cuartos,
+                ReferenciaLocal = "Ganador C" + ((i * 2) - 1),
+                ReferenciaVisitante = "Ganador C" + (i * 2)
+            });
+        }
+
+        var semifinales = _crucesServicio.GenerarSemifinales(cuartos);
+
+        Assert.AreEqual(2, semifinales.Count);
+
+        var s1 = semifinales.First(c => c.Codigo == "S1");
+        Assert.AreEqual(Fase.Semifinal, s1.Fase);
+        Assert.AreEqual("Ganador D1", s1.ReferenciaLocal);
+        Assert.AreEqual("Ganador D2", s1.ReferenciaVisitante);
+
+        var s2 = semifinales.First(c => c.Codigo == "S2");
+        Assert.AreEqual(Fase.Semifinal, s2.Fase);
+        Assert.AreEqual("Ganador D3", s2.ReferenciaLocal);
+        Assert.AreEqual("Ganador D4", s2.ReferenciaVisitante);
+    }
 }
