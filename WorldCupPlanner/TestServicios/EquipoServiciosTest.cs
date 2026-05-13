@@ -66,6 +66,13 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.AgregarEquipo(_equipoDTO);
     }
+    
+    [TestMethod]
+    public void AgregarEquipo_DebeLlamarAuditoria()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+        _auditoriaMock.Verify(a => a.RegistrarAltaEquipo(_equipoDTO.nombre), Times.Once);
+    }
 
     [TestMethod]
     public void ObtenerEquipos_DevuelveTodosLosEquipo()
