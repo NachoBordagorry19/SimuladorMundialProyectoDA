@@ -1,10 +1,160 @@
 @page "/fixture"
+@rendermode InteractiveServer
+@using Dominio.Clases
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@inject IServicioFixturePrimeraFase ServicioFixture
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Fixture</h1>
         <p class="wcp-subtitle">Generación y visualización del fixture del torneo.</p>
 
-        <p>Esta pantalla está pendiente de implementación.</p>
+        @if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger wcp-alert">@mensajeError</div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(mensajeExito))
+        {
+            <div class="alert alert-success wcp-alert">@mensajeExito</div>
+        }
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="wcp-form-label">Semilla Fixture</label>
+                <InputNumber @bind-Value="semillaFixture" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="wcp-form-label">Fecha inicio torneo</label>
+                <InputDate @bind-Value="fechaInicioTorneo" class="form-control" />
+            </div>
+        </div>
+
+        <div class="wcp-actions">
+            <button class="wcp-btn-primary" @onclick="GenerarFixture">
+                Generar Fixture
+            </button>
+
+            <NavLink href="/partidos" class="wcp-btn-secondary">
+                Ver Lista de Partidos
+            </NavLink>
+        </div>
     </div>
+
+    @if (resultadoFixture != null)
+    {
+        <div class="wcp-card mt-4">
+            <h2 class="wcp-title">Grupos</h2>
+            <p class="wcp-subtitle">Seleccione un grupo para ver sus equipos y partidos.</p>
+
+            <div class="wcp-actions">
+                @foreach (var grupo in resultadoFixture.Grupos)
+                {
+                    <button class="wcp-btn-secondary" @onclick="() => SeleccionarGrupo(grupo.Nombre)">
+                        Grupo @grupo.Nombre
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (grupoSeleccionado != null)
+        {
+            var grupo = resultadoFixture.Grupos.First(g => g.Nombre == grupoSeleccionado);
+            var partidosGrupo = resultadoFixture.Partidos
+                .Where(p => p.Grupo == grupoSeleccionado)
+                .OrderBy(p => p.Fecha)
+                .ToList();
+
+            <div class="wcp-card mt-4">
+                <h2 class="wcp-title">Grupo @grupo.Nombre</h2>
+
+                <h3 class="mt-4">Equipos</h3>
+
+                <table class="wcp-table">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Confederación</th>
+                        <th>Ranking FIFA</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var equipo in grupo.Equipos)
+                    {
+                        <tr>
+                            <td>@equipo.Nombre</td>
+                            <td>@equipo.Confederacion</td>
+                            <td>@equipo.RankingFifa</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+                <h3 class="mt-4">Partidos</h3>
+
+                <table class="wcp-table">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Local</th>
+                        <th>Visitante</th>
+                        <th>Estadio</th>
+                        <th>Fase</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var partido in partidosGrupo)
+                    {
+                        <tr>
+                            <td>@partido.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@partido.equipoLocal.nombre</td>
+                            <td>@partido.equipoVisitante.nombre</td>
+                            <td>@partido.Estadio.Nombre</td>
+                            <td>@partido.fase</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
 </div>
+
+@code {
+    private int semillaFixture = 123;
+    private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
+
+    private ResultadoFixture? resultadoFixture;
+    private string? grupoSeleccionado;
+
+    private string mensajeError = "";
+    private string mensajeExito = "";
+
+    private void GenerarFixture()
+    {
+        try
+        {
+            mensajeError = "";
+            mensajeExito = "";
+
+            resultadoFixture = ServicioFixture.GenerarFixturePrimeraFase(
+                semillaFixture,
+                fechaInicioTorneo);
+
+            grupoSeleccionado = resultadoFixture.Grupos.First().Nombre;
+            mensajeExito = "Fixture generado correctamente.";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+    }
+
+    private void SeleccionarGrupo(string grupo)
+    {
+        grupoSeleccionado = grupo;
+    }
+}
