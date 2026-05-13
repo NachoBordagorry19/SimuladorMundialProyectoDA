@@ -90,6 +90,12 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Generación de fixture", "Proceso completado");
     }
+    
+    public void RegistrarSorteoCruces()
+    {
+        Registrar("Realización de sorteo para cruces", "Proceso completado");
+    }
+    
     public List<string> ObtenerRegistrosFormateados()
     {
         var logs = _auditoriaRepo.ObtenerTodosLosRegistros();
