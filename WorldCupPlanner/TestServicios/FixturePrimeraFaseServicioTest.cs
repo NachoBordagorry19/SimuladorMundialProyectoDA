@@ -58,7 +58,8 @@ public class FixturePrimeraFaseServicioTest
             _partidoRepositorio,
             _equipoServicios,
             _estadioServicios,
-            _partidoServicios);
+            _partidoServicios,
+            _auditoriaMock.Object);
     }
 
     [TestMethod]
