@@ -1,16 +1,26 @@
 @page "/estadios"
+@using Dominio.Enums
 @using Servicios.Interfaces
+@using UI.Estado
 @using Servicios.Modelo
 @inject IServicioEstadio ServicioEstadio
+@inject UsuarioSesion Sesion
 
 <div class="wcp-page">
     <div class="wcp-card">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
+                @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+                {
+                    <div class="alert alert-danger wcp-alert">Solo un administrador puede gestionar estadios.</div>
+                }
                 <h1 class="wcp-title">Estadios</h1>
                 <p class="wcp-subtitle">Listado de estadios registrados en el sistema.</p>
             </div>
-            <NavLink href="/AgregarEstadio" class="wcp-btn-primary">Agregar Estadio</NavLink>
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+            {
+                <NavLink href="/AgregarEstadio" class="wcp-btn-primary">Agregar Estadio</NavLink>
+            }
         </div>
     </div>
 
@@ -36,8 +46,11 @@
                             <td>@estadio.Descripcion</td>
                             <td>@estadio.CapacidadLocativa?.ToString("N0")</td>
                             <td>
-                                <NavLink href="@($"/ActualizarEstadio?nombre={Uri.EscapeDataString(estadio.Nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
-                                <NavLink href="@($"/EliminarEstadio?nombre={Uri.EscapeDataString(estadio.Nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                                @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+                                {
+                                    <NavLink href="@($"/ActualizarEstadio?nombre={Uri.EscapeDataString(estadio.Nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
+                                    <NavLink href="@($"/EliminarEstadio?nombre={Uri.EscapeDataString(estadio.Nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                                }
                             </td>
                         </tr>
                     }
@@ -58,18 +71,13 @@
 
     protected override void OnInitialized()
     {
-        CargarEstadios();
+        CargarEstadios(); 
+        estadios = ServicioEstadio.ObtenerEstadios();
+        
     }
 
     private void CargarEstadios()
     {
-        try
-        {
-            estadios = ServicioEstadio.ObtenerEstadios();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error al cargar estadios: {ex.Message}");
-        }
+        estadios = ServicioEstadio.ObtenerEstadios();
     }
 }

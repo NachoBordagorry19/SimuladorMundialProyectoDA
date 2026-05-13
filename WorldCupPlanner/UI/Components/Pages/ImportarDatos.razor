@@ -1,10 +1,13 @@
 @page "/importar"
 @using Servicios.Interfaces
 @using Dominio.Clases
+@using Dominio.Enums
 @using Microsoft.AspNetCore.Components.Forms
+@using UI.Estado
 @using Servicios.Modelo
 @inject IImportadorEquiposCSV ImportadorEquipos
 @inject IServicioEquipo ServicioEquipo
+@inject UsuarioSesion Sesion
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -25,11 +28,13 @@
             </div>
         </div>
 
-        <div class="wcp-actions mt-3">
-            <button class="wcp-btn-primary" @onclick="Importar" disabled="@(archivoSeleccionado == null)">Importar</button>
-            <NavLink href="/equipos" class="wcp-btn-secondary">Cancelar</NavLink>
-        </div>
-
+        @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+        {
+            <div class="wcp-actions mt-3">
+                <button class="wcp-btn-primary" @onclick="Importar" disabled="@(archivoSeleccionado == null)">Importar</button>
+                <NavLink href="/equipos" class="wcp-btn-secondary">Cancelar</NavLink>
+            </div>
+        }
         @if (equipos != null && equipos.Count > 0)
         {
             <div class="mt-4">

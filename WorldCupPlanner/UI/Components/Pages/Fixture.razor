@@ -8,6 +8,7 @@
 @inject IServicioPartido ServicioPartido
 @inject IServicioFixturePrimeraFase ServicioFixture
 @inject IServicioCrucesSegundaFase ServicioCruces
+@inject UsuarioSesion Sesion
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -42,10 +43,12 @@
         </div>
 
         <div class="wcp-actions">
-            <button class="wcp-btn-primary" @onclick="GenerarFixture">
-                Generar Fixture
-            </button>
-
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+            {
+                <button class="wcp-btn-primary" @onclick="GenerarFixture">
+                    Generar Fixture
+                </button>
+            }
             <button class="wcp-btn-secondary" @onclick="GenerarCruces">
                 Generar Cruces
             </button>

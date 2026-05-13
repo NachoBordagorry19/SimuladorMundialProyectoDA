@@ -15,7 +15,10 @@
                 <p class="wcp-subtitle">Listado de usuarios registrados en el sistema.</p>
             </div>
 
-            <NavLink href="/AgregarUsuario" class="wcp-btn-primary">Nuevo Usuario</NavLink>
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+            {
+                <NavLink href="/AgregarUsuario" class="wcp-btn-primary">Nuevo Usuario</NavLink>
+            }
         </div>
 
         @if (Sesion.UsuarioActual == null)
@@ -47,13 +50,16 @@
                             <td>@usuario.FechaNacimiento.ToString("dd/MM/yyyy")</td>
                             <td>@string.Join(", ", usuario.Roles)</td>
                             <td>
-                                <NavLink href="@($"/ActualizarUsuario?email={Uri.EscapeDataString(usuario.Email)}")" class="wcp-action-link wcp-action-edit">
-                                    Editar
-                                </NavLink>
+                                @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+                                {
+                                    <NavLink href="@($"/ActualizarUsuario?email={Uri.EscapeDataString(usuario.Email)}")" class="wcp-action-link wcp-action-edit">
+                                        Editar
+                                    </NavLink>
 
-                                <NavLink href="@($"/EliminarUsuario?email={Uri.EscapeDataString(usuario.Email)}")" class="wcp-action-link wcp-action-delete">
-                                    Eliminar
-                                </NavLink>
+                                    <NavLink href="@($"/EliminarUsuario?email={Uri.EscapeDataString(usuario.Email)}")" class="wcp-action-link wcp-action-delete">
+                                        Eliminar
+                                    </NavLink>
+                                }
                             </td>
                         </tr>
                     }

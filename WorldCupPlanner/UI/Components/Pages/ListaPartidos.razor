@@ -2,8 +2,10 @@
 @rendermode InteractiveServer
 @using Dominio.Enums
 @using Servicios.Interfaces
+@using UI.Estado
 @using Servicios.Modelo
 @inject IServicioPartido ServicioPartido
+@inject UsuarioSesion Sesion
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -13,7 +15,10 @@
                 <p class="wcp-subtitle">Listado de partidos programados en el sistema.</p>
             </div>
 
-            <NavLink href="/fixture" class="wcp-btn-primary">Ver Fixture</NavLink>
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+            {
+                <NavLink href="/fixture" class="wcp-btn-primary">Ver Fixture</NavLink>
+            }
         </div>
 
         @if (!string.IsNullOrWhiteSpace(mensajeError))
@@ -98,9 +103,12 @@
                         <td>@partido.estadoPartido</td>
                         <td>@partido.golesLocal - @partido.golesVisitante</td>
                         <td>
-                            <NavLink href="@($"/EditarPartido/{partido.idPartido}")" class="wcp-action-link wcp-action-edit">
-                                Editar
-                            </NavLink>
+                            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+                            {
+                                <NavLink href="@($"/EditarPartido/{partido.idPartido}")" class="wcp-action-link wcp-action-edit">
+                                    Editar
+                                </NavLink>
+                            }
                         </td>
                     </tr>
                 }
