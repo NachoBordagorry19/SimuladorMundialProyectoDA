@@ -23,7 +23,7 @@ public class EstadioServiciosTest
         _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
         _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
         _auditoriaMock = new Mock<IServicioAuditoria>();
-        _servicioEstadio = new EstadioServicios(_estadioRepositorio, _auditoriaMock);
+        _servicioEstadio = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
 
         _estadioDTO = new EstadioDTO()
         {

@@ -49,7 +49,7 @@ public class FixturePrimeraFaseServicioTest
         _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
-        _estadioServicios = new EstadioServicios(_estadioRepositorio);
+        _estadioServicios = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
         _partidoServicios = new PartidoServicios(_partidoRepositorio);
 
         _fixtureServicio = new FixturePrimeraFaseServicio(

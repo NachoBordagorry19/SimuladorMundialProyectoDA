@@ -11,10 +11,12 @@ namespace Servicios.Clases;
 public class EstadioServicios : IServicioEstadio
 {
     private readonly IEstadioRepositorio _estadioRepositorio;
+    private readonly IServicioAuditoria _auditoria;
 
-    public EstadioServicios(IEstadioRepositorio estadioRepositorio)
+    public EstadioServicios(IEstadioRepositorio estadioRepositorio, IServicioAuditoria auditoria)
     {
         _estadioRepositorio = estadioRepositorio;
+        _auditoria = auditoria;
     }
 
     public void AgregarEstadio(EstadioDTO estadioDTO)
