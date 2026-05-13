@@ -1,7 +1,8 @@
 using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio;
-using Repositorio.Interfaces;
+using Servicios.Interfaces;
+
 
 namespace TestRepositorio;
 
