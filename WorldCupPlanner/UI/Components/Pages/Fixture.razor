@@ -8,11 +8,17 @@
 @inject IServicioPartido ServicioPartido
 @inject IServicioFixturePrimeraFase ServicioFixture
 @inject IServicioCrucesSegundaFase ServicioCruces
+@inject UsuarioSesion Sesion
 
 <div class="wcp-page">
     <div class="wcp-card">
         <h1 class="wcp-title">Fixture</h1>
         <p class="wcp-subtitle">Generación y visualización del fixture y cruces del torneo.</p>
+        
+        @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+        { 
+            <div class="alert alert-danger wcp-alert">Solo un editor puede gestionar fixtures.</div>
+        }
 
         @if (!string.IsNullOrWhiteSpace(mensajeError))
         {
@@ -42,14 +48,16 @@
         </div>
 
         <div class="wcp-actions">
-            <button class="wcp-btn-primary" @onclick="GenerarFixture">
-                Generar Fixture
-            </button>
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+            {
+                <button class="wcp-btn-primary" @onclick="GenerarFixture">
+                    Generar Fixture
+                </button>
 
-            <button class="wcp-btn-secondary" @onclick="GenerarCruces">
-                Generar Cruces
-            </button>
-
+                <button class="wcp-btn-secondary" @onclick="GenerarCruces">
+                    Generar Cruces
+                </button>
+            }
             <NavLink href="/equipos" class="wcp-btn-secondary">
                 Ir a Equipos
             </NavLink>
