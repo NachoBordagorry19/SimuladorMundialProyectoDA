@@ -51,7 +51,7 @@ public class EstadioServiciosTest
         _estadioServicios.AgregarEstadio(_estadioDTO);
         _estadioServicios.AgregarEstadio(_estadioDTO);
     }
-    
+
     [TestMethod]
     public void AgregarEstadio_DebeRegistrarAuditoria()
     {
@@ -120,13 +120,13 @@ public class EstadioServiciosTest
     {
         _estadioServicios.EliminarEstadio(_estadioDTO);
     }
-    
+
     [TestMethod]
     public void EliminarEstadio_DebeRegistrarAuditoria()
     {
         _estadioServicios.AgregarEstadio(_estadioDTO);
         _estadioServicios.EliminarEstadio(_estadioDTO);
-        
+
         _auditoriaMock.Verify(a => a.RegistrarEliminacionEstadio(_estadioDTO.Nombre), Times.Once);
     }
 
@@ -165,20 +165,21 @@ public class EstadioServiciosTest
 
         _estadioServicios.ActualizarEstadio(estadio);
     }
-    
+
     [TestMethod]
     public void ActualizarEstadio_DebeRegistrarAuditoria()
     {
-        var estadioInicial = new EstadioDTO { Nombre = "Lusail", Ciudad = "Lusail", CapacidadLocativa = 80000 };;
-    
+        var estadioInicial = new EstadioDTO { Nombre = "Lusail", Ciudad = "Lusail", CapacidadLocativa = 80000 }; ;
+
         _estadioServicios.AgregarEstadio(estadioInicial);
 
-        var estadioEditado = new EstadioDTO { 
-            Nombre = "Lusail", 
-            Ciudad = "Lusail City", 
-            CapacidadLocativa = 85000 
+        var estadioEditado = new EstadioDTO
+        {
+            Nombre = "Lusail",
+            Ciudad = "Lusail City",
+            CapacidadLocativa = 85000
         };
-        
+
         _estadioServicios.ActualizarEstadio(estadioEditado);
         _auditoriaMock.Verify(a => a.RegistrarEdicionEstadio(estadioEditado.Nombre), Times.Once);
     }

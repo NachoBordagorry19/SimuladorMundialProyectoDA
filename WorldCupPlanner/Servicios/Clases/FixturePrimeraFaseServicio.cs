@@ -18,7 +18,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
     private readonly IServicioEstadio _estadioServicios;
     private readonly IServicioPartido _partidoServicios;
     private readonly IServicioAuditoria _auditoria;
-    
+
     public FixturePrimeraFaseServicio(
         IEquipoRepositorio equipoRepositorio,
         IEstadioRepositorio estadioRepositorio,
@@ -96,9 +96,9 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
             Partidos = partidos,
             Grupos = grupos
         };
-        
+
         _auditoria.RegistrarGeneracionFixture();
-        
+
         return resultado;
     }
 

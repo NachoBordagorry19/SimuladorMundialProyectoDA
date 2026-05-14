@@ -93,102 +93,102 @@ public class PartidoServicios : IServicioPartido
         }
         return partidosDTO;
     }
-    
+
     public List<PartidoDTO> ObtenerPartidosFiltrados(DateTime? fecha, string estadio, string grupo, string fase)
-{
-    List<PartidoDTO> partidos = ObtenerPartidos();
-    List<PartidoDTO> partidosFiltrados = new List<PartidoDTO>();
-
-    foreach (PartidoDTO partido in partidos)
     {
-        bool cumpleFiltros = true;
+        List<PartidoDTO> partidos = ObtenerPartidos();
+        List<PartidoDTO> partidosFiltrados = new List<PartidoDTO>();
 
-        if (fecha != null && partido.Fecha.Date != fecha.Value.Date)
+        foreach (PartidoDTO partido in partidos)
         {
-            cumpleFiltros = false;
+            bool cumpleFiltros = true;
+
+            if (fecha != null && partido.Fecha.Date != fecha.Value.Date)
+            {
+                cumpleFiltros = false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(estadio) && partido.Estadio.Nombre != estadio)
+            {
+                cumpleFiltros = false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(grupo) && partido.Grupo != grupo)
+            {
+                cumpleFiltros = false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(fase) && partido.fase.ToString() != fase)
+            {
+                cumpleFiltros = false;
+            }
+
+            if (cumpleFiltros)
+            {
+                partidosFiltrados.Add(partido);
+            }
         }
 
-        if (!string.IsNullOrWhiteSpace(estadio) && partido.Estadio.Nombre != estadio)
-        {
-            cumpleFiltros = false;
-        }
-
-        if (!string.IsNullOrWhiteSpace(grupo) && partido.Grupo != grupo)
-        {
-            cumpleFiltros = false;
-        }
-
-        if (!string.IsNullOrWhiteSpace(fase) && partido.fase.ToString() != fase)
-        {
-            cumpleFiltros = false;
-        }
-
-        if (cumpleFiltros)
-        {
-            partidosFiltrados.Add(partido);
-        }
+        return partidosFiltrados
+            .OrderBy(p => p.Fecha)
+            .ToList();
     }
 
-    return partidosFiltrados
-        .OrderBy(p => p.Fecha)
-        .ToList();
-}
-
-public List<string> ObtenerEstadiosDePartidos()
-{
-    List<PartidoDTO> partidos = ObtenerPartidos();
-    List<string> estadios = new List<string>();
-
-    foreach (PartidoDTO partido in partidos)
+    public List<string> ObtenerEstadiosDePartidos()
     {
-        if (!estadios.Contains(partido.Estadio.Nombre))
+        List<PartidoDTO> partidos = ObtenerPartidos();
+        List<string> estadios = new List<string>();
+
+        foreach (PartidoDTO partido in partidos)
         {
-            estadios.Add(partido.Estadio.Nombre);
+            if (!estadios.Contains(partido.Estadio.Nombre))
+            {
+                estadios.Add(partido.Estadio.Nombre);
+            }
         }
+
+        estadios.Sort();
+
+        return estadios;
     }
 
-    estadios.Sort();
-
-    return estadios;
-}
-
-public List<string> ObtenerGruposDePartidos()
-{
-    List<PartidoDTO> partidos = ObtenerPartidos();
-    List<string> grupos = new List<string>();
-
-    foreach (PartidoDTO partido in partidos)
+    public List<string> ObtenerGruposDePartidos()
     {
-        if (!string.IsNullOrWhiteSpace(partido.Grupo) && !grupos.Contains(partido.Grupo))
+        List<PartidoDTO> partidos = ObtenerPartidos();
+        List<string> grupos = new List<string>();
+
+        foreach (PartidoDTO partido in partidos)
         {
-            grupos.Add(partido.Grupo);
+            if (!string.IsNullOrWhiteSpace(partido.Grupo) && !grupos.Contains(partido.Grupo))
+            {
+                grupos.Add(partido.Grupo);
+            }
         }
+
+        grupos.Sort();
+
+        return grupos;
     }
 
-    grupos.Sort();
-
-    return grupos;
-}
-
-public List<string> ObtenerFasesDePartidos()
-{
-    List<PartidoDTO> partidos = ObtenerPartidos();
-    List<string> fases = new List<string>();
-
-    foreach (PartidoDTO partido in partidos)
+    public List<string> ObtenerFasesDePartidos()
     {
-        string fase = partido.fase.ToString();
+        List<PartidoDTO> partidos = ObtenerPartidos();
+        List<string> fases = new List<string>();
 
-        if (!fases.Contains(fase))
+        foreach (PartidoDTO partido in partidos)
         {
-            fases.Add(fase);
+            string fase = partido.fase.ToString();
+
+            if (!fases.Contains(fase))
+            {
+                fases.Add(fase);
+            }
         }
+
+        fases.Sort();
+
+        return fases;
     }
-
-    fases.Sort();
-
-    return fases;
-}
 
     public void EliminarPartido(PartidoDTO partidoDTO)
     {
@@ -319,7 +319,9 @@ public List<string> ObtenerFasesDePartidos()
         int golesLocal;
         int golesVisitante;
 
-        if (numeroAleatorio < probabilidadLocal)
+        bool ganaLocal = numeroAleatorio < probabilidadLocal;
+
+        if (ganaLocal)
         {
             golesLocal = GenerarGolesAleatorios(random, true);
             golesVisitante = GenerarGolesAleatorios(random, false);
@@ -328,6 +330,18 @@ public List<string> ObtenerFasesDePartidos()
         {
             golesLocal = GenerarGolesAleatorios(random, false);
             golesVisitante = GenerarGolesAleatorios(random, true);
+        }
+
+        if (partidoExistente.Fase != Fase.Grupos && golesLocal == golesVisitante)
+        {
+            if (ganaLocal)
+            {
+                golesLocal++;
+            }
+            else
+            {
+                golesVisitante++;
+            }
         }
 
         partidoDTO.golesLocal = golesLocal;
@@ -365,18 +379,24 @@ public List<string> ObtenerFasesDePartidos()
                 return 1;
         }
     }
-    
+
     public void SimularTodosLosPartidos(int semillaSimulacion)
     {
         List<PartidoDTO> partidos = ObtenerPartidos();
 
         foreach (PartidoDTO partido in partidos)
         {
-            if (partido.estadoPartido != EstadoPartido.Jugado)
+            if (partido.estadoPartido != EstadoPartido.Jugado || EsPartidoEliminatorioEmpatado(partido))
             {
                 SimularResultado(partido, semillaSimulacion + partido.idPartido);
             }
         }
+    }
+    private bool EsPartidoEliminatorioEmpatado(PartidoDTO partido)
+    {
+        return partido.fase != Fase.Grupos &&
+               partido.estadoPartido == EstadoPartido.Jugado &&
+               partido.golesLocal == partido.golesVisitante;
     }
 
 

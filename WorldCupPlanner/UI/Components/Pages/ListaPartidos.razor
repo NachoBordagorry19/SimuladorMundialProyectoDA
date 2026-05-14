@@ -3,6 +3,7 @@
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @inject IServicioPartido ServicioPartido
+@inject IServicioCrucesSegundaFase ServicioCruces
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -228,6 +229,8 @@
             mensajeExito = "";
 
             ServicioPartido.SimularTodosLosPartidos(semillaSimulacion);
+
+            ServicioCruces.ProcesarAvanceDelTorneo();
 
             CargarDatos();
 

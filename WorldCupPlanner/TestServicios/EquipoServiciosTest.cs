@@ -66,7 +66,7 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.AgregarEquipo(_equipoDTO);
     }
-    
+
     [TestMethod]
     public void AgregarEquipo_DebeLlamarAuditoria()
     {
@@ -119,7 +119,7 @@ public class EquipoServiciosTest
         _equipoServicios.AgregarEquipo(_equipoDTO);
         _equipoServicios.EliminarEquipo(_equipoDTO2);
     }
-    
+
     [TestMethod]
     public void EliminarEquipo_DebeRegistrarEnAuditoria()
     {
@@ -158,26 +158,26 @@ public class EquipoServiciosTest
         };
         _equipoServicios.ActualizarEquipo(equipoActualizadoDto);
     }
-    
+
     [TestMethod]
     public void ActualizarEquipo_DebeRegistrarEnAuditoria()
     {
         _equipoServicios.AgregarEquipo(_equipoDTO);
         string nombreNuevo = "Allianz Stadium";
-        var dtoNuevoNombre = new EquipoDTO 
-        { 
-            nombre = nombreNuevo, 
-            confederacion = _equipoDTO.confederacion, 
-            rankingFifa = _equipoDTO.rankingFifa 
+        var dtoNuevoNombre = new EquipoDTO
+        {
+            nombre = nombreNuevo,
+            confederacion = _equipoDTO.confederacion,
+            rankingFifa = _equipoDTO.rankingFifa
         };
 
         _equipoServicios.ActualizarEquipo(_equipoDTO.nombre, dtoNuevoNombre);
         _auditoriaMock.Verify(a => a.RegistrarEdicionEquipo(nombreNuevo), Times.Once);
 
-        var dtoCambioRanking = new EquipoDTO 
-        { 
+        var dtoCambioRanking = new EquipoDTO
+        {
             nombre = nombreNuevo,
-            confederacion = _equipoDTO.confederacion, 
+            confederacion = _equipoDTO.confederacion,
             rankingFifa = 2500
         };
 
@@ -317,7 +317,7 @@ public class EquipoServiciosTest
 
         Assert.IsTrue(existeNombreFormateado);
     }
-    
+
     [TestMethod]
     public void GenerarEquiposAutomaticamente_DebeLlamarAuditoria()
     {

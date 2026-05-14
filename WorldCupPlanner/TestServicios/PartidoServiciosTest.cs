@@ -184,12 +184,12 @@ public class PartidoServiciosTest
         Assert.AreEqual(2, partidoActualizado.golesVisitante);
         Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.estadoPartido);
     }
-    
+
     [TestMethod]
     public void ActualizarPartido_DebeRegistrarAuditoria()
     {
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
-    
+
         _partidoDTO.golesLocal = 2;
         _servicioPartido.ActualizarPartido(_partidoDTO);
 

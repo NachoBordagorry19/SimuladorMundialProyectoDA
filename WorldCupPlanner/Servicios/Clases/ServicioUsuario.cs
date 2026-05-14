@@ -31,7 +31,7 @@ public class ServicioUsuario : IServicioUsuario
         ValidarEmailExiste(emailAVerificar);
         ValidarRoles(usuarioDto);
         _usuarioRepositorio.AgregarUsuario(usuario);
-        
+
         string rolesString = string.Join(", ", usuarioDto.Roles.Select(r => r.ToString()));
         _auditoria.RegistrarAltaUsuario(usuarioDto.Email, rolesString);
     }
@@ -120,7 +120,7 @@ public class ServicioUsuario : IServicioUsuario
             _usuarioRepositorio.EliminarUsuario(usuarioExistente);
         }
     }
-    
+
     public List<UsuarioDTO> ObtenerUsuariosEliminables(string emailUsuarioActual)
     {
         return ObtenerUsuarios()

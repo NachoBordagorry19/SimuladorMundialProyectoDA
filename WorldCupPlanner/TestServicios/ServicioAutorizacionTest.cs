@@ -29,7 +29,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Administrador_PuedeGestionarEquipos()
     {
@@ -43,7 +43,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Administrador_PuedeGestionarEstadios()
     {
@@ -57,7 +57,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Administrador_PuedeVisualizarLogs()
     {
@@ -71,7 +71,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Editor_PuedeUsarFixture()
     {
@@ -85,7 +85,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Editor_PuedeEditarPartidos()
     {
@@ -99,7 +99,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Editor_PuedeImportar()
     {
@@ -128,7 +128,7 @@ public class ServicioAutorizacionTest
         Assert.IsTrue(puedeGestionarUsuarios);
         Assert.IsTrue(puedeUsarFixture);
     }
-    
+
     [TestMethod]
     public void Administrador_PuedeEliminarOtroUsuario()
     {
@@ -142,7 +142,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsTrue(resultado);
     }
-    
+
     [TestMethod]
     public void Administrador_NoPuedeEliminarSuPropiaCuenta()
     {
@@ -169,7 +169,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsFalse(resultado);
     }
-    
+
     [TestMethod]
     public void Administrador_NoPuedeImportar()
     {
@@ -183,7 +183,7 @@ public class ServicioAutorizacionTest
 
         Assert.IsFalse(resultado);
     }
-    
+
     [TestMethod]
     public void Editor_NoPuedeEliminarUsuarios()
     {
@@ -197,5 +197,5 @@ public class ServicioAutorizacionTest
 
         Assert.IsFalse(resultado);
     }
-    
+
 }
