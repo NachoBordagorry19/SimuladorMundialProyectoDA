@@ -221,4 +221,70 @@ public class UsuarioServicioTest
         _servicioUsuario.ReiniciarContraseña("a@gmail.com");
         _auditoriaMock.Verify(a => a.RegistrarEdicionUsuario("a@gmail.com"), Times.AtLeast(1));
     }
+    
+    [TestMethod]
+    public void AgregarUsuario_SiEmailTieneEspacios_LoGuardaSinEspacios()
+    {
+        _usuarioDTO.Email = "  a@gmail.com  ";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuario = _servicioUsuario.ObtenerUsuario("a@gmail.com");
+
+        Assert.AreEqual("a@gmail.com", usuario.Email);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiEmailEstaVacio_LanzaExcepcion()
+    {
+        _usuarioDTO.Email = " ";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiEmailNoTieneArroba_LanzaExcepcion()
+    {
+        _usuarioDTO.Email = "agmail.com";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiEmailEmpiezaConArroba_LanzaExcepcion()
+    {
+        _usuarioDTO.Email = "@gmail.com";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiEmailTerminaConArroba_LanzaExcepcion()
+    {
+        _usuarioDTO.Email = "a@";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiEmailTieneDosArrobas_LanzaExcepcion()
+    {
+        _usuarioDTO.Email = "a@@gmail.com";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarUsuario_SiContraseñaNoEsValida_LanzaExcepcion()
+    {
+        _usuarioDTO.Contraseña = "sinmayuscula1!";
+
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+    }
 }
