@@ -285,4 +285,16 @@ public class PartidoServiciosTest
         PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
         Assert.AreEqual("Nuevo Estadio", partidoActualizado.Estadio.Nombre);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarPartido_SiFaseEstaBloqueada_LanzaExcepcion()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.BloquearEdicionFase(Fase.Grupos);
+
+        _partidoDTO.Fecha = new DateTime(2026, 6, 10);
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+    }
 }
