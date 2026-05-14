@@ -228,4 +228,15 @@ public class PartidoServiciosTest
         _partidoDTO.idPartido = -1;
         _servicioPartido.SimularResultado(_partidoDTO, 12345);
     }
+    
+    [TestMethod]
+    public void AgregarPartido_SiEstadoEsJugado_SeGuardaJugado()
+    {
+        _partidoDTO.estadoPartido = EstadoPartido.Jugado;
+
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        PartidoDTO partidoGuardado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoGuardado.estadoPartido);
+    }
 }
