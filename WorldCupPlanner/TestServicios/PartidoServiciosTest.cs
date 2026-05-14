@@ -297,4 +297,16 @@ public class PartidoServiciosTest
         _partidoDTO.Fecha = new DateTime(2026, 6, 10);
         _servicioPartido.ActualizarPartido(_partidoDTO);
     }
+    
+    [TestMethod]
+    public void SimularResultado_SiEsEliminatorio_NoQuedaEmpatado()
+    {
+        _partidoDTO.fase = Fase.Dieciseisavos;
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreNotEqual(partidoSimulado.golesLocal, partidoSimulado.golesVisitante);
+    }
 }
