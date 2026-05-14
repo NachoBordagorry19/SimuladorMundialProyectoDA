@@ -1,8 +1,11 @@
 @page "/equipos"
 @rendermode InteractiveServer
+@using Dominio.Enums
 @using Servicios.Interfaces
+@using UI.Estado
 @using Servicios.Modelo
 @inject IServicioEquipo ServicioEquipo
+@inject UsuarioSesion Sesion
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -12,7 +15,14 @@
                 <p class="wcp-subtitle">Listado de equipos registrados en el sistema.</p>
             </div>
 
-            <NavLink href="/AgregarEquipo" class="wcp-btn-primary">Agregar Equipo</NavLink>
+            @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+            {
+                <div class="alert alert-danger wcp-alert">Solo un administrador puede gestionar equipos.</div>
+            }
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+            {
+                <NavLink href="/AgregarEquipo" class="wcp-btn-primary">Agregar Equipo</NavLink>
+            }
         </div>
 
         @if (!string.IsNullOrWhiteSpace(mensajeError))
@@ -32,11 +42,14 @@
             </div>
         </div>
 
-        <div class="wcp-actions">
-            <button class="wcp-btn-secondary" @onclick="CompletarEquipos">
-                Completar Equipos
-            </button>
-        </div>
+        @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            <div class="wcp-actions">
+                <button class="wcp-btn-secondary" @onclick="CompletarEquipos">
+                    Completar Equipos
+                </button>
+            </div>
+        }
     </div>
 
     @if (equipos != null && equipos.Count > 0)
@@ -59,8 +72,11 @@
                             <td>@equipo.confederacion</td>
                             <td>@equipo.rankingFifa</td>
                             <td>
-                                <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
-                                <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                                @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+                                {
+                                    <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
+                                    <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                                }
                             </td>
                         </tr>
                     }
