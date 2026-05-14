@@ -19,6 +19,9 @@ public interface IServicioCrucesSegundaFase
     List<CruceDTO> GenerarTercerPuestoYFinal(List<CruceDTO> semifinales);
 
     CuadroSegundaFaseDTO GenerarCuadroSegundaFase(int semillaCrucesFase);
+    CuadroSegundaFaseDTO ObtenerCuadroActual();
+    void ProcesarAvanceDelTorneo();
 
+    EquipoDTO? ObtenerCampeonActual();
     EquipoDTO ObtenerCampeon(PartidoDTO partidoFinal);
 }

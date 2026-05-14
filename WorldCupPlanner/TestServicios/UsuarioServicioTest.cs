@@ -61,7 +61,7 @@ public class UsuarioServicioTest
         _usuarioDTO.Roles = new List<Rol> { Rol.Administrador, Rol.Administrador };
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
-    
+
     [TestMethod]
     public void AgregarUsuario_DebeRegistrarAuditoria()
     {
@@ -147,7 +147,7 @@ public class UsuarioServicioTest
 
         _servicioUsuario.AutenticarUsuario("a@gmail.com", "Incorrecta123!");
     }
-    
+
     [TestMethod]
     public void AutenticarUsuario_SiEmailTieneEspaciosAlPrincipioOFinal_DevuelveUsuario()
     {
@@ -182,16 +182,17 @@ public class UsuarioServicioTest
         Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Administrador));
         Assert.IsTrue(usuarioObtenido.Roles.Contains(Rol.Editor));
     }
-    
+
     [TestMethod]
     public void ActualizarUsuario_DebeRegistrarAuditoria()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
 
-        var usuarioEditado = new UsuarioDTO { 
+        var usuarioEditado = new UsuarioDTO
+        {
             Email = "a@gmail.com",
             FechaNacimiento = new DateTime(1999, 10, 10),
-            Nombre = "Fede Editado", 
+            Nombre = "Fede Editado",
             Apellido = "Rodriguez",
             Roles = new List<Rol> { Rol.Editor },
             Contraseña = ""
@@ -212,7 +213,7 @@ public class UsuarioServicioTest
 
         Assert.AreEqual("a@gmail.com", usuarioAutenticado.Email);
     }
-    
+
     [TestMethod]
     public void ReiniciarContraseña_DebeRegistrarAuditoria()
     {

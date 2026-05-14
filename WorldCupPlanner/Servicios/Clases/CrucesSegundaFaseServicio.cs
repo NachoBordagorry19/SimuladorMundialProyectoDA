@@ -9,7 +9,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     private readonly IServicioPartido _partidoServicios;
     private readonly IServicioAuditoria _auditoria;
 
-    public CrucesSegundaFaseServicio(IServicioPartido partidoServicios,  IServicioAuditoria auditoria)
+    public CrucesSegundaFaseServicio(IServicioPartido partidoServicios, IServicioAuditoria auditoria)
     {
         _partidoServicios = partidoServicios;
         _auditoria = auditoria;
@@ -25,8 +25,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         foreach (var partido in partidos)
         {
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal.nombre, grupo);
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante.nombre, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante, grupo);
 
             if (partido.estadoPartido != EstadoPartido.Jugado)
             {
@@ -75,17 +75,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         return OrdenarPosiciones(posiciones, semillaCrucesFase);
     }
 
-    private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, string nombreEquipo, string grupo)
+    private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, EquipoDTO equipo, string grupo)
     {
-        if (posiciones.Any(p => p.EquipoNombre == nombreEquipo))
+        if (posiciones.Any(p => p.EquipoNombre == equipo.nombre))
         {
             return;
         }
 
         posiciones.Add(new PosicionEquipoDTO
         {
-            EquipoNombre = nombreEquipo,
-            Grupo = grupo
+            EquipoNombre = equipo.nombre,
+            Grupo = grupo,
+            Equipo = equipo
         });
     }
 
@@ -162,7 +163,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
             if (partidosJugados < 6)
             {
-                throw new ArgumentException("No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
+                throw new ArgumentException(
+                    "No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
             }
 
             var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
@@ -302,7 +304,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         _partidoServicios.BloquearEdicionFase(Fase.Grupos);
         _auditoria.RegistrarSorteoCruces();
-        
+
         return cruces;
     }
 
@@ -408,6 +410,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         return partidosFinales;
     }
+
     public EquipoDTO ObtenerCampeon(PartidoDTO partidoFinal)
     {
         if (partidoFinal == null)
@@ -437,23 +440,412 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         throw new ArgumentException("La final no puede terminar empatada");
     }
+
+    public EquipoDTO? ObtenerCampeonActual()
+    {
+        var partidos = _partidoServicios.ObtenerPartidos();
+
+        var final = partidos.FirstOrDefault(p => p.fase == Fase.Final);
+
+        if (final == null)
+        {
+            return null;
+        }
+
+        if (final.estadoPartido != EstadoPartido.Jugado)
+        {
+            return null;
+        }
+
+        return ObtenerCampeon(final);
+    }
+
     public CuadroSegundaFaseDTO GenerarCuadroSegundaFase(int semillaCrucesFase)
     {
         var clasificados = ObtenerClasificados(semillaCrucesFase);
 
         var dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
-        var octavos = GenerarOctavosDeFinal(dieciseisavos);
-        var cuartos = GenerarCuartosDeFinal(octavos);
-        var semifinales = GenerarSemifinales(cuartos);
-        var partidosFinales = GenerarTercerPuestoYFinal(semifinales);
+
+        AgregarPartidosDieciseisavos(dieciseisavos);
+
+        return ObtenerCuadroActual();
+    }
+
+    private void AgregarPartidosDieciseisavos(List<CruceDTO> dieciseisavos)
+    {
+        var partidos = _partidoServicios.ObtenerPartidos();
+
+        if (partidos.Any(p => p.fase == Fase.Dieciseisavos))
+        {
+            return;
+        }
+
+        var estadios = ObtenerEstadiosDisponibles(partidos);
+        var fechaInicio = ObtenerFechaInicioDieciseisavos(partidos);
+
+        for (int i = 0; i < dieciseisavos.Count; i++)
+        {
+            var cruce = dieciseisavos[i];
+
+            if (string.IsNullOrWhiteSpace(cruce.EquipoLocal.Equipo.nombre) ||
+                string.IsNullOrWhiteSpace(cruce.EquipoVisitante.Equipo.nombre))
+            {
+                continue;
+            }
+
+            var estadio = estadios[i % estadios.Count];
+
+            var partido = new PartidoDTO
+            {
+                Grupo = cruce.Codigo,
+                Fecha = fechaInicio.AddHours(i * 4),
+                Estadio = estadio,
+                equipoLocal = cruce.EquipoLocal.Equipo,
+                equipoVisitante = cruce.EquipoVisitante.Equipo,
+                fase = Fase.Dieciseisavos,
+                estadoPartido = EstadoPartido.Pendiente,
+                golesLocal = 0,
+                golesVisitante = 0
+            };
+
+            _partidoServicios.AgregarPartido(
+                partido,
+                partido.equipoLocal,
+                partido.equipoVisitante,
+                partido.Estadio);
+        }
+    }
+
+    private List<EstadioDTO> ObtenerEstadiosDisponibles(List<PartidoDTO> partidos)
+    {
+        var estadios = new List<EstadioDTO>();
+
+        foreach (var partido in partidos)
+        {
+            if (!estadios.Any(e => e.Nombre == partido.Estadio.Nombre))
+            {
+                estadios.Add(partido.Estadio);
+            }
+        }
+
+        if (estadios.Count == 0)
+        {
+            throw new ArgumentException("No se pueden generar partidos de dieciseisavos sin estadios disponibles.");
+        }
+
+        return estadios;
+    }
+
+    private DateTime ObtenerFechaInicioDieciseisavos(List<PartidoDTO> partidos)
+    {
+        var partidosGrupos = partidos
+            .Where(p => p.fase == Fase.Grupos)
+            .ToList();
+
+        if (partidosGrupos.Count == 0)
+        {
+            throw new ArgumentException("No se pueden generar partidos de dieciseisavos sin partidos de grupos.");
+        }
+
+        var ultimaFechaGrupos = partidosGrupos
+            .OrderByDescending(p => p.Fecha)
+            .First()
+            .Fecha;
+
+        return ultimaFechaGrupos.Date.AddDays(3).AddHours(14);
+    }
+
+    public void ProcesarAvanceDelTorneo()
+    {
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
+
+        if (PuedeGenerarOctavos(partidos))
+        {
+            GenerarPartidosOctavos(partidos);
+            return;
+        }
+
+        if (PuedeGenerarCuartos(partidos))
+        {
+            GenerarPartidosCuartos(partidos);
+            return;
+        }
+
+        if (PuedeGenerarSemifinales(partidos))
+        {
+            GenerarPartidosSemifinales(partidos);
+            return;
+        }
+
+        if (PuedeGenerarTercerPuestoYFinal(partidos))
+        {
+            GenerarPartidosTercerPuestoYFinal(partidos);
+        }
+    }
+    private bool PuedeGenerarOctavos(List<PartidoDTO> partidos)
+    {
+        return FaseCompleta(partidos, Fase.Dieciseisavos, 16)
+               && !partidos.Any(p => p.fase == Fase.Octavos);
+    }
+
+    private bool PuedeGenerarCuartos(List<PartidoDTO> partidos)
+    {
+        return FaseCompleta(partidos, Fase.Octavos, 8)
+               && !partidos.Any(p => p.fase == Fase.Cuartos);
+    }
+
+    private bool PuedeGenerarSemifinales(List<PartidoDTO> partidos)
+    {
+        return FaseCompleta(partidos, Fase.Cuartos, 4)
+               && !partidos.Any(p => p.fase == Fase.Semifinal);
+    }
+
+    private bool PuedeGenerarTercerPuestoYFinal(List<PartidoDTO> partidos)
+    {
+        return FaseCompleta(partidos, Fase.Semifinal, 2)
+               && !partidos.Any(p => p.fase == Fase.Tercero)
+               && !partidos.Any(p => p.fase == Fase.Final);
+    }
+
+    private bool FaseCompleta(List<PartidoDTO> partidos, Fase fase, int cantidadEsperada)
+    {
+        var partidosFase = partidos
+            .Where(p => p.fase == fase)
+            .ToList();
+
+        return partidosFase.Count == cantidadEsperada &&
+               partidosFase.All(p => p.estadoPartido == EstadoPartido.Jugado);
+    }
+    private void GenerarPartidosOctavos(List<PartidoDTO> partidos)
+    {
+        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Dieciseisavos);
+        var estadios = ObtenerEstadiosDisponibles(partidos);
+
+        for (int i = 1; i <= 8; i++)
+        {
+            var partidoA = ObtenerPartidoPorCodigo(partidos, Fase.Dieciseisavos, "A" + i);
+            var partidoB = ObtenerPartidoPorCodigo(partidos, Fase.Dieciseisavos, "B" + i);
+
+            AgregarPartidoEliminatorio(
+                "C" + i,
+                Fase.Octavos,
+                ObtenerGanador(partidoA),
+                ObtenerGanador(partidoB),
+                fechaInicio.AddHours((i - 1) * 4),
+                estadios[(i - 1) % estadios.Count]);
+        }
+    }
+    private void GenerarPartidosCuartos(List<PartidoDTO> partidos)
+    {
+        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Octavos);
+        var estadios = ObtenerEstadiosDisponibles(partidos);
+
+        for (int i = 1; i <= 4; i++)
+        {
+            int numeroLocal = (i * 2) - 1;
+            int numeroVisitante = i * 2;
+
+            var partidoLocal = ObtenerPartidoPorCodigo(partidos, Fase.Octavos, "C" + numeroLocal);
+            var partidoVisitante = ObtenerPartidoPorCodigo(partidos, Fase.Octavos, "C" + numeroVisitante);
+
+            AgregarPartidoEliminatorio(
+                "D" + i,
+                Fase.Cuartos,
+                ObtenerGanador(partidoLocal),
+                ObtenerGanador(partidoVisitante),
+                fechaInicio.AddHours((i - 1) * 4),
+                estadios[(i - 1) % estadios.Count]);
+        }
+    }
+    private void GenerarPartidosSemifinales(List<PartidoDTO> partidos)
+    {
+        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Cuartos);
+        var estadios = ObtenerEstadiosDisponibles(partidos);
+
+        var d1 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D1");
+        var d2 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D2");
+        var d3 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D3");
+        var d4 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D4");
+
+        AgregarPartidoEliminatorio(
+            "S1",
+            Fase.Semifinal,
+            ObtenerGanador(d1),
+            ObtenerGanador(d2),
+            fechaInicio,
+            estadios[0 % estadios.Count]);
+
+        AgregarPartidoEliminatorio(
+            "S2",
+            Fase.Semifinal,
+            ObtenerGanador(d3),
+            ObtenerGanador(d4),
+            fechaInicio.AddHours(4),
+            estadios[1 % estadios.Count]);
+    }
+    private void GenerarPartidosTercerPuestoYFinal(List<PartidoDTO> partidos)
+    {
+        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Semifinal);
+        var estadios = ObtenerEstadiosDisponibles(partidos);
+
+        var s1 = ObtenerPartidoPorCodigo(partidos, Fase.Semifinal, "S1");
+        var s2 = ObtenerPartidoPorCodigo(partidos, Fase.Semifinal, "S2");
+
+        AgregarPartidoEliminatorio(
+            "TercerPuesto",
+            Fase.Tercero,
+            ObtenerPerdedor(s1),
+            ObtenerPerdedor(s2),
+            fechaInicio,
+            estadios[0 % estadios.Count]);
+
+        AgregarPartidoEliminatorio(
+            "Final",
+            Fase.Final,
+            ObtenerGanador(s1),
+            ObtenerGanador(s2),
+            fechaInicio.AddHours(4),
+            estadios[1 % estadios.Count]);
+    }
+    private PartidoDTO ObtenerPartidoPorCodigo(List<PartidoDTO> partidos, Fase fase, string codigo)
+    {
+        return partidos.First(p => p.fase == fase && p.Grupo == codigo);
+    }
+
+    private EquipoDTO ObtenerGanador(PartidoDTO partido)
+    {
+        if (partido.golesLocal > partido.golesVisitante)
+        {
+            return partido.equipoLocal;
+        }
+
+        if (partido.golesVisitante > partido.golesLocal)
+        {
+            return partido.equipoVisitante;
+        }
+
+        throw new ArgumentException("Un partido eliminatorio no puede terminar empatado.");
+    }
+
+    private EquipoDTO ObtenerPerdedor(PartidoDTO partido)
+    {
+        if (partido.golesLocal > partido.golesVisitante)
+        {
+            return partido.equipoVisitante;
+        }
+
+        if (partido.golesVisitante > partido.golesLocal)
+        {
+            return partido.equipoLocal;
+        }
+
+        throw new ArgumentException("Un partido eliminatorio no puede terminar empatado.");
+    }
+
+    private DateTime ObtenerFechaInicioSiguienteFase(List<PartidoDTO> partidos, Fase faseAnterior)
+    {
+        var ultimaFecha = partidos
+            .Where(p => p.fase == faseAnterior)
+            .OrderByDescending(p => p.Fecha)
+            .First()
+            .Fecha;
+
+        return ultimaFecha.Date.AddDays(3).AddHours(14);
+    }
+
+    private void AgregarPartidoEliminatorio(
+        string codigo,
+        Fase fase,
+        EquipoDTO local,
+        EquipoDTO visitante,
+        DateTime fecha,
+        EstadioDTO estadio)
+    {
+        var partido = new PartidoDTO
+        {
+            Grupo = codigo,
+            Fecha = fecha,
+            Estadio = estadio,
+            equipoLocal = local,
+            equipoVisitante = visitante,
+            fase = fase,
+            estadoPartido = EstadoPartido.Pendiente,
+            golesLocal = 0,
+            golesVisitante = 0
+        };
+
+        _partidoServicios.AgregarPartido(
+            partido,
+            partido.equipoLocal,
+            partido.equipoVisitante,
+            partido.Estadio);
+    }
+    public CuadroSegundaFaseDTO ObtenerCuadroActual()
+    {
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
 
         return new CuadroSegundaFaseDTO
         {
-            Dieciseisavos = dieciseisavos,
-            Octavos = octavos,
-            Cuartos = cuartos,
-            Semifinales = semifinales,
-            PartidosFinales = partidosFinales
+            Dieciseisavos = ConvertirPartidosACruces(partidos, Fase.Dieciseisavos),
+            Octavos = ConvertirPartidosACruces(partidos, Fase.Octavos),
+            Cuartos = ConvertirPartidosACruces(partidos, Fase.Cuartos),
+            Semifinales = ConvertirPartidosACruces(partidos, Fase.Semifinal),
+            PartidosFinales = ConvertirPartidosFinalesACruces(partidos)
+        };
+    }
+
+    private List<CruceDTO> ConvertirPartidosACruces(List<PartidoDTO> partidos, Fase fase)
+    {
+        var partidosFase = partidos
+            .Where(p => p.fase == fase)
+            .OrderBy(p => p.Fecha)
+            .ToList();
+
+        var cruces = new List<CruceDTO>();
+
+        foreach (var partido in partidosFase)
+        {
+            cruces.Add(PartidoACruce(partido));
+        }
+
+        return cruces;
+    }
+
+    private List<CruceDTO> ConvertirPartidosFinalesACruces(List<PartidoDTO> partidos)
+    {
+        var partidosFinales = partidos
+            .Where(p => p.fase == Fase.Tercero || p.fase == Fase.Final)
+            .OrderBy(p => p.Fecha)
+            .ToList();
+
+        var cruces = new List<CruceDTO>();
+
+        foreach (var partido in partidosFinales)
+        {
+            cruces.Add(PartidoACruce(partido));
+        }
+
+        return cruces;
+    }
+
+    private CruceDTO PartidoACruce(PartidoDTO partido)
+    {
+        return new CruceDTO
+        {
+            Codigo = partido.Grupo,
+            Fase = partido.fase,
+            EquipoLocal = new PosicionEquipoDTO
+            {
+                EquipoNombre = partido.equipoLocal.nombre,
+                Grupo = partido.Grupo,
+                Equipo = partido.equipoLocal
+            },
+            EquipoVisitante = new PosicionEquipoDTO
+            {
+                EquipoNombre = partido.equipoVisitante.nombre,
+                Grupo = partido.Grupo,
+                Equipo = partido.equipoVisitante
+            }
         };
     }
 }

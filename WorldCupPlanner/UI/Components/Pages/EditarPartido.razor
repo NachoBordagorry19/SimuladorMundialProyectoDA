@@ -5,6 +5,7 @@
 @using Servicios.Modelo
 @inject IServicioPartido ServicioPartido
 @inject IServicioEstadio ServicioEstadio
+@inject IServicioCrucesSegundaFase ServicioCruces
 @inject NavigationManager Navigation
 
 <div class="wcp-page">
@@ -140,6 +141,7 @@
             partido.estadoPartido = EstadoPartido.Jugado;
 
             ServicioPartido.ActualizarPartido(partido);
+            ServicioCruces.ProcesarAvanceDelTorneo();
 
             mensajeExito = "Partido actualizado correctamente.";
         }
@@ -164,7 +166,8 @@
             }
 
             ServicioPartido.SimularResultado(partido, semillaSimulacion);;
-
+            ServicioCruces.ProcesarAvanceDelTorneo();
+            
             partido = ServicioPartido.ObtenerPartido(IdPartido);
 
             if (partido.Estadio != null)

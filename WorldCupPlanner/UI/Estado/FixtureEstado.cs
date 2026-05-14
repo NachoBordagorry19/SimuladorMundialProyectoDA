@@ -9,4 +9,6 @@ public class FixtureEstado
     public CuadroSegundaFaseDTO? CuadroSegundaFase { get; set; }
 
     public string? GrupoSeleccionado { get; set; }
+
+    public EquipoDTO? Campeon { get; set; }
 }
