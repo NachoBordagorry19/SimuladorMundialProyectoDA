@@ -239,4 +239,20 @@ public class PartidoServiciosTest
         PartidoDTO partidoGuardado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
         Assert.AreEqual(EstadoPartido.Jugado, partidoGuardado.estadoPartido);
     }
+    
+    [TestMethod]
+    public void ObtenerPartidosFiltrados_SiCoincideConFiltros_RetornaUnPartido()
+    {
+        _partidoDTO.Grupo = "A";
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        List<PartidoDTO> partidos = _servicioPartido.ObtenerPartidosFiltrados(
+            _partidoDTO.Fecha,
+            estadioDTO.Nombre,
+            "A",
+            Fase.Grupos.ToString()
+        );
+
+        Assert.AreEqual(1, partidos.Count);
+    }
 }
