@@ -929,6 +929,21 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual(0, ranking[0].Puntos);
         Assert.AreEqual(0, ranking[1].Puntos);
     }
+    [TestMethod]
+    public void GenerarCrucesEntreListas_SiNoHayVisitanteDeOtroGrupo_UsaElPrimero()
+    {
+        var local = new PosicionEquipoDTO { EquipoNombre = "Local", Grupo = "A" };
+        var visitante = new PosicionEquipoDTO { EquipoNombre = "Visitante", Grupo = "A" };
+
+        var cruces = _crucesServicio.GenerarCrucesEntreListas(
+            new List<PosicionEquipoDTO> { local },
+            new List<PosicionEquipoDTO> { visitante },
+            "A",
+            123
+        );
+
+        Assert.AreEqual("Visitante", cruces[0].EquipoVisitante.EquipoNombre);
+    }
 
 
 }
