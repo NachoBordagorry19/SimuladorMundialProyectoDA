@@ -297,4 +297,37 @@ public class UsuarioServicioTest
 
         Assert.AreEqual("Fede", usuario.Nombre);
     }
+    
+    [TestMethod]
+    public void AutenticarUsuario_SiEmailTieneEspacios_AutenticaCorrectamente()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuario = _servicioUsuario.AutenticarUsuario("  a@gmail.com  ", "Password123!");
+
+        Assert.AreEqual("a@gmail.com", usuario.Email);
+    }
+    
+    [TestMethod]
+    public void ObtenerUsuariosEliminables_NoIncluyeUsuarioActual()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO otroUsuario = new UsuarioDTO
+        {
+            Nombre = "Mateo",
+            Apellido = "Roo",
+            Email = "b@gmail.com",
+            FechaNacimiento = new DateTime(2000, 05, 15),
+            Contraseña = "Password123!",
+            Roles = new List<Rol> { Rol.Editor }
+        };
+
+        _servicioUsuario.AgregarUsuario(otroUsuario);
+
+        var eliminables = _servicioUsuario.ObtenerUsuariosEliminables("A@GMAIL.COM");
+
+        Assert.AreEqual(1, eliminables.Count);
+        Assert.AreEqual("b@gmail.com", eliminables[0].Email);
+    }
 }
