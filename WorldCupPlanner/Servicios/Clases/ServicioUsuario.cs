@@ -266,7 +266,7 @@ public class ServicioUsuario : IServicioUsuario
         _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
         _auditoria.RegistrarEdicionUsuario(email);
     }
-
+    
     private void ValidarFormatoEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
