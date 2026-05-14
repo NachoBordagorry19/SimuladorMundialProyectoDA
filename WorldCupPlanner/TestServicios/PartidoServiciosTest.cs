@@ -228,4 +228,96 @@ public class PartidoServiciosTest
         _partidoDTO.idPartido = -1;
         _servicioPartido.SimularResultado(_partidoDTO, 12345);
     }
+    
+    [TestMethod]
+    public void AgregarPartido_SiEstadoEsJugado_SeGuardaJugado()
+    {
+        _partidoDTO.estadoPartido = EstadoPartido.Jugado;
+
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        PartidoDTO partidoGuardado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoGuardado.estadoPartido);
+    }
+    
+    [TestMethod]
+    public void ObtenerPartidosFiltrados_SiCoincideConFiltros_RetornaUnPartido()
+    {
+        _partidoDTO.Grupo = "A";
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        List<PartidoDTO> partidos = _servicioPartido.ObtenerPartidosFiltrados(
+            _partidoDTO.Fecha,
+            estadioDTO.Nombre,
+            "A",
+            Fase.Grupos.ToString()
+        );
+
+        Assert.AreEqual(1, partidos.Count);
+    }
+    
+    [TestMethod]
+    public void ObtenerEstadiosGruposYFases_DePartidos_RetornaDatos()
+    {
+        _partidoDTO.Grupo = "A";
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        Assert.AreEqual(1, _servicioPartido.ObtenerEstadiosDePartidos().Count);
+        Assert.AreEqual(1, _servicioPartido.ObtenerGruposDePartidos().Count);
+        Assert.AreEqual(1, _servicioPartido.ObtenerFasesDePartidos().Count);
+    }
+    
+    [TestMethod]
+    public void ActualizarPartido_SiCambiaEstadio_SeActualiza()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _partidoDTO.Estadio = new EstadioDTO
+        {
+            Nombre = "Nuevo Estadio",
+            Ciudad = "Montevideo",
+            Descripcion = "Nuevo",
+            CapacidadLocativa = 60000
+        };
+
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+
+        PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreEqual("Nuevo Estadio", partidoActualizado.Estadio.Nombre);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarPartido_SiFaseEstaBloqueada_LanzaExcepcion()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.BloquearEdicionFase(Fase.Grupos);
+
+        _partidoDTO.Fecha = new DateTime(2026, 6, 10);
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+    }
+    
+    [TestMethod]
+    public void SimularResultado_SiEsEliminatorio_NoQuedaEmpatado()
+    {
+        _partidoDTO.fase = Fase.Dieciseisavos;
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreNotEqual(partidoSimulado.golesLocal, partidoSimulado.golesVisitante);
+    }
+    
+    [TestMethod]
+    public void SimularTodosLosPartidos_SiHayPendiente_LoMarcaComoJugado()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularTodosLosPartidos(12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
+    }
 }

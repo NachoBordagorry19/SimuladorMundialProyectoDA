@@ -85,17 +85,20 @@ public class CrucesSegundaFaseServicioTest
         EquipoDTO visitante,
         EstadioDTO estadio,
         int golesLocal,
-        int golesVisitante)
+        int golesVisitante,
+        string grupo = "A",
+        Fase fase = Fase.Grupos,
+        EstadoPartido estado = EstadoPartido.Jugado)
     {
         var partido = new PartidoDTO
         {
-            Grupo = "A",
             Fecha = new DateTime(2026, 06, 01),
             Estadio = estadio,
             equipoLocal = local,
             equipoVisitante = visitante,
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Jugado,
+            Grupo = grupo,
+            fase = fase,
+            estadoPartido = estado,
             golesLocal = golesLocal,
             golesVisitante = golesVisitante
         };
@@ -895,6 +898,310 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.AreEqual("Uruguay", campeon.nombre);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerClasificados_SiFaltanPartidosJugados_LanzaExcepcion()
+    {
+        _crucesServicio.ObtenerClasificados(123);
+    }
+    
+    [TestMethod]
+    public void ObtenerRankingGrupo_SiPartidoEstaPendiente_NoSumaPuntos()
+    {
+        var equipoA = CrearEquipo("Equipo A");
+        var equipoB = CrearEquipo("Equipo B");
+        var estadio = CrearEstadio();
 
+        var partido = new PartidoDTO
+        {
+            Grupo = "A",
+            Fecha = new DateTime(2026, 06, 01),
+            Estadio = estadio,
+            equipoLocal = equipoA,
+            equipoVisitante = equipoB,
+            fase = Fase.Grupos,
+            estadoPartido = EstadoPartido.Pendiente
+        };
 
+        _partidoServicios.AgregarPartido(partido, equipoA, equipoB, estadio);
+
+        var ranking = _crucesServicio.ObtenerRankingGrupo("A", 123);
+
+        Assert.AreEqual(2, ranking.Count);
+        Assert.AreEqual(0, ranking[0].Puntos);
+        Assert.AreEqual(0, ranking[1].Puntos);
+    }
+    [TestMethod]
+    public void GenerarCrucesEntreListas_SiNoHayVisitanteDeOtroGrupo_UsaElPrimero()
+    {
+        var local = new PosicionEquipoDTO { EquipoNombre = "Local", Grupo = "A" };
+        var visitante = new PosicionEquipoDTO { EquipoNombre = "Visitante", Grupo = "A" };
+
+        var cruces = _crucesServicio.GenerarCrucesEntreListas(
+            new List<PosicionEquipoDTO> { local },
+            new List<PosicionEquipoDTO> { visitante },
+            "A",
+            123
+        );
+
+        Assert.AreEqual("Visitante", cruces[0].EquipoVisitante.EquipoNombre);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeon_SiGanaVisitante_RetornaVisitante()
+    {
+        var final = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 1,
+            golesVisitante = 2
+        };
+
+        var campeon = _crucesServicio.ObtenerCampeon(final);
+
+        Assert.AreEqual("Brasil", campeon.nombre);
+    }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiFinalEmpata_LanzaExcepcion()
+    {
+        var final = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 1,
+            golesVisitante = 1
+        };
+
+        _crucesServicio.ObtenerCampeon(final);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiNoEsFinal_LanzaExcepcion()
+    {
+        var partido = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Semifinal,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 2,
+            golesVisitante = 1
+        };
+
+        _crucesServicio.ObtenerCampeon(partido);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiFinalNoEstaJugada_LanzaExcepcion()
+    {
+        var final = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Pendiente,
+            golesLocal = 0,
+            golesVisitante = 0
+        };
+
+        _crucesServicio.ObtenerCampeon(final);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiFinalEsNula_LanzaExcepcion()
+    {
+        _crucesServicio.ObtenerCampeon(null);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeonActual_SiNoHayFinal_RetornaNull()
+    {
+        var campeon = _crucesServicio.ObtenerCampeonActual();
+
+        Assert.IsNull(campeon);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeonActual_SiFinalEstaPendiente_RetornaNull()
+    {
+        var local = CrearEquipo("Uruguay");
+        var visitante = CrearEquipo("Brasil");
+        var estadio = CrearEstadio();
+
+        var final = new PartidoDTO
+        {
+            Fecha = new DateTime(2026, 07, 19),
+            Estadio = estadio,
+            equipoLocal = local,
+            equipoVisitante = visitante,
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Pendiente
+        };
+
+        _partidoServicios.AgregarPartido(final, local, visitante, estadio);
+
+        var campeon = _crucesServicio.ObtenerCampeonActual();
+
+        Assert.IsNull(campeon);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeonActual_SiFinalEstaJugada_RetornaCampeon()
+    {
+        var local = CrearEquipo("Uruguay");
+        var visitante = CrearEquipo("Brasil");
+        var estadio = CrearEstadio();
+
+        var final = new PartidoDTO
+        {
+            Fecha = new DateTime(2026, 07, 19),
+            Estadio = estadio,
+            equipoLocal = local,
+            equipoVisitante = visitante,
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 3,
+            golesVisitante = 1
+        };
+
+        _partidoServicios.AgregarPartido(final, local, visitante, estadio);
+
+        var campeon = _crucesServicio.ObtenerCampeonActual();
+
+        Assert.AreEqual("Uruguay", campeon.nombre);
+    }
+    [TestMethod]
+    public void ProcesarAvanceDelTorneo_SiNoHayPartidos_NoGeneraNada()
+    {
+        _crucesServicio.ProcesarAvanceDelTorneo();
+
+        Assert.AreEqual(0, _partidoServicios.ObtenerPartidos().Count);
+    }
+    
+    [TestMethod]
+    public void GenerarCuadroSegundaFase_SiGruposEstanCompletos_GeneraDieciseisavos()
+    {
+        var estadio = CrearEstadio();
+
+        for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
+        {
+            string grupo = letraGrupo.ToString();
+
+            var equipo1 = CrearEquipo(grupo + " Equipo 1");
+            var equipo2 = CrearEquipo(grupo + " Equipo 2");
+            var equipo3 = CrearEquipo(grupo + " Equipo 3");
+            var equipo4 = CrearEquipo(grupo + " Equipo 4");
+
+            AgregarPartido(equipo1, equipo2, estadio, 3, 0, grupo);
+            AgregarPartido(equipo1, equipo3, estadio, 2, 0, grupo);
+            AgregarPartido(equipo1, equipo4, estadio, 1, 0, grupo);
+
+            AgregarPartido(equipo2, equipo3, estadio, 2, 0, grupo);
+            AgregarPartido(equipo2, equipo4, estadio, 1, 0, grupo);
+
+            AgregarPartido(equipo3, equipo4, estadio, 1, 0, grupo);
+        }
+
+        var cuadro = _crucesServicio.GenerarCuadroSegundaFase(123);
+
+        var partidosDieciseisavos = _partidoServicios.ObtenerPartidos()
+            .Where(p => p.fase == Fase.Dieciseisavos)
+            .ToList();
+
+        Assert.AreEqual(16, cuadro.Dieciseisavos.Count);
+        Assert.AreEqual(16, partidosDieciseisavos.Count);
+        Assert.IsTrue(partidosDieciseisavos.All(p => p.estadoPartido == EstadoPartido.Pendiente));
+    }
+    
+    [TestMethod]
+public void ProcesarAvanceDelTorneo_SiFasesEstanJugadas_GeneraFinalYTercerPuesto()
+{
+    var estadio = CrearEstadio();
+
+    for (int i = 1; i <= 8; i++)
+    {
+        AgregarPartido(
+            CrearEquipo("A" + i + " Local"),
+            CrearEquipo("A" + i + " Visitante"),
+            estadio,
+            2,
+            1,
+            "A" + i,
+            Fase.Dieciseisavos);
+
+        AgregarPartido(
+            CrearEquipo("B" + i + " Local"),
+            CrearEquipo("B" + i + " Visitante"),
+            estadio,
+            2,
+            1,
+            "B" + i,
+            Fase.Dieciseisavos);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var octavos = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Octavos)
+        .ToList();
+
+    Assert.AreEqual(8, octavos.Count);
+
+    foreach (var partido in octavos)
+    {
+        partido.golesLocal = 2;
+        partido.golesVisitante = 1;
+        _partidoServicios.ActualizarPartido(partido);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var cuartos = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Cuartos)
+        .ToList();
+
+    Assert.AreEqual(4, cuartos.Count);
+
+    foreach (var partido in cuartos)
+    {
+        partido.golesLocal = 2;
+        partido.golesVisitante = 1;
+        _partidoServicios.ActualizarPartido(partido);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var semifinales = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Semifinal)
+        .ToList();
+
+    Assert.AreEqual(2, semifinales.Count);
+
+    foreach (var partido in semifinales)
+    {
+        partido.golesLocal = 2;
+        partido.golesVisitante = 1;
+        _partidoServicios.ActualizarPartido(partido);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var partidosFinales = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Final || p.fase == Fase.Tercero)
+        .ToList();
+
+    Assert.AreEqual(2, partidosFinales.Count);
+    Assert.IsTrue(partidosFinales.Any(p => p.Grupo == "Final"));
+    Assert.IsTrue(partidosFinales.Any(p => p.Grupo == "TercerPuesto"));
+}
 }
