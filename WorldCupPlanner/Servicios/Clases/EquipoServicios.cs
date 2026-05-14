@@ -228,7 +228,7 @@ public class EquipoServicios : IServicioEquipo
                 continue;
             }
 
-            List<String> ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
+            var ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
 
             int semillaGrupo = generadorDeNumerosPrincipal.Next();
             var generadorDeNumerosGrupo = new Random(semillaGrupo);
@@ -242,7 +242,7 @@ public class EquipoServicios : IServicioEquipo
                 copiaGrupo[j] = copiaTemporal;
             }
 
-            List<String> ordenResuelto = copiaGrupo.Select(e => e.nombre).ToList();
+            var ordenResuelto = copiaGrupo.Select(e => e.nombre).ToList();
 
             auditoria.Add(new EntradaAuditoria
             {
