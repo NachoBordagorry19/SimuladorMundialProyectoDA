@@ -59,7 +59,7 @@
             </NavLink>
 
             <NavLink href="/partidos" class="wcp-btn-secondary">
-                Ver Lista de Partidos
+                Ver Partidos
             </NavLink>
         </div>
     </div>
@@ -173,7 +173,7 @@
         <div class="wcp-card mt-4">
             <h2 class="wcp-title">Cruces de Segunda Fase</h2>
             <p class="wcp-subtitle">Cuadro generado con la semilla de cruces indicada.</p>
-            <p class="wcp-subtitle">Detalles de los partidos aparecen en Lista de Partidos.</p>
+            <p class="wcp-subtitle">Detalles de los partidos aparecen en Partidos.</p>
 
             <h3>Dieciseisavos</h3>
             <table class="wcp-table mb-3">
@@ -289,6 +289,15 @@
                 }
                 </tbody>
             </table>
+            @if (EstadoFixture.Campeon != null)
+            {
+                <div class="mt-4">
+                    <h3>Campeón del torneo</h3>
+                    <div class="wcp-card">
+                        <h2 class="wcp-title mb-0">🏆 @EstadoFixture.Campeon.nombre</h2>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>
@@ -318,6 +327,7 @@
 
             EstadoFixture.GrupoSeleccionado = EstadoFixture.ResultadoFixture.Grupos.First().Nombre;
             EstadoFixture.CuadroSegundaFase = null;
+            EstadoFixture.Campeon = null;
 
             mensajeExito = "Fixture generado correctamente.";
         }
@@ -394,15 +404,18 @@
 
         return ServicioCruces.ObtenerRankingGrupo(EstadoFixture.GrupoSeleccionado, semillaCrucesFase);
     }
+    
     private void ActualizarCuadro()
     {
         try
         {
             EstadoFixture.CuadroSegundaFase = ServicioCruces.ObtenerCuadroActual();
+            EstadoFixture.Campeon = ServicioCruces.ObtenerCampeonActual();
         }
         catch
         {
             EstadoFixture.CuadroSegundaFase = null;
+            EstadoFixture.Campeon = null;
         }
     }
 }

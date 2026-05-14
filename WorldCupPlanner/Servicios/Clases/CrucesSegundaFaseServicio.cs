@@ -441,6 +441,25 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         throw new ArgumentException("La final no puede terminar empatada");
     }
 
+    public EquipoDTO? ObtenerCampeonActual()
+    {
+        var partidos = _partidoServicios.ObtenerPartidos();
+
+        var final = partidos.FirstOrDefault(p => p.fase == Fase.Final);
+
+        if (final == null)
+        {
+            return null;
+        }
+
+        if (final.estadoPartido != EstadoPartido.Jugado)
+        {
+            return null;
+        }
+
+        return ObtenerCampeon(final);
+    }
+
     public CuadroSegundaFaseDTO GenerarCuadroSegundaFase(int semillaCrucesFase)
     {
         var clasificados = ObtenerClasificados(semillaCrucesFase);

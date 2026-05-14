@@ -22,5 +22,6 @@ public interface IServicioCrucesSegundaFase
     CuadroSegundaFaseDTO ObtenerCuadroActual();
     void ProcesarAvanceDelTorneo();
 
+    EquipoDTO? ObtenerCampeonActual();
     EquipoDTO ObtenerCampeon(PartidoDTO partidoFinal);
 }
