@@ -30,25 +30,23 @@
             <div class="wcp-card mt-4">
                 <table class="wcp-table">
                     <thead>
-                        <tr>
-                            <th>Fecha y Hora</th>
-                            <th>Usuario</th>
-                            <th>Acción</th>
-                            <th>Detalle</th>
-                        </tr>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Usuario</th>
+                        <th>Acción</th>
+                        <th>Detalle</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @* Agregué un OrderByDescending para que los logs más nuevos salgan arriba *@
-              @foreach (var log in _auditoriaLista.OrderByDescending(l => l.FechaHora))
-            {
-                <tr>
-                    <td>@log.FechaHora.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                    <td>@log.Usuario</td>
-                    <td>@log.Accion</td>
-                    <td>@log.Detalle</td>
-                    
-                </tr>
-            }
+                    @foreach (Auditoria auditoria in _auditoriaLista.OrderByDescending(a => a.FechaHora))
+                    {
+                        <tr>
+                            <td>@auditoria.FechaHora.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td>@auditoria.Usuario</td>
+                            <td>@auditoria.Accion</td>
+                            <td>@auditoria.Detalle</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
