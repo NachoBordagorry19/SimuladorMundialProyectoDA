@@ -944,6 +944,139 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.AreEqual("Visitante", cruces[0].EquipoVisitante.EquipoNombre);
     }
+    
+    [TestMethod]
+    public void ObtenerCampeon_SiGanaVisitante_RetornaVisitante()
+    {
+        var final = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 1,
+            golesVisitante = 2
+        };
+
+        var campeon = _crucesServicio.ObtenerCampeon(final);
+
+        Assert.AreEqual("Brasil", campeon.nombre);
+    }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiFinalEmpata_LanzaExcepcion()
+    {
+        var final = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 1,
+            golesVisitante = 1
+        };
+
+        _crucesServicio.ObtenerCampeon(final);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiNoEsFinal_LanzaExcepcion()
+    {
+        var partido = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Semifinal,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 2,
+            golesVisitante = 1
+        };
+
+        _crucesServicio.ObtenerCampeon(partido);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiFinalNoEstaJugada_LanzaExcepcion()
+    {
+        var final = new PartidoDTO
+        {
+            equipoLocal = CrearEquipo("Uruguay"),
+            equipoVisitante = CrearEquipo("Brasil"),
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Pendiente,
+            golesLocal = 0,
+            golesVisitante = 0
+        };
+
+        _crucesServicio.ObtenerCampeon(final);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerCampeon_SiFinalEsNula_LanzaExcepcion()
+    {
+        _crucesServicio.ObtenerCampeon(null);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeonActual_SiNoHayFinal_RetornaNull()
+    {
+        var campeon = _crucesServicio.ObtenerCampeonActual();
+
+        Assert.IsNull(campeon);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeonActual_SiFinalEstaPendiente_RetornaNull()
+    {
+        var local = CrearEquipo("Uruguay");
+        var visitante = CrearEquipo("Brasil");
+        var estadio = CrearEstadio();
+
+        var final = new PartidoDTO
+        {
+            Fecha = new DateTime(2026, 07, 19),
+            Estadio = estadio,
+            equipoLocal = local,
+            equipoVisitante = visitante,
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Pendiente
+        };
+
+        _partidoServicios.AgregarPartido(final, local, visitante, estadio);
+
+        var campeon = _crucesServicio.ObtenerCampeonActual();
+
+        Assert.IsNull(campeon);
+    }
+    
+    [TestMethod]
+    public void ObtenerCampeonActual_SiFinalEstaJugada_RetornaCampeon()
+    {
+        var local = CrearEquipo("Uruguay");
+        var visitante = CrearEquipo("Brasil");
+        var estadio = CrearEstadio();
+
+        var final = new PartidoDTO
+        {
+            Fecha = new DateTime(2026, 07, 19),
+            Estadio = estadio,
+            equipoLocal = local,
+            equipoVisitante = visitante,
+            fase = Fase.Final,
+            estadoPartido = EstadoPartido.Jugado,
+            golesLocal = 3,
+            golesVisitante = 1
+        };
+
+        _partidoServicios.AgregarPartido(final, local, visitante, estadio);
+
+        var campeon = _crucesServicio.ObtenerCampeonActual();
+
+        Assert.AreEqual("Uruguay", campeon.nombre);
+    }
 
 
 }
