@@ -85,17 +85,20 @@ public class CrucesSegundaFaseServicioTest
         EquipoDTO visitante,
         EstadioDTO estadio,
         int golesLocal,
-        int golesVisitante)
+        int golesVisitante,
+        string grupo = "A",
+        Fase fase = Fase.Grupos,
+        EstadoPartido estado = EstadoPartido.Jugado)
     {
         var partido = new PartidoDTO
         {
-            Grupo = "A",
             Fecha = new DateTime(2026, 06, 01),
             Estadio = estadio,
             equipoLocal = local,
             equipoVisitante = visitante,
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Jugado,
+            Grupo = grupo,
+            fase = fase,
+            estadoPartido = estado,
             golesLocal = golesLocal,
             golesVisitante = golesVisitante
         };
@@ -1083,5 +1086,40 @@ public class CrucesSegundaFaseServicioTest
         _crucesServicio.ProcesarAvanceDelTorneo();
 
         Assert.AreEqual(0, _partidoServicios.ObtenerPartidos().Count);
+    }
+    
+    [TestMethod]
+    public void GenerarCuadroSegundaFase_SiGruposEstanCompletos_GeneraDieciseisavos()
+    {
+        var estadio = CrearEstadio();
+
+        for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
+        {
+            string grupo = letraGrupo.ToString();
+
+            var equipo1 = CrearEquipo(grupo + " Equipo 1");
+            var equipo2 = CrearEquipo(grupo + " Equipo 2");
+            var equipo3 = CrearEquipo(grupo + " Equipo 3");
+            var equipo4 = CrearEquipo(grupo + " Equipo 4");
+
+            AgregarPartido(equipo1, equipo2, estadio, 3, 0, grupo);
+            AgregarPartido(equipo1, equipo3, estadio, 2, 0, grupo);
+            AgregarPartido(equipo1, equipo4, estadio, 1, 0, grupo);
+
+            AgregarPartido(equipo2, equipo3, estadio, 2, 0, grupo);
+            AgregarPartido(equipo2, equipo4, estadio, 1, 0, grupo);
+
+            AgregarPartido(equipo3, equipo4, estadio, 1, 0, grupo);
+        }
+
+        var cuadro = _crucesServicio.GenerarCuadroSegundaFase(123);
+
+        var partidosDieciseisavos = _partidoServicios.ObtenerPartidos()
+            .Where(p => p.fase == Fase.Dieciseisavos)
+            .ToList();
+
+        Assert.AreEqual(16, cuadro.Dieciseisavos.Count);
+        Assert.AreEqual(16, partidosDieciseisavos.Count);
+        Assert.IsTrue(partidosDieciseisavos.All(p => p.estadoPartido == EstadoPartido.Pendiente));
     }
 }
