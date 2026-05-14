@@ -368,4 +368,110 @@ public class UsuarioServicioTest
     {
         _servicioUsuario.EliminarUsuario("a@gmail.com", "a@gmail.com", "A@GMAIL.COM");
     }
+    
+    [TestMethod]
+    public void ActualizarUsuario_SiCambiaEmail_ActualizaCorrectamente()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuarioActualizado = new UsuarioDTO
+        {
+            Nombre = "Fede",
+            Apellido = "Rodriguez",
+            Email = "nuevo@gmail.com",
+            FechaNacimiento = new DateTime(2000, 05, 15),
+            Contraseña = "",
+            Roles = new List<Rol> { Rol.Administrador }
+        };
+
+        _servicioUsuario.ActualizarUsuario("a@gmail.com", usuarioActualizado);
+
+        UsuarioDTO usuario = _servicioUsuario.ObtenerUsuario("nuevo@gmail.com");
+
+        Assert.AreEqual("nuevo@gmail.com", usuario.Email);
+    }
+    
+    [TestMethod]
+    public void ActualizarUsuario_SiCambiaContraseña_PermiteAutenticarConNueva()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _usuarioDTO.Contraseña = "Nueva123!";
+
+        _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
+
+        UsuarioDTO usuario = _servicioUsuario.AutenticarUsuario("a@gmail.com", "Nueva123!");
+
+        Assert.AreEqual("a@gmail.com", usuario.Email);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarUsuario_SiEmailOriginalNoExiste_LanzaExcepcion()
+    {
+        _servicioUsuario.ActualizarUsuario("noexiste@gmail.com", _usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarUsuario_SiNuevoEmailYaExiste_LanzaExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO otroUsuario = new UsuarioDTO
+        {
+            Nombre = "Mateo",
+            Apellido = "Roo",
+            Email = "b@gmail.com",
+            FechaNacimiento = new DateTime(2000, 05, 15),
+            Contraseña = "Password123!",
+            Roles = new List<Rol> { Rol.Editor }
+        };
+
+        _servicioUsuario.AgregarUsuario(otroUsuario);
+
+        _usuarioDTO.Email = "b@gmail.com";
+
+        _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarUsuario_SiRolesDuplicados_LanzaExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _usuarioDTO.Roles = new List<Rol> { Rol.Editor, Rol.Editor };
+
+        _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarUsuario_SiNuevoEmailNoTieneFormatoValido_LanzaExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _usuarioDTO.Email = "emailinvalido";
+
+        _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarUsuario_SiNuevaContraseñaNoEsValida_LanzaExcepcion()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _usuarioDTO.Contraseña = "invalida";
+
+        _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ReiniciarContraseña_SiUsuarioNoExiste_LanzaExcepcion()
+    {
+        _servicioUsuario.ReiniciarContraseña("noexiste@gmail.com");
+    }
 }
