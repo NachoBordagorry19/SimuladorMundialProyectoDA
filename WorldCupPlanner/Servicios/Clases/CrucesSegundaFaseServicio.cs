@@ -449,19 +449,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         AgregarPartidosDieciseisavos(dieciseisavos);
 
-        var octavos = GenerarOctavosDeFinal(dieciseisavos);
-        var cuartos = GenerarCuartosDeFinal(octavos);
-        var semifinales = GenerarSemifinales(cuartos);
-        var partidosFinales = GenerarTercerPuestoYFinal(semifinales);
-
-        return new CuadroSegundaFaseDTO
-        {
-            Dieciseisavos = dieciseisavos,
-            Octavos = octavos,
-            Cuartos = cuartos,
-            Semifinales = semifinales,
-            PartidosFinales = partidosFinales
-        };
+        return ObtenerCuadroActual();
     }
 
     private void AgregarPartidosDieciseisavos(List<CruceDTO> dieciseisavos)
@@ -772,5 +760,73 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             partido.equipoLocal,
             partido.equipoVisitante,
             partido.Estadio);
+    }
+    public CuadroSegundaFaseDTO ObtenerCuadroActual()
+    {
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
+
+        return new CuadroSegundaFaseDTO
+        {
+            Dieciseisavos = ConvertirPartidosACruces(partidos, Fase.Dieciseisavos),
+            Octavos = ConvertirPartidosACruces(partidos, Fase.Octavos),
+            Cuartos = ConvertirPartidosACruces(partidos, Fase.Cuartos),
+            Semifinales = ConvertirPartidosACruces(partidos, Fase.Semifinal),
+            PartidosFinales = ConvertirPartidosFinalesACruces(partidos)
+        };
+    }
+
+    private List<CruceDTO> ConvertirPartidosACruces(List<PartidoDTO> partidos, Fase fase)
+    {
+        var partidosFase = partidos
+            .Where(p => p.fase == fase)
+            .OrderBy(p => p.Fecha)
+            .ToList();
+
+        var cruces = new List<CruceDTO>();
+
+        foreach (var partido in partidosFase)
+        {
+            cruces.Add(PartidoACruce(partido));
+        }
+
+        return cruces;
+    }
+
+    private List<CruceDTO> ConvertirPartidosFinalesACruces(List<PartidoDTO> partidos)
+    {
+        var partidosFinales = partidos
+            .Where(p => p.fase == Fase.Tercero || p.fase == Fase.Final)
+            .OrderBy(p => p.Fecha)
+            .ToList();
+
+        var cruces = new List<CruceDTO>();
+
+        foreach (var partido in partidosFinales)
+        {
+            cruces.Add(PartidoACruce(partido));
+        }
+
+        return cruces;
+    }
+
+    private CruceDTO PartidoACruce(PartidoDTO partido)
+    {
+        return new CruceDTO
+        {
+            Codigo = partido.Grupo,
+            Fase = partido.fase,
+            EquipoLocal = new PosicionEquipoDTO
+            {
+                EquipoNombre = partido.equipoLocal.nombre,
+                Grupo = partido.Grupo,
+                Equipo = partido.equipoLocal
+            },
+            EquipoVisitante = new PosicionEquipoDTO
+            {
+                EquipoNombre = partido.equipoVisitante.nombre,
+                Grupo = partido.Grupo,
+                Equipo = partido.equipoVisitante
+            }
+        };
     }
 }

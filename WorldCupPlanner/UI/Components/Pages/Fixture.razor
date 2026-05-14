@@ -139,7 +139,7 @@
                     </tbody>
                 </table>
 
-                <h3 class="mt-4">Partidos</h3>
+                <h3 class="mt-4">Partidos de grupo</h3>
 
                 <table class="wcp-table">
                     <thead>
@@ -173,6 +173,7 @@
         <div class="wcp-card mt-4">
             <h2 class="wcp-title">Cruces de Segunda Fase</h2>
             <p class="wcp-subtitle">Cuadro generado con la semilla de cruces indicada.</p>
+            <p class="wcp-subtitle">Detalles de los partidos aparecen en Lista de Partidos.</p>
 
             <h3>Dieciseisavos</h3>
             <table class="wcp-table mb-3">
@@ -180,8 +181,8 @@
                 <tr>
                     <th>Código</th>
                     <th>Fase</th>
-                    <th>Local / Referencia</th>
-                    <th>Visitante / Referencia</th>
+                    <th>Equipo 1</th>
+                    <th>Equipo 2</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -203,8 +204,8 @@
                 <tr>
                     <th>Código</th>
                     <th>Fase</th>
-                    <th>Local / Referencia</th>
-                    <th>Visitante / Referencia</th>
+                    <th>Equipo 1</th>
+                    <th>Equipo 2</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -226,8 +227,8 @@
                 <tr>
                     <th>Código</th>
                     <th>Fase</th>
-                    <th>Local / Referencia</th>
-                    <th>Visitante / Referencia</th>
+                    <th>Equipo 1</th>
+                    <th>Equipo 2</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -249,8 +250,8 @@
                 <tr>
                     <th>Código</th>
                     <th>Fase</th>
-                    <th>Local / Referencia</th>
-                    <th>Visitante / Referencia</th>
+                    <th>Equipo 1</th>
+                    <th>Equipo 2</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -272,8 +273,8 @@
                 <tr>
                     <th>Código</th>
                     <th>Fase</th>
-                    <th>Local / Referencia</th>
-                    <th>Visitante / Referencia</th>
+                    <th>Equipo 1</th>
+                    <th>Equipo 2</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -293,6 +294,10 @@
 </div>
 
 @code {
+    protected override void OnInitialized()
+    {
+        ActualizarCuadro();
+    }
     private int semillaFixture = 123;
     private int semillaCrucesFase = 456;
     private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
@@ -330,8 +335,10 @@
             mensajeError = "";
             mensajeExito = "";
 
-            EstadoFixture.CuadroSegundaFase = ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
+            ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
 
+            ActualizarCuadro();
+            
             mensajeExito = "Cruces generados correctamente.";
         }
         catch (Exception ex)
@@ -386,5 +393,16 @@
         }
 
         return ServicioCruces.ObtenerRankingGrupo(EstadoFixture.GrupoSeleccionado, semillaCrucesFase);
+    }
+    private void ActualizarCuadro()
+    {
+        try
+        {
+            EstadoFixture.CuadroSegundaFase = ServicioCruces.ObtenerCuadroActual();
+        }
+        catch
+        {
+            EstadoFixture.CuadroSegundaFase = null;
+        }
     }
 }
