@@ -19,7 +19,7 @@ public class Estadio
 
             if (value.Length > 80)
             {
-                throw new ArgumentException("El nombre del estadio no puede superar los 81 caracteres");
+                throw new ArgumentException("El nombre del estadio no puede superar los 80 caracteres");
             }
             _nombre = value;
         }

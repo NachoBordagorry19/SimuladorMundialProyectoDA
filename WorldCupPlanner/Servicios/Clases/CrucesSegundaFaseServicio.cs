@@ -1,3 +1,4 @@
+using Dominio.Clases;
 using Dominio.Enums;
 using Servicios.Interfaces;
 using Servicios.Modelo;
@@ -17,7 +18,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     public List<PosicionEquipoDTO> ObtenerRankingGrupo(string grupo, int semillaCrucesFase)
     {
-        var partidos = _partidoServicios.ObtenerPartidos()
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos()
             .Where(p => p.Grupo == grupo && p.fase == Fase.Grupos)
             .ToList();
 
@@ -33,8 +34,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                 continue;
             }
 
-            var posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
-            var posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
+            PosicionEquipoDTO posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
+            PosicionEquipoDTO posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
 
             posicionLocal.PartidosJugados++;
             posicionVisitante.PartidosJugados++;
@@ -105,7 +106,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         while (i < posiciones.Count)
         {
             var grupoEmpatado = new List<PosicionEquipoDTO>();
-            var posicionActual = posiciones[i];
+            PosicionEquipoDTO posicionActual = posiciones[i];
 
             grupoEmpatado.Add(posicionActual);
             i++;
@@ -140,7 +141,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         {
             int j = random.Next(i + 1);
 
-            var auxiliar = equipos[i];
+            PosicionEquipoDTO auxiliar = equipos[i];
             equipos[i] = equipos[j];
             equipos[j] = auxiliar;
         }
@@ -167,7 +168,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                     "No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
             }
 
-            var rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
+            List<PosicionEquipoDTO> rankingGrupo = ObtenerRankingGrupo(grupo, semillaCrucesFase);
 
             primeros.Add(rankingGrupo[0]);
             segundos.Add(rankingGrupo[1]);
@@ -186,7 +187,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private List<PosicionEquipoDTO> OrdenarPosiciones(List<PosicionEquipoDTO> posiciones, int semillaCrucesFase)
     {
-        var posicionesOrdenadas = posiciones
+        List<PosicionEquipoDTO> posicionesOrdenadas = posiciones
             .OrderByDescending(p => p.Puntos)
             .ThenByDescending(p => p.Diferencia)
             .ThenByDescending(p => p.GolesAFavor)
@@ -202,8 +203,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         int semillaCrucesFase,
         int numeroInicial = 1)
     {
-        var locales = equiposLocales.ToList();
-        var visitantes = equiposVisitantes.ToList();
+        List<PosicionEquipoDTO> locales = equiposLocales.ToList();
+        List<PosicionEquipoDTO> visitantes = equiposVisitantes.ToList();
 
         var random = new Random(semillaCrucesFase);
 
@@ -214,10 +215,10 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         for (int i = 0; i < locales.Count; i++)
         {
-            var local = locales[i];
+            PosicionEquipoDTO local = locales[i];
             int indiceVisitante = BuscarIndiceVisitanteDisponible(visitantes, local);
 
-            var visitante = visitantes[indiceVisitante];
+            PosicionEquipoDTO visitante = visitantes[indiceVisitante];
             visitantes.RemoveAt(indiceVisitante);
 
             var cruce = new CruceDTO
@@ -249,30 +250,30 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     public List<CruceDTO> GenerarCrucesFase(ClasificadosDTO clasificados, int semillaCrucesFase)
     {
-        var mejoresPrimeros = clasificados.Primeros
+        List<PosicionEquipoDTO> mejoresPrimeros = clasificados.Primeros
             .Take(8)
             .ToList();
 
-        var terceros = clasificados.Terceros
+        List<PosicionEquipoDTO> terceros = clasificados.Terceros
             .ToList();
 
-        var cruces = GenerarCrucesEntreListas(
+        List<CruceDTO> cruces = GenerarCrucesEntreListas(
             mejoresPrimeros,
             terceros,
             "A",
             semillaCrucesFase);
 
-        var primerosRestantes = clasificados.Primeros
+        List<PosicionEquipoDTO> primerosRestantes = clasificados.Primeros
             .Skip(8)
             .Take(4)
             .ToList();
 
-        var segundosMenorPuntaje = clasificados.Segundos
+        List<PosicionEquipoDTO> segundosMenorPuntaje = clasificados.Segundos
             .OrderBy(s => s.Puntos)
             .Take(4)
             .ToList();
 
-        var crucesB1aB4 = GenerarCrucesEntreListas(
+        List<CruceDTO> crucesB1aB4 = GenerarCrucesEntreListas(
             primerosRestantes,
             segundosMenorPuntaje,
             "B",
@@ -280,20 +281,20 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         cruces.AddRange(crucesB1aB4);
 
-        var segundosRestantes = clasificados.Segundos
+        List<PosicionEquipoDTO> segundosRestantes = clasificados.Segundos
             .Where(s => !segundosMenorPuntaje.Any(m => m.EquipoNombre == s.EquipoNombre))
             .ToList();
 
-        var segundosLocales = segundosRestantes
+        List<PosicionEquipoDTO> segundosLocales = segundosRestantes
             .Take(4)
             .ToList();
 
-        var segundosVisitantes = segundosRestantes
+        List<PosicionEquipoDTO> segundosVisitantes = segundosRestantes
             .Skip(4)
             .Take(4)
             .ToList();
 
-        var crucesB5aB8 = GenerarCrucesEntreListas(
+        List<CruceDTO> crucesB5aB8 = GenerarCrucesEntreListas(
             segundosLocales,
             segundosVisitantes,
             "B",
@@ -314,8 +315,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
         for (int i = 1; i <= 8; i++)
         {
-            var cruceA = crucesDieciseisavos.First(c => c.Codigo == "A" + i);
-            var cruceB = crucesDieciseisavos.First(c => c.Codigo == "B" + i);
+            CruceDTO cruceA = crucesDieciseisavos.First(c => c.Codigo == "A" + i);
+            CruceDTO cruceB = crucesDieciseisavos.First(c => c.Codigo == "B" + i);
 
             var cruce = new CruceDTO
             {
@@ -340,8 +341,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             int numeroCruceLocal = (i * 2) - 1;
             int numeroCruceVisitante = i * 2;
 
-            var cruceLocal = octavos.First(c => c.Codigo == "C" + numeroCruceLocal);
-            var cruceVisitante = octavos.First(c => c.Codigo == "C" + numeroCruceVisitante);
+            CruceDTO cruceLocal = octavos.First(c => c.Codigo == "C" + numeroCruceLocal);
+            CruceDTO cruceVisitante = octavos.First(c => c.Codigo == "C" + numeroCruceVisitante);
 
             var cruce = new CruceDTO
             {
@@ -361,10 +362,10 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         var semifinales = new List<CruceDTO>();
 
-        var d1 = cuartos.First(c => c.Codigo == "D1");
-        var d2 = cuartos.First(c => c.Codigo == "D2");
-        var d3 = cuartos.First(c => c.Codigo == "D3");
-        var d4 = cuartos.First(c => c.Codigo == "D4");
+        CruceDTO d1 = cuartos.First(c => c.Codigo == "D1");
+        CruceDTO d2 = cuartos.First(c => c.Codigo == "D2");
+        CruceDTO d3 = cuartos.First(c => c.Codigo == "D3");
+        CruceDTO d4 = cuartos.First(c => c.Codigo == "D4");
 
         semifinales.Add(new CruceDTO
         {
@@ -389,8 +390,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         var partidosFinales = new List<CruceDTO>();
 
-        var s1 = semifinales.First(c => c.Codigo == "S1");
-        var s2 = semifinales.First(c => c.Codigo == "S2");
+        CruceDTO s1 = semifinales.First(c => c.Codigo == "S1");
+        CruceDTO s2 = semifinales.First(c => c.Codigo == "S2");
 
         partidosFinales.Add(new CruceDTO
         {
@@ -443,9 +444,9 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     public EquipoDTO? ObtenerCampeonActual()
     {
-        var partidos = _partidoServicios.ObtenerPartidos();
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
 
-        var final = partidos.FirstOrDefault(p => p.fase == Fase.Final);
+        PartidoDTO final = partidos.FirstOrDefault(p => p.fase == Fase.Final);
 
         if (final == null)
         {
@@ -464,7 +465,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         var clasificados = ObtenerClasificados(semillaCrucesFase);
 
-        var dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
+        List<CruceDTO> dieciseisavos = GenerarCrucesFase(clasificados, semillaCrucesFase);
 
         AgregarPartidosDieciseisavos(dieciseisavos);
 
@@ -473,15 +474,15 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private void AgregarPartidosDieciseisavos(List<CruceDTO> dieciseisavos)
     {
-        var partidos = _partidoServicios.ObtenerPartidos();
+        List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
 
         if (partidos.Any(p => p.fase == Fase.Dieciseisavos))
         {
             return;
         }
 
-        var estadios = ObtenerEstadiosDisponibles(partidos);
-        var fechaInicio = ObtenerFechaInicioDieciseisavos(partidos);
+        List<EstadioDTO> estadios = ObtenerEstadiosDisponibles(partidos);
+        DateTime fechaInicio = ObtenerFechaInicioDieciseisavos(partidos);
 
         for (int i = 0; i < dieciseisavos.Count; i++)
         {
@@ -538,7 +539,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private DateTime ObtenerFechaInicioDieciseisavos(List<PartidoDTO> partidos)
     {
-        var partidosGrupos = partidos
+        List<PartidoDTO> partidosGrupos = partidos
             .Where(p => p.fase == Fase.Grupos)
             .ToList();
 
@@ -547,7 +548,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             throw new ArgumentException("No se pueden generar partidos de dieciseisavos sin partidos de grupos.");
         }
 
-        var ultimaFechaGrupos = partidosGrupos
+        DateTime ultimaFechaGrupos = partidosGrupos
             .OrderByDescending(p => p.Fecha)
             .First()
             .Fecha;
@@ -609,7 +610,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private bool FaseCompleta(List<PartidoDTO> partidos, Fase fase, int cantidadEsperada)
     {
-        var partidosFase = partidos
+        List<PartidoDTO> partidosFase = partidos
             .Where(p => p.fase == fase)
             .ToList();
 
@@ -618,13 +619,13 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     }
     private void GenerarPartidosOctavos(List<PartidoDTO> partidos)
     {
-        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Dieciseisavos);
-        var estadios = ObtenerEstadiosDisponibles(partidos);
+        DateTime fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Dieciseisavos);
+        List<EstadioDTO> estadios = ObtenerEstadiosDisponibles(partidos);
 
         for (int i = 1; i <= 8; i++)
         {
-            var partidoA = ObtenerPartidoPorCodigo(partidos, Fase.Dieciseisavos, "A" + i);
-            var partidoB = ObtenerPartidoPorCodigo(partidos, Fase.Dieciseisavos, "B" + i);
+            PartidoDTO partidoA = ObtenerPartidoPorCodigo(partidos, Fase.Dieciseisavos, "A" + i);
+            PartidoDTO partidoB = ObtenerPartidoPorCodigo(partidos, Fase.Dieciseisavos, "B" + i);
 
             AgregarPartidoEliminatorio(
                 "C" + i,
@@ -637,16 +638,16 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     }
     private void GenerarPartidosCuartos(List<PartidoDTO> partidos)
     {
-        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Octavos);
-        var estadios = ObtenerEstadiosDisponibles(partidos);
+        DateTime fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Octavos);
+        List<EstadioDTO> estadios = ObtenerEstadiosDisponibles(partidos);
 
         for (int i = 1; i <= 4; i++)
         {
             int numeroLocal = (i * 2) - 1;
             int numeroVisitante = i * 2;
 
-            var partidoLocal = ObtenerPartidoPorCodigo(partidos, Fase.Octavos, "C" + numeroLocal);
-            var partidoVisitante = ObtenerPartidoPorCodigo(partidos, Fase.Octavos, "C" + numeroVisitante);
+            PartidoDTO partidoLocal = ObtenerPartidoPorCodigo(partidos, Fase.Octavos, "C" + numeroLocal);
+            PartidoDTO partidoVisitante = ObtenerPartidoPorCodigo(partidos, Fase.Octavos, "C" + numeroVisitante);
 
             AgregarPartidoEliminatorio(
                 "D" + i,
@@ -659,13 +660,13 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     }
     private void GenerarPartidosSemifinales(List<PartidoDTO> partidos)
     {
-        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Cuartos);
-        var estadios = ObtenerEstadiosDisponibles(partidos);
+        DateTime fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Cuartos);
+        List<EstadioDTO> estadios = ObtenerEstadiosDisponibles(partidos);
 
-        var d1 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D1");
-        var d2 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D2");
-        var d3 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D3");
-        var d4 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D4");
+        PartidoDTO d1 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D1");
+        PartidoDTO d2 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D2");
+        PartidoDTO d3 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D3");
+        PartidoDTO d4 = ObtenerPartidoPorCodigo(partidos, Fase.Cuartos, "D4");
 
         AgregarPartidoEliminatorio(
             "S1",
@@ -685,11 +686,11 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     }
     private void GenerarPartidosTercerPuestoYFinal(List<PartidoDTO> partidos)
     {
-        var fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Semifinal);
-        var estadios = ObtenerEstadiosDisponibles(partidos);
+        DateTime fechaInicio = ObtenerFechaInicioSiguienteFase(partidos, Fase.Semifinal);
+        List<EstadioDTO> estadios = ObtenerEstadiosDisponibles(partidos);
 
-        var s1 = ObtenerPartidoPorCodigo(partidos, Fase.Semifinal, "S1");
-        var s2 = ObtenerPartidoPorCodigo(partidos, Fase.Semifinal, "S2");
+        PartidoDTO s1 = ObtenerPartidoPorCodigo(partidos, Fase.Semifinal, "S1");
+        PartidoDTO s2 = ObtenerPartidoPorCodigo(partidos, Fase.Semifinal, "S2");
 
         AgregarPartidoEliminatorio(
             "TercerPuesto",
@@ -744,7 +745,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private DateTime ObtenerFechaInicioSiguienteFase(List<PartidoDTO> partidos, Fase faseAnterior)
     {
-        var ultimaFecha = partidos
+        DateTime ultimaFecha = partidos
             .Where(p => p.fase == faseAnterior)
             .OrderByDescending(p => p.Fecha)
             .First()
@@ -796,7 +797,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private List<CruceDTO> ConvertirPartidosACruces(List<PartidoDTO> partidos, Fase fase)
     {
-        var partidosFase = partidos
+        List<PartidoDTO> partidosFase = partidos
             .Where(p => p.fase == fase)
             .OrderBy(p => p.Fecha)
             .ToList();
@@ -813,7 +814,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private List<CruceDTO> ConvertirPartidosFinalesACruces(List<PartidoDTO> partidos)
     {
-        var partidosFinales = partidos
+        List<PartidoDTO> partidosFinales = partidos
             .Where(p => p.fase == Fase.Tercero || p.fase == Fase.Final)
             .OrderBy(p => p.Fecha)
             .ToList();
