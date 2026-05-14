@@ -309,4 +309,15 @@ public class PartidoServiciosTest
         PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
         Assert.AreNotEqual(partidoSimulado.golesLocal, partidoSimulado.golesVisitante);
     }
+    
+    [TestMethod]
+    public void SimularTodosLosPartidos_SiHayPendiente_LoMarcaComoJugado()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularTodosLosPartidos(12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
+    }
 }
