@@ -1077,6 +1077,11 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.AreEqual("Uruguay", campeon.nombre);
     }
+    [TestMethod]
+    public void ProcesarAvanceDelTorneo_SiNoHayPartidos_NoGeneraNada()
+    {
+        _crucesServicio.ProcesarAvanceDelTorneo();
 
-
+        Assert.AreEqual(0, _partidoServicios.ObtenerPartidos().Count);
+    }
 }
