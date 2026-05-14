@@ -903,7 +903,32 @@ public class CrucesSegundaFaseServicioTest
         _crucesServicio.ObtenerClasificados(123);
     }
     
-    
+    [TestMethod]
+    public void ObtenerRankingGrupo_SiPartidoEstaPendiente_NoSumaPuntos()
+    {
+        var equipoA = CrearEquipo("Equipo A");
+        var equipoB = CrearEquipo("Equipo B");
+        var estadio = CrearEstadio();
+
+        var partido = new PartidoDTO
+        {
+            Grupo = "A",
+            Fecha = new DateTime(2026, 06, 01),
+            Estadio = estadio,
+            equipoLocal = equipoA,
+            equipoVisitante = equipoB,
+            fase = Fase.Grupos,
+            estadoPartido = EstadoPartido.Pendiente
+        };
+
+        _partidoServicios.AgregarPartido(partido, equipoA, equipoB, estadio);
+
+        var ranking = _crucesServicio.ObtenerRankingGrupo("A", 123);
+
+        Assert.AreEqual(2, ranking.Count);
+        Assert.AreEqual(0, ranking[0].Puntos);
+        Assert.AreEqual(0, ranking[1].Puntos);
+    }
 
 
 }
