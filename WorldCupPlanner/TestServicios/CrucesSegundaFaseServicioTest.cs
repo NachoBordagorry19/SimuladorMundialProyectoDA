@@ -1122,4 +1122,86 @@ public class CrucesSegundaFaseServicioTest
         Assert.AreEqual(16, partidosDieciseisavos.Count);
         Assert.IsTrue(partidosDieciseisavos.All(p => p.estadoPartido == EstadoPartido.Pendiente));
     }
+    
+    [TestMethod]
+public void ProcesarAvanceDelTorneo_SiFasesEstanJugadas_GeneraFinalYTercerPuesto()
+{
+    var estadio = CrearEstadio();
+
+    for (int i = 1; i <= 8; i++)
+    {
+        AgregarPartido(
+            CrearEquipo("A" + i + " Local"),
+            CrearEquipo("A" + i + " Visitante"),
+            estadio,
+            2,
+            1,
+            "A" + i,
+            Fase.Dieciseisavos);
+
+        AgregarPartido(
+            CrearEquipo("B" + i + " Local"),
+            CrearEquipo("B" + i + " Visitante"),
+            estadio,
+            2,
+            1,
+            "B" + i,
+            Fase.Dieciseisavos);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var octavos = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Octavos)
+        .ToList();
+
+    Assert.AreEqual(8, octavos.Count);
+
+    foreach (var partido in octavos)
+    {
+        partido.golesLocal = 2;
+        partido.golesVisitante = 1;
+        _partidoServicios.ActualizarPartido(partido);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var cuartos = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Cuartos)
+        .ToList();
+
+    Assert.AreEqual(4, cuartos.Count);
+
+    foreach (var partido in cuartos)
+    {
+        partido.golesLocal = 2;
+        partido.golesVisitante = 1;
+        _partidoServicios.ActualizarPartido(partido);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var semifinales = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Semifinal)
+        .ToList();
+
+    Assert.AreEqual(2, semifinales.Count);
+
+    foreach (var partido in semifinales)
+    {
+        partido.golesLocal = 2;
+        partido.golesVisitante = 1;
+        _partidoServicios.ActualizarPartido(partido);
+    }
+
+    _crucesServicio.ProcesarAvanceDelTorneo();
+
+    var partidosFinales = _partidoServicios.ObtenerPartidos()
+        .Where(p => p.fase == Fase.Final || p.fase == Fase.Tercero)
+        .ToList();
+
+    Assert.AreEqual(2, partidosFinales.Count);
+    Assert.IsTrue(partidosFinales.Any(p => p.Grupo == "Final"));
+    Assert.IsTrue(partidosFinales.Any(p => p.Grupo == "TercerPuesto"));
+}
 }
