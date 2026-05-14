@@ -255,4 +255,15 @@ public class PartidoServiciosTest
 
         Assert.AreEqual(1, partidos.Count);
     }
+    
+    [TestMethod]
+    public void ObtenerEstadiosGruposYFases_DePartidos_RetornaDatos()
+    {
+        _partidoDTO.Grupo = "A";
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        Assert.AreEqual(1, _servicioPartido.ObtenerEstadiosDePartidos().Count);
+        Assert.AreEqual(1, _servicioPartido.ObtenerGruposDePartidos().Count);
+        Assert.AreEqual(1, _servicioPartido.ObtenerFasesDePartidos().Count);
+    }
 }
