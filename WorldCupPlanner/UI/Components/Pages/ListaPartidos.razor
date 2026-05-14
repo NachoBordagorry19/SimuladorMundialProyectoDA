@@ -90,9 +90,12 @@
                 Limpiar filtros
             </button>
 
-            <button class="wcp-btn-primary" @onclick="SimularTodosLosPartidos">
-                Simular partidos pendientes
-            </button>
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+            {
+                <button class="wcp-btn-primary" @onclick="SimularTodosLosPartidos">
+                    Simular partidos pendientes
+                </button>
+            }
         </div>
     </div>
 
