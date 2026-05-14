@@ -266,4 +266,23 @@ public class PartidoServiciosTest
         Assert.AreEqual(1, _servicioPartido.ObtenerGruposDePartidos().Count);
         Assert.AreEqual(1, _servicioPartido.ObtenerFasesDePartidos().Count);
     }
+    
+    [TestMethod]
+    public void ActualizarPartido_SiCambiaEstadio_SeActualiza()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _partidoDTO.Estadio = new EstadioDTO
+        {
+            Nombre = "Nuevo Estadio",
+            Ciudad = "Montevideo",
+            Descripcion = "Nuevo",
+            CapacidadLocativa = 60000
+        };
+
+        _servicioPartido.ActualizarPartido(_partidoDTO);
+
+        PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.AreEqual("Nuevo Estadio", partidoActualizado.Estadio.Nombre);
+    }
 }
