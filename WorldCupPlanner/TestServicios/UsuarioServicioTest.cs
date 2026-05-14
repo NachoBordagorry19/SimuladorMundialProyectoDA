@@ -287,4 +287,14 @@ public class UsuarioServicioTest
 
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
+    
+    [TestMethod]
+    public void ObtenerUsuario_SiEmailTieneEspacios_LoEncuentra()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        UsuarioDTO usuario = _servicioUsuario.ObtenerUsuario("  a@gmail.com  ");
+
+        Assert.AreEqual("Fede", usuario.Nombre);
+    }
 }
