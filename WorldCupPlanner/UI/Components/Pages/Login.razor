@@ -1,6 +1,7 @@
 @page "/"
 @page "/login"
 @rendermode InteractiveServer
+@using Dominio.Enums
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using UI.Estado
@@ -49,6 +50,26 @@
 @code {
     private LoginModel login = new LoginModel();
     private string? mensajeError;
+    
+    protected override void OnInitialized()
+    {
+        bool existeAdmin = ServicioUsuario
+            .ObtenerUsuarios()
+            .Any(usuario => usuario.Email == "admin@admin.com");
+
+        if (!existeAdmin)
+        {
+            ServicioUsuario.AgregarUsuario(new UsuarioDTO()
+            {
+                Nombre = "Admin",
+                Apellido = "Prueba",
+                Email = "admin@admin.com",
+                FechaNacimiento = new DateTime(2000, 1, 1),
+                Contraseña = "Admin123!",
+                Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
+            });
+        }
+    }
 
     private void IniciarSesion()
     {
