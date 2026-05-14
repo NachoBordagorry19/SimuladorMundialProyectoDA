@@ -895,6 +895,15 @@ public class CrucesSegundaFaseServicioTest
 
         Assert.AreEqual("Uruguay", campeon.nombre);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerClasificados_SiFaltanPartidosJugados_LanzaExcepcion()
+    {
+        _crucesServicio.ObtenerClasificados(123);
+    }
+    
+    
 
 
 }
