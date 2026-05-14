@@ -15,6 +15,10 @@
                 <p class="wcp-subtitle">Listado de equipos registrados en el sistema.</p>
             </div>
 
+            @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+            {
+                <div class="alert alert-danger wcp-alert">Solo un administrador puede gestionar equipos.</div>
+            }
             @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
             {
                 <NavLink href="/AgregarEquipo" class="wcp-btn-primary">Agregar Equipo</NavLink>

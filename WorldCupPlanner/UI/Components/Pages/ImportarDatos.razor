@@ -13,6 +13,11 @@
     <div class="wcp-card">
         <h1 class="wcp-title">Importación de Equipos</h1>
         <p class="wcp-subtitle">Importar equipos desde un archivo CSV.</p>
+        
+        @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
+        {
+            <div class="alert alert-danger wcp-alert">Solo un editor puede gestionar importacion de datos.</div>
+        }
 
         @if (!string.IsNullOrEmpty(mensaje))
         {
