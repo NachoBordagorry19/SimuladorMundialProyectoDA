@@ -1,0 +1,75 @@
+@page "/auditoria"
+@using Dominio.Enums
+@using Dominio.Clases
+@using Repositorio.Interfaces
+@using UI.Estado
+@inject UsuarioSesion Sesion
+@inject IAuditoriaRepositorio AuditoriaRepositorio
+@using System.Linq
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Auditoría</h1>
+                <p class="wcp-subtitle">Listado de logs registrados en el sistema.</p>
+            </div>
+        </div>
+    </div>
+    
+    @if (Sesion.UsuarioActual == null || !Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+    {
+        <div class="wcp-card mt-4">
+            <div class="alert alert-danger wcp-alert mb-0">Solo un administrador puede ver y gestionar los logs.</div>
+        </div>
+    }
+    else
+    {
+        @if (_auditoriaLista != null && _auditoriaLista.Count > 0)
+        {
+            <div class="wcp-card mt-4">
+                <table class="wcp-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha y Hora</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @* Agregué un OrderByDescending para que los logs más nuevos salgan arriba *@
+              @foreach (var log in _auditoriaLista.OrderByDescending(l => l.FechaHora))
+            {
+                <tr>
+                    <td>@log.FechaHora.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>@log.Usuario</td>
+                    <td>@log.Accion</td>
+                    <td>@log.Detalle</td>
+                    
+                </tr>
+            }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="wcp-card mt-4">
+                <p class="text-center text-muted">No hay registros de auditoría todavía.</p>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private List<Auditoria> _auditoriaLista = new List<Auditoria>();
+
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual != null && Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
+        {
+            _auditoriaLista = AuditoriaRepositorio.ObtenerTodosLosRegistros();
+        }
+    }
+}
