@@ -330,4 +330,42 @@ public class UsuarioServicioTest
         Assert.AreEqual(1, eliminables.Count);
         Assert.AreEqual("b@gmail.com", eliminables[0].Email);
     }
+    
+    [TestMethod]
+    public void EliminarUsuario_ConEmailsConfirmados_EliminaUsuario()
+    {
+        _servicioUsuario.AgregarUsuario(_usuarioDTO);
+
+        _servicioUsuario.EliminarUsuario("a@gmail.com", "A@GMAIL.COM", "admin@gmail.com");
+
+        Assert.AreEqual(0, _servicioUsuario.ObtenerUsuarios().Count);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarUsuario_SiNoSeleccionaUsuario_LanzaExcepcion()
+    {
+        _servicioUsuario.EliminarUsuario("", "a@gmail.com", "admin@gmail.com");
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarUsuario_SiNoConfirmaEmail_LanzaExcepcion()
+    {
+        _servicioUsuario.EliminarUsuario("a@gmail.com", "", "admin@gmail.com");
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarUsuario_SiConfirmacionNoCoincide_LanzaExcepcion()
+    {
+        _servicioUsuario.EliminarUsuario("a@gmail.com", "otro@gmail.com", "admin@gmail.com");
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarUsuario_SiIntentaEliminarseASiMismo_LanzaExcepcion()
+    {
+        _servicioUsuario.EliminarUsuario("a@gmail.com", "a@gmail.com", "A@GMAIL.COM");
+    }
 }
