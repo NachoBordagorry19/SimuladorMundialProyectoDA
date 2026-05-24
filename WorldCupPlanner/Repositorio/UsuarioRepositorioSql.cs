@@ -15,4 +15,10 @@ public class UsuarioRepositorioSql
     {
         return _contexto.Usuarios.ToList();
     }
+
+    public void AgregarUsuario(Usuario usuario)
+    {
+        _contexto.Usuarios.Add(usuario);
+        _contexto.SaveChanges();
+    }
 }
