@@ -21,4 +21,10 @@ public class UsuarioRepositorioSql
         _contexto.Usuarios.Add(usuario);
         _contexto.SaveChanges();
     }
+
+    public void EliminarUsuario(Usuario usuario)
+    {
+        _contexto.Usuarios.Remove(usuario);
+        _contexto.SaveChanges();
+    }
 }
