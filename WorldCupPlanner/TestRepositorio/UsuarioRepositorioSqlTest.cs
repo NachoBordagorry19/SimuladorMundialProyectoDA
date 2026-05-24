@@ -39,4 +39,14 @@ public class UsuarioRepositorioSqlTest
         List<Usuario> usuarios = _usuarioRepositorioSql.ObtenerUsuarios();
         Assert.AreEqual(1, usuarios.Count);
     }
+
+    [TestMethod]
+    public void EliminarUsuario_SiUsuarioValidoSeElimina()
+    {
+        _usuarioRepositorioSql.AgregarUsuario(_usuario);
+        List<Usuario> usuarios = _usuarioRepositorioSql.ObtenerUsuarios();
+        Assert.AreEqual(1, usuarios.Count);
+        _usuarioRepositorioSql.EliminarUsuario(_usuario);
+        Assert.AreEqual(0,usuarios.Count);
+    }
 }
