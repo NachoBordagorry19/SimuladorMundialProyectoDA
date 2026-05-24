@@ -32,4 +32,10 @@ public class UsuarioRepositorioSql
     {
         return _contexto.Usuarios.ToList().Where(filtro).FirstOrDefault();
     }
+
+    public void ActualizarUsuario(Usuario usuario)
+    {
+        _contexto.Usuarios.Update(usuario);
+        _contexto.SaveChanges();
+    }
 }
