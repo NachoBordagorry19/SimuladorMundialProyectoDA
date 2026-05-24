@@ -50,4 +50,12 @@ public class UsuarioRepositorioSqlTest
         usuarios = _usuarioRepositorioSql.ObtenerUsuarios();
         Assert.AreEqual(0, usuarios.Count);
     }
+
+    [TestMethod]
+    public void ObtenerUsuario()
+    {
+        _usuarioRepositorioSql.AgregarUsuario(_usuario);
+        Usuario usuarioPrueba = _usuarioRepositorioSql.ObtenerUsuario(u => u.Email == "a@gmail.com");
+        Assert.AreEqual("a@gmail.com", usuarioPrueba.Email);
+    }
 }
