@@ -7,7 +7,7 @@ public class Auditoria
     public string Usuario { get; set; } = string.Empty;
     public string Accion { get; set; } = string.Empty;
     public string Detalle { get; set; } = string.Empty;
-
+    
     public Auditoria()
     {
         FechaHora = DateTime.Now;

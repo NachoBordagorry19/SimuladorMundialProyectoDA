@@ -4,8 +4,7 @@ namespace Dominio.Clases;
 
 public class Partido
 {
-    private static int _contadorId = 0;
-    private int _id;
+    public int Id { get; set; }
     private DateTime _fecha;
     private Estadio _estadio = null!;
     private Equipo _local = null!;
@@ -15,10 +14,9 @@ public class Partido
     private int _golesLocal;
     private int _golesVisitante;
 
-    public int Id
+    public Partido()
     {
-        get => _id;
-        set => _id = value;
+        
     }
 
     public DateTime Fecha
@@ -147,9 +145,6 @@ public class Partido
     }
     public Partido(DateTime fecha, Estadio estadio, Equipo local, Equipo visitante, Fase fase, int golesLocal, int golesVisitante)
     {
-        _contadorId++;
-        Id = _contadorId;
-
         Fecha = fecha;
         Estadio = estadio;
         Local = local;
