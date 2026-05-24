@@ -27,4 +27,9 @@ public class UsuarioRepositorioSql
         _contexto.Usuarios.Remove(usuario);
         _contexto.SaveChanges();
     }
+
+    public Usuario? ObtenerUsuario(Func<Usuario, bool> filtro)
+    {
+        return _contexto.Usuarios.ToList().Where(filtro).FirstOrDefault();
+    }
 }
