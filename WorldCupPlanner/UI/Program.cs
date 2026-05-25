@@ -17,11 +17,12 @@ builder.Services.AddDbContext<SqlContexto>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(name: "DefaultConnection"),
         providerOptions => providerOptions.EnableRetryOnFailure()));
 
+
 builder.Services.AddScoped<SqlContexto>();
 
-builder.Services.AddSingleton<UsuarioRepositorioSql>();
+builder.Services.AddScoped<UsuarioRepositorioSql>();
 
-builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
 builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorio>();
 builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorio>();
 builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
