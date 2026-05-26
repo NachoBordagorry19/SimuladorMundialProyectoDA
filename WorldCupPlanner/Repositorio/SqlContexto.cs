@@ -7,6 +7,7 @@ namespace Repositorio;
 public class SqlContexto: DbContext
 {
     public DbSet<Usuario> Usuarios { get; set; }
+    public DbSet<Equipo> Equipos { get; set; }
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {
@@ -23,5 +24,9 @@ public class SqlContexto: DbContext
                     .Select(r => Enum.Parse<Rol>(r))
                     .ToList()
             );
+        
+        modelBuilder.Entity<Equipo>()
+            .Property(e => e.Confederacion)
+            .HasConversion<string>();
     }
 }

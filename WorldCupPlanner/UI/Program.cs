@@ -22,10 +22,11 @@ builder.Services.AddScoped<SqlContexto>();
 
 builder.Services.AddScoped<BaseDeDatosEnMemoria>();
 builder.Services.AddScoped<UsuarioRepositorioSql>();
+builder.Services.AddScoped<EquipoRepositorioSql>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorioSql>();
+builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorioSql>();
 
 
-builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorio>();
 builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorio>();
 builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
 builder.Services.AddScoped<IAuditoriaRepositorio, AuditoriaRepositorio>();
