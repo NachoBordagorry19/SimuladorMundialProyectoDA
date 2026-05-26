@@ -36,4 +36,14 @@ public class EstadioRepositorioSqlTest
         List<Estadio> estadios = _estadioRepositorioSql.ObtenerEstadios();
         Assert.AreEqual(1, estadios.Count);
     }
+
+    [TestMethod]
+    public void EliminarEstadio()
+    {
+        _estadioRepositorioSql.AgregarEstadio(_estadio);
+        List<Estadio> estadiosIniciales = _estadioRepositorioSql.ObtenerEstadios();
+        _estadioRepositorioSql.EliminarEstadio(_estadio);
+        List<Estadio> estadiosFinales = _estadioRepositorioSql.ObtenerEstadios();
+        Assert.AreEqual(estadiosFinales.Count, estadiosIniciales.Count);
+    }
 }
