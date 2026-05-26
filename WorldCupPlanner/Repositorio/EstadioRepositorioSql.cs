@@ -32,4 +32,10 @@ public class EstadioRepositorioSql
     {
         return _contexto.Estadios.ToList().Where(filtro).FirstOrDefault();
     }
+
+    public void ActualizarEstadio(Estadio estadio)
+    {
+        _contexto.Estadios.Update(estadio);
+        _contexto.SaveChanges();
+    }
 }
