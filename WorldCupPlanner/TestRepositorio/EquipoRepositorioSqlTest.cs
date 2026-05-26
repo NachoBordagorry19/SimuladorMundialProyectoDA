@@ -29,4 +29,12 @@ public class EquipoRepositorioSqlTest
         List<Equipo> equipos = _equipoRepositorioSql.ObtenerEquipos();
         Assert.AreEqual(0, equipos.Count);
     }
+
+    [TestMethod]
+    public void AgregarEquipo()
+    {
+        _equipoRepositorioSql.AgregarEquipo(_equipo);
+        List<Equipo> equipos = _equipoRepositorioSql.ObtenerEquipos();
+        Assert.AreEqual(1, equipos.Count);
+    }
 }
