@@ -16,4 +16,10 @@ public class EquipoRepositorioSql
     {
         return _contexto.Equipos.ToList();
     }
+
+    public void AgregarEquipo(Equipo equipo)
+    {
+        _contexto.Equipos.Add(equipo);
+        _contexto.SaveChanges();
+    }
 }
