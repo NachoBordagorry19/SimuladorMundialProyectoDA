@@ -55,4 +55,14 @@ public class EquipoRepositorioSqlTest
         Equipo equipoPrueba = _equipoRepositorioSql.ObtenerEquipo(e => e.Nombre == "Nacional");
         Assert.AreEqual(_equipo.Nombre, equipoPrueba.Nombre);
     }
+
+    [TestMethod]
+    public void ActualizarEquipo_SeActalizaCorrectamente()
+    {
+        _equipoRepositorioSql.AgregarEquipo(_equipo);
+        _equipo.Confederacion = Confederacion.CONMEBOL;
+        _equipoRepositorioSql.ActualizarEquipo(_equipo);
+        Equipo equipoPrueba = _equipoRepositorioSql.ObtenerEquipo(e => e.Nombre == "Nacional");
+        Assert.AreEqual(_equipo.Confederacion, equipoPrueba.Confederacion);
+    }
 }
