@@ -46,4 +46,12 @@ public class EstadioRepositorioSqlTest
         List<Estadio> estadiosFinales = _estadioRepositorioSql.ObtenerEstadios();
         Assert.AreNotEqual(estadiosFinales.Count, estadiosIniciales.Count);
     }
+
+    [TestMethod]
+    public void ObtenerEstadio_SeObtieneCorrectamente()
+    {
+        _estadioRepositorioSql.AgregarEstadio(_estadio);
+        Estadio estadioPrueba = _estadioRepositorioSql.ObtenerEstadio(e => e.Nombre == "Allianz Arena");
+        Assert.AreEqual(_estadio.Nombre, estadioPrueba.Nombre);
+    }
 }
