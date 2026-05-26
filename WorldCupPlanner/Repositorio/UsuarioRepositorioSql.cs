@@ -1,8 +1,9 @@
 using Dominio.Clases;
+using Repositorio.Interfaces;
 
 namespace Repositorio;
 
-public class UsuarioRepositorioSql
+public class UsuarioRepositorioSql : IUsuarioRepositorio
 {
     private SqlContexto _contexto;
 

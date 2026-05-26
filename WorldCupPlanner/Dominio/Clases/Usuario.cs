@@ -8,7 +8,7 @@ namespace Dominio.Clases;
 
 public class Usuario
 {
-    public int _id { get; set; }
+    private int _id;
     
     public int Id
     {
