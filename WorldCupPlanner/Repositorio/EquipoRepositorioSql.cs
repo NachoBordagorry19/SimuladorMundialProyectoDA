@@ -33,4 +33,10 @@ public class EquipoRepositorioSql
     {
         return _contexto.Equipos.ToList().Where(filtro).FirstOrDefault();
     }
+
+    public void ActualizarEquipo(Equipo equipo)
+    {
+        _contexto.Equipos.Update(equipo);
+        _contexto.SaveChanges();
+    }
 }
