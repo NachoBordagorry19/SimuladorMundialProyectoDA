@@ -97,4 +97,15 @@ public class EquipoTest
         int goles = -20;
         equipo.GolesAFavor = goles;
     }
+
+    [TestMethod]
+    public void CrearEquipo_ConBanderaBase64_SeGuardaCorrectamente()
+    {
+        Equipo equipo = new Equipo("Argentina", Confederacion.CONMEBOL, 1800);
+        string banderaBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAUA";
+
+        equipo.BanderaBase64 = banderaBase64;
+
+        Assert.AreEqual(banderaBase64, equipo.BanderaBase64);
+    }
 }

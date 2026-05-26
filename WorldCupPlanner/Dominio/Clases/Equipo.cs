@@ -78,6 +78,7 @@ public class Equipo
         get => _diferenciaDeGoles;
         set => _diferenciaDeGoles = value;
     }
+    
 
     public bool EsVacio(string textoATestear)
     {
