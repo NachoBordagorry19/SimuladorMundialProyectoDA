@@ -47,4 +47,12 @@ public class EquipoRepositorioSqlTest
         List<Equipo> equiposFinales = _equipoRepositorioSql.ObtenerEquipos();
         Assert.AreNotEqual(equiposFinales.Count, equiposIniciales.Count);
     }
+
+    [TestMethod]
+    public void ObtenerEquipo_SeObtieneCorrectamente()
+    {
+        _equipoRepositorioSql.AgregarEquipo(_equipo);
+        Equipo equipoPrueba = _equipoRepositorioSql.ObtenerEquipo(e => e.Nombre == "Nacional");
+        Assert.AreEqual(_equipo.Nombre, equipoPrueba.Nombre);
+    }
 }
