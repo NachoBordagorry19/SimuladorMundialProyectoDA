@@ -21,13 +21,14 @@ builder.Services.AddDbContext<SqlContexto>(options =>
 builder.Services.AddScoped<SqlContexto>();
 
 builder.Services.AddScoped<BaseDeDatosEnMemoria>();
+
 builder.Services.AddScoped<UsuarioRepositorioSql>();
 builder.Services.AddScoped<EquipoRepositorioSql>();
+builder.Services.AddScoped<EstadioRepositorioSql>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorioSql>();
 builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorioSql>();
+builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorioSql>();
 
-
-builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorio>();
 builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
 builder.Services.AddScoped<IAuditoriaRepositorio, AuditoriaRepositorio>();
 
