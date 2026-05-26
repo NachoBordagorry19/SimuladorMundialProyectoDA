@@ -1,4 +1,5 @@
 using Dominio.Clases;
+using Dominio.Enums;
 using Repositorio;
 
 namespace TestRepositorio;
