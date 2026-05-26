@@ -27,4 +27,9 @@ public class EstadioRepositorioSql
         _contexto.Estadios.Remove(estadio);
         _contexto.SaveChanges();
     }
+
+    public Estadio ObtenerEstadio(Func<Estadio, bool> filtro)
+    {
+        return _contexto.Estadios.ToList().Where(filtro).FirstOrDefault();
+    }
 }
