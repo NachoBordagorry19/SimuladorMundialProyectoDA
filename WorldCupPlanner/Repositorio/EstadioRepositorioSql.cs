@@ -15,4 +15,10 @@ public class EstadioRepositorioSql
     {
         return _contexto.Estadios.ToList();
     }
+
+    public void AgregarEstadio(Estadio estadio)
+    {
+        _contexto.Estadios.Add(estadio);
+        _contexto.SaveChanges();
+    }
 }
