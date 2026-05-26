@@ -5,6 +5,7 @@ using Servicios.Clases;
 using Servicios.Interfaces;
 using UI.Estado;
 using Dominio.Enums;
+using Microsoft.EntityFrameworkCore;
 using Servicios.Modelo;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,9 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<BaseDeDatosEnMemoria>();
+builder.Services.AddDbContext<SqlContexto>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString(name: "DefaultConnection"),
+        providerOptions => providerOptions.EnableRetryOnFailure()));
 
-builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+builder.Services.AddScoped<SqlContexto>();
+
+builder.Services.AddScoped<BaseDeDatosEnMemoria>();
+builder.Services.AddScoped<UsuarioRepositorioSql>();
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorioSql>();
+
+
 builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorio>();
 builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorio>();
 builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();

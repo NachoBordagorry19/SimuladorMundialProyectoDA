@@ -1,0 +1,42 @@
+using Dominio.Clases;
+using Repositorio.Interfaces;
+
+namespace Repositorio;
+
+public class UsuarioRepositorioSql : IUsuarioRepositorio
+{
+    private SqlContexto _contexto;
+
+    public UsuarioRepositorioSql(SqlContexto contexto)
+    {
+        _contexto = contexto;
+    }
+
+    public List<Usuario> ObtenerUsuarios()
+    {
+        return _contexto.Usuarios.ToList();
+    }
+
+    public void AgregarUsuario(Usuario usuario)
+    {
+        _contexto.Usuarios.Add(usuario);
+        _contexto.SaveChanges();
+    }
+
+    public void EliminarUsuario(Usuario usuario)
+    {
+        _contexto.Usuarios.Remove(usuario);
+        _contexto.SaveChanges();
+    }
+
+    public Usuario? ObtenerUsuario(Func<Usuario, bool> filtro)
+    {
+        return _contexto.Usuarios.ToList().Where(filtro).FirstOrDefault();
+    }
+
+    public void ActualizarUsuario(Usuario usuario)
+    {
+        _contexto.Usuarios.Update(usuario);
+        _contexto.SaveChanges();
+    }
+}

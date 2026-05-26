@@ -8,6 +8,13 @@ namespace Dominio.Clases;
 
 public class Usuario
 {
+    private int _id;
+    
+    public int Id
+    {
+        get => _id;
+        set => _id = value;
+    }
     private string _nombre = string.Empty;
     private string _apellido = string.Empty;
     private string _email = string.Empty;

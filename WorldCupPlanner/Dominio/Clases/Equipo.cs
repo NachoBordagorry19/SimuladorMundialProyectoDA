@@ -3,6 +3,7 @@ using Dominio.Enums;
 
 public class Equipo
 {
+    public int id { get; set; }
     private string _nombre = string.Empty;
     private Confederacion _confederacion;
     private int _rankingFifa;
@@ -86,6 +87,11 @@ public class Equipo
             vacio = false;
         }
         return vacio;
+    }
+
+    public Equipo()
+    {
+        
     }
     public Equipo(string nombre, Confederacion confederacion, int rankingFifa)
     {
