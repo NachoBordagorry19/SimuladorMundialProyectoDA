@@ -24,5 +24,9 @@ public class SqlContexto: DbContext
                     .Select(r => Enum.Parse<Rol>(r))
                     .ToList()
             );
+        
+        modelBuilder.Entity<Equipo>()
+            .Property(e => e.Confederacion)
+            .HasConversion<string>();
     }
 }

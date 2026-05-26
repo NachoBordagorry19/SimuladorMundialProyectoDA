@@ -3,7 +3,7 @@ using Repositorio.Interfaces;
 
 namespace Repositorio;
 
-public class EquipoRepositorioSql
+public class EquipoRepositorioSql:IEquipoRepositorio
 {
     private SqlContexto _contexto;
 
