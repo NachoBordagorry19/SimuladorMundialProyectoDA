@@ -1,8 +1,9 @@
 using Dominio.Clases;
+using Repositorio.Interfaces;
 
 namespace Repositorio;
 
-public class EstadioRepositorioSql
+public class EstadioRepositorioSql:IEstadioRepositorio
 {
     private SqlContexto _contexto;
 
@@ -28,14 +29,15 @@ public class EstadioRepositorioSql
         _contexto.SaveChanges();
     }
 
-    public Estadio ObtenerEstadio(Func<Estadio, bool> filtro)
+    public Estadio ObtenerEstadioPorNombre(string nombre)
     {
-        return _contexto.Estadios.ToList().Where(filtro).FirstOrDefault();
+        return _contexto.Estadios.FirstOrDefault(e => e.Nombre == nombre);
     }
 
-    public void ActualizarEstadio(Estadio estadio)
+    public bool ActualizarEstadio(Estadio estadio)
     {
         _contexto.Estadios.Update(estadio);
         _contexto.SaveChanges();
+        return true;
     }
 }

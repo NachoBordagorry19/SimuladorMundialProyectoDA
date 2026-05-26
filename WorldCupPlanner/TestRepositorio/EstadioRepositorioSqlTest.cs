@@ -51,7 +51,7 @@ public class EstadioRepositorioSqlTest
     public void ObtenerEstadio_SeObtieneCorrectamente()
     {
         _estadioRepositorioSql.AgregarEstadio(_estadio);
-        Estadio estadioPrueba = _estadioRepositorioSql.ObtenerEstadio(e => e.Nombre == "Allianz Arena");
+        Estadio estadioPrueba = _estadioRepositorioSql.ObtenerEstadioPorNombre("Allianz Arena");
         Assert.AreEqual(_estadio.Nombre, estadioPrueba.Nombre);
     }
 
@@ -60,9 +60,10 @@ public class EstadioRepositorioSqlTest
     {
         _estadioRepositorioSql.AgregarEstadio(_estadio);
         _estadio.Ciudad = "Berlin";
-        _estadioRepositorioSql.ActualizarEstadio(_estadio);
-        Estadio estadioPrueba = _estadioRepositorioSql.ObtenerEstadio(e => e.Nombre == "Allianz Arena");
+        bool seActualizo = _estadioRepositorioSql.ActualizarEstadio(_estadio);
+        Estadio estadioPrueba = _estadioRepositorioSql.ObtenerEstadioPorNombre("Allianz Arena");
         Assert.AreEqual(_estadio.Nombre, estadioPrueba.Nombre);
         Assert.AreEqual(_estadio.Ciudad, estadioPrueba.Ciudad);
+        Assert.AreEqual(seActualizo, true);
     }
 }
