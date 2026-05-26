@@ -37,4 +37,14 @@ public class EquipoRepositorioSqlTest
         List<Equipo> equipos = _equipoRepositorioSql.ObtenerEquipos();
         Assert.AreEqual(1, equipos.Count);
     }
+
+    [TestMethod]
+    public void EliminarUsuario()
+    {
+        _equipoRepositorioSql.AgregarEquipo(_equipo);
+        List<Equipo> equiposIniciales = _equipoRepositorioSql.ObtenerEquipos();
+        _equipoRepositorioSql.EliminarEquipo(_equipo);
+        List<Equipo> equiposFinales = _equipoRepositorioSql.ObtenerEquipos();
+        Assert.AreNotEqual(equiposFinales.Count, equiposIniciales.Count);
+    }
 }
