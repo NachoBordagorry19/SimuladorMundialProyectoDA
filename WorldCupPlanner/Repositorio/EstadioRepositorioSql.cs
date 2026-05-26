@@ -21,4 +21,10 @@ public class EstadioRepositorioSql
         _contexto.Estadios.Add(estadio);
         _contexto.SaveChanges();
     }
+
+    public void EliminarEstadio(Estadio estadio)
+    {
+        _contexto.Estadios.Remove(estadio);
+        _contexto.SaveChanges();
+    }
 }
