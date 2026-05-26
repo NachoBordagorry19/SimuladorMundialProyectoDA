@@ -39,7 +39,7 @@ public class EquipoRepositorioSqlTest
     }
 
     [TestMethod]
-    public void EliminarUsuario()
+    public void EliminarEquipo()
     {
         _equipoRepositorioSql.AgregarEquipo(_equipo);
         List<Equipo> equiposIniciales = _equipoRepositorioSql.ObtenerEquipos();

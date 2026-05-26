@@ -22,4 +22,10 @@ public class EquipoRepositorioSql
         _contexto.Equipos.Add(equipo);
         _contexto.SaveChanges();
     }
+
+    public void EliminarEquipo(Equipo equipo)
+    {
+        _contexto.Equipos.Remove(equipo);
+        _contexto.SaveChanges();
+    }
 }
