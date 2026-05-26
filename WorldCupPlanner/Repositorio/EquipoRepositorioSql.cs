@@ -28,4 +28,9 @@ public class EquipoRepositorioSql
         _contexto.Equipos.Remove(equipo);
         _contexto.SaveChanges();
     }
+
+    public Equipo ObtenerEquipo(Func<Equipo, bool> filtro)
+    {
+        return _contexto.Equipos.ToList().Where(filtro).FirstOrDefault();
+    }
 }
