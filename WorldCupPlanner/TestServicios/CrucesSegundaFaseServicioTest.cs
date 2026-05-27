@@ -1161,6 +1161,7 @@ public void ProcesarAvanceDelTorneo_SiFasesEstanJugadas_GeneraFinalYTercerPuesto
     {
         partido.golesLocal = 2;
         partido.golesVisitante = 1;
+        partido.estadoPartido = EstadoPartido.Jugado;
         _partidoServicios.ActualizarPartido(partido);
     }
 
@@ -1176,6 +1177,7 @@ public void ProcesarAvanceDelTorneo_SiFasesEstanJugadas_GeneraFinalYTercerPuesto
     {
         partido.golesLocal = 2;
         partido.golesVisitante = 1;
+        partido.estadoPartido = EstadoPartido.Jugado;
         _partidoServicios.ActualizarPartido(partido);
     }
 
@@ -1191,6 +1193,7 @@ public void ProcesarAvanceDelTorneo_SiFasesEstanJugadas_GeneraFinalYTercerPuesto
     {
         partido.golesLocal = 2;
         partido.golesVisitante = 1;
+        partido.estadoPartido = EstadoPartido.Jugado;
         _partidoServicios.ActualizarPartido(partido);
     }
 
