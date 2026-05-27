@@ -10,6 +10,7 @@ public class Equipo
     private int _puntos;
     private int _golesAFavor;
     private int _diferenciaDeGoles;
+    private string _banderaBase64 = string.Empty;
     public String Nombre
     {
         get => _nombre;
@@ -78,7 +79,12 @@ public class Equipo
         get => _diferenciaDeGoles;
         set => _diferenciaDeGoles = value;
     }
-    
+
+    public string BanderaBase64
+    {
+        get => _banderaBase64;
+        set => _banderaBase64 = value ?? string.Empty;
+    }
 
     public bool EsVacio(string textoATestear)
     {
