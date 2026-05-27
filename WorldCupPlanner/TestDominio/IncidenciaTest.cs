@@ -12,10 +12,10 @@ public class IncidenciaTest
         int equipoId = 1;
         var tipo = TipoIncidencia.TarjetaAmarilla;
 
-        var incidencia = new Incidencia { PartidoId = partidoId, EquipoId = equipoId, Tipo = tipo };
+        var incidencia = new Incidencia(partidoId, equipoId, tipo);
 
-        Assert.AreEqual(partidoId, incidencia.PartidoId);
-        Assert.AreEqual(equipoId, incidencia.EquipoId);
-        Assert.AreEqual(tipo, incidencia.Tipo);
+        Assert.AreEqual(partidoId, incidencia._idPartido);
+        Assert.AreEqual(equipoId, incidencia._idEquipo);
+        Assert.AreEqual(tipo, incidencia._tipoIncidencia);
     }
 }
