@@ -30,16 +30,22 @@ public class PartidoRepositorioSql : IPartidoRepositorio
 
     public Partido? ObtenerPartidoPorId(int id)
     {
-        throw new NotImplementedException();
+        return _contexto.Partidos
+            .Include(p => p.Local)
+            .Include(p => p.Visitante)
+            .Include(p => p.Estadio)
+            .FirstOrDefault(p => p.Id == id);
     }
 
     public void EliminarPartido(Partido partido)
     {
-        throw new NotImplementedException();
+        _contexto.Partidos.Remove(partido);
+        _contexto.SaveChanges();
     }
 
     public void ActualizarPartido(Partido partido)
     {
-        throw new NotImplementedException();
+        _contexto.Partidos.Update(partido);
+        _contexto.SaveChanges();
     }
 }
