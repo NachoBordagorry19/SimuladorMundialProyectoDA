@@ -50,4 +50,31 @@ public class PartidoRepositorioSqlTest
         List<Partido> partidos = _partidoRepositorioSql.ObtenerPartidos();
         Assert.AreEqual(1, partidos.Count);
     }
+
+    [TestMethod]
+    public void EliminarPartido_SeEliminaCorrectamente()
+    {
+        _partidoRepositorioSql.AgregarPartido(_partido);
+        _partidoRepositorioSql.EliminarPartido(_partido);
+        List<Partido> partidos = _partidoRepositorioSql.ObtenerPartidos();
+        Assert.AreEqual(0, partidos.Count);
+    }
+
+    [TestMethod]
+    public void ObtenerPartidoPorId_DevuelvePartidoCorrecto()
+    {
+        _partidoRepositorioSql.AgregarPartido(_partido);
+        Partido? resultado = _partidoRepositorioSql.ObtenerPartidoPorId(_partido.Id);
+        Assert.AreEqual(_partido.Id, resultado!.Id);
+    }
+
+    [TestMethod]
+    public void ActualizarPartido_SeActualizaCorrectamente()
+    {
+        _partidoRepositorioSql.AgregarPartido(_partido);
+        _partido.GolesLocal = 3;
+        _partidoRepositorioSql.ActualizarPartido(_partido);
+        Partido? resultado = _partidoRepositorioSql.ObtenerPartidoPorId(_partido.Id);
+        Assert.AreEqual(3, resultado!.GolesLocal);
+    }
 }
