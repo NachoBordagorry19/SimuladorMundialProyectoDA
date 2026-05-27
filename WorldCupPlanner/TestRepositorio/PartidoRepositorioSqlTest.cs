@@ -23,8 +23,8 @@ public class PartidoRepositorioSqlTest
         _contexto.Partidos.RemoveRange(_contexto.Partidos);
         _contexto.SaveChanges();
 
-        _local = new Equipo("Argentina", Confederacion.CONMEBOL, 1);
-        _visitante = new Equipo("Brasil", Confederacion.CONMEBOL, 5);
+        _local = new Equipo("Argentina", Confederacion.CONMEBOL, 400);
+        _visitante = new Equipo("Brasil", Confederacion.CONMEBOL, 500);
         _estadio = new Estadio("Monumental", "Buenos Aires", "Estadio de Argentina", 84567);
 
         _contexto.Equipos.Add(_local);
