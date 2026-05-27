@@ -15,11 +15,6 @@
         <h1 class="wcp-title">Fixture</h1>
         <p class="wcp-subtitle">Generación y visualización del fixture y cruces del torneo.</p>
         
-        @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
-        { 
-            <div class="alert alert-danger wcp-alert">Solo un editor puede gestionar fixtures.</div>
-        }
-
         @if (!string.IsNullOrWhiteSpace(mensajeError))
         {
             <div class="alert alert-danger wcp-alert">@mensajeError</div>
@@ -58,6 +53,7 @@
                     Generar Cruces
                 </button>
             }
+
             <NavLink href="/equipos" class="wcp-btn-secondary">
                 Ir a Equipos
             </NavLink>
@@ -311,10 +307,12 @@
 </div>
 
 @code {
+
     protected override void OnInitialized()
     {
         ActualizarCuadro();
     }
+
     private int semillaFixture = 123;
     private int semillaCrucesFase = 456;
     private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
@@ -356,7 +354,7 @@
             ServicioCruces.GenerarCuadroSegundaFase(semillaCrucesFase);
 
             ActualizarCuadro();
-            
+
             mensajeExito = "Cruces generados correctamente.";
         }
         catch (Exception ex)
@@ -390,6 +388,7 @@
 
         return cruce.ReferenciaVisitante;
     }
+
     private List<PartidoDTO> ObtenerPartidosGrupo()
     {
         if (string.IsNullOrWhiteSpace(EstadoFixture.GrupoSeleccionado))
@@ -412,7 +411,7 @@
 
         return ServicioCruces.ObtenerRankingGrupo(EstadoFixture.GrupoSeleccionado, semillaCrucesFase);
     }
-    
+
     private void ActualizarCuadro()
     {
         try

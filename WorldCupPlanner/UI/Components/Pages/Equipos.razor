@@ -52,19 +52,21 @@
         }
     </div>
 
-    @if (equipos != null && equipos.Count > 0)
+    @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador) || Sesion.UsuarioActual.Roles.Contains(Rol.Periodista))
     {
-        <div class="wcp-card mt-4">
-            <table class="wcp-table">
-                <thead>
+        @if (equipos != null && equipos.Count > 0)
+        {
+            <div class="wcp-card mt-4">
+                <table class="wcp-table">
+                    <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Confederación</th>
                         <th>Ranking FIFA</th>
                         <th>Acciones</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     @foreach (var equipo in equipos)
                     {
                         <tr>
@@ -80,15 +82,16 @@
                             </td>
                         </tr>
                     }
-                </tbody>
-            </table>
-        </div>
-    }
-    else
-    {
-        <div class="wcp-card mt-4">
-            <p class="text-center text-muted mb-0">No hay equipos registrados</p>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="wcp-card mt-4">
+                <p class="text-center text-muted mb-0">No hay equipos registrados</p>
+            </div>
+        }
     }
 </div>
 
