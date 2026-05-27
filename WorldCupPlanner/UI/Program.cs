@@ -29,7 +29,8 @@ builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorioSql>();
 builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorioSql>();
 builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorioSql>();
 
-builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorio>();
+builder.Services.AddScoped<PartidoRepositorioSql>();
+builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorioSql>();
 builder.Services.AddScoped<IAuditoriaRepositorio, AuditoriaRepositorio>();
 
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
