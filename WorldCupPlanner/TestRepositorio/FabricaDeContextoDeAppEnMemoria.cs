@@ -8,7 +8,7 @@ public class FabricaDeContextoDeAppEnMemoria
     public SqlContexto CrearDbContexto()
     {
         var opcionesBuilder = new DbContextOptionsBuilder<SqlContexto>();
-        opcionesBuilder.UseInMemoryDatabase("TestingDB_");
+        opcionesBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
         return new SqlContexto(opcionesBuilder.Options);
     }
 }
