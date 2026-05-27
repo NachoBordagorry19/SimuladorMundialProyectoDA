@@ -42,4 +42,12 @@ public class PartidoRepositorioSqlTest
         List<Partido> partidos = _partidoRepositorioSql.ObtenerPartidos();
         Assert.AreEqual(0, partidos.Count);
     }
+
+    [TestMethod]
+    public void AgregarPartido_SeAgregaCorrectamente()
+    {
+        _partidoRepositorioSql.AgregarPartido(_partido);
+        List<Partido> partidos = _partidoRepositorioSql.ObtenerPartidos();
+        Assert.AreEqual(1, partidos.Count);
+    }
 }
