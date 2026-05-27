@@ -24,7 +24,8 @@ public class PartidoRepositorioSql : IPartidoRepositorio
 
     public void AgregarPartido(Partido partido)
     {
-        throw new NotImplementedException();
+        _contexto.Partidos.Add(partido);
+        _contexto.SaveChanges();
     }
 
     public Partido? ObtenerPartidoPorId(int id)
