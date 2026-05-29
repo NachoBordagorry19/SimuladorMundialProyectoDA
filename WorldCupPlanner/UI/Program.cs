@@ -46,6 +46,8 @@ builder.Services.AddScoped<UsuarioSesion>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<FixtureEstado>();
 
+builder.Services.AddScoped<AuditoriaRepositorioSql>();
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
