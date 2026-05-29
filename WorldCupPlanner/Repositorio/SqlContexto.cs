@@ -32,5 +32,6 @@ public class SqlContexto: DbContext
         modelBuilder.Entity<Equipo>()
             .Property(e => e.Confederacion)
             .HasConversion<string>();
+        
     }
 }

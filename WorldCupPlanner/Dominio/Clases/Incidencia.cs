@@ -4,7 +4,7 @@ namespace Dominio.Clases;
 
 public class Incidencia
 {
-    public int _id { get; set; }
+    public int Id { get; set; }
     public int _idPartido { get; set; }
     public int _idEquipo { get; set; }
     public TipoIncidencia _tipoIncidencia { get; set; }
