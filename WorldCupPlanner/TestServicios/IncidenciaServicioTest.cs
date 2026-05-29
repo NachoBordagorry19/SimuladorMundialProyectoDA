@@ -62,6 +62,6 @@ public class IncidenciaServicioTest
     [ExpectedException(typeof(ArgumentException))]
     public void AgregarIncidenciaSiEsNull_LanzoExcepcion()
     {
-        _incidenciaRepositorio.AgregarIncidencia(null);
+        _incidenciaServicio.AgregarIncidencia(null);
     }
 }

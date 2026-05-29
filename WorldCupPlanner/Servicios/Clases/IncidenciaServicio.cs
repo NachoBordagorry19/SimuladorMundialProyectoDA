@@ -15,6 +15,11 @@ public class IncidenciaServicio
 
     public void AgregarIncidencia(IncidenciaDTO incidenciaDTO)
     {
+        if (incidenciaDTO == null)
+        {
+            throw new ArgumentException("La incidencia no puede ser nula.");
+        }
+
         if (incidenciaDTO.Id > 0)
         {
             var incidenciaExistente = _incidenciaRepositorio.ObtenerIncidenciaPorId(incidenciaDTO.Id);
