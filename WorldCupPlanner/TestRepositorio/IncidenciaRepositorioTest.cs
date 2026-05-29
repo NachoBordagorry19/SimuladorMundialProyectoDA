@@ -37,4 +37,14 @@ public class IncidenciaRepositorioTest
         List<Incidencia> incidenciasPorPartido = _incidenciaRepositorio.ObtenerIncidencias(_incidencia._idPartido);
         Assert.AreEqual(1,incidenciasPorPartido.Count);
     }
+
+    [TestMethod]
+    public void EliminarIncidencia_SeEliminaCorrectamente()
+    {
+        _incidenciaRepositorio.AgregarIncidencia(_incidencia);
+        List<Incidencia> incidenciasPorPartidoIniciales = _incidenciaRepositorio.ObtenerIncidencias(_incidencia._idPartido);
+        _incidenciaRepositorio.EliminarIncidencia(_incidencia.Id);
+        List<Incidencia> incidenciasPorPartidoFinales = _incidenciaRepositorio.ObtenerIncidencias(_incidencia._idPartido);
+        Assert.AreNotEqual(incidenciasPorPartidoIniciales.Count,incidenciasPorPartidoFinales.Count);
+    }
 }
