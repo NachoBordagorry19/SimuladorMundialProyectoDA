@@ -17,4 +17,11 @@ public class AuditoriaRepositorioSqlTest
         _auditoriaRepositorioSql = new AuditoriaRepositorioSql(_contexto);
         _contexto.SaveChanges();
     }
+
+    [TestMethod]
+    public void ObtenerTodosLosRegistros_SiNoHayRegistros_RetornaListaVacia()
+    {
+        var registros = _auditoriaRepositorioSql.ObtenerTodosLosRegistros();
+        Assert.AreEqual(0, registros.Count);
+    }
 }
