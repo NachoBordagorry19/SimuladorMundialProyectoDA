@@ -68,7 +68,7 @@ public class IncidenciaServicioTest
     [TestMethod]
     public void ObtenerIncidenciasPorPartido_SeObtienenCorrectamente()
     {
-        List<Incidencia> incidencias = _incidenciaServicio.ObtenerIncidenciasPorPartido(_incidenciaDTO.IdPartido);
-        Assert.AreEqual(0, incidencias.Count);
+        List<Incidencia> incidencias = _incidenciaServicio.ObtenerIncidenciasPorPartido(2);
+        Assert.AreEqual(1, incidencias.Count);
     }
 }

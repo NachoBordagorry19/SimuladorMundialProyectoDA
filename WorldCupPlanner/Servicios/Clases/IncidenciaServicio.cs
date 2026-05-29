@@ -33,6 +33,11 @@ public class IncidenciaServicio
         _incidenciaRepositorio.AgregarIncidencia(incidencia);
     }
 
+    public List<Incidencia> ObtenerIncidenciasPorPartido(int idPartido)
+    {
+        return _incidenciaRepositorio.ObtenerIncidencias(idPartido);
+    }
+
     public Incidencia IncidenciaDTOAEntidad(IncidenciaDTO incidenciaDTO)
     {
         var Incidencia = new Incidencia(
