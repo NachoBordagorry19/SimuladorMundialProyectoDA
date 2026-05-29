@@ -7,9 +7,13 @@ namespace Repositorio;
 public class SqlContexto: DbContext
 {
     public DbSet<Usuario> Usuarios { get; set; }
+    
     public DbSet<Equipo> Equipos { get; set; }
     
     public DbSet<Estadio> Estadios { get; set; }
+    
+    public DbSet<Incidencia> Incidencias { get; set; }
+    
     public DbSet<Partido> Partidos { get; set; }
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
@@ -31,6 +35,7 @@ public class SqlContexto: DbContext
         modelBuilder.Entity<Equipo>()
             .Property(e => e.Confederacion)
             .HasConversion<string>();
+
 
         modelBuilder.Entity<Partido>()
             .Ignore(p => p.Vencedor);
