@@ -10,6 +10,8 @@ public class SqlContexto: DbContext
     public DbSet<Equipo> Equipos { get; set; }
     
     public DbSet<Estadio> Estadios { get; set; }
+    
+    public DbSet<Incidencia> Incidencias { get; set; }
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {

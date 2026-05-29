@@ -16,4 +16,9 @@ public class Incidencia
         _tipoIncidencia = tipo;
     }
 
+    public Incidencia()
+    {
+        
+    }
+
 }
