@@ -64,6 +64,25 @@ public class SqlContexto: DbContext
             .HasForeignKey("EstadioId")
             .OnDelete(DeleteBehavior.Restrict);
         
-        
+        modelBuilder.Entity<Auditoria>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.FechaHora)
+                .IsRequired();
+
+            entity.Property(a => a.Usuario)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasDefaultValue(string.Empty);
+
+            entity.Property(a => a.Accion)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasDefaultValue(string.Empty);
+
+            entity.Property(a => a.Detalle)
+                .HasDefaultValue(string.Empty);
+        });
     }
 }
