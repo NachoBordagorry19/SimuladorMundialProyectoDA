@@ -9,16 +9,19 @@ public class SqlContexto: DbContext
     public DbSet<Usuario> Usuarios { get; set; }
     
     public DbSet<Equipo> Equipos { get; set; }
-    
     public DbSet<Estadio> Estadios { get; set; }
     
     public DbSet<Incidencia> Incidencias { get; set; }
     
     public DbSet<Partido> Partidos { get; set; }
+    public DbSet<Auditoria> Auditorias { get; set; }
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {
-
+        if (!Database.IsInMemory())
+        {
+            Database.Migrate();
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -65,5 +68,26 @@ public class SqlContexto: DbContext
             .WithMany()
             .HasForeignKey("EstadioId")
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Auditoria>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.FechaHora)
+                .IsRequired();
+
+            entity.Property(a => a.Usuario)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasDefaultValue(string.Empty);
+
+            entity.Property(a => a.Accion)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasDefaultValue(string.Empty);
+
+            entity.Property(a => a.Detalle)
+                .HasDefaultValue(string.Empty);
+        });
     }
 }

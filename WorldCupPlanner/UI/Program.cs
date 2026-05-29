@@ -30,8 +30,8 @@ builder.Services.AddScoped<IEquipoRepositorio, EquipoRepositorioSql>();
 builder.Services.AddScoped<IEstadioRepositorio, EstadioRepositorioSql>();
 
 builder.Services.AddScoped<PartidoRepositorioSql>();
-builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorioSql>();
-builder.Services.AddScoped<IAuditoriaRepositorio, AuditoriaRepositorio>();
+ builder.Services.AddScoped<IPartidoRepositorio, PartidoRepositorioSql>();
+ builder.Services.AddScoped<IAuditoriaRepositorio, AuditoriaRepositorioSql>();
 
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
 builder.Services.AddScoped<IServicioAuditoria, ServicioAuditoria>();
@@ -45,6 +45,8 @@ builder.Services.AddScoped<IServicioCrucesSegundaFase, CrucesSegundaFaseServicio
 builder.Services.AddScoped<UsuarioSesion>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<FixtureEstado>();
+
+builder.Services.AddScoped<AuditoriaRepositorioSql>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
