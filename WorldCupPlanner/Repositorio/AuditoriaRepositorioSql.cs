@@ -13,7 +13,8 @@ public class AuditoriaRepositorioSql : IAuditoriaRepositorio
     }
     public void AgregarRegistro(Auditoria registro)
     {
-        throw new NotImplementedException();
+        _contexto.Auditorias.Add(registro);
+        _contexto.SaveChanges();
     }
 
     public List<Auditoria> ObtenerTodosLosRegistros()
