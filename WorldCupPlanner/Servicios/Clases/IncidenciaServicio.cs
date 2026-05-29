@@ -42,6 +42,11 @@ public class IncidenciaServicio
         return _incidenciaRepositorio.ObtenerIncidencias(idPartido);
     }
 
+    public void EliminarIncidencia(int idIncidencia)
+    {
+        _incidenciaRepositorio.EliminarIncidencia(idIncidencia);
+    }
+
     public Incidencia IncidenciaDTOAEntidad(IncidenciaDTO incidenciaDTO)
     {
         var Incidencia = new Incidencia(

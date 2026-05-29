@@ -82,10 +82,11 @@ public class IncidenciaServicioTest
     [TestMethod]
     public void EliminarIncidencia_SeEliminaCorrectamente()
     {
-        _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
         List<Incidencia> incidenciasIniciales = _incidenciaServicio.ObtenerIncidenciasPorPartido(2);
-        _incidenciaServicio.EliminarIncidencia(_incidenciaDTO);
+        int countInicial = incidenciasIniciales.Count;
+        _incidenciaServicio.EliminarIncidencia(5);
         List<Incidencia> incidenciasFinales = _incidenciaServicio.ObtenerIncidenciasPorPartido(2);
-        Assert.AreNotEqual(incidenciasIniciales.Count, incidenciasFinales.Count);
+        int countFinal = incidenciasFinales.Count;
+        Assert.AreEqual(countInicial - 1, countFinal);
     }
 }
