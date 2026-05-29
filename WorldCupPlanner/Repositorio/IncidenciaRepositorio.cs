@@ -22,4 +22,11 @@ public class IncidenciaRepositorio
         _contexto.Incidencias.Add(incidencia);
         _contexto.SaveChanges();
     }
+
+    public void EliminarIncidencia(int id)
+    {
+        var incidencia = _contexto.Incidencias.Find(id);
+        _contexto.Incidencias.Remove(incidencia);
+        _contexto.SaveChanges();
+    }
 }
