@@ -71,4 +71,11 @@ public class IncidenciaServicioTest
         List<Incidencia> incidencias = _incidenciaServicio.ObtenerIncidenciasPorPartido(2);
         Assert.AreEqual(1, incidencias.Count);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ObtenerIncidenciasPorPartidoSiNegativo_LanzoExcepcion()
+    {
+        List<Incidencia> incidencias = _incidenciaServicio.ObtenerIncidenciasPorPartido(-2);
+    }
 }
