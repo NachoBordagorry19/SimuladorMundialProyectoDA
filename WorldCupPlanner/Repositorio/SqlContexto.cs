@@ -63,5 +63,7 @@ public class SqlContexto: DbContext
             .WithMany()
             .HasForeignKey("EstadioId")
             .OnDelete(DeleteBehavior.Restrict);
+        
+        
     }
 }

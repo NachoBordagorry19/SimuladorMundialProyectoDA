@@ -9,7 +9,7 @@ public class AuditoriaRepositorioSql : IAuditoriaRepositorio
 
     public AuditoriaRepositorioSql(SqlContexto contexto)
     {
-        
+        _contexto = contexto;
     }
     public void AgregarRegistro(Auditoria registro)
     {
@@ -18,6 +18,8 @@ public class AuditoriaRepositorioSql : IAuditoriaRepositorio
 
     public List<Auditoria> ObtenerTodosLosRegistros()
     {
-        throw new NotImplementedException();
+        return _contexto.Auditorias
+            .OrderByDescending(a => a.FechaHora)
+            .ToList();
     }
 }
