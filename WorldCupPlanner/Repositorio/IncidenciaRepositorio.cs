@@ -30,4 +30,9 @@ public class IncidenciaRepositorio : IIncidenciaRepositorio
         _contexto.Incidencias.Remove(incidencia);
         _contexto.SaveChanges();
     }
+
+    public Incidencia ObtenerIncidenciaPorId(int id)
+    {
+        return _contexto.Incidencias.Find(id);
+    }
 }

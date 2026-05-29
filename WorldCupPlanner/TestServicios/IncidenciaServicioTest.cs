@@ -26,10 +26,15 @@ public class IncidenciaServicioTest
         _contexto.SaveChanges();
         _incidenciaRepositorio = new IncidenciaRepositorio(_contexto);
         _incidenciaServicio = new IncidenciaServicio(_incidenciaRepositorio);
+        
         _incidencia = new Incidencia(2, 2, TipoIncidencia.TarjetaAmarilla);
+        _incidencia.Id = 5; 
+        _contexto.Incidencias.Add(_incidencia);
+        _contexto.SaveChanges();
+        
         _incidenciaDTO = new IncidenciaDTO()
         {
-            Id = _incidencia.Id,
+            Id = 1, 
             IdEquipo = 2,
             IdPartido = 2,
             TipoIncidencia = TipoIncidencia.TarjetaAmarilla
@@ -39,14 +44,16 @@ public class IncidenciaServicioTest
     [TestMethod]
     public void AgregarIncidenciSiNoExiste_SeAgregarCorrectamente()
     {
+        _incidenciaDTO.Id = 0;
         _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
-        Assert.AreEqual(2,_incidenciaDTO.IdEquipo);
+        Assert.AreEqual(2, _incidenciaDTO.IdEquipo);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void AgregarIncidenciaSiExiste_LanzoExcepcion()
     {
+        _incidenciaDTO.Id = 5; 
         _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
         _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
     }

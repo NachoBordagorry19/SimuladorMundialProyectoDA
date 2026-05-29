@@ -15,6 +15,15 @@ public class IncidenciaServicio
 
     public void AgregarIncidencia(IncidenciaDTO incidenciaDTO)
     {
+        if (incidenciaDTO.Id > 0)
+        {
+            var incidenciaExistente = _incidenciaRepositorio.ObtenerIncidenciaPorId(incidenciaDTO.Id);
+            if (incidenciaExistente != null)
+            {
+                throw new ArgumentException("La incidencia con ese Id ya existe.");
+            }
+        }
+
         Incidencia incidencia = IncidenciaDTOAEntidad(incidenciaDTO);
         _incidenciaRepositorio.AgregarIncidencia(incidencia);
     }

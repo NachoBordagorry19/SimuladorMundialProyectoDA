@@ -7,4 +7,5 @@ public interface IIncidenciaRepositorio
     public List<Incidencia> ObtenerIncidencias(int idPartido);
     public void AgregarIncidencia(Incidencia incidencia);
     public void EliminarIncidencia(int  idIncidencia);
+    public Incidencia ObtenerIncidenciaPorId(int idIncidencia);
 }
