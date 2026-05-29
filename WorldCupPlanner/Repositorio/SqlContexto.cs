@@ -14,7 +14,10 @@ public class SqlContexto: DbContext
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {
-
+        if (Database.IsInMemory())
+        {
+            Database.Migrate();
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
