@@ -29,4 +29,12 @@ public class IncidenciaRepositorioTest
         List<Incidencia> incidenciasPorPartido = _incidenciaRepositorio.ObtenerIncidencias(_incidencia._idPartido);
         Assert.AreEqual(0,incidenciasPorPartido.Count);
     }
+
+    [TestMethod]
+    public void AgregarIncidencia_SeAgregaCorrectamente()
+    {
+        _incidenciaRepositorio.AgregarIncidencia(_incidencia);
+        List<Incidencia> incidenciasPorPartido = _incidenciaRepositorio.ObtenerIncidencias(_incidencia._idPartido);
+        Assert.AreEqual(1,incidenciasPorPartido.Count);
+    }
 }
