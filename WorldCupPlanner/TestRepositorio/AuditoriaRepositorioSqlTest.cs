@@ -43,4 +43,22 @@ public class AuditoriaRepositorioSqlTest
         Assert.AreEqual("admin@gmail.com", registros[0].Usuario);
         Assert.AreEqual("Alta usuario", registros[0].Accion);
     }
+    
+    [TestMethod]
+    public void ObtenerTodosLosRegistros_RetornaCopiaDeLaLista()
+    {
+        _auditoriaRepositorioSql.AgregarRegistro(new Auditoria
+        {
+            Usuario = "admin@gmail.com",
+            Accion = "Alta usuario",
+            Detalle = "Se agregó un usuario"
+        });
+
+        var registros = _auditoriaRepositorioSql.ObtenerTodosLosRegistros();
+        registros.Clear();
+
+        var registrosOriginales = _auditoriaRepositorioSql.ObtenerTodosLosRegistros();
+
+        Assert.AreEqual(1, registrosOriginales.Count);
+    }
 }
