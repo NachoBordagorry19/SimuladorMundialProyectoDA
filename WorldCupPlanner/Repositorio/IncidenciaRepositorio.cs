@@ -16,4 +16,10 @@ public class IncidenciaRepositorio
     {
         return _contexto.Incidencias.Where(i => i._idPartido == idPartido).ToList();
     }
+
+    public void AgregarIncidencia(Incidencia incidencia)
+    {
+        _contexto.Incidencias.Add(incidencia);
+        _contexto.SaveChanges();
+    }
 }
