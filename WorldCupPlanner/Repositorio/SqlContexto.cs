@@ -7,15 +7,18 @@ namespace Repositorio;
 public class SqlContexto: DbContext
 {
     public DbSet<Usuario> Usuarios { get; set; }
+    
     public DbSet<Equipo> Equipos { get; set; }
     
     public DbSet<Estadio> Estadios { get; set; }
     
     public DbSet<Incidencia> Incidencias { get; set; }
+    
+    public DbSet<Partido> Partidos { get; set; }
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {
-        
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,10 +31,39 @@ public class SqlContexto: DbContext
                     .Select(r => Enum.Parse<Rol>(r))
                     .ToList()
             );
-        
+
         modelBuilder.Entity<Equipo>()
             .Property(e => e.Confederacion)
             .HasConversion<string>();
-        
+
+
+        modelBuilder.Entity<Partido>()
+            .Ignore(p => p.Vencedor);
+
+        modelBuilder.Entity<Partido>()
+            .Property(p => p.Fase)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Partido>()
+            .Property(p => p.Estado)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Partido>()
+            .HasOne(p => p.Local)
+            .WithMany()
+            .HasForeignKey("LocalId")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Partido>()
+            .HasOne(p => p.Visitante)
+            .WithMany()
+            .HasForeignKey("VisitanteId")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Partido>()
+            .HasOne(p => p.Estadio)
+            .WithMany()
+            .HasForeignKey("EstadioId")
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
