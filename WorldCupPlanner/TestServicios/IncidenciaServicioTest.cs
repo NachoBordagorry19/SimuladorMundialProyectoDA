@@ -57,4 +57,11 @@ public class IncidenciaServicioTest
         _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
         _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarIncidenciaSiEsNull_LanzoExcepcion()
+    {
+        _incidenciaRepositorio.AgregarIncidencia(null);
+    }
 }
