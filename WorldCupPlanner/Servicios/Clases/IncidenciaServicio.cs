@@ -48,6 +48,11 @@ public class IncidenciaServicio
         {
             throw new ArgumentException("El id de incidencia no debe ser menor a 0");
         }
+        var incidenciaExistente = _incidenciaRepositorio.ObtenerIncidenciaPorId(idIncidencia);
+        if (incidenciaExistente == null)
+        {
+            throw new ArgumentException("La incidencia no existe.");
+        }
         _incidenciaRepositorio.EliminarIncidencia(idIncidencia);
     }
 
