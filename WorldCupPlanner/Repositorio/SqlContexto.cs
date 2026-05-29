@@ -14,7 +14,7 @@ public class SqlContexto: DbContext
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {
-        if (Database.IsInMemory())
+        if (!Database.IsInMemory())
         {
             Database.Migrate();
         }
