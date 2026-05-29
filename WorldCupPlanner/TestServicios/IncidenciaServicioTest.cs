@@ -78,4 +78,14 @@ public class IncidenciaServicioTest
     {
         List<Incidencia> incidencias = _incidenciaServicio.ObtenerIncidenciasPorPartido(-2);
     }
+
+    [TestMethod]
+    public void EliminarIncidencia_SeEliminaCorrectamente()
+    {
+        _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
+        List<Incidencia> incidenciasIniciales = _incidenciaServicio.ObtenerIncidenciasPorPartido(2);
+        _incidenciaServicio.EliminarIncidencia(_incidenciaDTO);
+        List<Incidencia> incidenciasFinales = _incidenciaServicio.ObtenerIncidenciasPorPartido(2);
+        Assert.AreNotEqual(incidenciasIniciales.Count, incidenciasFinales.Count);
+    }
 }
