@@ -2,6 +2,7 @@ using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio;
 using Repositorio.Interfaces;
+using Servicios.Clases;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -23,8 +24,10 @@ public class IncidenciaServicioTest
         _contexto = _contextoFabrica.CrearDbContexto();
         _contexto.Incidencias.RemoveRange(_contexto.Incidencias);
         _contexto.SaveChanges();
-        _incidencia = new Incidencia();
-        _incidenciaDTO = new  IncidenciaDTO()
+        _incidenciaRepositorio = new IncidenciaRepositorio(_contexto);
+        _incidenciaServicio = new IncidenciaServicio(_incidenciaRepositorio);
+        _incidencia = new Incidencia(2, 2, TipoIncidencia.TarjetaAmarilla);
+        _incidenciaDTO = new IncidenciaDTO()
         {
             Id = _incidencia.Id,
             IdEquipo = 2,
