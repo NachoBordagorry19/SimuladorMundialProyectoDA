@@ -42,4 +42,12 @@ public class IncidenciaServicioTest
         _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
         Assert.AreEqual(2,_incidenciaDTO.IdEquipo);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AgregarIncidenciaSiExiste_LanzoExcepcion()
+    {
+        _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
+        _incidenciaServicio.AgregarIncidencia(_incidenciaDTO);
+    }
 }
