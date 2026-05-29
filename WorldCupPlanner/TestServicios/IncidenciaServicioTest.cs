@@ -89,4 +89,11 @@ public class IncidenciaServicioTest
         int countFinal = incidenciasFinales.Count;
         Assert.AreEqual(countInicial - 1, countFinal);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarIncidenciaSiIdMenorA0_LanzoExcecpion()
+    {
+        _incidenciaServicio.EliminarIncidencia(-2);
+    }
 }
