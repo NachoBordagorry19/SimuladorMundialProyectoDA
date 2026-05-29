@@ -1,9 +1,10 @@
 using Dominio.Clases;
 using Microsoft.Data.SqlClient;
+using Repositorio.Interfaces;
 
 namespace Repositorio;
 
-public class IncidenciaRepositorio
+public class IncidenciaRepositorio : IIncidenciaRepositorio
 {
     private SqlContexto _contexto;
 
