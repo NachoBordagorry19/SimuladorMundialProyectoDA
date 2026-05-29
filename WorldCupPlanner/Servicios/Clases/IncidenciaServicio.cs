@@ -35,6 +35,10 @@ public class IncidenciaServicio
 
     public List<Incidencia> ObtenerIncidenciasPorPartido(int idPartido)
     {
+        if (idPartido < 0)
+        {
+            throw new ArgumentException("El id de partido no debe ser menor a 0");
+        }
         return _incidenciaRepositorio.ObtenerIncidencias(idPartido);
     }
 
