@@ -44,6 +44,10 @@ public class IncidenciaServicio
 
     public void EliminarIncidencia(int idIncidencia)
     {
+        if (idIncidencia < 0)
+        {
+            throw new ArgumentException("El id de incidencia no debe ser menor a 0");
+        }
         _incidenciaRepositorio.EliminarIncidencia(idIncidencia);
     }
 
