@@ -64,4 +64,11 @@ public class IncidenciaServicioTest
     {
         _incidenciaServicio.AgregarIncidencia(null);
     }
+
+    [TestMethod]
+    public void ObtenerIncidenciasPorPartido_SeObtienenCorrectamente()
+    {
+        List<Incidencia> incidencias = _incidenciaServicio.ObtenerIncidenciasPorPartido(_incidenciaDTO.IdPartido);
+        Assert.AreEqual(0, incidencias.Count);
+    }
 }
