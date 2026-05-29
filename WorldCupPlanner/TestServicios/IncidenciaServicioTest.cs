@@ -96,4 +96,11 @@ public class IncidenciaServicioTest
     {
         _incidenciaServicio.EliminarIncidencia(-2);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void EliminarIncidenciaSiNoExiste_LanzoExcecpion()
+    {
+        _incidenciaServicio.EliminarIncidencia(10);
+    }
 }
