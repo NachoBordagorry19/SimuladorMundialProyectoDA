@@ -288,6 +288,10 @@ public class PartidoServicios : IServicioPartido
         {
             partido.incidenciaEquipoLocal = new List<TipoIncidencia>(dto.incidenciaEquipoLocal);
         }
+        if (dto.incidenciaEquipoVisitante != null)
+        {
+            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(dto.incidenciaEquipoVisitante);
+        }
         return partido;
     }
 
