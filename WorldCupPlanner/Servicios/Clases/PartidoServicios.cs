@@ -26,9 +26,23 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido no puede ser nulo porfavor ingrese partido valido");
         }
 
-        var partido = PartidoDTOAEntidad(partidoDto);
-
+        var estadioEntidad = EstadioDTOAEntidad(estadio);
+        var localEntidad = EquipoDTOAEntidad(equipoLocal);
+        var visitanteEntidad = EquipoDTOAEntidad(equipoVisitante);
+        var fecha = partidoDto.Fecha == default ? DateTime.UtcNow : partidoDto.Fecha;
+        
+        var partido = new Partido(fecha, estadioEntidad, localEntidad, visitanteEntidad, partidoDto.fase, partidoDto.golesLocal, partidoDto.golesVisitante);
+        
         partido.Grupo = partidoDto.Grupo;
+        
+        if (partidoDto.incidenciaEquipoLocal != null && partidoDto.incidenciaEquipoLocal.Count > 0)
+        {
+            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDto.incidenciaEquipoLocal);
+        }
+        if (partidoDto.incidenciaEquipoVisitante != null && partidoDto.incidenciaEquipoVisitante.Count > 0)
+        {
+            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDto.incidenciaEquipoVisitante);
+        }
 
         if (partidoDto.estadoPartido == EstadoPartido.Jugado)
         {
@@ -272,7 +286,9 @@ public class PartidoServicios : IServicioPartido
             fase = partido.Fase,
             estadoPartido = partido.Estado,
             golesLocal = partido.GolesLocal,
-            golesVisitante = partido.GolesVisitante
+            golesVisitante = partido.GolesVisitante,
+            incidenciaEquipoLocal = new List<TipoIncidencia>(partido.incidenciaEquipoLocal ?? new List<TipoIncidencia>()),
+            incidenciaEquipoVisitante = new List<TipoIncidencia>(partido.incidenciaEquipoVisitante ?? new List<TipoIncidencia>())
         };
     }
 
@@ -398,6 +414,6 @@ public class PartidoServicios : IServicioPartido
                partido.estadoPartido == EstadoPartido.Jugado &&
                partido.golesLocal == partido.golesVisitante;
     }
-    
-    
+
+
 }
