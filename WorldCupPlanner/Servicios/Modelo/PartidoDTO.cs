@@ -15,4 +15,5 @@ public class PartidoDTO
     public EstadoPartido estadoPartido { get; set; }
     public int golesLocal { get; set; }
     public int golesVisitante { get; set; }
+    public List<TipoIncidencia> incidenciaEquipoLocal { get; set; }
 }

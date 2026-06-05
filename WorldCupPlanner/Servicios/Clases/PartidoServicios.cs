@@ -26,15 +26,7 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido no puede ser nulo porfavor ingrese partido valido");
         }
 
-        var partido = new Partido(
-            partidoDto.Fecha == default ? DateTime.UtcNow : partidoDto.Fecha,
-            EstadioDTOAEntidad(estadio),
-            EquipoDTOAEntidad(equipoLocal),
-            EquipoDTOAEntidad(equipoVisitante),
-            partidoDto.fase,
-            partidoDto.golesLocal,
-            partidoDto.golesVisitante
-        );
+        var partido = PartidoDTOAEntidad(partidoDto);
 
         partido.Grupo = partidoDto.Grupo;
 
@@ -292,6 +284,10 @@ public class PartidoServicios : IServicioPartido
         var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
         var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
         partido.Grupo = dto.Grupo;
+        if (dto.incidenciaEquipoLocal != null)
+        {
+            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(dto.incidenciaEquipoLocal);
+        }
         return partido;
     }
 
@@ -398,4 +394,6 @@ public class PartidoServicios : IServicioPartido
                partido.estadoPartido == EstadoPartido.Jugado &&
                partido.golesLocal == partido.golesVisitante;
     }
+    
+    
 }

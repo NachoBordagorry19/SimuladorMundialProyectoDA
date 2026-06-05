@@ -322,9 +322,10 @@ public class PartidoServiciosTest
     }
 
     [TestMethod]
-    public void AgregarIncidencia_SeAgregaIncidencia()
+    public void AgregarPartido_SeAgregaPartidoConIncidencia()
     {
-        _partidoDTO.incidenciaEquipoLocal = TipoIncidencia.TarjetaAmarilla;
+        _partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>();
+        _partidoDTO.incidenciaEquipoLocal.Add(TipoIncidencia.TarjetaAmarilla);
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
     }
 }
