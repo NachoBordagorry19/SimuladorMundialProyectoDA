@@ -320,4 +320,11 @@ public class PartidoServiciosTest
         PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
         Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
     }
+
+    [TestMethod]
+    public void AgregarIncidencia_SeAgregaIncidencia()
+    {
+        _partidoDTO.incidenciaEquipoLocal = TipoIncidencia.TarjetaAmarilla;
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+    }
 }

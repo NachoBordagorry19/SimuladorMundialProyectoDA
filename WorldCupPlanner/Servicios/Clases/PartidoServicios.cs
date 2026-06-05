@@ -398,6 +398,4 @@ public class PartidoServicios : IServicioPartido
                partido.estadoPartido == EstadoPartido.Jugado &&
                partido.golesLocal == partido.golesVisitante;
     }
-
-
 }
