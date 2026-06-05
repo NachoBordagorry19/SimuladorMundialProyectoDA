@@ -14,6 +14,7 @@ public class Partido
     private EstadoPartido _estado;
     private int _golesLocal;
     private int _golesVisitante;
+    
 
     public Partido()
     {
