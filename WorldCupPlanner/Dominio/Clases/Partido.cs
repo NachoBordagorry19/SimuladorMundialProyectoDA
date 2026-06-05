@@ -15,7 +15,7 @@ public class Partido
     private int _golesLocal;
     private int _golesVisitante;
     public List<TipoIncidencia> incidenciaEquipoLocal;
-    
+    public List<TipoIncidencia> incidenciaEquipoVisitante;
 
     public Partido()
     {
@@ -158,5 +158,6 @@ public class Partido
         GolesLocal = golesLocal;
         GolesVisitante = golesVisitante;
         incidenciaEquipoLocal = new List<TipoIncidencia>();
+        incidenciaEquipoVisitante = new List<TipoIncidencia>();
     }
 }
