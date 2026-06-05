@@ -322,10 +322,18 @@ public class PartidoServiciosTest
     }
 
     [TestMethod]
-    public void AgregarPartido_SeAgregaPartidoConIncidencia()
+    public void AgregarPartido_SeAgregaPartidoConIncidenciaLocal()
     {
         _partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>();
         _partidoDTO.incidenciaEquipoLocal.Add(TipoIncidencia.TarjetaAmarilla);
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+    }
+
+    [TestMethod]
+    public void AgregarPartido_SeAgregaPartidoConIncidenciaVisitante()
+    {
+        _partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>();
+        _partidoDTO.incidenciaEquipoVisitante.Add(TipoIncidencia.TarjetaAmarilla);
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
     }
 }
