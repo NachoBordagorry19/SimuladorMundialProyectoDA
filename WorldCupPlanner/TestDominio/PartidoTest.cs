@@ -169,6 +169,6 @@ public class PartidoTest
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
         Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
         Partido partido = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 1, 0);
-        partido.incidenciaEquipoLocal.add(incidenciaLocal);
+        partido.incidenciaEquipoLocal.Add(incidenciaLocal);
     }
 }
