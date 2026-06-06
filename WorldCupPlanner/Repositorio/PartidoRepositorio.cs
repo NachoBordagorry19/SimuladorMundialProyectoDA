@@ -5,35 +5,36 @@ namespace Repositorio;
 
 public class PartidoRepositorio : IPartidoRepositorio
 {
-    private BaseDeDatosEnMemoria _BDEnMemoria;
+    private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
 
-    public PartidoRepositorio(BaseDeDatosEnMemoria BDEnMemoria)
+    public PartidoRepositorio(BaseDeDatosEnMemoria baseDeDatosEnMemoria)
     {
-        _BDEnMemoria = BDEnMemoria;
+        _baseDeDatosEnMemoria = baseDeDatosEnMemoria;
     }
 
     public List<Partido> ObtenerPartidos()
     {
-        return _BDEnMemoria.ObtenerPartidos();
+        return _baseDeDatosEnMemoria.ObtenerPartidos();
     }
 
     public void AgregarPartido(Partido partido)
     {
-        _BDEnMemoria.AgregarPartido(partido);
+        partido.Id = _baseDeDatosEnMemoria.ObtenerPartidos().Count + 1;
+        _baseDeDatosEnMemoria.AgregarPartido(partido);
     }
 
     public Partido? ObtenerPartidoPorId(int id)
     {
-        return _BDEnMemoria.ObtenerPartidos().FirstOrDefault(p => p.Id == id);
+        return _baseDeDatosEnMemoria.ObtenerPartidos().FirstOrDefault(p => p.Id == id);
     }
 
     public void EliminarPartido(Partido partido)
     {
-        _BDEnMemoria.BorrarPartido(partido);
+        _baseDeDatosEnMemoria.BorrarPartido(partido);
     }
 
     public void ActualizarPartido(Partido partido)
     {
-        _BDEnMemoria.ActualizarPartido(partido);
+        _baseDeDatosEnMemoria.ActualizarPartido(partido);
     }
 }

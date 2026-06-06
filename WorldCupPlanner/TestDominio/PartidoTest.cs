@@ -26,19 +26,6 @@ public class PartidoTest
     }
 
     [TestMethod]
-    public void Partido_IdEsIncremental()
-    {
-        Equipo local = new Equipo("A", Confederacion.CONMEBOL, 1000);
-        Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
-        Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Decano", 60000);
-
-        Partido p1 = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, 0);
-        Partido p2 = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, 0);
-
-        Assert.AreEqual(p1.Id + 1, p2.Id);
-    }
-
-    [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Partido_FechaInvalida_TiraExcepcion()
     {

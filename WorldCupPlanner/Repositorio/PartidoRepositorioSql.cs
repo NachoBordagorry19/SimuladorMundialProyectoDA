@@ -24,7 +24,26 @@ public class PartidoRepositorioSql : IPartidoRepositorio
 
     public void AgregarPartido(Partido partido)
     {
+        var local = _contexto.Equipos.FirstOrDefault(e => e.Nombre == partido.Local.Nombre);
+        if (local != null) partido.Local = local;
+
+        var visitante = _contexto.Equipos.FirstOrDefault(e => e.Nombre == partido.Visitante.Nombre);
+        if (visitante != null) partido.Visitante = visitante;
+
+        var estadio = _contexto.Estadios.FirstOrDefault(e => e.Nombre == partido.Estadio.Nombre);
+        if (estadio != null) partido.Estadio = estadio;
+
         _contexto.Partidos.Add(partido);
+        _contexto.SaveChanges();
+    }
+
+    public void ActualizarPartido(Partido partido)
+    {
+        if (partido.Estadio.id == 0)
+        {
+            var estadio = _contexto.Estadios.FirstOrDefault(e => e.Nombre == partido.Estadio.Nombre);
+            if (estadio != null) partido.Estadio = estadio;
+        }
         _contexto.SaveChanges();
     }
 
@@ -40,12 +59,6 @@ public class PartidoRepositorioSql : IPartidoRepositorio
     public void EliminarPartido(Partido partido)
     {
         _contexto.Partidos.Remove(partido);
-        _contexto.SaveChanges();
-    }
-
-    public void ActualizarPartido(Partido partido)
-    {
-        _contexto.Partidos.Update(partido);
         _contexto.SaveChanges();
     }
 }
