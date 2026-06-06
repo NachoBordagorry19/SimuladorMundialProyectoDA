@@ -254,16 +254,9 @@ public class ServicioUsuario : IServicioUsuario
     {
         Usuario usuarioExistente = ObtenerEntidadPorEmail(email.Trim());
 
-        Usuario usuarioActualizado = new Usuario(
-            usuarioExistente.Nombre,
-            usuarioExistente.Apellido,
-            usuarioExistente.Email,
-            usuarioExistente.FechaNacimiento,
-            CifrarContraseña(ContraseñaPorDefecto),
-            usuarioExistente.Roles.ToList()
-        );
+        usuarioExistente.Contraseña = CifrarContraseña(ContraseñaPorDefecto);
 
-        _usuarioRepositorio.ActualizarUsuario(usuarioActualizado);
+        _usuarioRepositorio.ActualizarUsuario(usuarioExistente);
         _auditoria.RegistrarEdicionUsuario(email);
     }
     
