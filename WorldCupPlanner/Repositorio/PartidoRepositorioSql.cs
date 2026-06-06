@@ -24,6 +24,10 @@ public class PartidoRepositorioSql : IPartidoRepositorio
 
     public void AgregarPartido(Partido partido)
     {
+        partido.Local = _contexto.Equipos.First(e => e.Nombre == partido.Local.Nombre);
+        partido.Visitante = _contexto.Equipos.First(e => e.Nombre == partido.Visitante.Nombre);
+        partido.Estadio = _contexto.Estadios.First(e => e.Nombre == partido.Estadio.Nombre);
+
         _contexto.Partidos.Add(partido);
         _contexto.SaveChanges();
     }
