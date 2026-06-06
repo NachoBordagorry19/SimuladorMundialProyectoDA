@@ -100,7 +100,8 @@ public class FixturePrimeraFaseServicioTest
         _equipoServicios.GenerarEquiposAutomaticamente(123);
         _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-
+        _contexto.SaveChanges();
+        
         _fixtureServicio.GenerarFixturePrimeraFase(456);
     }
 
@@ -136,7 +137,8 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
-
+        _contexto.SaveChanges();
+        
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
         var partidos = _contexto.Partidos.Count();
@@ -227,6 +229,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Campeón del Siglo", "Montevideo", "descrip2", 40000));
         _contexto.Add(new Estadio("Bombonera", "Buenos Aires", "bocaboca", 54000));
         _contexto.Add(new Estadio("Centenario", "Montevideo", "descrip", 60000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
