@@ -86,9 +86,11 @@ public class EstadioServicios : IServicioEstadio
         {
             throw new ArgumentException("El estadio no existe");
         }
-        Estadio estadio = EstadioDTOAEntidad(estadioDTO);
-        _estadioRepositorio.ActualizarEstadio(estadio);
-        _auditoria.RegistrarEdicionEstadio(estadio.Nombre);
+        existente.Ciudad = estadioDTO.Ciudad;
+        existente.Descripcion = estadioDTO.Descripcion;
+        existente.CapacidadLocativa = estadioDTO.CapacidadLocativa;
+        _estadioRepositorio.ActualizarEstadio(existente);
+        _auditoria.RegistrarEdicionEstadio(existente.Nombre);
     }
 
     private EstadioDTO DesdeEntidad(Estadio estadio)
