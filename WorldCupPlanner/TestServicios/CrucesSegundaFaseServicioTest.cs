@@ -10,8 +10,9 @@ namespace TestServicios;
 [TestClass]
 public class CrucesSegundaFaseServicioTest
 {
-    private BaseDeDatosEnMemoria _baseDeDatos;
-    private PartidoRepositorio _partidoRepositorio;
+    private SqlContexto _contexto;
+    private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
+    private PartidoRepositorioSql _partidoRepositorio;
     private IServicioPartido _partidoServicios;
     private CrucesSegundaFaseServicio _crucesServicio;
     private Mock<IServicioAuditoria> _auditoriaMock;
@@ -19,8 +20,11 @@ public class CrucesSegundaFaseServicioTest
     [TestInitialize]
     public void Inicializar()
     {
-        _baseDeDatos = new BaseDeDatosEnMemoria();
-        _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
+        _contextoFabrica = new FabricaDeContextoDeAppEnMemoria();
+        _contexto = _contextoFabrica.CrearDbContexto();
+        _contexto.Equipos.RemoveRange(_contexto.Equipos);
+        _contexto.SaveChanges();
+        _partidoRepositorio = new PartidoRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
         _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios, _auditoriaMock.Object);

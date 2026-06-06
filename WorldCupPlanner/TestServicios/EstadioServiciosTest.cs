@@ -10,7 +10,8 @@ namespace TestServicios;
 [TestClass]
 public class EstadioServiciosTest
 {
-    private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
+    private SqlContexto _contexto;
+    private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
     private IEstadioRepositorio _estadioRepositorio;
     private IServicioEstadio _estadioServicios;
     private EstadioDTO _estadioDTO;
@@ -20,8 +21,11 @@ public class EstadioServiciosTest
     [TestInitialize]
     public void TestInitialize()
     {
-        _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
-        _estadioRepositorio = new EstadioRepositorio(_baseDeDatosEnMemoria);
+        _contextoFabrica = new FabricaDeContextoDeAppEnMemoria();
+        _contexto = _contextoFabrica.CrearDbContexto();
+        _contexto.Equipos.RemoveRange(_contexto.Equipos);
+        _contexto.SaveChanges();
+        _estadioRepositorio = new EstadioRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _estadioServicios = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
 

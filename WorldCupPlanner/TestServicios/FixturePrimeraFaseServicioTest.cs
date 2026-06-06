@@ -13,10 +13,11 @@ namespace TestServicios;
 public class FixturePrimeraFaseServicioTest
 {
     private FixturePrimeraFaseServicio _fixtureServicio;
-    private BaseDeDatosEnMemoria _baseDeDatos;
-    private EquipoRepositorio _equipoRepositorio;
-    private EstadioRepositorio _estadioRepositorio;
-    private PartidoRepositorio _partidoRepositorio;
+    private SqlContexto _contexto;
+    private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
+    private EquipoRepositorioSql _equipoRepositorio;
+    private EstadioRepositorioSql _estadioRepositorio;
+    private PartidoRepositorioSql _partidoRepositorio;
     private EquipoServicios _equipoServicios;
     private EstadioServicios _estadioServicios;
     private PartidoServicios _partidoServicios;
@@ -43,10 +44,13 @@ public class FixturePrimeraFaseServicioTest
     [TestInitialize]
     public void Inicializar()
     {
-        _baseDeDatos = new BaseDeDatosEnMemoria();
-        _equipoRepositorio = new EquipoRepositorio(_baseDeDatos);
-        _estadioRepositorio = new EstadioRepositorio(_baseDeDatos);
-        _partidoRepositorio = new PartidoRepositorio(_baseDeDatos);
+        _contextoFabrica = new FabricaDeContextoDeAppEnMemoria();
+        _contexto = _contextoFabrica.CrearDbContexto();
+        _contexto.Equipos.RemoveRange(_contexto.Equipos);
+        _contexto.SaveChanges();
+        _equipoRepositorio = new EquipoRepositorioSql(_contexto);
+        _estadioRepositorio = new EstadioRepositorioSql(_contexto);
+        _partidoRepositorio = new PartidoRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
         _estadioServicios = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
@@ -66,11 +70,12 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_Con48EquiposY4Estadios_RetornaResultadoValido()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
-
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
+        
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
         Assert.IsNotNull(resultado);
@@ -81,10 +86,11 @@ public class FixturePrimeraFaseServicioTest
     [ExpectedException(typeof(ArgumentException))]
     public void GenerarFixture_SiNoHay48Equipos_LanzaArgumentException()
     {
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         _fixtureServicio.GenerarFixturePrimeraFase(456);
     }
@@ -94,9 +100,10 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_SiNoHay4Estadios_LanzaArgumentException()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.SaveChanges();
+        
         _fixtureServicio.GenerarFixturePrimeraFase(456);
     }
 
@@ -104,10 +111,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_GeneraDoceGruposDeCuatroEquipos()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -128,25 +136,27 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_GeneraDoceGruposConCuatroEquiposYSeisPartidos()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
-
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
+        
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
-        var partidos = _baseDeDatos.ObtenerPartidos();
-        Assert.AreEqual(72, partidos.Count);
+        var partidos = _contexto.Partidos.Count();
+        Assert.AreEqual(72, partidos);
     }
 
     [TestMethod]
     public void GenerarFixture_RespetaReglasConfederaciones()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -172,10 +182,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_CadaGrupoTieneTresJornadasConEnfrentamientosCorrectos()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -219,10 +230,11 @@ public class FixturePrimeraFaseServicioTest
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
 
-        _baseDeDatos.AgregarEstadio(new Estadio("Monumental", "Buenos Aires", "descrip", 84000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Campeón del Siglo", "Montevideo", "descrip2", 40000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Bombonera", "Buenos Aires", "bocaboca", 54000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Centenario", "Montevideo", "descrip", 60000));
+        _contexto.Add(new Estadio("Monumental", "Buenos Aires", "descrip", 84000));
+        _contexto.Add(new Estadio("Campeón del Siglo", "Montevideo", "descrip2", 40000));
+        _contexto.Add(new Estadio("Bombonera", "Buenos Aires", "bocaboca", 54000));
+        _contexto.Add(new Estadio("Centenario", "Montevideo", "descrip", 60000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -237,10 +249,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_AsignaGrupoACadaPartido()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -263,10 +276,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_RespetaHorariosDeJornadas()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -304,10 +318,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_NoSuperaTresPartidosPorDia()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -328,10 +343,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_UsaFechaInicioDefaultYSeparaJornadasTresDias()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -351,10 +367,11 @@ public class FixturePrimeraFaseServicioTest
     public void GenerarFixture_UsaFechaInicioIndicada()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.Add(new Estadio("Estadio_A", "Ciudad_A", "Descripcion A", 50000));
+        _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
+        _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
+        _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var fechaInicio = new DateTime(2026, 07, 10);
 
@@ -374,10 +391,11 @@ public class FixturePrimeraFaseServicioTest
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
 
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 1", "Ciudad 1", "Desc", 40000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 2", "Ciudad 2", "Desc", 50000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 3", "Ciudad 3", "Desc", 60000));
-        _baseDeDatos.AgregarEstadio(new Estadio("Estadio 4", "Ciudad 4", "Desc", 70000));
+        _contexto.Add(new Estadio("Estadio 1", "Ciudad 1", "Desc", 40000));
+        _contexto.Add(new Estadio("Estadio 2", "Ciudad 2", "Desc", 50000));
+        _contexto.Add(new Estadio("Estadio 3", "Ciudad 3", "Desc", 60000));
+        _contexto.Add(new Estadio("Estadio 4", "Ciudad 4", "Desc", 70000));
+        _contexto.SaveChanges();
 
         int semilla = 456;
         _fixtureServicio.GenerarFixturePrimeraFase(semilla);
