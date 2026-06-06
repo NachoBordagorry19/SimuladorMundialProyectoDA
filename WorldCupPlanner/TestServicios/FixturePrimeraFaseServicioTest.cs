@@ -74,7 +74,8 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
-
+        _contexto.SaveChanges();
+        
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
         Assert.IsNotNull(resultado);
@@ -89,6 +90,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         _fixtureServicio.GenerarFixturePrimeraFase(456);
     }
@@ -113,6 +115,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -153,6 +156,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -182,6 +186,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -248,6 +253,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -274,6 +280,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -315,6 +322,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -339,6 +347,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var resultado = _fixtureServicio.GenerarFixturePrimeraFase(456);
 
@@ -362,6 +371,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio_B", "Ciudad_B", "Descripcion B", 60000));
         _contexto.Add(new Estadio("Estadio_C", "Ciudad_C", "Descripcion C", 70000));
         _contexto.Add(new Estadio("Estadio_D", "Ciudad_D", "Descripcion D", 80000));
+        _contexto.SaveChanges();
 
         var fechaInicio = new DateTime(2026, 07, 10);
 
@@ -385,6 +395,7 @@ public class FixturePrimeraFaseServicioTest
         _contexto.Add(new Estadio("Estadio 2", "Ciudad 2", "Desc", 50000));
         _contexto.Add(new Estadio("Estadio 3", "Ciudad 3", "Desc", 60000));
         _contexto.Add(new Estadio("Estadio 4", "Ciudad 4", "Desc", 70000));
+        _contexto.SaveChanges();
 
         int semilla = 456;
         _fixtureServicio.GenerarFixturePrimeraFase(semilla);
