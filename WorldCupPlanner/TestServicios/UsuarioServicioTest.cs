@@ -11,7 +11,8 @@ namespace TestServicios;
 [TestClass]
 public class UsuarioServicioTest
 {
-    private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
+    private SqlContexto _contexto;
+    private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
     private IUsuarioRepositorio _usuarioRepositorio;
     private ServicioUsuario _servicioUsuario;
     private UsuarioDTO _usuarioDTO;
@@ -20,8 +21,11 @@ public class UsuarioServicioTest
     [TestInitialize]
     public void Inicializar()
     {
-        _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
-        _usuarioRepositorio = new UsuarioRepositorio(_baseDeDatosEnMemoria);
+        _contextoFabrica = new FabricaDeContextoDeAppEnMemoria();
+        _contexto = _contextoFabrica.CrearDbContexto();
+        _contexto.Equipos.RemoveRange(_contexto.Equipos);
+        _contexto.SaveChanges();
+        _usuarioRepositorio = new UsuarioRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _servicioUsuario = new ServicioUsuario(_usuarioRepositorio, _auditoriaMock.Object);
 
