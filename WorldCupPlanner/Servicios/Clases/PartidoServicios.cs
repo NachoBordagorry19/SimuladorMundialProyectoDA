@@ -254,6 +254,7 @@ public class PartidoServicios : IServicioPartido
         }
         string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
+        _partidoRepositorio.ActualizarPartido(partidoExistente);
     }
 
     private PartidoDTO PartidoEntidadADto(Partido partido)
