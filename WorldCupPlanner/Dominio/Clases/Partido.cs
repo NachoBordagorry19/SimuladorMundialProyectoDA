@@ -14,6 +14,8 @@ public class Partido
     private EstadoPartido _estado;
     private int _golesLocal;
     private int _golesVisitante;
+    public List<TipoIncidencia> incidenciaEquipoLocal;
+    public List<TipoIncidencia> incidenciaEquipoVisitante;
 
     public Partido()
     {
@@ -155,5 +157,7 @@ public class Partido
         Estado = EstadoPartido.Pendiente;
         GolesLocal = golesLocal;
         GolesVisitante = golesVisitante;
+        incidenciaEquipoLocal = new List<TipoIncidencia>();
+        incidenciaEquipoVisitante = new List<TipoIncidencia>();
     }
 }

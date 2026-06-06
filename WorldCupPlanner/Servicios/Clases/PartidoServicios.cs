@@ -26,17 +26,23 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido no puede ser nulo porfavor ingrese partido valido");
         }
 
-        var partido = new Partido(
-            partidoDto.Fecha == default ? DateTime.UtcNow : partidoDto.Fecha,
-            EstadioDTOAEntidad(estadio),
-            EquipoDTOAEntidad(equipoLocal),
-            EquipoDTOAEntidad(equipoVisitante),
-            partidoDto.fase,
-            partidoDto.golesLocal,
-            partidoDto.golesVisitante
-        );
-
+        var estadioEntidad = EstadioDTOAEntidad(estadio);
+        var localEntidad = EquipoDTOAEntidad(equipoLocal);
+        var visitanteEntidad = EquipoDTOAEntidad(equipoVisitante);
+        var fecha = partidoDto.Fecha == default ? DateTime.UtcNow : partidoDto.Fecha;
+        
+        var partido = new Partido(fecha, estadioEntidad, localEntidad, visitanteEntidad, partidoDto.fase, partidoDto.golesLocal, partidoDto.golesVisitante);
+        
         partido.Grupo = partidoDto.Grupo;
+        
+        if (partidoDto.incidenciaEquipoLocal != null && partidoDto.incidenciaEquipoLocal.Count > 0)
+        {
+            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDto.incidenciaEquipoLocal);
+        }
+        if (partidoDto.incidenciaEquipoVisitante != null && partidoDto.incidenciaEquipoVisitante.Count > 0)
+        {
+            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDto.incidenciaEquipoVisitante);
+        }
 
         if (partidoDto.estadoPartido == EstadoPartido.Jugado)
         {
@@ -280,7 +286,9 @@ public class PartidoServicios : IServicioPartido
             fase = partido.Fase,
             estadoPartido = partido.Estado,
             golesLocal = partido.GolesLocal,
-            golesVisitante = partido.GolesVisitante
+            golesVisitante = partido.GolesVisitante,
+            incidenciaEquipoLocal = new List<TipoIncidencia>(partido.incidenciaEquipoLocal ?? new List<TipoIncidencia>()),
+            incidenciaEquipoVisitante = new List<TipoIncidencia>(partido.incidenciaEquipoVisitante ?? new List<TipoIncidencia>())
         };
     }
 
@@ -292,6 +300,14 @@ public class PartidoServicios : IServicioPartido
         var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
         var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
         partido.Grupo = dto.Grupo;
+        if (dto.incidenciaEquipoLocal != null)
+        {
+            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(dto.incidenciaEquipoLocal);
+        }
+        if (dto.incidenciaEquipoVisitante != null)
+        {
+            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(dto.incidenciaEquipoVisitante);
+        }
         return partido;
     }
 
