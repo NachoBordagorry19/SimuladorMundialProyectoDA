@@ -14,7 +14,8 @@ namespace TestServicios;
 [TestClass]
 public class PartidoServiciosTest
 {
-    private BaseDeDatosEnMemoria _baseDeDatosEnMemoria;
+    private SqlContexto _contexto;
+    private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
     private IPartidoRepositorio _partidoRepositorio;
     private PartidoServicios _servicioPartido;
     private PartidoDTO _partidoDTO;
@@ -27,8 +28,11 @@ public class PartidoServiciosTest
     [TestInitialize]
     public void Inicializar()
     {
-        _baseDeDatosEnMemoria = new BaseDeDatosEnMemoria();
-        _partidoRepositorio = new PartidoRepositorio(_baseDeDatosEnMemoria);
+        _contextoFabrica = new FabricaDeContextoDeAppEnMemoria();
+        _contexto = _contextoFabrica.CrearDbContexto();
+        _contexto.Equipos.RemoveRange(_contexto.Equipos);
+        _contexto.SaveChanges();
+        _partidoRepositorio = new PartidoRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _servicioPartido = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object);
 
