@@ -20,8 +20,6 @@ builder.Services.AddDbContext<SqlContexto>(options =>
 
 builder.Services.AddScoped<SqlContexto>();
 
-builder.Services.AddScoped<BaseDeDatosEnMemoria>();
-
 builder.Services.AddScoped<UsuarioRepositorioSql>();
 builder.Services.AddScoped<EquipoRepositorioSql>();
 builder.Services.AddScoped<EstadioRepositorioSql>();
