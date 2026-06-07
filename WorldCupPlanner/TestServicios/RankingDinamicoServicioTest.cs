@@ -46,8 +46,17 @@ public class RankingDinamicoServicioTest
     [ExpectedException(typeof(ArgumentException))]
     public void ActualizarRanking_EquipoLocalNoExisteEnSistema_LanzaExcepcion()
     {
-        AgregarEquipos("Barcelona",49,"Bayern",48);
+        AgregarEquipos("Barcelona",301,"Bayern",302);
         PartidoDTO partidoDto = CrearPartidoDTO("Argentina","Bayern",1,2,Fase.Final);
+        _servicioRankingDinamico.ActualizarRanking(partidoDto);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarRanking_EquipoVisitanteNoExisteEnSistema_LanzaExcepcion()
+    {
+        AgregarEquipos("Barcelona",301,"Bayern",302);
+        PartidoDTO partidoDto = CrearPartidoDTO("Barcelona","Argentina",1,2,Fase.Final);
         _servicioRankingDinamico.ActualizarRanking(partidoDto);
     }
 }
