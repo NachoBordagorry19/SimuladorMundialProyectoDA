@@ -1,4 +1,5 @@
 using Dominio.Clases;
+using Dominio.Enums;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 using Servicios.Modelo;
@@ -26,5 +27,12 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
         {
             throw new ArgumentException("El equio visitante no existe");
         }
+
+        if (partidoDto.golesLocal == partidoDto.golesVisitante)
+        {
+            return;
+        }
+        _equipoRepositorio.ActualizarEquipo(local);
+        _equipoRepositorio.ActualizarEquipo(visitante);
     }
 }

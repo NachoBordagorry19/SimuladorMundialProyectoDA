@@ -64,10 +64,10 @@ public class RankingDinamicoServicioTest
     public void ActualizarRanking_EmpateEntreEquiposIguales_RankingNoVaria()
     {
         AgregarEquipos("Barcelona",301,"Bayern",302);
-        PartidoDTO partidoDto = CrearPartidoDTO("Barcelona","Argentina",1,1,Fase.Grupos);
+        PartidoDTO partidoDto = CrearPartidoDTO("Barcelona","Bayern",1,1,Fase.Grupos);
         _servicioRankingDinamico.ActualizarRanking(partidoDto);
-        var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "EquipoA");
-        var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "EquipoB");
+        var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Barcelona");
+        var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Bayern");
         Assert.AreEqual(301, localActualizado.RankingFifa);
         Assert.AreEqual(302, visitanteActualizado.RankingFifa);
 
