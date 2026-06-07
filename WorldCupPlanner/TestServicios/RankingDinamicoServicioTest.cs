@@ -2,6 +2,7 @@ using Dominio.Clases;
 using Dominio.Enums;
 using Repositorio;
 using Repositorio.Interfaces;
+using Servicios.Clases;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -11,7 +12,7 @@ public class RankingDinamicoServicioTest
 {
     private SqlContexto _contexto;
     private IEquipoRepositorio _equipoRepositorio;
-    private ServicioRankingDinamico _servicioRankingDinamico;
+    private RankingDinamicoServicio _servicioRankingDinamico;
 
     [TestInitialize]
     public void IniciarPrueba()
@@ -19,7 +20,7 @@ public class RankingDinamicoServicioTest
         FabricaDeContextoDeAppEnMemoria fabricaDeContextoDeAppEnMemoria = new FabricaDeContextoDeAppEnMemoria();
         _contexto = fabricaDeContextoDeAppEnMemoria.CrearDbContexto();
         _equipoRepositorio = new EquipoRepositorioSql(_contexto);
-        _servicioRankingDinamico = new ServicioRankingDinamico(_equipoRepositorio);
+        _servicioRankingDinamico = new RankingDinamicoServicio(_equipoRepositorio);
     }
     
     private void AgregarEquipos(string nombreLocal, int rankingLocal, string nombreVisitante, int rankingVisitante)
