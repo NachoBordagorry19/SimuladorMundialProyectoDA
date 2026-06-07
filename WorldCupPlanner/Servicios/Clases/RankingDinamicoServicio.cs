@@ -20,6 +20,11 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
         if (local == null)
         {
             throw new ArgumentException("El equipo local no existe");
+        } 
+        Equipo? visitante = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == partidoDto.equipoVisitante.nombre);
+        if (visitante == null)
+        {
+            throw new ArgumentException("El equio visitante no existe");
         }
     }
 }
