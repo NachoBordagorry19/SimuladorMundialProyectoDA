@@ -55,6 +55,16 @@ public class Notificacion
         return vacio;
     }
 
+    public void MarcarComoLeida()
+    {
+        this.Leida = true;
+    }
+
+    public bool YaLeida()
+    {
+        return this.Leida;
+    }
+
     public Notificacion()
     {
         
