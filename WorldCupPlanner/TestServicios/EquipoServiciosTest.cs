@@ -328,4 +328,42 @@ public class EquipoServiciosTest
         _equipoServicios.GenerarEquiposAutomaticamente(123);
         _auditoriaMock.Verify(a => a.RegistrarGeneracionAutomaticaEquipos(48), Times.Once);
     }
+    
+    [TestMethod]
+    public void AgregarEquipo_ConBandera_GuardaLaBandera()
+    {
+        EquipoDTO equipoDto = new EquipoDTO
+        {
+            nombre = "Argentina",
+            confederacion = Confederacion.CONMEBOL,
+            rankingFifa = 1800,
+            banderaBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAUA"
+        };
+
+        _equipoServicios.AgregarEquipo(equipoDto);
+
+        var equipoObtenido = _equipoServicios.ObtenerEquipo("Argentina");
+        Assert.AreEqual("iVBORw0KGgoAAAANSUhEUgAAAAUA", equipoObtenido.banderaBase64);
+    }
+    
+    [TestMethod]
+    public void ActualizarEquipo_ConBandera_ActualizaLaBandera()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+
+        var dtoActualizado = new EquipoDTO
+        {
+            nombre = _equipoDTO.nombre,
+            confederacion = _equipoDTO.confederacion,
+            rankingFifa = _equipoDTO.rankingFifa,
+            banderaBase64 = "banderaActualizada"
+        };
+
+        _equipoServicios.ActualizarEquipo(dtoActualizado);
+
+        var equipoObtenido = _equipoServicios.ObtenerEquipo(_equipoDTO.nombre);
+        Assert.AreEqual("banderaActualizada", equipoObtenido.banderaBase64);
+    }
+
+
 }

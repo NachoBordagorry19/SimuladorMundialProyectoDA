@@ -47,6 +47,15 @@
                 <label class="wcp-form-label">Ranking FIFA</label>
                 <input @bind="equipo.rankingFifa" type="number" class="form-control" />
             </div>
+            <div class="col-md-6">
+                <label class="wcp-form-label">Bandera del país</label>
+                <InputFile OnChange="CargarBandera" accept="image/*" class="form-control" />
+                @if (!string.IsNullOrEmpty(equipo.banderaBase64))
+                {
+                    <img src="data:image/*;base64,@equipo.banderaBase64" style="height:40px; margin-top:8px;" />
+                }
+            </div>
+
         </div>
 
         <div class="wcp-actions mt-3">
@@ -171,4 +180,13 @@
             esError = true;
         }
     }
+    private async Task CargarBandera(InputFileChangeEventArgs e)
+    {
+        var archivo = e.File;
+        using var stream = archivo.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024);
+        var buffer = new byte[archivo.Size];
+        await stream.ReadAsync(buffer);
+        equipo.banderaBase64 = Convert.ToBase64String(buffer);
+    }
+
 }

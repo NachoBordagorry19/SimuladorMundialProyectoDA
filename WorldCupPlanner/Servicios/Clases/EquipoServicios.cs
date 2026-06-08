@@ -105,12 +105,15 @@ public class EquipoServicios : IServicioEquipo
 
     public Equipo EquipoDTOAEntidad(EquipoDTO equipoDto)
     {
-        return new Equipo(
+        var equipo = new Equipo(
             equipoDto.nombre,
             equipoDto.confederacion,
             equipoDto.rankingFifa
         );
+        equipo.BanderaBase64 = equipoDto.banderaBase64;
+        return equipo;
     }
+
 
     public List<EquipoDTO> ObtenerEquipos()
     {
@@ -127,14 +130,15 @@ public class EquipoServicios : IServicioEquipo
 
     public EquipoDTO EquipoEntidadAEquipoDTO(Equipo equipo)
     {
-        EquipoDTO equipoDto = new EquipoDTO()
+        return new EquipoDTO()
         {
             nombre = equipo.Nombre,
             confederacion = equipo.Confederacion,
-            rankingFifa = equipo.RankingFifa
+            rankingFifa = equipo.RankingFifa,
+            banderaBase64 = equipo.BanderaBase64
         };
-        return equipoDto;
     }
+
 
     public EquipoDTO ObtenerEquipo(string nombre)
     {
@@ -199,11 +203,14 @@ public class EquipoServicios : IServicioEquipo
                 throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDto.confederacion}");
             }
         }
+        
+        equipoOriginal.Nombre = equipoDto.nombre;
+        equipoOriginal.Confederacion = equipoDto.confederacion;
+        equipoOriginal.RankingFifa = equipoDto.rankingFifa;
+        equipoOriginal.BanderaBase64 = equipoDto.banderaBase64;
+        _equipoRepositorio.ActualizarEquipo(equipoOriginal);
+        _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
 
-        Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
-
-        _equipoRepositorio.EliminarEquipo(equipoOriginal);
-        _equipoRepositorio.AgregarEquipo(equipoActualizado);
         _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
     }
 
