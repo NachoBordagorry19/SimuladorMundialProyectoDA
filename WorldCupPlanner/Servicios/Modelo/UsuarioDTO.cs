@@ -24,7 +24,6 @@ public class UsuarioDTO
     [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$",
         ErrorMessage = "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un carácter especial")]
     public string Contraseña { get; set; } = "";
-
-    [MinLength(1, ErrorMessage = "El usuario debe tener al menos un rol")]
+    
     public List<Rol> Roles { get; set; } = new();
 }
