@@ -345,5 +345,25 @@ public class EquipoServiciosTest
         var equipoObtenido = _equipoServicios.ObtenerEquipo("Argentina");
         Assert.AreEqual("iVBORw0KGgoAAAANSUhEUgAAAAUA", equipoObtenido.banderaBase64);
     }
+    
+    [TestMethod]
+    public void ActualizarEquipo_ConBandera_ActualizaLaBandera()
+    {
+        _equipoServicios.AgregarEquipo(_equipoDTO);
+
+        var dtoActualizado = new EquipoDTO
+        {
+            nombre = _equipoDTO.nombre,
+            confederacion = _equipoDTO.confederacion,
+            rankingFifa = _equipoDTO.rankingFifa,
+            banderaBase64 = "banderaActualizada"
+        };
+
+        _equipoServicios.ActualizarEquipo(dtoActualizado);
+
+        var equipoObtenido = _equipoServicios.ObtenerEquipo(_equipoDTO.nombre);
+        Assert.AreEqual("banderaActualizada", equipoObtenido.banderaBase64);
+    }
+
 
 }
