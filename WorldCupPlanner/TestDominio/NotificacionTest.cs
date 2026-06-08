@@ -21,4 +21,14 @@ public class NotificacionTest
         Usuario usuario = new Usuario();
         Notificacion not = new Notificacion("", fechaHora, usuario.Id);
     }
+
+    [TestMethod]
+    public void MarcarComoLeida_MarcaComoLeida()
+    {
+        DateTime fechaHora = DateTime.Now;
+        Usuario usuario = new Usuario();
+        Notificacion not = new Notificacion("Mensaje", fechaHora, usuario.Id);
+        bool leida = MarcarComoLeida(not);
+        Assert.IsTrue(leida);
+    }
 }
