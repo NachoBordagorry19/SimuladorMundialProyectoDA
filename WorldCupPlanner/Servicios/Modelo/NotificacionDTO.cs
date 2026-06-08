@@ -1,0 +1,9 @@
+namespace Servicios.Modelo;
+
+public class NotificacionDTO
+{
+    public string Mensaje { get; set; } = String.Empty;
+    public DateTime FechaHora { get; set; }
+    public int UsuarioId { get; set; }
+    public bool Leida { get; set; }
+}
