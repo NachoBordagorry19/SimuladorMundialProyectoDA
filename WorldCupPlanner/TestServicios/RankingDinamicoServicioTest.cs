@@ -78,8 +78,8 @@ public class RankingDinamicoServicioTest
         AgregarEquipos("Barcelona",1500,"Bayern",1500);
         PartidoDTO partidoDto = CrearPartidoDTO("Barcelona","Bayern",2,0,Fase.Grupos);
         _servicioRankingDinamico.ActualizarRanking(partidoDto);
-        var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "EquipoA");
-        var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "EquipoB");
+        var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Barcelona");
+        var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Bayern");
         Assert.AreEqual(1515, localActualizado.RankingFifa);
         Assert.AreEqual(1485, visitanteActualizado.RankingFifa);
     }

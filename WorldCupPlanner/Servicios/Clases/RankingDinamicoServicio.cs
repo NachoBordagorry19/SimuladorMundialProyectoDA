@@ -32,6 +32,19 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
         {
             return;
         }
+        double probabilidadLocal = 1.0 / (1.0 + Math.Pow(10, (visitante.RankingFifa - local.RankingFifa) / 1000.0));
+        double probabilidadVisitante = 1.0 - probabilidadLocal;
+
+        double resultadoLocal = partidoDto.golesLocal > partidoDto.golesVisitante ? 1.0 :
+            partidoDto.golesLocal < partidoDto.golesVisitante ? 0.0 : 0.5;
+        double resultadoVisitante = 1.0 - resultadoLocal;
+
+        double deltaLocal = 30 * (resultadoLocal - probabilidadLocal) * 1.0;
+        double deltaVisitante = 30 * (resultadoVisitante - probabilidadVisitante) * 1.0;
+
+        local.RankingFifa = (int)Math.Round(local.RankingFifa + deltaLocal, MidpointRounding.AwayFromZero);
+        visitante.RankingFifa = (int)Math.Round(visitante.RankingFifa + deltaVisitante, MidpointRounding.AwayFromZero);
+
         _equipoRepositorio.ActualizarEquipo(local);
         _equipoRepositorio.ActualizarEquipo(visitante);
     }
