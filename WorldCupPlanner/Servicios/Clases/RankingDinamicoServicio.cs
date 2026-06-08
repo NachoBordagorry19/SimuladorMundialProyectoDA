@@ -39,9 +39,10 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
             partidoDto.golesLocal < partidoDto.golesVisitante ? 0.0 : 0.5;
         double resultadoVisitante = 1.0 - resultadoLocal;
 
-        double deltaLocal = 30 * (resultadoLocal - probabilidadLocal) * 1.0;
-        double deltaVisitante = 30 * (resultadoVisitante - probabilidadVisitante) * 1.0;
-
+        double multiplicador = partidoDto.fase == Fase.Grupos ? 1.0 : 1.5;
+        double deltaLocal = 30 * (resultadoLocal - probabilidadLocal) * multiplicador;
+        double deltaVisitante = 30 * (resultadoVisitante - probabilidadVisitante) * multiplicador;
+        
         local.RankingFifa = (int)Math.Round(local.RankingFifa + deltaLocal, MidpointRounding.AwayFromZero);
         visitante.RankingFifa = (int)Math.Round(visitante.RankingFifa + deltaVisitante, MidpointRounding.AwayFromZero);
 

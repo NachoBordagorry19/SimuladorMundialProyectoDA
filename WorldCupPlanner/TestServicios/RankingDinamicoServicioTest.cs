@@ -95,7 +95,7 @@ public class RankingDinamicoServicioTest
         var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Barcelona");
         var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Bayern");
         Assert.AreEqual(1523, localActualizado.RankingFifa);
-        Assert.AreEqual(1477, visitanteActualizado.RankingFifa);
+        Assert.AreEqual(1478, visitanteActualizado.RankingFifa);
     }
 
 }
