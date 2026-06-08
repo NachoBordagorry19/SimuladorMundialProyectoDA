@@ -56,6 +56,11 @@
                         <InputCheckbox @bind-Value="esEditor" class="form-check-input" />
                         <label class="form-check-label">Editor</label>
                     </div>
+
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="esPeriodista" class="form-check-input" />
+                        <label class="form-check-label">Periodista</label>
+                    </div>
                 </div>
             </div>
 
@@ -81,7 +86,8 @@
     private bool esAdministrador;
     private bool esEditor = true;
     private string? mensajeError;
-
+    private bool esPeriodista;
+    
     protected override void OnInitialized()
     {
         if (Sesion.UsuarioActual == null)
@@ -110,6 +116,11 @@
             if (esEditor)
             {
                 usuario.Roles.Add(Rol.Editor);
+            }
+            
+            if (esPeriodista)                                                                                                                                           
+            {                                                                                                                                                           
+                usuario.Roles.Add(Rol.Periodista);                                                                                                                      
             }
 
             ServicioUsuario.AgregarUsuario(usuario);
