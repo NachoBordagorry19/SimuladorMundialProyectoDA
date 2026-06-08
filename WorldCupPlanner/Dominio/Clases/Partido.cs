@@ -117,6 +117,14 @@ public class Partido
         Estado = EstadoPartido.Jugado;
     }
 
+    public void AgregarIncidencia(TipoIncidencia incidencia, bool esLocal)
+    {
+        if (esLocal)
+            incidenciaEquipoLocal.Add(incidencia);
+        else
+            incidenciaEquipoVisitante.Add(incidencia);
+    }
+
     public int GolesLocal
     {
         get => _golesLocal;
