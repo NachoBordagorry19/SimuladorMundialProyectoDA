@@ -6,6 +6,6 @@ namespace Servicios.Interfaces;
 public interface IServicioNotificacion
 {
     void GenerarNotificaciones(string mensaje);
-    List<Notificacion> ObtenerNoLeidas(int usuarioId);
+    List<NotificacionDTO> ObtenerNoLeidas(int usuarioId);
     void MarcarComoLeida(NotificacionDTO notDTO);
 }
