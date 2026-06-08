@@ -237,4 +237,12 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Generación de simulación completada correctamente"));
     }
+
+    [TestMethod]
+    public void RegistrarCalculosDeCambioDeRanking_DebeGuardarCorrectamente()
+    {
+        _servicio.RegistrarCalculosDeCambioDeRanking(300,315);
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Cambio de ranking completado correctamente"));
+    }
 }
