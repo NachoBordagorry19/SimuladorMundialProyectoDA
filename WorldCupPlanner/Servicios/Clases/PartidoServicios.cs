@@ -371,13 +371,21 @@ public class PartidoServicios : IServicioPartido
             }
         }
 
-        int tarjetasLocal = random.Next(0, 11);
-        for (int i = 0; i < tarjetasLocal; i++)
+        int tarjetasAmarillasLocal = random.Next(0, 11);
+        for (int i = 0; i < tarjetasAmarillasLocal; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, true);
 
-        int tarjetasVisitante = random.Next(0, 11);
-        for (int i = 0; i < tarjetasVisitante; i++)
+        int tarjetasAmarillasVisitante = random.Next(0, 11);
+        for (int i = 0; i < tarjetasAmarillasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, false);
+
+        int tarjetasRojasLocal = random.Next(0, 6);
+        for (int i = 0; i < tarjetasRojasLocal; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, true);
+
+        int tarjetasRojasVisitante = random.Next(0, 6);
+        for (int i = 0; i < tarjetasRojasVisitante; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
 
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
