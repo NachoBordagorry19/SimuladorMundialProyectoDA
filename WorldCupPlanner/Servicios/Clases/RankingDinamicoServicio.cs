@@ -9,10 +9,12 @@ namespace Servicios.Clases;
 public class RankingDinamicoServicio:IServicioRankingDinamico
 {
     private readonly IEquipoRepositorio _equipoRepositorio;
+    private readonly IServicioAuditoria _auditoria;
 
-    public RankingDinamicoServicio(IEquipoRepositorio equipoRepositorio)
+    public RankingDinamicoServicio(IEquipoRepositorio equipoRepositorio, IServicioAuditoria auditoria)
     {
         _equipoRepositorio = equipoRepositorio;
+        _auditoria = auditoria;
     }
 
     public void ActualizarRanking(PartidoDTO partidoDto)
@@ -21,12 +23,15 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
         if (local == null)
         {
             throw new ArgumentException("El equipo local no existe");
-        } 
+        }
         Equipo? visitante = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == partidoDto.equipoVisitante.nombre);
         if (visitante == null)
         {
             throw new ArgumentException("El equio visitante no existe");
         }
+
+        int rankingAnteriorLocal = local.RankingFifa;
+        int rankingAnteriorVisitante = visitante.RankingFifa;
 
         double probabilidadLocal = 1.0 / (1.0 + Math.Pow(10, (visitante.RankingFifa - local.RankingFifa) / 1000.0));
         double probabilidadVisitante = 1.0 - probabilidadLocal;
@@ -38,13 +43,16 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
         double multiplicador = partidoDto.fase == Fase.Grupos ? 1.0 : 1.5;
         double deltaLocal = 30 * (resultadoLocal - probabilidadLocal) * multiplicador;
         double deltaVisitante = 30 * (resultadoVisitante - probabilidadVisitante) * multiplicador;
-        
+
         local.RankingFifa = Math.Clamp(
             (int)Math.Round(local.RankingFifa + deltaLocal, MidpointRounding.AwayFromZero), 300, 2500);
         visitante.RankingFifa = Math.Clamp(
             (int)Math.Round(visitante.RankingFifa + deltaVisitante, MidpointRounding.AwayFromZero), 300, 2500);
-        
+
         _equipoRepositorio.ActualizarEquipo(local);
         _equipoRepositorio.ActualizarEquipo(visitante);
+
+        _auditoria.RegistrarCalculosDeCambioDeRanking(rankingAnteriorLocal, local.RankingFifa);
+        _auditoria.RegistrarCalculosDeCambioDeRanking(rankingAnteriorVisitante, visitante.RankingFifa);
     }
 }

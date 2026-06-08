@@ -1,8 +1,10 @@
 using Dominio.Clases;
 using Dominio.Enums;
+using Moq;
 using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Clases;
+using Servicios.Interfaces;
 using Servicios.Modelo;
 
 namespace TestServicios;
@@ -13,6 +15,7 @@ public class RankingDinamicoServicioTest
     private SqlContexto _contexto;
     private IEquipoRepositorio _equipoRepositorio;
     private RankingDinamicoServicio _servicioRankingDinamico;
+    private Mock<IServicioAuditoria> _auditoriasMock;
 
     [TestInitialize]
     public void IniciarPrueba()
@@ -20,7 +23,8 @@ public class RankingDinamicoServicioTest
         FabricaDeContextoDeAppEnMemoria fabricaDeContextoDeAppEnMemoria = new FabricaDeContextoDeAppEnMemoria();
         _contexto = fabricaDeContextoDeAppEnMemoria.CrearDbContexto();
         _equipoRepositorio = new EquipoRepositorioSql(_contexto);
-        _servicioRankingDinamico = new RankingDinamicoServicio(_equipoRepositorio);
+        _auditoriasMock = new Mock<IServicioAuditoria>();
+        _servicioRankingDinamico = new RankingDinamicoServicio(_equipoRepositorio, _auditoriasMock.Object);
     }
     
     private void AgregarEquipos(string nombreLocal, int rankingLocal, string nombreVisitante, int rankingVisitante)
