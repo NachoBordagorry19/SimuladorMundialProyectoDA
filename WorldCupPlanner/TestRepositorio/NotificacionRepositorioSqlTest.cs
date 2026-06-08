@@ -52,6 +52,11 @@ public class NotificacionRepositorioSqlTest
         
         Assert.AreEqual(1, notificaciones.Count);
     }
-    
-    //test por si el usuario no es el mismo
+
+    [TestMethod]
+    public void MarcarComoLeida_MarcaComoLeida()
+    {
+        _notificacionRepositorioSql.MarcarComoLeida(_notificacion.Id);
+        Assert.IsTrue(_notificacion.Leida);
+    }
 }
