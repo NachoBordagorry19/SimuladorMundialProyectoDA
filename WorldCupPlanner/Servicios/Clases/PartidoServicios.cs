@@ -392,6 +392,7 @@ public class PartidoServicios : IServicioPartido
         partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
         partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
+        _auditoria.RegistrarSimulacion(semillaSimulacion);
     }
 
 
@@ -436,6 +437,7 @@ public class PartidoServicios : IServicioPartido
                 SimularResultado(partido, semillaSimulacion + partido.idPartido);
             }
         }
+        _auditoria.RegistrarSimulacion(semillaSimulacion);
     }
     private bool EsPartidoEliminatorioEmpatado(PartidoDTO partido)
     {
