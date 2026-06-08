@@ -366,8 +366,18 @@ public class PartidoServicios : IServicioPartido
             }
         }
 
+        int tarjetasLocal = random.Next(0, 11);
+        for (int i = 0; i < tarjetasLocal; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, true);
+
+        int tarjetasVisitante = random.Next(0, 11);
+        for (int i = 0; i < tarjetasVisitante; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, false);
+
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
+        partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
+        partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
     }
 
