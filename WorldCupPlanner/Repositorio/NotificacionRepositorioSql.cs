@@ -24,7 +24,17 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
 
     public List<Notificacion> ObtenerNotificaciones(int usuarioId)
     {
-        return _contexto.Notificaciones.ToList();
+        List<Notificacion> notificaciones = new List<Notificacion>();
+        List<Notificacion> notsContexto = _contexto.Notificaciones.ToList();
+        
+        foreach (var not in notsContexto)
+        {
+            if (not.UsuarioId == usuarioId)
+            {
+                notificaciones.Add(not);
+            }
+        }
+        return notificaciones;
     }
 
     public List<Notificacion> ObtenerNotificacionesNoLeidas(int usuarioId)
