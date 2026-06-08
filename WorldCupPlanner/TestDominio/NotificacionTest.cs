@@ -12,4 +12,13 @@ public class NotificacionTest
         Usuario usuario = new Usuario();
         Notificacion not = new Notificacion("Mensaje", fechaHora, usuario.Id);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CrearNotificacion_SinMensaje_LanzaExcepcion()
+    {
+        DateTime fechaHora = DateTime.Now;
+        Usuario usuario = new Usuario();
+        Notificacion not = new Notificacion("", fechaHora, usuario.Id);
+    }
 }
