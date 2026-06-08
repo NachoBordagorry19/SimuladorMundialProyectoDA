@@ -98,9 +98,14 @@
             equipo = new EquipoDTO();
             confederacionSeleccionada = "";
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             mensaje = ex.Message;
+            esError = true;
+        }
+        catch (Exception)
+        {
+            mensaje = "Ocurrió un error inesperado. Intente nuevamente.";
             esError = true;
         }
     }

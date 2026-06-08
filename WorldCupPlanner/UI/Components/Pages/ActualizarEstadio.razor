@@ -73,7 +73,7 @@
         }
         catch (Exception ex)
         {
-            mensaje = $"Error al cargar estadio: {ex.Message}";
+            mensaje = $"Error al cargar estadios: {ex.Message}";
             esError = true;
         }
     }
@@ -90,9 +90,14 @@
             esError = false;
             estadio = new EstadioDTO();
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             mensaje = ex.Message;
+            esError = true;
+        }
+        catch (Exception)
+        {
+            mensaje = "Ocurrió un error inesperado. Intente nuevamente.";
             esError = true;
         }
     }
