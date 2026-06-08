@@ -64,6 +64,7 @@
                         <th>Confederación</th>
                         <th>Ranking FIFA</th>
                         <th>Acciones</th>
+                        <th>Bandera</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -73,6 +74,13 @@
                             <td>@equipo.nombre</td>
                             <td>@equipo.confederacion</td>
                             <td>@equipo.rankingFifa</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(equipo.banderaBase64))
+                                {
+                                    <img src="data:image/*;base64,@equipo.banderaBase64" style="height:30px;" />
+                                }
+                            </td>
+
                             <td>
                                 @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
                                 {
