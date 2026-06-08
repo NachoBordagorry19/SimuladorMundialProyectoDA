@@ -13,7 +13,8 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
     }
     public void AgregarNotificacion(Notificacion not)
     {
-        throw new NotImplementedException();
+        _contexto.Notificaciones.Add(not);
+        _contexto.SaveChanges();
     }
 
     public void MarcarComoLeida(int notId)
