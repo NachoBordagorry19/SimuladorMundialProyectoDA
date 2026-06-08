@@ -70,6 +70,26 @@
                         <label class="wcp-form-label">Semilla Simulación</label>
                         <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
                     </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Amarillas @partido.equipoLocal.nombre</label>
+                        <InputNumber @bind-Value="amarillasLocal" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Rojas @partido.equipoLocal.nombre</label>
+                        <InputNumber @bind-Value="rojasLocal" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Amarillas @partido.equipoVisitante.nombre</label>
+                        <InputNumber @bind-Value="amarillasVisitante" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Rojas @partido.equipoVisitante.nombre</label>
+                        <InputNumber @bind-Value="rojasVisitante" class="form-control" />
+                    </div>
                 </div>
 
                 <div class="wcp-actions">
@@ -86,55 +106,6 @@
                     </NavLink>
                 </div>
 
-                <div class="col-md-2">
-                    <label class="wcp-form-label">Goles local</label>
-                    <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
-                </div>
-
-                <div class="col-md-2">
-                    <label class="wcp-form-label">Goles visitante</label>
-                    <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
-                </div>
-
-                <div class="col-md-3">
-                    <label class="wcp-form-label">Amarillas @partido.equipoLocal.nombre</label>
-                    <InputNumber @bind-Value="amarillasLocal" class="form-control" />
-                </div>
-
-                <div class="col-md-3">
-                    <label class="wcp-form-label">Rojas @partido.equipoLocal.nombre</label>
-                    <InputNumber @bind-Value="rojasLocal" class="form-control" />
-                </div>
-
-                <div class="col-md-3">
-                    <label class="wcp-form-label">Amarillas @partido.equipoVisitante.nombre</label>
-                    <InputNumber @bind-Value="amarillasVisitante" class="form-control" />
-                </div>
-
-                <div class="col-md-3">
-                    <label class="wcp-form-label">Rojas @partido.equipoVisitante.nombre</label>
-                    <InputNumber @bind-Value="rojasVisitante" class="form-control" />
-                </div>
-
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Semilla Simulación</label>
-                    <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
-                </div>
-            </div>
-
-            <div class="wcp-actions">
-                <button class="wcp-btn-primary" @onclick="GuardarCambios">
-                    Guardar Cambios
-                </button>
-                
-                <button class="wcp-btn-secondary" @onclick="SimularResultado">
-                    Simular Resultado
-                </button>
-
-                <NavLink href="/partidos" class="wcp-btn-secondary">
-                    Volver
-                </NavLink>
-            </div>
             </EditForm>
         }
     </div>
