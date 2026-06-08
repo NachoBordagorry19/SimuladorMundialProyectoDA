@@ -229,4 +229,12 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Realización de sorteo para cruces"));
     }
+    
+    [TestMethod]
+    public void RegistrarSimulacion_DebeGuardarRegistroCorrectamente()
+    {
+        _servicio.RegistrarSimulacion(int semilla, string tipo);
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Generación de simulación completada correctamente"));
+    }
 }
