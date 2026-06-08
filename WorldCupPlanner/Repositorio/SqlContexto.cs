@@ -16,6 +16,7 @@ public class SqlContexto: DbContext
     public DbSet<Estadio> Estadios { get; set; }
     public DbSet<Partido> Partidos { get; set; }
     public DbSet<Auditoria> Auditorias { get; set; }
+    public DbSet<Notificacion>  Notificaciones { get; set; }
 
     public SqlContexto(DbContextOptions<SqlContexto> options) : base(options)
     {

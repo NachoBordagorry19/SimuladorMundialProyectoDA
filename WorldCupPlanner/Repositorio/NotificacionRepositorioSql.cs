@@ -23,7 +23,7 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
 
     public List<Notificacion> ObtenerNotificaciones(int usuarioId)
     {
-        throw new NotImplementedException();
+        return _contexto.Notificaciones.ToList();
     }
 
     public List<Notificacion> ObtenerNotificacionesNoLeidas(int usuarioId)
