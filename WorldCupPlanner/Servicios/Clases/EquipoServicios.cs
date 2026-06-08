@@ -203,11 +203,14 @@ public class EquipoServicios : IServicioEquipo
                 throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDto.confederacion}");
             }
         }
+        
+        equipoOriginal.Nombre = equipoDto.nombre;
+        equipoOriginal.Confederacion = equipoDto.confederacion;
+        equipoOriginal.RankingFifa = equipoDto.rankingFifa;
+        equipoOriginal.BanderaBase64 = equipoDto.banderaBase64;
+        _equipoRepositorio.ActualizarEquipo(equipoOriginal);
+        _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
 
-        Equipo equipoActualizado = EquipoDTOAEntidad(equipoDto);
-
-        _equipoRepositorio.EliminarEquipo(equipoOriginal);
-        _equipoRepositorio.AgregarEquipo(equipoActualizado);
         _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
     }
 
