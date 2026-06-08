@@ -12,6 +12,10 @@ public class Notificacion
         get => _mensaje;
         set
         {
+            if (EsVacio(value))
+            {
+                throw new ArgumentException("El mensaje no puede ser vacio");
+            }
             _mensaje = value;
         }
     }
@@ -40,6 +44,16 @@ public class Notificacion
         {
             _usuarioId = Convert.ToInt32(value);
         }
+    }
+    
+    public bool EsVacio(string textoATestear)
+    {
+        bool vacio = true;
+        if (!String.IsNullOrEmpty(textoATestear))
+        {
+            vacio = false;
+        }
+        return vacio;
     }
 
     public Notificacion()
