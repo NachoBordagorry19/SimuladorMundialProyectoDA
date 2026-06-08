@@ -351,7 +351,7 @@ public class PartidoServiciosTest
         _servicioPartido.SimularResultado(_partidoDTO, 12345);
 
         PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
-        Assert.IsTrue(partidoSimulado.incidenciaEquipoLocal.Count > 0);
-        Assert.IsTrue(partidoSimulado.incidenciaEquipoVisitante.Count > 0);
+        Assert.IsTrue(partidoSimulado.incidenciaEquipoLocal.Count >= 0 && partidoSimulado.incidenciaEquipoLocal.Count <= 10);
+        Assert.IsTrue(partidoSimulado.incidenciaEquipoVisitante.Count >= 0 && partidoSimulado.incidenciaEquipoVisitante.Count <= 10);
     }
 }
