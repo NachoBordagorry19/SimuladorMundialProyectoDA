@@ -3,10 +3,10 @@ namespace Dominio.Clases;
 public class Notificacion
 {
     public int Id { get; set; }
-    public string _mensaje = string.Empty;
-    public DateTime _fechaHora;
-    public bool _leida;
-    public int _usuarioId;
+    private string _mensaje = string.Empty;
+    private DateTime _fechaHora;
+    private bool _leida;
+    private int _usuarioId;
 
     public string Mensaje
     {
