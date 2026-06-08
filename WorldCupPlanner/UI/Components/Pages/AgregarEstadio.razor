@@ -9,39 +9,43 @@
         <h1 class="wcp-title">Agregar Estadio</h1>
         <p class="wcp-subtitle">Registrar un nuevo estadio.</p>
         
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="wcp-form-label">Nombre</label>
-                <InputText @bind-Value="estadio.Nombre" class="form-control" />
+        <EditForm Model="estadio" OnValidSubmit="Guardar" FormName="agregarEstadioForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Nombre</label>
+                    <InputText @bind-Value="estadio.Nombre" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Ciudad</label>
+                    <InputText @bind-Value="estadio.Ciudad" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Descripción</label>
+                    <InputText @bind-Value="estadio.Descripcion" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Capacidad</label>
+                    <InputNumber @bind-Value="estadio.CapacidadLocativa" class="form-control" />
+                </div>
             </div>
 
-            <div class="col-md-6">
-                <label class="wcp-form-label">Ciudad</label>
-                <InputText @bind-Value="estadio.Ciudad" class="form-control" />
+            <div class="wcp-actions mt-3">
+                <button type="submit" class="wcp-btn-primary">Guardar</button>
+                <NavLink href="/estadios" class="wcp-btn-secondary">Volver</NavLink>
             </div>
 
-            <div class="col-md-6">
-                <label class="wcp-form-label">Descripción</label>
-                <InputText @bind-Value="estadio.Descripcion" class="form-control" />
-            </div>
-
-            <div class="col-md-6">
-                <label class="wcp-form-label">Capacidad</label>
-                <InputNumber @bind-Value="estadio.CapacidadLocativa" class="form-control" />
-            </div>
-        </div>
-
-        <div class="wcp-actions mt-3">
-            <button @onclick="Guardar" class="wcp-btn-primary">Guardar</button>
-            <NavLink href="/estadios" class="wcp-btn-secondary">Volver</NavLink>
-        </div>
-
-        @if (!string.IsNullOrEmpty(mensaje))
-        {
-            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
-                @mensaje
-            </div>
-        }
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                    @mensaje
+                </div>
+            }
+        </EditForm>
     </div>
 </div>
 
