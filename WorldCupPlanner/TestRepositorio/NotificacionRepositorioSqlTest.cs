@@ -8,6 +8,7 @@ public class NotificacionRepositorioSqlTest
 {
     private NotificacionRepositorioSql _notificacionRepositorioSql;
     private Notificacion _notificacion;
+    private Usuario _usuario;
     private SqlContexto _contexto;
     private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
 
@@ -20,8 +21,9 @@ public class NotificacionRepositorioSqlTest
         _contexto.SaveChanges();
         _notificacionRepositorioSql = new NotificacionRepositorioSql(_contexto);
         DateTime fechaHora = DateTime.Now;
-        Usuario usuario = new Usuario();
-        _notificacion = new Notificacion("Mensaje", fechaHora, usuario.Id);
+        _usuario = new Usuario();
+        _usuario.Id = 1;
+        _notificacion = new Notificacion("Mensaje", fechaHora, _usuario.Id);
     }
 
     [TestMethod]
@@ -50,4 +52,6 @@ public class NotificacionRepositorioSqlTest
         
         Assert.AreEqual(1, notificaciones.Count);
     }
+    
+    //test por si el usuario no es el mismo
 }

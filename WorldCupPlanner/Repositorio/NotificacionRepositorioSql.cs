@@ -29,6 +29,15 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
 
     public List<Notificacion> ObtenerNotificacionesNoLeidas(int usuarioId)
     {
-        throw new NotImplementedException();
+        List<Notificacion> noLeidas = new List<Notificacion>();
+        List<Notificacion> notificaciones = _contexto.Notificaciones.ToList();
+        foreach (var not in notificaciones)
+        {
+            if (not.Leida == false && not.UsuarioId == usuarioId)
+            {
+                noLeidas.Add(not);
+            }
+        }
+        return noLeidas;
     }
 }
