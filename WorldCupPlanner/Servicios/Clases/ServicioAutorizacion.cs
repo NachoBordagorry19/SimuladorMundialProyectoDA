@@ -46,4 +46,14 @@ public class ServicioAutorizacion : IServicioAutorizacion
         return usuarioActual.Roles.Contains(Rol.Administrador)
                && usuarioActual.Email != emailAEliminar;
     }
+    
+    public bool PuedeVerFixture(UsuarioDTO usuario)
+    {
+        return usuario.Roles.Contains(Rol.Editor) || usuario.Roles.Contains(Rol.Periodista);
+    }
+
+    public bool PuedeVerEstadisticas(UsuarioDTO usuario)
+    {
+        return usuario.Roles.Contains(Rol.Administrador) || usuario.Roles.Contains(Rol.Periodista);
+    }
 }

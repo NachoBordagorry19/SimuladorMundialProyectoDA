@@ -12,6 +12,7 @@ public interface IServicioAutorizacion
     bool PuedeUsarFixture(UsuarioDTO? usuario);
     bool PuedeEditarPartidos(UsuarioDTO? usuario);
     bool PuedeImportar(UsuarioDTO? usuario);
-
     bool PuedeEliminarUsuario(UsuarioDTO? usuarioActual, string emailAEliminar);
+    bool PuedeVerFixture(UsuarioDTO? usuario);     
+    bool PuedeVerEstadisticas(UsuarioDTO? usuario);
 }

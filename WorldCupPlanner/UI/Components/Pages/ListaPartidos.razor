@@ -16,13 +16,13 @@
                 <p class="wcp-subtitle">Listado de partidos programados en el sistema.</p>
             </div>
 
-            @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
-            {
-                <div class="alert alert-danger wcp-alert">Solo un editor puede gestionar partidos.</div>
-            }
-            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
-            {
-                <NavLink href="/fixture" class="wcp-btn-primary">Ver Fixture</NavLink>
+            @if (!Sesion.UsuarioActual.Roles.Contains(Rol.Editor) && !Sesion.UsuarioActual.Roles.Contains(Rol.Periodista))                                              
+            {                                                                                                                                                           
+                <div class="alert alert-danger wcp-alert">Solo un editor o periodista puede ver los partidos.</div>                                                     
+            }                                                                                                                                                           
+            @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))                                                                                                       
+            {                                                                                                                                                           
+                <NavLink href="/fixture" class="wcp-btn-primary">Ver Fixture</NavLink>                                                                                  
             }
         </div>
 
