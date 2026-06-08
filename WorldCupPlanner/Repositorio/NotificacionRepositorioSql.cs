@@ -21,6 +21,11 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
         throw new NotImplementedException();
     }
 
+    public List<Notificacion> ObtenerNotificaciones(int usuarioId)
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Notificacion> ObtenerNotificacionesNoLeidas(int usuarioId)
     {
         throw new NotImplementedException();

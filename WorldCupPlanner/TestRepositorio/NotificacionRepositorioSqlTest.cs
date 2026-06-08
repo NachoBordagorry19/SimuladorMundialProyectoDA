@@ -23,4 +23,11 @@ public class NotificacionRepositorioSqlTest
         Usuario usuario = new Usuario();
         _notificacion = new Notificacion("Mensaje", fechaHora, usuario.Id);
     }
+
+    [TestMethod]
+    public void ObtenerNotificaciones_SeObtienenCorrectamente()
+    {
+        List<Notificacion> notificaciones = _notificacionRepositorioSql.ObtenerNotificaciones(1);
+        Assert.AreEqual(0, notificaciones.Count);
+    }
 }
