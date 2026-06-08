@@ -27,61 +27,65 @@
 
         @if (partido != null)
         {
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Equipo local</label>
-                    <input class="form-control" value="@partido.equipoLocal.nombre" disabled />
+            <EditForm Model="partido" OnValidSubmit="GuardarCambios" FormName="editarPartidoForm">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="wcp-form-label">Equipo local</label>
+                        <input class="form-control" value="@partido.equipoLocal.nombre" disabled />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="wcp-form-label">Equipo visitante</label>
+                        <input class="form-control" value="@partido.equipoVisitante.nombre" disabled />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="wcp-form-label">Fecha</label>
+                        <InputDate @bind-Value="partido.Fecha" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="wcp-form-label">Estadio</label>
+                        <select class="form-control" @bind="nombreEstadioSeleccionado">
+                            @foreach (var estadio in estadios)
+                            {
+                                <option value="@estadio.Nombre">@estadio.Nombre</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="wcp-form-label">Goles local</label>
+                        <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="wcp-form-label">Goles visitante</label>
+                        <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="wcp-form-label">Semilla Simulación</label>
+                        <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
+                    </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Equipo visitante</label>
-                    <input class="form-control" value="@partido.equipoVisitante.nombre" disabled />
-                </div>
+                <div class="wcp-actions">
+                    <button type="submit" class="wcp-btn-primary">
+                        Guardar Cambios
+                    </button>
 
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Fecha</label>
-                    <InputDate @bind-Value="partido.Fecha" class="form-control" />
-                </div>
+                    <button type="button" class="wcp-btn-secondary" @onclick="SimularResultado">
+                        Simular Resultado
+                    </button>
 
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Estadio</label>
-                    <select class="form-control" @bind="nombreEstadioSeleccionado">
-                        @foreach (var estadio in estadios)
-                        {
-                            <option value="@estadio.Nombre">@estadio.Nombre</option>
-                        }
-                    </select>
+                    <NavLink href="/partidos" class="wcp-btn-secondary">
+                        Volver
+                    </NavLink>
                 </div>
-
-                <div class="col-md-2">
-                    <label class="wcp-form-label">Goles local</label>
-                    <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
-                </div>
-
-                <div class="col-md-2">
-                    <label class="wcp-form-label">Goles visitante</label>
-                    <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
-                </div>
-                
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Semilla Simulación</label>
-                    <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
-                </div>
-            </div>
-
-            <div class="wcp-actions">
-                <button class="wcp-btn-primary" @onclick="GuardarCambios">
-                    Guardar Cambios
-                </button>
-                
-                <button class="wcp-btn-secondary" @onclick="SimularResultado">
-                    Simular Resultado
-                </button>
-
-                <NavLink href="/partidos" class="wcp-btn-secondary">
-                    Volver
-                </NavLink>
-            </div>
+            </EditForm>
         }
     </div>
 </div>
