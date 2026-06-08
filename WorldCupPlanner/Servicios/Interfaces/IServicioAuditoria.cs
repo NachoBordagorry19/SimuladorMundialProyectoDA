@@ -17,5 +17,6 @@ public interface IServicioAuditoria
     void RegistrarSorteoCruces();
     void RegistrarImportacionEquipos(string mensaje, bool esExito);
     void RegistrarSimulacion(int semilla);
+    void RegistrarCalculosDeCambioDeRanking(int valorAnterior, int valorNuevo);
     List<string> ObtenerRegistrosFormateados();
 }

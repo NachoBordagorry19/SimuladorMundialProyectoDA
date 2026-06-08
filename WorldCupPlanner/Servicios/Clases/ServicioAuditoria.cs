@@ -104,9 +104,12 @@ public class ServicioAuditoria : IServicioAuditoria
     {
         Registrar("Generación de simulación completada correctamente","La semilla usada es: " + semilla);
     }
-
-
-
+    
+    public void RegistrarCalculosDeCambioDeRanking(int valorAnterior, int valorNuevo)
+    {
+        Registrar("Cambio de ranking completado correctamente", "El valor anterior era: " + valorAnterior + ", el valor actual es ahora: " + valorNuevo);
+    }
+    
     public List<string> ObtenerRegistrosFormateados()
     {
         var logs = _auditoriaRepo.ObtenerTodosLosRegistros();
