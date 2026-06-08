@@ -30,7 +30,7 @@ public class Usuario
         {
             if (EsVacio(value))
             {
-                throw new ArgumentException("Nombre no debe ser vacio");
+                throw new ArgumentException("El nombre es obligatorio");
             }
 
             _nombre = value;
@@ -44,7 +44,7 @@ public class Usuario
         {
             if (EsVacio(value))
             {
-                throw new ArgumentException("Apellido no debe ser vacio");
+                throw new ArgumentException("El apellido es obligatorio");
             }
             _apellido = value;
         }
@@ -57,7 +57,7 @@ public class Usuario
         {
             if (EsVacio(value))
             {
-                throw new ArgumentException("Email no debe ser vacio");
+                throw new ArgumentException("El email es obligatorio");
             }
             _email = value;
         }
@@ -70,7 +70,7 @@ public class Usuario
         {
             if (value == DateTime.MinValue)
             {
-                throw new ArgumentException("Fecha de nacimiento debe ser real");
+                throw new ArgumentException("La fecha de nacimiento no es válida");
             }
             if (value.Year < 1900)
             {
@@ -91,7 +91,7 @@ public class Usuario
         {
             if (EsVacio(value))
             {
-                throw new ArgumentException("Contraseña no debe ser vacio");
+                throw new ArgumentException("CLa contraseña es obligatoria");
             }
             else if (!value.Any(char.IsUpper))
             {
