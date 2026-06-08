@@ -56,7 +56,7 @@ public class NotificacionRepositorioSqlTest
     [TestMethod]
     public void MarcarComoLeida_MarcaComoLeida()
     {
-        _notificacionRepositorioSql.MarcarComoLeida(_notificacion.Id);
+        _notificacionRepositorioSql.MarcarComoLeida(_notificacion);
         Assert.IsTrue(_notificacion.Leida);
     }
 }

@@ -17,9 +17,9 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
         _contexto.SaveChanges();
     }
 
-    public void MarcarComoLeida(int notId)
+    public void MarcarComoLeida(Notificacion not)
     {
-        throw new NotImplementedException();
+        not.MarcarComoLeida();
     }
 
     public List<Notificacion> ObtenerNotificaciones(int usuarioId)
