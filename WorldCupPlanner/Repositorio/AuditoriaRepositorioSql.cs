@@ -23,4 +23,12 @@ public class AuditoriaRepositorioSql : IAuditoriaRepositorio
             .OrderByDescending(a => a.FechaHora)
             .ToList();
     }
+
+    public List<Auditoria> ObtenerPorRango(DateTime desde, DateTime hasta)
+    {
+        return _contexto.Auditorias
+            .Where(a => a.FechaHora >= desde && a.FechaHora <= hasta)
+            .OrderByDescending(a => a.FechaHora)
+            .ToList();
+    }
 }
