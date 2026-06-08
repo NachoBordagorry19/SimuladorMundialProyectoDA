@@ -23,4 +23,12 @@ public class ServicioExportacionTest
         byte[] resultado = _servicio.ExportarAuditoriaCsv(DateTime.MinValue, DateTime.MaxValue);
         Assert.IsTrue(resultado.Length > 0);
     }
+
+    [TestMethod]
+    public void ExportarAuditoriaCsv_ConRegistros_ContieneEncabezado()
+    {
+        byte[] resultado = _servicio.ExportarAuditoriaCsv(DateTime.MinValue, DateTime.MaxValue);
+        string contenido = System.Text.Encoding.UTF8.GetString(resultado);
+        Assert.IsTrue(contenido.Contains("FechaHora,Usuario,Accion,Detalle"));
+    }
 }
