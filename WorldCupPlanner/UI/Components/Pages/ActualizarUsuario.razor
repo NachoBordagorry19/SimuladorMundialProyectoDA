@@ -64,6 +64,11 @@
                         <InputCheckbox @bind-Value="esEditor" class="form-check-input" />
                         <label class="form-check-label">Editor</label>
                     </div>
+                    
+                    <div class="form-check">                                                                                                                                    
+                        <InputCheckbox @bind-Value="esPeriodista" class="form-check-input" />                                                                                   
+                        <label class="form-check-label">Periodista</label>                                                                                                      
+                    </div>
                 </div>
             </div>
 
@@ -90,6 +95,7 @@
     private bool esError = false;
     private bool esAdministrador;
     private bool esEditor;
+    private bool esPeriodista;
 
     protected override void OnInitialized()
     {
@@ -142,6 +148,7 @@
 
             esAdministrador = usuario.Roles.Contains(Rol.Administrador);
             esEditor = usuario.Roles.Contains(Rol.Editor);
+            esPeriodista = usuario.Roles.Contains(Rol.Periodista);
         }
         catch (Exception ex)
         {
@@ -167,6 +174,11 @@
             if (esEditor)
             {
                 usuario.Roles.Add(Rol.Editor);
+            }
+            
+            if (esPeriodista)
+            {
+                usuario.Roles.Add(Rol.Periodista);
             }
 
             ServicioUsuario.ActualizarUsuario(emailOriginal, usuario);
