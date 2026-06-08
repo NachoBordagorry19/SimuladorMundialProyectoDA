@@ -210,8 +210,6 @@ public class EquipoServicios : IServicioEquipo
         equipoOriginal.BanderaBase64 = equipoDto.banderaBase64;
         _equipoRepositorio.ActualizarEquipo(equipoOriginal);
         _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
-
-        _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)

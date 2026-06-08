@@ -257,6 +257,11 @@ public class PartidoServicios : IServicioPartido
             if (eraPendiente)
                 _rankingDinamico.ActualizarRanking(PartidoEntidadADto(partidoExistente));
         }
+        if (partidoDTO.incidenciaEquipoLocal != null)
+            partidoExistente.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoLocal);
+        if (partidoDTO.incidenciaEquipoVisitante != null)
+            partidoExistente.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoVisitante);
+
         string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
         _partidoRepositorio.ActualizarPartido(partidoExistente);
@@ -366,8 +371,26 @@ public class PartidoServicios : IServicioPartido
             }
         }
 
+        int tarjetasAmarillasLocal = random.Next(0, 6);
+        for (int i = 0; i < tarjetasAmarillasLocal; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, true);
+
+        int tarjetasAmarillasVisitante = random.Next(0, 6);
+        for (int i = 0; i < tarjetasAmarillasVisitante; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, false);
+
+        int tarjetasRojasLocal = random.Next(0, 100) < 30 ? random.Next(1, 4) : 0;
+        for (int i = 0; i < tarjetasRojasLocal; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, true);
+
+        int tarjetasRojasVisitante = random.Next(0, 100) < 30 ? random.Next(1, 4) : 0;
+        for (int i = 0; i < tarjetasRojasVisitante; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
+
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
+        partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
+        partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
     }
 
