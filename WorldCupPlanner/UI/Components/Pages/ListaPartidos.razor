@@ -8,7 +8,7 @@
 @inject IServicioCrucesSegundaFase ServicioCruces
 @inject UsuarioSesion Sesion
 
-<div class="wcp-page">
+<div class="wcp-page" style="max-width: 1400px">
     <div class="wcp-card">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
@@ -102,7 +102,6 @@
     @if (partidos.Count > 0)
     {
         <div class="wcp-card mt-4">
-            <div style="overflow-x: auto">
             <table class="wcp-table">
                 <thead>
                 <tr>
@@ -159,7 +158,6 @@
                 }
                 </tbody>
             </table>
-            </div>
         </div>
     }
     else
