@@ -98,4 +98,18 @@ public class RankingDinamicoServicioTest
         Assert.AreEqual(1478, visitanteActualizado.RankingFifa);
     }
 
+    [TestMethod]
+    public void ActualizarRanking_RankingNuevoSuperaMaximo_SeLimita2500()
+    {
+        AgregarEquipos("Barcelona", 2490, "Bayern", 2490);
+        PartidoDTO partidoDto = CrearPartidoDTO("Barcelona", "Bayern", 1, 0, Fase.Semifinal);
+
+        _servicioRankingDinamico.ActualizarRanking(partidoDto);
+
+        var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Barcelona");
+        var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Bayern");
+        Assert.AreEqual(2500, localActualizado.RankingFifa);
+        Assert.AreEqual(2468, visitanteActualizado.RankingFifa);
+    }
+
 }
