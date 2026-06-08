@@ -100,6 +100,11 @@ public class ServicioAuditoria : IServicioAuditoria
         Registrar("Realización de sorteo para cruces", "Proceso completado");
     }
 
+    public void RegistrarSimulacion(int semilla)
+    {
+        Registrar("Generación de simulación completada correctamente","La semilla usada es: " + semilla);
+    }
+
 
 
     public List<string> ObtenerRegistrosFormateados()

@@ -233,7 +233,7 @@ public class AuditoriaServicioTest
     [TestMethod]
     public void RegistrarSimulacion_DebeGuardarRegistroCorrectamente()
     {
-        _servicio.RegistrarSimulacion(int semilla, string tipo);
+        _servicio.RegistrarSimulacion(781);
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Generación de simulación completada correctamente"));
     }
