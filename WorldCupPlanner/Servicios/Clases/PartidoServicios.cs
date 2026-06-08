@@ -257,6 +257,11 @@ public class PartidoServicios : IServicioPartido
             if (eraPendiente)
                 _rankingDinamico.ActualizarRanking(PartidoEntidadADto(partidoExistente));
         }
+        if (partidoDTO.incidenciaEquipoLocal != null)
+            partidoExistente.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoLocal);
+        if (partidoDTO.incidenciaEquipoVisitante != null)
+            partidoExistente.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoVisitante);
+
         string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
         _partidoRepositorio.ActualizarPartido(partidoExistente);
