@@ -28,10 +28,6 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
             throw new ArgumentException("El equio visitante no existe");
         }
 
-        if (partidoDto.golesLocal == partidoDto.golesVisitante)
-        {
-            return;
-        }
         double probabilidadLocal = 1.0 / (1.0 + Math.Pow(10, (visitante.RankingFifa - local.RankingFifa) / 1000.0));
         double probabilidadVisitante = 1.0 - probabilidadLocal;
 

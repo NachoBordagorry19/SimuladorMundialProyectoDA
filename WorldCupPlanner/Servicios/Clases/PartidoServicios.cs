@@ -11,11 +11,13 @@ public class PartidoServicios : IServicioPartido
     private readonly IPartidoRepositorio _partidoRepositorio;
     private readonly IServicioAuditoria _auditoria;
     private readonly List<Fase> _fasesBloqueadas = new List<Fase>();
+    private readonly IServicioRankingDinamico _rankingDinamico;
 
-    public PartidoServicios(IPartidoRepositorio partidoRepositorio, IServicioAuditoria auditoria)
+    public PartidoServicios(IPartidoRepositorio partidoRepositorio, IServicioAuditoria auditoria, IServicioRankingDinamico rankingDinamico)
     {
         _partidoRepositorio = partidoRepositorio;
         _auditoria = auditoria;
+        _rankingDinamico = rankingDinamico;
     }
 
     public void AgregarPartido(PartidoDTO partidoDto, EquipoDTO equipoLocal, EquipoDTO equipoVisitante, EstadioDTO estadio)
@@ -248,9 +250,12 @@ public class PartidoServicios : IServicioPartido
 
         if (partidoDTO.golesLocal >= 0 || partidoDTO.golesVisitante >= 0)
         {
+            bool eraPendiente = partidoExistente.Estado == EstadoPartido.Pendiente;
             partidoExistente.GolesLocal = partidoDTO.golesLocal;
             partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
             partidoExistente.MarcarComoJugado();
+            if (eraPendiente)
+                _rankingDinamico.ActualizarRanking(PartidoEntidadADto(partidoExistente));
         }
         string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
