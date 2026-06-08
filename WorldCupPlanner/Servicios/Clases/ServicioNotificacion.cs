@@ -17,7 +17,7 @@ public class ServicioNotificacion : IServicioNotificacion
     }
 
 
-    public void GenerarNotificacionesParaPeriodistas(string mensaje)
+    public void GenerarNotificaciones(string mensaje)
     {
         throw new NotImplementedException();
     }

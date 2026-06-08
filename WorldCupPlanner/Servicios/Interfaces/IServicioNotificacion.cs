@@ -5,7 +5,7 @@ namespace Servicios.Interfaces;
 
 public interface IServicioNotificacion
 {
-    void GenerarNotificacionesParaPeriodistas(string mensaje);
+    void GenerarNotificaciones(string mensaje);
     List<Notificacion> ObtenerNoLeidas(int usuarioId);
     void MarcarComoLeida(NotificacionDTO notDTO);
 }
