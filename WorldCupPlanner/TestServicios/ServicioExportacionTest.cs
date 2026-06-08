@@ -31,4 +31,12 @@ public class ServicioExportacionTest
         string contenido = System.Text.Encoding.UTF8.GetString(resultado);
         Assert.IsTrue(contenido.Contains("FechaHora,Usuario,Accion,Detalle"));
     }
+
+    [TestMethod]
+    public void ExportarAuditoriaXlsx_ConRegistros_DevuelveBytesNoVacios()
+    {
+        _repoMock.AgregarRegistro(new Auditoria { Usuario = "admin@test.com", Accion = "Alta Usuario", Detalle = "Test" });
+        byte[] resultado = _servicio.ExportarAuditoriaXlsx(DateTime.MinValue, DateTime.MaxValue);
+        Assert.IsTrue(resultado.Length > 0);
+    }
 }
