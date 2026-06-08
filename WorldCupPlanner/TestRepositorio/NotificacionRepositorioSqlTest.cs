@@ -30,4 +30,22 @@ public class NotificacionRepositorioSqlTest
         List<Notificacion> notificaciones = _notificacionRepositorioSql.ObtenerNotificaciones(1);
         Assert.AreEqual(0, notificaciones.Count);
     }
+
+    [TestMethod]
+    public void AgregarNotificacion_SeAgregaCorrectamente()
+    {
+        _notificacionRepositorioSql.AgregarNotificacion(_notificacion);
+        List<Notificacion> notificaciones = _notificacionRepositorioSql.ObtenerNotificaciones(1);
+        Assert.AreEqual(1, notificaciones.Count);
+    }
+    
+    //[TestMethod]
+    public void ObtenerNotificacionesNoLeidas_SeObtienenCorrectamente()
+    {
+        List<Notificacion> notificaciones = _notificacionRepositorioSql.ObtenerNotificaciones(1);
+        Notificacion not = new Notificacion("Mensaje", DateTime.Now, notificaciones.Count);
+        not.MarcarComoLeida();
+        
+        Assert.AreEqual(0, notificaciones.Count);
+    }
 }
