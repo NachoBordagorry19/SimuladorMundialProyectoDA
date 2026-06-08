@@ -18,6 +18,8 @@
         }
 
         <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="agregarUsuarioForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="wcp-form-label">Nombre</label>

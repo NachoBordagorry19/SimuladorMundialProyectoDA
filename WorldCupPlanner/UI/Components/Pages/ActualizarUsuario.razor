@@ -11,6 +11,8 @@
         <p class="wcp-subtitle">Seleccione un usuario registrado y actualice sus datos.</p>
 
         <EditForm Model="usuario" OnValidSubmit="Guardar" FormName="actualizarUsuarioForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="wcp-form-label">Usuario a editar</label>
@@ -28,27 +30,27 @@
 
                 <div class="col-md-6">
                     <label class="wcp-form-label">Nombre</label>
-                    <InputText @bind-Value="usuario.Nombre" class="form-control" />
+                    <InputText @bind-Value="usuario.Nombre" class="form-control"/>
                 </div>
 
                 <div class="col-md-6">
                     <label class="wcp-form-label">Apellido</label>
-                    <InputText @bind-Value="usuario.Apellido" class="form-control" />
+                    <InputText @bind-Value="usuario.Apellido" class="form-control"/>
                 </div>
 
                 <div class="col-md-6">
                     <label class="wcp-form-label">Email</label>
-                    <InputText @bind-Value="usuario.Email" class="form-control" />
+                    <InputText @bind-Value="usuario.Email" class="form-control"/>
                 </div>
 
                 <div class="col-md-6">
                     <label class="wcp-form-label">Fecha de nacimiento</label>
-                    <InputDate @bind-Value="usuario.FechaNacimiento" class="form-control" />
+                    <InputDate @bind-Value="usuario.FechaNacimiento" class="form-control"/>
                 </div>
 
                 <div class="col-md-6">
                     <label class="wcp-form-label">Nueva contraseña</label>
-                    <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control" />
+                    <InputText @bind-Value="usuario.Contraseña" type="password" class="form-control"/>
                     <small class="text-muted">Dejar vacía para mantener la contraseña actual.</small>
                 </div>
 
@@ -56,18 +58,18 @@
                     <label class="wcp-form-label">Roles</label>
 
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="esAdministrador" class="form-check-input" />
+                        <InputCheckbox @bind-Value="esAdministrador" class="form-check-input"/>
                         <label class="form-check-label">Administrador</label>
                     </div>
 
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="esEditor" class="form-check-input" />
+                        <InputCheckbox @bind-Value="esEditor" class="form-check-input"/>
                         <label class="form-check-label">Editor</label>
                     </div>
-                    
-                    <div class="form-check">                                                                                                                                    
-                        <InputCheckbox @bind-Value="esPeriodista" class="form-check-input" />                                                                                   
-                        <label class="form-check-label">Periodista</label>                                                                                                      
+
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="esPeriodista" class="form-check-input"/>
+                        <label class="form-check-label">Periodista</label>
                     </div>
                 </div>
             </div>
