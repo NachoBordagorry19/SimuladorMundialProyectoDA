@@ -2,10 +2,11 @@ namespace Dominio.Clases;
 
 public class Notificacion
 {
+    public int Id { get; set; }
     public string _mensaje = string.Empty;
-    public DateTime _fechaHora { get; set; }
-    public bool _leida { get; set; } = false;
-    public int _usuarioId { get; set; }
+    public DateTime _fechaHora;
+    public bool _leida;
+    public int _usuarioId;
 
     public string Mensaje
     {
