@@ -51,7 +51,7 @@ public class Notificacion
     {
         Mensaje = mensaje;
         FechaHora = fechaHora;
-        Leida = false;
         UsuarioId = usuarioId;
+        Leida = false;
     }
 }
