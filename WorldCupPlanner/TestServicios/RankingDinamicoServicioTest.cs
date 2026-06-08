@@ -112,4 +112,18 @@ public class RankingDinamicoServicioTest
         Assert.AreEqual(2468, visitanteActualizado.RankingFifa);
     }
 
+    [TestMethod]
+    public void ActualizarRanking_RankingNuevoBajaDeMinimo_SeLimita300()
+    {
+        AgregarEquipos("Barcelona", 300, "Bayern", 300);
+        PartidoDTO partidoDto = CrearPartidoDTO("Barcelona", "Bayern", 0, 1, Fase.Grupos);
+
+        _servicioRankingDinamico.ActualizarRanking(partidoDto);
+
+        var localActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Barcelona");
+        var visitanteActualizado = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == "Bayern");
+        Assert.AreEqual(300, localActualizado.RankingFifa);
+        Assert.AreEqual(315, visitanteActualizado.RankingFifa);
+    }
+
 }
