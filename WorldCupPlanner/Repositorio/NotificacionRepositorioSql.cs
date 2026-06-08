@@ -5,6 +5,12 @@ namespace Repositorio;
 
 public class NotificacionRepositorioSql : INotificacionRepositorio
 {
+    private SqlContexto _contexto;
+
+    public NotificacionRepositorioSql(SqlContexto contexto)
+    {
+        _contexto = contexto;
+    }
     public void AgregarNotificacion(Notificacion not)
     {
         throw new NotImplementedException();
