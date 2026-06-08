@@ -32,10 +32,8 @@ public class Notificacion
     
     public bool Leida
     {
-        set
-        {
-            _leida = value;
-        }
+        get => _leida;
+        set => _leida = value;
     }
 
     public int UsuarioId
