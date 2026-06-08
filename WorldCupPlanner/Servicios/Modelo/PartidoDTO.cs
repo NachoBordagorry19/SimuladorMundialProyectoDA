@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Dominio.Clases;
 using Dominio.Enums;
 
@@ -6,6 +7,7 @@ namespace Servicios.Modelo;
 public class PartidoDTO
 {
     public int idPartido { get; set; }
+    [Required(ErrorMessage = "La fecha es obligatoria")]
     public DateTime Fecha { get; set; }
     public EstadioDTO Estadio { get; set; } = new EstadioDTO();
     public EquipoDTO equipoLocal { get; set; } = new EquipoDTO();
@@ -13,7 +15,11 @@ public class PartidoDTO
     public string Grupo { get; set; } = string.Empty;
     public Fase fase { get; set; }
     public EstadoPartido estadoPartido { get; set; }
+    
+    [Range(0, 50, ErrorMessage = "Los goles deben estar entre 0 y 50")]
     public int golesLocal { get; set; }
+    
+    [Range(0, 50, ErrorMessage = "Los goles deben estar entre 0 y 50")]
     public int golesVisitante { get; set; }
     public List<TipoIncidencia> incidenciaEquipoLocal { get; set; } = new List<TipoIncidencia>();
     public List<TipoIncidencia> incidenciaEquipoVisitante { get; set; } = new List<TipoIncidencia>();
