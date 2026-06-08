@@ -35,7 +35,7 @@ public class PartidoServiciosTest
         _partidoRepositorio = new PartidoRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         var equipoRepositorio = new EquipoRepositorioSql(_contexto);
-        var rankingDinamico = new RankingDinamicoServicio(equipoRepositorio);
+        var rankingDinamico = new RankingDinamicoServicio(equipoRepositorio, _auditoriaMock.Object);
         _servicioPartido = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object, rankingDinamico);
 
         estadioDTO = new EstadioDTO()
