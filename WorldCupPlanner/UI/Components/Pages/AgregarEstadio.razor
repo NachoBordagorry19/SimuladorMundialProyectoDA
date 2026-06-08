@@ -66,9 +66,14 @@
             esError = false;
             estadio = new EstadioDTO();
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
-            mensaje ="Ocurrió un error inesperado. Intente nuevamente.";;
+            mensaje = ex.Message;
+            esError = true;
+        }
+        catch (Exception)
+        {
+            mensaje = "Ocurrió un error inesperado. Intente nuevamente.";
             esError = true;
         }
     }

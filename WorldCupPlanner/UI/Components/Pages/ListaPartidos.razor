@@ -252,9 +252,14 @@
 
             mensajeExito = "Partidos pendientes simulados correctamente.";
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+        catch (Exception)
+        {
+            mensajeError = "Ocurrió un error inesperado. Intente nuevamente.";
             mensajeExito = "";
         }
     }
