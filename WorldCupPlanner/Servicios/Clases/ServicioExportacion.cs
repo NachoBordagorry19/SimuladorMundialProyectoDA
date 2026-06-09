@@ -62,4 +62,34 @@ public class ServicioExportacion : IServicioExportacion
             sb.AppendLine($"{p.Fecha:yyyy-MM-dd},{p.fase},{p.equipoLocal.nombre},{p.golesLocal},{p.golesVisitante},{p.equipoVisitante.nombre},{p.Estadio.Nombre}");
         return Encoding.UTF8.GetBytes(sb.ToString());
     }
+
+    public byte[] ExportarFixtureXlsx()
+    {
+        List<PartidoDTO> partidos = _servicioPartido.ObtenerPartidos()
+            .Where(p => p.estadoPartido == EstadoPartido.Jugado)
+            .ToList();
+        using XLWorkbook workbook = new XLWorkbook();
+        IXLWorksheet hoja = workbook.Worksheets.Add("Fixture");
+        hoja.Cell(1, 1).Value = "Fecha";
+        hoja.Cell(1, 2).Value = "Fase";
+        hoja.Cell(1, 3).Value = "EquipoLocal";
+        hoja.Cell(1, 4).Value = "GolesLocal";
+        hoja.Cell(1, 5).Value = "GolesVisitante";
+        hoja.Cell(1, 6).Value = "EquipoVisitante";
+        hoja.Cell(1, 7).Value = "Estadio";
+        for (int i = 0; i < partidos.Count; i++)
+        {
+            PartidoDTO p = partidos[i];
+            hoja.Cell(i + 2, 1).Value = p.Fecha.ToString("yyyy-MM-dd");
+            hoja.Cell(i + 2, 2).Value = p.fase.ToString();
+            hoja.Cell(i + 2, 3).Value = p.equipoLocal.nombre;
+            hoja.Cell(i + 2, 4).Value = p.golesLocal;
+            hoja.Cell(i + 2, 5).Value = p.golesVisitante;
+            hoja.Cell(i + 2, 6).Value = p.equipoVisitante.nombre;
+            hoja.Cell(i + 2, 7).Value = p.Estadio.Nombre;
+        }
+        using MemoryStream ms = new MemoryStream();
+        workbook.SaveAs(ms);
+        return ms.ToArray();
+    }
 }
