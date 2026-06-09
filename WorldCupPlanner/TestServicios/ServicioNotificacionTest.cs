@@ -13,6 +13,7 @@ public class ServicioNotificacionTest
     private SqlContexto _contexto;
     private FabricaDeContextoDeAppEnMemoria _contextoFabrica;
     private INotificacionRepositorio _notificacionRepositorio;
+    private IUsuarioRepositorio _usuarioRepositorio;
     private ServicioNotificacion _servicioNotificacion;
     private NotificacionDTO _notDTO1;
     private NotificacionDTO _notDTO2;
@@ -27,7 +28,7 @@ public class ServicioNotificacionTest
         _contexto.SaveChanges();
         _notificacionRepositorio = new NotificacionRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
-        _servicioNotificacion = new ServicioNotificacion(_notificacionRepositorio, _auditoriaMock.Object);
+        _servicioNotificacion = new ServicioNotificacion(_notificacionRepositorio, _usuarioRepositorio, _auditoriaMock.Object);
 
         _notDTO1 = new NotificacionDTO()
         {

@@ -9,10 +9,11 @@ public class ServicioNotificacion : IServicioNotificacion
 {
     private readonly INotificacionRepositorio _notificacionRepositorio;
     private readonly IServicioAuditoria _auditoriaRepositorio;
-
-    public ServicioNotificacion(INotificacionRepositorio notificacionRepositorio, IServicioAuditoria auditoria)
+    private readonly IUsuarioRepositorio _usuarioRepositorio;
+    public ServicioNotificacion(INotificacionRepositorio notificacionRepositorio, IUsuarioRepositorio usuarioRepositorio, IServicioAuditoria auditoria)
     {
         _notificacionRepositorio = notificacionRepositorio;
+        _usuarioRepositorio = usuarioRepositorio;
         _auditoriaRepositorio = auditoria;
     }
 
@@ -22,7 +23,7 @@ public class ServicioNotificacion : IServicioNotificacion
         throw new NotImplementedException();
     }
 
-    public List<Notificacion> ObtenerNoLeidas(int usuarioId)
+    public List<NotificacionDTO> ObtenerNoLeidas(int usuarioId)
     {
         throw new NotImplementedException();
     }
