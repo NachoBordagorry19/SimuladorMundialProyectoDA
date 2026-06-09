@@ -1,5 +1,9 @@
 using Dominio.Clases;
+using Dominio.Enums;
+using Moq;
 using Servicios.Clases;
+using Servicios.Interfaces;
+using Servicios.Modelo;
 
 namespace TestServicios;
 
@@ -7,13 +11,15 @@ namespace TestServicios;
 public class ServicioExportacionTest
 {
     private AuditoriaRepositorioMock _repoMock;
+    private Mock<IServicioPartido> _servicioPartidoMock;
     private ServicioExportacion _servicio;
 
     [TestInitialize]
     public void Setup()
     {
         _repoMock = new AuditoriaRepositorioMock();
-        _servicio = new ServicioExportacion(_repoMock);
+        _servicioPartidoMock = new Mock<IServicioPartido>();
+        _servicio = new ServicioExportacion(_repoMock, _servicioPartidoMock.Object);
     }
 
     [TestMethod]
