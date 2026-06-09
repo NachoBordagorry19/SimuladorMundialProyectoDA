@@ -53,7 +53,9 @@ public class ServicioNotificacion : IServicioNotificacion
 
     public void MarcarComoLeida(NotificacionDTO notDTO)
     {
-        
+        Notificacion not = NotificacionDTOAEntidad(notDTO);
+        _notificacionRepositorio.MarcarComoLeida(not);
+        notDTO.Leida = true;
     }
     
     public Notificacion NotificacionDTOAEntidad(NotificacionDTO notificacionDto)
@@ -63,6 +65,8 @@ public class ServicioNotificacion : IServicioNotificacion
             notificacionDto.FechaHora,
             notificacionDto.UsuarioId
         );
+        notificacion.Id = notificacionDto.Id;
+        notificacion.Leida = notificacionDto.Leida;
         return notificacion;
     }
     
@@ -70,6 +74,7 @@ public class ServicioNotificacion : IServicioNotificacion
     {
         return new NotificacionDTO()
         {
+            Id = notificacion.Id,
             Mensaje = notificacion.Mensaje,
             FechaHora = notificacion.FechaHora,
             UsuarioId = notificacion.UsuarioId,
