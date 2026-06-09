@@ -17,8 +17,7 @@ public class ServicioNotificacion : IServicioNotificacion
         _usuarioRepositorio = usuarioRepositorio;
         _auditoriaRepositorio = auditoria;
     }
-
-
+    
     public void GenerarNotificaciones(string mensaje)
     {
         List<Usuario> usuarios = _usuarioRepositorio.ObtenerUsuarios();
@@ -37,13 +36,11 @@ public class ServicioNotificacion : IServicioNotificacion
             }
         }
     }
-    //
 //_auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
 //void RegistrarGeneracionNotificacion(string usuario,string mensaje); interfaz
 
     public List<NotificacionDTO> ObtenerNoLeidas(int usuarioId)
     {
-        //return _notificacionRepositorio.ObtenerNotificacionesNoLeidas(usuarioId);
         List<Notificacion> notsNoLeidas = _notificacionRepositorio.ObtenerNotificacionesNoLeidas(usuarioId);
         List<NotificacionDTO> notsNoLeidasDTO = new List<NotificacionDTO>();
         foreach (var not in notsNoLeidas)
@@ -56,10 +53,10 @@ public class ServicioNotificacion : IServicioNotificacion
 
     public void MarcarComoLeida(NotificacionDTO notDTO)
     {
-        throw new NotImplementedException();
+        
     }
     
-    public Notificacion NotificacionDTOAEntidad(Notificacion notificacionDto)
+    public Notificacion NotificacionDTOAEntidad(NotificacionDTO notificacionDto)
     {
         var notificacion = new Notificacion(
             notificacionDto.Mensaje,

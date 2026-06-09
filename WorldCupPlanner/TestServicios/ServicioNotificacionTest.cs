@@ -96,4 +96,18 @@ public class ServicioNotificacionTest
         Assert.IsTrue(notificacionesUsuario3.Any(not => not.Mensaje == mensaje));
         Assert.AreEqual(1, notificacionesUsuario3.Count);
     }
+
+    [TestMethod]
+    public void MarcarComoLeida_MarcaCorrectamente()
+    {
+        DateTime fechaHora = DateTime.Parse("2003-12-14 14:30:00");
+        Usuario usuario = new Usuario ("Usuario1", "Apellido", "usuario1@gmail.com", fechaHora, "Contraseña_1", Rol.Periodista);
+        _usuarioRepositorio.AgregarUsuario(usuario);
+        _servicioNotificacion.GenerarNotificaciones("mensaje");
+        var notificacionesUsuario = _servicioNotificacion.ObtenerNoLeidas(1);
+        var not = notificacionesUsuario[0];
+        _servicioNotificacion.MarcarComoLeida(not);
+        Assert.IsTrue(not.Leida);
+
+    }
 }
