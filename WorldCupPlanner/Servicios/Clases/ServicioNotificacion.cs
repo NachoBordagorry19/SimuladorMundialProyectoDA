@@ -1,4 +1,5 @@
 using Dominio.Clases;
+using Dominio.Enums;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 using Servicios.Modelo;
@@ -20,16 +21,59 @@ public class ServicioNotificacion : IServicioNotificacion
 
     public void GenerarNotificaciones(string mensaje)
     {
-        throw new NotImplementedException();
+        List<Usuario> usuarios = _usuarioRepositorio.ObtenerUsuarios();
+        foreach (var usuario in usuarios)
+        {
+            Notificacion notificacion = new Notificacion
+            {
+                Mensaje = mensaje,
+                FechaHora = DateTime.Now,
+                UsuarioId = usuario.Id,
+                Leida = false
+            };
+            _notificacionRepositorio.AgregarNotificacion(notificacion);
+        }
     }
+    //if (usuario.Roles.Contains(Rol.Periodista))
+//_auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
+//void RegistrarGeneracionNotificacion(string usuario,string mensaje); interfaz
 
     public List<NotificacionDTO> ObtenerNoLeidas(int usuarioId)
     {
-        throw new NotImplementedException();
+        //return _notificacionRepositorio.ObtenerNotificacionesNoLeidas(usuarioId);
+        List<Notificacion> notsNoLeidas = _notificacionRepositorio.ObtenerNotificacionesNoLeidas(usuarioId);
+        List<NotificacionDTO> notsNoLeidasDTO = new List<NotificacionDTO>();
+        foreach (var not in notsNoLeidas)
+        {
+            notsNoLeidasDTO.Add(NotificacionEntidadADTO(not));
+        }
+
+        return notsNoLeidasDTO;
     }
 
     public void MarcarComoLeida(NotificacionDTO notDTO)
     {
         throw new NotImplementedException();
+    }
+    
+    public Notificacion NotificacionDTOAEntidad(Notificacion notificacionDto)
+    {
+        var notificacion = new Notificacion(
+            notificacionDto.Mensaje,
+            notificacionDto.FechaHora,
+            notificacionDto.UsuarioId
+        );
+        return notificacion;
+    }
+    
+    public NotificacionDTO NotificacionEntidadADTO(Notificacion notificacion)
+    {
+        return new NotificacionDTO()
+        {
+            Mensaje = notificacion.Mensaje,
+            FechaHora = notificacion.FechaHora,
+            UsuarioId = notificacion.UsuarioId,
+            Leida = notificacion.Leida
+        };
     }
 }

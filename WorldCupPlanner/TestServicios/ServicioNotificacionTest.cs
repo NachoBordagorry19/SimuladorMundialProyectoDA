@@ -1,3 +1,6 @@
+using System.Globalization;
+using Dominio.Clases;
+using Dominio.Enums;
 using Moq;
 using Repositorio;
 using Repositorio.Interfaces;
@@ -27,6 +30,7 @@ public class ServicioNotificacionTest
         _contexto.Equipos.RemoveRange(_contexto.Equipos);
         _contexto.SaveChanges();
         _notificacionRepositorio = new NotificacionRepositorioSql(_contexto);
+        _usuarioRepositorio = new UsuarioRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _servicioNotificacion = new ServicioNotificacion(_notificacionRepositorio, _usuarioRepositorio, _auditoriaMock.Object);
 
@@ -50,6 +54,13 @@ public class ServicioNotificacionTest
     [TestMethod]
     public void GenerarNotificaciones_DeberiaGenerarNotificacionesParaTodosLosPeriodistas()
     {
+        DateTime fechaHora = DateTime.Parse("2003-12-14 14:30:00");
+        Usuario usuario1 = new Usuario ("Usuario1", "Apellido", "usuario1@gmail.com", fechaHora, "Contraseña_1", Rol.Administrador);
+        Usuario usuario2 = new Usuario ("Usuario2", "Apellido", "usuario2@gmail.com", fechaHora, "Contraseña_2", Rol.Editor);
+        Usuario usuario3 = new Usuario ("Usuario3", "Apellido", "usuario3@gmail.com", fechaHora, "Contraseña_3", Rol.Periodista);
+        _usuarioRepositorio.AgregarUsuario(usuario1);
+        _usuarioRepositorio.AgregarUsuario(usuario2);
+        _usuarioRepositorio.AgregarUsuario(usuario3);
         string mensaje = "Notificacion Generada";
         _servicioNotificacion.GenerarNotificaciones(mensaje);
         var notificacionesUsuario1 = _servicioNotificacion.ObtenerNoLeidas(1);
