@@ -1,18 +1,22 @@
 using System.Text;
 using ClosedXML.Excel;
 using Dominio.Clases;
+using Dominio.Enums;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
+using Servicios.Modelo;
 
 namespace Servicios.Clases;
 
 public class ServicioExportacion : IServicioExportacion
 {
     private readonly IAuditoriaRepositorio _auditoriaRepo;
+    private readonly IServicioPartido _servicioPartido;
 
-    public ServicioExportacion(IAuditoriaRepositorio auditoriaRepo)
+    public ServicioExportacion(IAuditoriaRepositorio auditoriaRepo, IServicioPartido servicioPartido)
     {
         _auditoriaRepo = auditoriaRepo;
+        _servicioPartido = servicioPartido;
     }
 
     public byte[] ExportarAuditoriaCsv(DateTime desde, DateTime hasta)
@@ -45,5 +49,17 @@ public class ServicioExportacion : IServicioExportacion
         using MemoryStream ms = new MemoryStream();
         workbook.SaveAs(ms);
         return ms.ToArray();
+    }
+
+    public byte[] ExportarFixtureCsv()
+    {
+        List<PartidoDTO> partidos = _servicioPartido.ObtenerPartidos()
+            .Where(p => p.estadoPartido == EstadoPartido.Jugado)
+            .ToList();
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("Fecha,Fase,EquipoLocal,GolesLocal,GolesVisitante,EquipoVisitante,Estadio");
+        foreach (PartidoDTO p in partidos)
+            sb.AppendLine($"{p.Fecha:yyyy-MM-dd},{p.fase},{p.equipoLocal.nombre},{p.golesLocal},{p.golesVisitante},{p.equipoVisitante.nombre},{p.Estadio.Nombre}");
+        return Encoding.UTF8.GetBytes(sb.ToString());
     }
 }
