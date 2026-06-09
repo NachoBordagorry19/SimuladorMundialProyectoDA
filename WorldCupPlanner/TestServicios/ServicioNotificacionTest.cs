@@ -46,4 +46,18 @@ public class ServicioNotificacionTest
             Leida = false
         };
     }
+    
+    [TestMethod]
+    public void GenerarNotificaciones_DeberiaGenerarNotificacionesParaTodosLosPeriodistas()
+    {
+        string mensaje = "Notificacion Generada";
+        _servicioNotificacion.GenerarNotificaciones(mensaje);
+        var notificacionesUsuario1 = _servicioNotificacion.ObtenerNoLeidas(1);
+        var notificacionesUsuario2 = _servicioNotificacion.ObtenerNoLeidas(2);
+        
+        Assert.IsTrue(notificacionesUsuario1.Any(n => n.Mensaje == mensaje));
+        Assert.AreEqual(1, notificacionesUsuario1.Count);
+        Assert.IsTrue(notificacionesUsuario2.Any(n => n.Mensaje == mensaje));
+        Assert.AreEqual(1, notificacionesUsuario2.Count);
+    }
 }
