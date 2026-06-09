@@ -65,10 +65,19 @@ public class ServicioNotificacionTest
         _servicioNotificacion.GenerarNotificaciones(mensaje);
         var notificacionesUsuario1 = _servicioNotificacion.ObtenerNoLeidas(1);
         var notificacionesUsuario2 = _servicioNotificacion.ObtenerNoLeidas(2);
+        var notificacionesUsuario3 = _servicioNotificacion.ObtenerNoLeidas(3);
         
-        Assert.IsTrue(notificacionesUsuario1.Any(n => n.Mensaje == mensaje));
+        Assert.IsTrue(notificacionesUsuario1.Any(not => not.Mensaje == mensaje));
         Assert.AreEqual(1, notificacionesUsuario1.Count);
-        Assert.IsTrue(notificacionesUsuario2.Any(n => n.Mensaje == mensaje));
+        Assert.IsTrue(notificacionesUsuario2.Any(not => not.Mensaje == mensaje));
         Assert.AreEqual(1, notificacionesUsuario2.Count);
+        Assert.IsTrue(notificacionesUsuario3.Any(not => not.Mensaje == mensaje));
+        Assert.AreEqual(1, notificacionesUsuario2.Count);
+    }
+
+    [TestMethod]
+    public void GenerarNotificaciones_SoloGeneraParaPeriodistas()
+    {
+        
     }
 }
