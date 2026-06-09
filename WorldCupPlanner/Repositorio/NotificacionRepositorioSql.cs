@@ -20,6 +20,8 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
     public void MarcarComoLeida(Notificacion not)
     {
         not.MarcarComoLeida();
+        _contexto.Notificaciones.Update(not);
+        _contexto.SaveChanges();
     }
 
     public List<Notificacion> ObtenerNotificaciones(int usuarioId)
