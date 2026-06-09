@@ -24,17 +24,20 @@ public class ServicioNotificacion : IServicioNotificacion
         List<Usuario> usuarios = _usuarioRepositorio.ObtenerUsuarios();
         foreach (var usuario in usuarios)
         {
-            Notificacion notificacion = new Notificacion
+            if (usuario.Roles.Contains(Rol.Periodista))
             {
-                Mensaje = mensaje,
-                FechaHora = DateTime.Now,
-                UsuarioId = usuario.Id,
-                Leida = false
-            };
-            _notificacionRepositorio.AgregarNotificacion(notificacion);
+                Notificacion notificacion = new Notificacion
+                {
+                    Mensaje = mensaje,
+                    FechaHora = DateTime.Now,
+                    UsuarioId = usuario.Id,
+                    Leida = false
+                };
+                _notificacionRepositorio.AgregarNotificacion(notificacion);
+            }
         }
     }
-    //if (usuario.Roles.Contains(Rol.Periodista))
+    //
 //_auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
 //void RegistrarGeneracionNotificacion(string usuario,string mensaje); interfaz
 

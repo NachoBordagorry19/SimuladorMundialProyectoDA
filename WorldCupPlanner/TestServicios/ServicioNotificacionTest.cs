@@ -55,8 +55,8 @@ public class ServicioNotificacionTest
     public void GenerarNotificaciones_DeberiaGenerarNotificacionesParaTodosLosPeriodistas()
     {
         DateTime fechaHora = DateTime.Parse("2003-12-14 14:30:00");
-        Usuario usuario1 = new Usuario ("Usuario1", "Apellido", "usuario1@gmail.com", fechaHora, "Contraseña_1", Rol.Administrador);
-        Usuario usuario2 = new Usuario ("Usuario2", "Apellido", "usuario2@gmail.com", fechaHora, "Contraseña_2", Rol.Editor);
+        Usuario usuario1 = new Usuario ("Usuario1", "Apellido", "usuario1@gmail.com", fechaHora, "Contraseña_1", Rol.Periodista);
+        Usuario usuario2 = new Usuario ("Usuario2", "Apellido", "usuario2@gmail.com", fechaHora, "Contraseña_2", Rol.Periodista);
         Usuario usuario3 = new Usuario ("Usuario3", "Apellido", "usuario3@gmail.com", fechaHora, "Contraseña_3", Rol.Periodista);
         _usuarioRepositorio.AgregarUsuario(usuario1);
         _usuarioRepositorio.AgregarUsuario(usuario2);
@@ -72,7 +72,7 @@ public class ServicioNotificacionTest
         Assert.IsTrue(notificacionesUsuario2.Any(not => not.Mensaje == mensaje));
         Assert.AreEqual(1, notificacionesUsuario2.Count);
         Assert.IsTrue(notificacionesUsuario3.Any(not => not.Mensaje == mensaje));
-        Assert.AreEqual(1, notificacionesUsuario2.Count);
+        Assert.AreEqual(1, notificacionesUsuario3.Count);
     }
 
     [TestMethod]
@@ -91,11 +91,9 @@ public class ServicioNotificacionTest
         var notificacionesUsuario2 = _servicioNotificacion.ObtenerNoLeidas(2);
         var notificacionesUsuario3 = _servicioNotificacion.ObtenerNoLeidas(3);
         
-        Assert.IsTrue(notificacionesUsuario1.Any(not => not.Mensaje == mensaje));
         Assert.AreEqual(0, notificacionesUsuario1.Count);
-        Assert.IsTrue(notificacionesUsuario2.Any(not => not.Mensaje == mensaje));
         Assert.AreEqual(0, notificacionesUsuario2.Count);
         Assert.IsTrue(notificacionesUsuario3.Any(not => not.Mensaje == mensaje));
-        Assert.AreEqual(1, notificacionesUsuario2.Count);
+        Assert.AreEqual(1, notificacionesUsuario3.Count);
     }
 }
