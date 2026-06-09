@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
                 <h1 class="wcp-title">Exportación</h1>
-                <p class="wcp-subtitle">Exportar registros de auditoría en CSV o XLSX.</p>
+                <p class="wcp-subtitle">Exportar auditoría y fixture en CSV o XLSX.</p>
             </div>
         </div>
     </div>
@@ -37,8 +37,10 @@
             </div>
             <div class="wcp-actions mt-3">
                 <button class="wcp-btn-secondary" @onclick="ActualizarLinks">Filtrar</button>
-                <a href="@_csvUrl" download="auditoria.csv" class="wcp-btn-primary">Exportar CSV</a>
-                <a href="@_xlsxUrl" download="auditoria.xlsx" class="wcp-btn-primary">Exportar XLSX</a>
+                <a href="@_csvUrl" download="auditoria.csv" class="wcp-btn-primary">Auditoría CSV</a>
+                <a href="@_xlsxUrl" download="auditoria.xlsx" class="wcp-btn-primary">Auditoría XLSX</a>
+                <a href="@_fixtureCsvUrl" download="fixture.csv" class="wcp-btn-primary">Fixture CSV</a>
+                <a href="@_fixtureXlsxUrl" download="fixture.xlsx" class="wcp-btn-primary">Fixture XLSX</a>
             </div>
         </div>
     }
@@ -49,6 +51,8 @@
     private DateTime _hasta = DateTime.Today;
     private string _csvUrl = string.Empty;
     private string _xlsxUrl = string.Empty;
+    private string _fixtureCsvUrl = string.Empty;
+    private string _fixtureXlsxUrl = string.Empty;
 
     protected override void OnInitialized()
     {
