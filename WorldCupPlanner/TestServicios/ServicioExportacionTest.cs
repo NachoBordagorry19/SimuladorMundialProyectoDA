@@ -45,4 +45,23 @@ public class ServicioExportacionTest
         byte[] resultado = _servicio.ExportarAuditoriaXlsx(DateTime.MinValue, DateTime.MaxValue);
         Assert.IsTrue(resultado.Length > 0);
     }
+
+    [TestMethod]
+    public void ExportarFixtureCsv_ConPartidosJugados_DevuelveBytesNoVacios()
+    {
+        _servicioPartidoMock.Setup(s => s.ObtenerPartidos()).Returns(new List<PartidoDTO>
+        {
+            new PartidoDTO
+            {
+                equipoLocal = new EquipoDTO { nombre = "Uruguay" },
+                equipoVisitante = new EquipoDTO { nombre = "Brasil" },
+                golesLocal = 2,
+                golesVisitante = 1,
+                estadoPartido = EstadoPartido.Jugado,
+                fase = Fase.Grupos
+            }
+        });
+        byte[] resultado = _servicio.ExportarFixtureCsv();
+        Assert.IsTrue(resultado.Length > 0);
+    }
 }
