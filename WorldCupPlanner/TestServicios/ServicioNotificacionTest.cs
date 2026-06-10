@@ -114,8 +114,11 @@ public class ServicioNotificacionTest
     public void GenerarNotificaciones_DebeLlamarAuditoria()
     {
         string mensaje = "Mensaje";
-        string usuario = "Usuario";
+        string nombreUsuario = "Usuario";
+        DateTime fechaHora = DateTime.Parse("2003-12-14 14:30:00");
+        Usuario usuario = new Usuario("Usuario", "Apellido", "usuario@gmail.com", fechaHora, "Contraseña_1", Rol.Periodista);
+        _usuarioRepositorio.AgregarUsuario(usuario);
         _servicioNotificacion.GenerarNotificaciones(mensaje);
-        _auditoriaMock.Verify(a => a.RegistrarGeneracionNotificacion(usuario, mensaje));
+        _auditoriaMock.Verify(a => a.RegistrarGeneracionNotificacion(nombreUsuario, mensaje));
     }
 }

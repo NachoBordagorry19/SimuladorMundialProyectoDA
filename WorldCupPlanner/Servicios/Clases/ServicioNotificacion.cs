@@ -33,12 +33,11 @@ public class ServicioNotificacion : IServicioNotificacion
                     Leida = false
                 };
                 _notificacionRepositorio.AgregarNotificacion(notificacion);
+                _auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
             }
         }
     }
-//_auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
-// interfaz
-
+    
     public List<NotificacionDTO> ObtenerNoLeidas(int usuarioId)
     {
         List<Notificacion> notsNoLeidas = _notificacionRepositorio.ObtenerNotificacionesNoLeidas(usuarioId);
