@@ -121,4 +121,18 @@ public class ServicioNotificacionTest
         _servicioNotificacion.GenerarNotificaciones(mensaje);
         _auditoriaMock.Verify(a => a.RegistrarGeneracionNotificacion(nombreUsuario, mensaje));
     }
+
+    [TestMethod]
+    public void GenerarNotificaciones_ConEtiquetaGrupo_AsignaEtiquetaCorrectamente()
+    {
+        string mensaje = "Mensaje";
+        string nombreUsuario = "Usuario";
+        string etiqueta = "Etiqueta";
+        DateTime fechaHora = DateTime.Parse("2003-12-14 14:30:00");
+        Usuario usuario = new Usuario("Usuario", "Apellido", "usuario@gmail.com", fechaHora, "Contraseña_1", Rol.Periodista);
+        _usuarioRepositorio.AgregarUsuario(usuario);
+        _servicioNotificacion.GenerarNotificaciones(mensaje, etiqueta);
+        Assert.AreEqual(etiqueta, _contexto.Notificaciones.First().EtiquetaGrupo);
+        
+    }
 }
