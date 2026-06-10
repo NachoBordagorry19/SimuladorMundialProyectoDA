@@ -7,4 +7,5 @@ public class NotificacionDTO
     public DateTime FechaHora { get; set; }
     public int UsuarioId { get; set; }
     public bool Leida { get; set; }
+    public string? EtiquetaGrupo { get; set; }
 }
