@@ -241,6 +241,6 @@ public class AuditoriaServicioTest
         string log = logs[0];
         Assert.IsTrue(log.Contains(usuario));
         Assert.IsTrue(log.Contains(mensaje));
-        Assert.IsTrue(log.Contains("Generacion de Notificaciones"));
+        Assert.IsTrue(log.Contains("Generación de Notificaciones"));
     }
 }

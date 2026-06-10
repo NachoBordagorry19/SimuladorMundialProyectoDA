@@ -87,7 +87,7 @@ public class ServicioAuditoria : IServicioAuditoria
 
     public void RegistrarGeneracionNotificacion(string usuario, string mensaje)
     {
-        throw new NotImplementedException();
+        Registrar("Generación de Notificaciones", $"Usuario: {usuario}, Mensaje: {mensaje}");
     }
 
     public void RegistrarGeneracionAutomaticaEquipos(int cantidad)
