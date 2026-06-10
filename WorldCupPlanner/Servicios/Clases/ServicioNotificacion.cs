@@ -30,7 +30,8 @@ public class ServicioNotificacion : IServicioNotificacion
                     Mensaje = mensaje,
                     FechaHora = DateTime.Now,
                     UsuarioId = usuario.Id,
-                    Leida = false
+                    Leida = false,
+                    EtiquetaGrupo = etiquetaGrupo
                 };
                 _notificacionRepositorio.AgregarNotificacion(notificacion);
                 _auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
