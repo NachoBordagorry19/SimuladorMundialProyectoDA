@@ -37,7 +37,7 @@ public class ServicioNotificacion : IServicioNotificacion
         }
     }
 //_auditoriaRepositorio.RegistrarGeneracionNotificacion(usuario.Nombre, mensaje);
-//void RegistrarGeneracionNotificacion(string usuario,string mensaje); interfaz
+// interfaz
 
     public List<NotificacionDTO> ObtenerNoLeidas(int usuarioId)
     {
