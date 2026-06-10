@@ -7,6 +7,7 @@ public class Notificacion
     private DateTime _fechaHora;
     private bool _leida;
     private int _usuarioId;
+    public string? EtiquetaGrupo { get; set; }
 
     public string Mensaje
     {
