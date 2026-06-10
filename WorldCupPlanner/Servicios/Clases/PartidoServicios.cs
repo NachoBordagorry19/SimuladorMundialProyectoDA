@@ -8,6 +8,14 @@ namespace Servicios.Clases;
 
 public class PartidoServicios : IServicioPartido
 {
+    private const int MaxTarjetasAmarillas = 6;
+    private const int ProbabilidadTarjetaRoja = 30;
+    private const int MaxTarjetasRojas = 3;
+    private const double EloDivisor = 400.0;
+    private const int ProbabilidadGanadorGol1 = 50;
+    private const int ProbabilidadGanadorGol2 = 80;
+    private const int ProbabilidadPerdedorGol0 = 70;
+
     private readonly IPartidoRepositorio _partidoRepositorio;
     private readonly IServicioAuditoria _auditoria;
     private readonly List<Fase> _fasesBloqueadas = new List<Fase>();
@@ -371,19 +379,19 @@ public class PartidoServicios : IServicioPartido
             }
         }
 
-        int tarjetasAmarillasLocal = random.Next(0, 6);
+        int tarjetasAmarillasLocal = random.Next(0, MaxTarjetasAmarillas);
         for (int i = 0; i < tarjetasAmarillasLocal; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, true);
 
-        int tarjetasAmarillasVisitante = random.Next(0, 6);
+        int tarjetasAmarillasVisitante = random.Next(0, MaxTarjetasAmarillas);
         for (int i = 0; i < tarjetasAmarillasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, false);
 
-        int tarjetasRojasLocal = random.Next(0, 100) < 30 ? random.Next(1, 4) : 0;
+        int tarjetasRojasLocal = random.Next(0, 100) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
         for (int i = 0; i < tarjetasRojasLocal; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, true);
 
-        int tarjetasRojasVisitante = random.Next(0, 100) < 30 ? random.Next(1, 4) : 0;
+        int tarjetasRojasVisitante = random.Next(0, 100) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
         for (int i = 0; i < tarjetasRojasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
 
@@ -399,7 +407,7 @@ public class PartidoServicios : IServicioPartido
     private double CalcularProbabilidad(int rankingLocal, int rankingVisitante)
     {
         double diferencia = rankingVisitante - rankingLocal;
-        double probabilidadLocal = (1.0 / (1.0 + Math.Pow(10, diferencia / 400.0))) * 100;
+        double probabilidadLocal = (1.0 / (1.0 + Math.Pow(10, diferencia / EloDivisor))) * 100;
         return probabilidadLocal;
     }
 
@@ -409,9 +417,9 @@ public class PartidoServicios : IServicioPartido
         if (esEquipoGanador)
         {
             int numeroAleatorio = random.Next(0, 100);
-            if (numeroAleatorio < 50)
+            if (numeroAleatorio < ProbabilidadGanadorGol1)
                 return 1;
-            else if (numeroAleatorio < 80)
+            else if (numeroAleatorio < ProbabilidadGanadorGol2)
                 return 2;
             else
                 return 3;
@@ -419,7 +427,7 @@ public class PartidoServicios : IServicioPartido
         else
         {
             int numeroAleatorio = random.Next(0, 100);
-            if (numeroAleatorio < 70)
+            if (numeroAleatorio < ProbabilidadPerdedorGol0)
                 return 0;
             else
                 return 1;
