@@ -19,8 +19,16 @@ public class NotificacionRepositorioSql : INotificacionRepositorio
 
     public void MarcarComoLeida(Notificacion not)
     {
-        not.MarcarComoLeida();
-        _contexto.Notificaciones.Update(not);
+        var existente = _contexto.Notificaciones.SingleOrDefault(n => n.Id == not.Id);
+        if (existente != null)
+        {
+            existente.MarcarComoLeida();
+        }
+        else
+        {
+            not.MarcarComoLeida();
+            _contexto.Notificaciones.Update(not);
+        }
         _contexto.SaveChanges();
     }
 
