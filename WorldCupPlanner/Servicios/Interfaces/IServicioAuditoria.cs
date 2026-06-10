@@ -17,5 +17,6 @@ public interface IServicioAuditoria
     void RegistrarSorteoCruces();
     void RegistrarImportacionEquipos(string mensaje, bool esExito);
     void RegistrarGeneracionNotificacion(string usuario,string mensaje);
+    void RegistrarLecturaNotificacion(string mensajeNotificacion);
     List<string> ObtenerRegistrosFormateados();
 }
