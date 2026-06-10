@@ -229,4 +229,18 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Realización de sorteo para cruces"));
     }
+
+    [TestMethod]
+    public void RegistrarGeneracionNotificaciones_DebeGuardarRegistroCorrectamente()
+    {
+        string usuario = "usuario";
+        string mensaje = "mensaje";
+        _servicio.RegistrarGeneracionNotificacion(usuario, mensaje);
+        var logs = _servicio.ObtenerRegistrosFormateados();
+        Assert.AreEqual(1, logs.Count);
+        string log = logs[0];
+        Assert.IsTrue(log.Contains(usuario));
+        Assert.IsTrue(log.Contains(mensaje));
+        Assert.IsTrue(log.Contains("Generacion de Notificaciones"));
+    }
 }
