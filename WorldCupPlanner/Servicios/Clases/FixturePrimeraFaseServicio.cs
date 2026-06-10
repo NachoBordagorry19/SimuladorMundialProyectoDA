@@ -11,6 +11,20 @@ namespace Servicios.Clases;
 
 public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 {
+    private const int TotalEquipos = 48;
+    private const int MinimoEstadios = 4;
+    private const int CantidadGrupos = 12;
+    private const int EquiposPorGrupo = 4;
+    private const int CantidadBombos = 4;
+    private const int EquiposPorBombo = 12;
+    private const int DiasEntreGrupos = 9;
+    private const int HoraInicioJornada = 14;
+    private const int DiasJornada2 = 3;
+    private const int DiasJornada3 = 6;
+    private const int HorasEntrePartidos = 4;
+    private const int MaxEquiposUEFAPorGrupo = 2;
+    private const int MaxEquiposOtrasConfPorGrupo = 1;
+
     private readonly IEquipoRepositorio _equipoRepositorio;
     private readonly IEstadioRepositorio _estadioRepositorio;
     private readonly IPartidoRepositorio _partidoRepositorio;
@@ -40,15 +54,15 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
     public ResultadoFixture GenerarFixturePrimeraFase(int semillaFixture, DateTime? fechaInicio = null)
     {
         List<Equipo> equipos = _equipoRepositorio.ObtenerEquipos();
-        if (equipos.Count != 48)
+        if (equipos.Count != TotalEquipos)
         {
-            throw new ArgumentException("Debe haber exactamente 48 equipos para generar el fixture");
+            throw new ArgumentException($"Debe haber exactamente {TotalEquipos} equipos para generar el fixture");
         }
 
         List<Estadio> estadios = _estadioRepositorio.ObtenerEstadios();
-        if (estadios.Count < 4)
+        if (estadios.Count < MinimoEstadios)
         {
-            throw new ArgumentException("Debe haber al menos 4 estadios para generar el fixture");
+            throw new ArgumentException($"Debe haber al menos {MinimoEstadios} estadios para generar el fixture");
         }
 
         List<EquipoDTO> equiposDTO = _equipoServicios.ObtenerEquipos();
@@ -57,11 +71,11 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 
         List<Grupo> grupos = CrearGruposVacios();
 
-        for (int bombo = 0; bombo < 4; bombo++)
+        for (int bombo = 0; bombo < CantidadBombos; bombo++)
         {
-            for (int pos = 0; pos < 12; pos++)
+            for (int pos = 0; pos < EquiposPorBombo; pos++)
             {
-                var equipoDto = equiposOrdenados[bombo * 12 + pos];
+                var equipoDto = equiposOrdenados[bombo * EquiposPorBombo + pos];
                 var equipo = _equipoServicios.EquipoDTOAEntidad(equipoDto);
                 int grupoFinal = BuscarGrupoParaEquipo(grupos, equipo, pos);
 
@@ -78,7 +92,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
         for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
         {
             var grupo = grupos[grupoIndex];
-            DateTime fechaInicioGrupo = fechaBase.AddDays(grupoIndex * 9);
+            DateTime fechaInicioGrupo = fechaBase.AddDays(grupoIndex * DiasEntreGrupos);
 
             AgregarPartidosDelGrupo(
                 grupo,
@@ -106,7 +120,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
     {
         var grupos = new List<Grupo>();
 
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < CantidadGrupos; i++)
         {
             string nombreGrupo = ((char)('A' + i)).ToString();
             grupos.Add(new Grupo(nombreGrupo));
@@ -132,7 +146,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 
         for (int i = 0; i < grupos.Count; i++)
         {
-            if (grupos[i].Equipos.Count < 4)
+            if (grupos[i].Equipos.Count < EquiposPorGrupo)
             {
                 return i;
             }
@@ -143,7 +157,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 
     private bool PuedeAgregarseAGrupo(Grupo grupo, Equipo equipo)
     {
-        if (grupo.Equipos.Count >= 4)
+        if (grupo.Equipos.Count >= EquiposPorGrupo)
         {
             return false;
         }
@@ -153,10 +167,10 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 
         if (confederacion == Confederacion.UEFA)
         {
-            return cantidadMismaConfederacion < 2;
+            return cantidadMismaConfederacion < MaxEquiposUEFAPorGrupo;
         }
 
-        return cantidadMismaConfederacion < 1;
+        return cantidadMismaConfederacion < MaxEquiposOtrasConfPorGrupo;
     }
 
     private List<EquipoDTO> ConvertirEquiposADto(List<Equipo> equipos)
@@ -179,15 +193,15 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
     {
         List<EquipoDTO> equipos = ConvertirEquiposADto(grupo.Equipos);
 
-        DateTime fechaJornada1 = fechaInicioGrupo.Date.AddHours(14);
-        DateTime fechaJornada2 = fechaInicioGrupo.Date.AddDays(3).AddHours(14);
-        DateTime fechaJornada3 = fechaInicioGrupo.Date.AddDays(6).AddHours(14);
+        DateTime fechaJornada1 = fechaInicioGrupo.Date.AddHours(HoraInicioJornada);
+        DateTime fechaJornada2 = fechaInicioGrupo.Date.AddDays(DiasJornada2).AddHours(HoraInicioJornada);
+        DateTime fechaJornada3 = fechaInicioGrupo.Date.AddDays(DiasJornada3).AddHours(HoraInicioJornada);
 
         AgregarPartido(partidos, equipos[0], equipos[3], grupo.Nombre, fechaJornada1, estadios);
-        AgregarPartido(partidos, equipos[1], equipos[2], grupo.Nombre, fechaJornada1.AddHours(4), estadios);
+        AgregarPartido(partidos, equipos[1], equipos[2], grupo.Nombre, fechaJornada1.AddHours(HorasEntrePartidos), estadios);
 
         AgregarPartido(partidos, equipos[0], equipos[2], grupo.Nombre, fechaJornada2, estadios);
-        AgregarPartido(partidos, equipos[1], equipos[3], grupo.Nombre, fechaJornada2.AddHours(4), estadios);
+        AgregarPartido(partidos, equipos[1], equipos[3], grupo.Nombre, fechaJornada2.AddHours(HorasEntrePartidos), estadios);
 
         AgregarPartido(partidos, equipos[0], equipos[1], grupo.Nombre, fechaJornada3, estadios);
         AgregarPartido(partidos, equipos[2], equipos[3], grupo.Nombre, fechaJornada3, estadios);
