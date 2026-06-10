@@ -18,7 +18,7 @@ public class ServicioNotificacion : IServicioNotificacion
         _auditoriaRepositorio = auditoria;
     }
     
-    public void GenerarNotificaciones(string mensaje)
+    public void GenerarNotificaciones(string mensaje, string? etiquetaGrupo = null)
     {
         List<Usuario> usuarios = _usuarioRepositorio.ObtenerUsuarios();
         foreach (var usuario in usuarios)
