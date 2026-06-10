@@ -56,6 +56,7 @@ public class ServicioNotificacion : IServicioNotificacion
         Notificacion not = NotificacionDTOAEntidad(notDTO);
         _notificacionRepositorio.MarcarComoLeida(not);
         notDTO.Leida = true;
+        _auditoriaRepositorio.RegistrarLecturaNotificacion(notDTO.Mensaje);
     }
     
     public Notificacion NotificacionDTOAEntidad(NotificacionDTO notificacionDto)

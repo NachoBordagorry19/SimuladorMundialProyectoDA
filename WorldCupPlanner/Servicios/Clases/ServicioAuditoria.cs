@@ -92,7 +92,7 @@ public class ServicioAuditoria : IServicioAuditoria
 
     public void RegistrarLecturaNotificacion(string mensajeNotificacion)
     {
-        throw new NotImplementedException();
+        Registrar("Lectura de Notificación", $"Mensaje: {mensajeNotificacion}");
     }
 
     public void RegistrarGeneracionAutomaticaEquipos(int cantidad)
