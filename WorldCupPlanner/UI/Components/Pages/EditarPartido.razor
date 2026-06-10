@@ -7,6 +7,7 @@
 @inject IServicioPartido ServicioPartido
 @inject IServicioEstadio ServicioEstadio
 @inject IServicioCrucesSegundaFase ServicioCruces
+@inject IServicioNotificacion ServicioNotificacion
 @inject NavigationManager Navigation
 @inject UsuarioSesion Sesion
 
@@ -149,6 +150,7 @@
 
             ServicioPartido.ActualizarPartido(partido);
             ServicioCruces.ProcesarAvanceDelTorneo();
+            ServicioNotificacion.GenerarNotificaciones($"{partido.equipoLocal.nombre} {partido.golesLocal} - {partido.golesVisitante} {partido.equipoVisitante.nombre}");
 
             mensajeExito = "Partido actualizado correctamente.";
         }
