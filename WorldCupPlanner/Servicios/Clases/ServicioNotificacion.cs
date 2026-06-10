@@ -78,7 +78,8 @@ public class ServicioNotificacion : IServicioNotificacion
             Mensaje = notificacion.Mensaje,
             FechaHora = notificacion.FechaHora,
             UsuarioId = notificacion.UsuarioId,
-            Leida = notificacion.Leida
+            Leida = notificacion.Leida,
+            EtiquetaGrupo = notificacion.EtiquetaGrupo
         };
     }
 }
