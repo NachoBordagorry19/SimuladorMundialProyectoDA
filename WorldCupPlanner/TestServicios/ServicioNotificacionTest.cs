@@ -108,6 +108,14 @@ public class ServicioNotificacionTest
         var not = notificacionesUsuario[0];
         _servicioNotificacion.MarcarComoLeida(not);
         Assert.IsTrue(not.Leida);
-
+    }
+    
+    [TestMethod]
+    public void GenerarNotificaciones_DebeLlamarAuditoria()
+    {
+        string mensaje = "Mensaje";
+        string usuario = "Usuario";
+        _servicioNotificacion.GenerarNotificaciones(mensaje);
+        _auditoriaMock.Verify(a => a.RegistrarGeneracionNotificacion(usuario, mensaje));
     }
 }
