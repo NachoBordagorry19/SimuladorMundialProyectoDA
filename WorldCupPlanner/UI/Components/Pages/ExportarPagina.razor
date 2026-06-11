@@ -1,0 +1,76 @@
+@page "/exportar"
+@rendermode InteractiveServer
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using UI.Estado
+@inject UsuarioSesion Sesion
+@inject IServicioExportacion ServicioExportacion
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="wcp-title">Exportación</h1>
+                <p class="wcp-subtitle">Exportar auditoría y fixture en CSV o XLSX.</p>
+            </div>
+        </div>
+    </div>
+
+    @if (Sesion.UsuarioActual == null || (!Sesion.UsuarioActual.Roles.Contains(Rol.Administrador) && !Sesion.UsuarioActual.Roles.Contains(Rol.Periodista)))
+    {
+        <div class="wcp-card mt-4">
+            <div class="alert alert-danger wcp-alert mb-0">Solo un administrador o periodista puede exportar datos.</div>
+        </div>
+    }
+    else
+    {
+        <div class="wcp-card mt-4">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="wcp-form-label">Desde</label>
+                    <input type="date" class="form-control" @bind="_desde" />
+                </div>
+                <div class="col-md-3">
+                    <label class="wcp-form-label">Hasta</label>
+                    <input type="date" class="form-control" @bind="_hasta" />
+                </div>
+            </div>
+            <div class="wcp-actions mt-3">
+                <button class="wcp-btn-secondary" @onclick="ActualizarLinks">Filtrar</button>
+                <a href="@_csvUrl" download="auditoria.csv" class="wcp-btn-primary">Auditoría CSV</a>
+                <a href="@_xlsxUrl" download="auditoria.xlsx" class="wcp-btn-primary">Auditoría XLSX</a>
+                <a href="@_fixtureCsvUrl" download="fixture.csv" class="wcp-btn-primary">Fixture CSV</a>
+                <a href="@_fixtureXlsxUrl" download="fixture.xlsx" class="wcp-btn-primary">Fixture XLSX</a>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private DateTime _desde = DateTime.Today.AddMonths(-1);
+    private DateTime _hasta = DateTime.Today;
+    private string _csvUrl = string.Empty;
+    private string _xlsxUrl = string.Empty;
+    private string _fixtureCsvUrl = string.Empty;
+    private string _fixtureXlsxUrl = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual != null && (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador) || Sesion.UsuarioActual.Roles.Contains(Rol.Periodista)))
+        {
+            ActualizarLinks();
+        }
+    }
+
+    private void ActualizarLinks()
+    {
+        byte[] csv = ServicioExportacion.ExportarAuditoriaCsv(_desde, _hasta.AddDays(1).AddTicks(-1));
+        _csvUrl = $"data:text/csv;base64,{Convert.ToBase64String(csv)}";
+        byte[] xlsx = ServicioExportacion.ExportarAuditoriaXlsx(_desde, _hasta.AddDays(1).AddTicks(-1));
+        _xlsxUrl = $"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{Convert.ToBase64String(xlsx)}";
+        byte[] fixtureCsv = ServicioExportacion.ExportarFixtureCsv();
+        _fixtureCsvUrl = $"data:text/csv;base64,{Convert.ToBase64String(fixtureCsv)}";
+        byte[] fixtureXlsx = ServicioExportacion.ExportarFixtureXlsx();
+        _fixtureXlsxUrl = $"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{Convert.ToBase64String(fixtureXlsx)}";
+    }
+}

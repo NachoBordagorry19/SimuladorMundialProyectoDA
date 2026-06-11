@@ -40,6 +40,7 @@ builder.Services.AddScoped<IServicioPartido, PartidoServicios>();
 builder.Services.AddScoped<IImportadorEquiposCSV, ImportadorEquiposCSV>();
 builder.Services.AddScoped<IServicioFixturePrimeraFase, FixturePrimeraFaseServicio>();
 builder.Services.AddScoped<IServicioCrucesSegundaFase, CrucesSegundaFaseServicio>();
+builder.Services.AddScoped<IServicioExportacion, ServicioExportacion>();
 
 builder.Services.AddScoped<UsuarioSesion>();
 builder.Services.AddScoped<ISessionService, SessionService>();
