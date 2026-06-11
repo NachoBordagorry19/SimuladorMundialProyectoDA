@@ -17,6 +17,14 @@ public class MotorSimulacionTest
     }
 
     [TestMethod]
+    public void MotorAleatorioPuro_Nombre_EsElCorrecto()
+    {
+        var motor = new MotorAleatorioPuro();
+
+        Assert.AreEqual("Aleatorio Puro", motor.Nombre);
+    }
+
+    [TestMethod]
     public void MotorProbabilistico_Nombre_EsElCorrecto()
     {
         var motor = new MotorProbabilistico();
