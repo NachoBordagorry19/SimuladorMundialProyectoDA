@@ -1,19 +1,24 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Dominio.Clases;
 using Dominio.Enums;
 using Servicios.Clases;
+using Servicios.Modelo;
 
 namespace TestServicios;
 
 [TestClass]
 public class MotorSimulacionTest
 {
-    private Partido CrearPartidoConRankings(int rankingLocal, int rankingVisitante)
+    private PartidoDTO CrearPartidoDTO(int rankingLocal, int rankingVisitante)
     {
-        var estadio = new Estadio("Estadio", "Ciudad", "Descripcion", 50000);
-        var local = new Equipo("LocalFC", Confederacion.UEFA, rankingLocal);
-        var visitante = new Equipo("VisitanteFC", Confederacion.CONMEBOL, rankingVisitante);
-        return new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 0, 0);
+        return new PartidoDTO
+        {
+            equipoLocal = new EquipoDTO { nombre = "LocalFC", rankingFifa = rankingLocal, confederacion = Confederacion.UEFA },
+            equipoVisitante = new EquipoDTO { nombre = "VisitanteFC", rankingFifa = rankingVisitante, confederacion = Confederacion.CONMEBOL },
+            Fecha = DateTime.Now,
+            Estadio = new EstadioDTO { Nombre = "Estadio", Ciudad = "Ciudad", Descripcion = "Desc", CapacidadLocativa = 50000 },
+            fase = Fase.Grupos,
+            estadoPartido = EstadoPartido.Pendiente
+        };
     }
 
     [TestMethod]
@@ -36,12 +41,11 @@ public class MotorSimulacionTest
     public void MotorProbabilistico_Simular_ConLocalMuySuperior_GolesLocalSonDelGanador()
     {
         var motor = new MotorProbabilistico();
-        var partido = CrearPartidoConRankings(rankingLocal: 2500, rankingVisitante: 300);
-        var random = new Random(42);
+        var partidoDto = CrearPartidoDTO(rankingLocal: 2500, rankingVisitante: 300);
 
-        var (golesLocal, golesVisitante) = motor.Simular(partido, random);
+        motor.Simular(partidoDto, new Random(42));
 
-        Assert.IsTrue(golesLocal >= 1 && golesLocal <= 3);
-        Assert.IsTrue(golesVisitante >= 0 && golesVisitante <= 1);
+        Assert.IsTrue(partidoDto.golesLocal >= 1 && partidoDto.golesLocal <= 3);
+        Assert.IsTrue(partidoDto.golesVisitante >= 0 && partidoDto.golesVisitante <= 1);
     }
 }

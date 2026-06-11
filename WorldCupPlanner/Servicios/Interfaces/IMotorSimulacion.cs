@@ -1,9 +1,9 @@
-using Dominio.Clases;
+using Servicios.Modelo;
 
 namespace Servicios.Interfaces;
 
 public interface IMotorSimulacion
 {
     string Nombre { get; }
-    (int golesLocal, int golesVisitante) Simular(Partido partido, Random random);
+    void Simular(PartidoDTO partidoDto, Random random);
 }

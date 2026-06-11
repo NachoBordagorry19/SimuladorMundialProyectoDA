@@ -1,5 +1,5 @@
-using Dominio.Clases;
 using Servicios.Interfaces;
+using Servicios.Modelo;
 
 namespace Servicios.Clases;
 
@@ -12,15 +12,13 @@ public class MotorProbabilistico : IMotorSimulacion
 
     public string Nombre => "Probabilístico";
 
-    public (int golesLocal, int golesVisitante) Simular(Partido partido, Random random)
+    public void Simular(PartidoDTO partidoDto, Random random)
     {
-        double probabilidadLocal = CalcularProbabilidad(partido.Local.RankingFifa, partido.Visitante.RankingFifa);
+        double probabilidadLocal = CalcularProbabilidad(partidoDto.equipoLocal.rankingFifa, partidoDto.equipoVisitante.rankingFifa);
         bool ganaLocal = random.NextDouble() * 100 < probabilidadLocal;
 
-        int golesLocal = GenerarGoles(random, ganaLocal);
-        int golesVisitante = GenerarGoles(random, !ganaLocal);
-
-        return (golesLocal, golesVisitante);
+        partidoDto.golesLocal = GenerarGoles(random, ganaLocal);
+        partidoDto.golesVisitante = GenerarGoles(random, !ganaLocal);
     }
 
     private double CalcularProbabilidad(int rankingLocal, int rankingVisitante)
