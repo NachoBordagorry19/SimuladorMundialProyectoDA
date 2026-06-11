@@ -1,4 +1,7 @@
 ﻿@rendermode InteractiveServer
+@using Dominio.Enums
+@using UI.Estado
+@inject UsuarioSesion Sesion
 
 <div class="header-bar">
     <div class="hamburguesa @(isOpen ? "active" : "")" @onclick="ToggleMenu">
@@ -24,6 +27,10 @@
         <NavLink href="/fixture" @onclick="CerrarMenu">Fixture</NavLink>
         <NavLink href="/partidos" @onclick="CerrarMenu">Partidos</NavLink>
         <NavLink href="/importar" @onclick="CerrarMenu">Importación</NavLink>
+        @if (Sesion.UsuarioActual != null && Sesion.UsuarioActual.Roles.Contains(Rol.Periodista))
+        {
+            <NavLink href="/notificaciones" @onclick="CerrarMenu">Notificaciones</NavLink>
+        }
     </nav>
 </div>
 

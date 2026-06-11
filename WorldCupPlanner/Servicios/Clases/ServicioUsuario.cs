@@ -84,6 +84,7 @@ public class ServicioUsuario : IServicioUsuario
     {
         return new UsuarioDTO()
         {
+            Id = usuario.Id,
             Nombre = usuario.Nombre,
             Apellido = usuario.Apellido,
             Email = usuario.Email,
