@@ -1,6 +1,133 @@
-@page "/Notificaciones"
-<h3>Notificaciones</h3>
+@page "/notificaciones"
+@rendermode InteractiveServer
+@using Dominio.Enums
+@using Servicios.Interfaces
+@using Servicios.Modelo
+@using UI.Estado
+@inject IServicioNotificacion ServicioNotificacion
+@inject UsuarioSesion Sesion
+@inject NavigationManager Navigation
+
+<div class="wcp-page">
+    <div class="wcp-card">
+        <h1 class="wcp-title">Notificaciones</h1>
+        <p class="wcp-subtitle">Notificaciones pendientes de lectura.</p>
+
+        @if (!individuales.Any() && !grupos.Any())
+        {
+            <p class="text-muted text-center mt-3">No tenés notificaciones sin leer.</p>
+        }
+
+        @foreach (var not in individuales)
+        {
+            <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+                <div>
+                    <span class="fw-semibold">@not.Mensaje</span>
+                    <small class="text-muted d-block">@not.FechaHora.ToString("yyyy-MM-dd HH:mm")</small>
+                </div>
+                <button class="wcp-btn-secondary" @onclick="() => MarcarComoLeida(not)">
+                    Marcar como leída
+                </button>
+            </div>
+        }
+
+        @foreach (var grupo in grupos)
+        {
+            <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2"
+                 style="cursor:pointer" @onclick="() => AbrirModal(grupo.Value)">
+                <div>
+                    <span class="fw-semibold">Simulación masiva — @grupo.Value.Count partidos</span>
+                    <small class="text-muted d-block">@grupo.Value.First().FechaHora.ToString("yyyy-MM-dd HH:mm")</small>
+                </div>
+                <span class="wcp-btn-secondary">Ver detalles</span>
+            </div>
+        }
+    </div>
+</div>
+
+@if (mostrarModal)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" style="display:block" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Resultados simulados</h5>
+                </div>
+                <div class="modal-body">
+                    @foreach (var not in notificacionesModal)
+                    {
+                        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                            <span>@not.Mensaje</span>
+                            <small class="text-muted">@not.FechaHora.ToString("HH:mm")</small>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button class="wcp-btn-primary" @onclick="MarcarTodasComoLeidas">
+                        Marcar todas como leídas
+                    </button>
+                    <button class="wcp-btn-secondary" @onclick="CerrarModal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
-    
+    private List<NotificacionDTO> individuales = new();
+    private Dictionary<string, List<NotificacionDTO>> grupos = new();
+    private List<NotificacionDTO> notificacionesModal = new();
+    private bool mostrarModal = false;
+
+    protected override void OnInitialized()
+    {
+        if (Sesion.UsuarioActual == null || !Sesion.UsuarioActual.Roles.Contains(Rol.Periodista))
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+        CargarNotificaciones();
+    }
+
+    private void CargarNotificaciones()
+    {
+        if (Sesion.UsuarioActual == null) return;
+        var noLeidas = ServicioNotificacion.ObtenerNoLeidas(Sesion.UsuarioActual.Id);
+        individuales = noLeidas.Where(n => n.EtiquetaGrupo == null).ToList();
+        grupos = noLeidas
+            .Where(n => n.EtiquetaGrupo != null)
+            .GroupBy(n => n.EtiquetaGrupo!)
+            .ToDictionary(g => g.Key, g => g.ToList());
+    }
+
+    private void MarcarComoLeida(NotificacionDTO not)
+    {
+        ServicioNotificacion.MarcarComoLeida(not);
+        CargarNotificaciones();
+    }
+
+    private void AbrirModal(List<NotificacionDTO> nots)
+    {
+        notificacionesModal = nots;
+        mostrarModal = true;
+    }
+
+    private void CerrarModal()
+    {
+        mostrarModal = false;
+        notificacionesModal = new();
+    }
+
+    private void MarcarTodasComoLeidas()
+    {
+        foreach (var not in notificacionesModal)
+        {
+            ServicioNotificacion.MarcarComoLeida(not);
+        }
+        CerrarModal();
+        CargarNotificaciones();
+    }
 }
