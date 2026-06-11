@@ -18,6 +18,8 @@
         }
 
         <EditForm Model="usuario" OnValidSubmit="OnSave" FormName="agregarUsuarioForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="wcp-form-label">Nombre</label>
@@ -87,6 +89,7 @@
     private bool esEditor = true;
     private string? mensajeError;
     private bool esPeriodista;
+    private bool esError = false;
     
     protected override void OnInitialized()
     {
@@ -106,6 +109,8 @@
     {
         try
         {
+            esError = false;
+            mensajeError = "";
             usuario.Roles = new List<Rol>();
 
             if (esAdministrador)
@@ -127,9 +132,15 @@
 
             Navigation.NavigateTo("/usuarios");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             mensajeError = ex.Message;
+            esError = true;
+        }
+        catch (Exception)
+        {
+            mensajeError = "Ocurrió un error inesperado. Intente nuevamente.";
+            esError = true;
         }
     }
 }

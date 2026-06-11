@@ -8,6 +8,14 @@ namespace Servicios.Clases;
 
 public class PartidoServicios : IServicioPartido
 {
+    private const int MaxTarjetasAmarillas = 6;
+    private const int ProbabilidadTarjetaRoja = 30;
+    private const int MaxTarjetasRojas = 3;
+    private const double EloDivisor = 400.0;
+    private const int ProbabilidadGanadorGol1 = 50;
+    private const int ProbabilidadGanadorGol2 = 80;
+    private const int ProbabilidadPerdedorGol0 = 70;
+
     private readonly IPartidoRepositorio _partidoRepositorio;
     private readonly IServicioAuditoria _auditoria;
     private readonly List<Fase> _fasesBloqueadas = new List<Fase>();
@@ -257,6 +265,11 @@ public class PartidoServicios : IServicioPartido
             if (eraPendiente)
                 _rankingDinamico.ActualizarRanking(PartidoEntidadADto(partidoExistente));
         }
+        if (partidoDTO.incidenciaEquipoLocal != null)
+            partidoExistente.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoLocal);
+        if (partidoDTO.incidenciaEquipoVisitante != null)
+            partidoExistente.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoVisitante);
+
         string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
         _partidoRepositorio.ActualizarPartido(partidoExistente);
@@ -366,16 +379,36 @@ public class PartidoServicios : IServicioPartido
             }
         }
 
+        int tarjetasAmarillasLocal = random.Next(0, MaxTarjetasAmarillas);
+        for (int i = 0; i < tarjetasAmarillasLocal; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, true);
+
+        int tarjetasAmarillasVisitante = random.Next(0, MaxTarjetasAmarillas);
+        for (int i = 0; i < tarjetasAmarillasVisitante; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, false);
+
+        int tarjetasRojasLocal = random.Next(0, 100) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
+        for (int i = 0; i < tarjetasRojasLocal; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, true);
+
+        int tarjetasRojasVisitante = random.Next(0, 100) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
+        for (int i = 0; i < tarjetasRojasVisitante; i++)
+            partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
+
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
-        partidoDTO.estadoPartido = EstadoPartido.Jugado;
+
+        partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
+        partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
+        ActualizarPartido(partidoDTO);
+        _auditoria.RegistrarSimulacion(semillaSimulacion);
     }
 
 
     private double CalcularProbabilidad(int rankingLocal, int rankingVisitante)
     {
         double diferencia = rankingVisitante - rankingLocal;
-        double probabilidadLocal = (1.0 / (1.0 + Math.Pow(10, diferencia / 400.0))) * 100;
+        double probabilidadLocal = (1.0 / (1.0 + Math.Pow(10, diferencia / EloDivisor))) * 100;
         return probabilidadLocal;
     }
 
@@ -385,9 +418,9 @@ public class PartidoServicios : IServicioPartido
         if (esEquipoGanador)
         {
             int numeroAleatorio = random.Next(0, 100);
-            if (numeroAleatorio < 50)
+            if (numeroAleatorio < ProbabilidadGanadorGol1)
                 return 1;
-            else if (numeroAleatorio < 80)
+            else if (numeroAleatorio < ProbabilidadGanadorGol2)
                 return 2;
             else
                 return 3;
@@ -395,7 +428,7 @@ public class PartidoServicios : IServicioPartido
         else
         {
             int numeroAleatorio = random.Next(0, 100);
-            if (numeroAleatorio < 70)
+            if (numeroAleatorio < ProbabilidadPerdedorGol0)
                 return 0;
             else
                 return 1;
@@ -414,6 +447,7 @@ public class PartidoServicios : IServicioPartido
                 ActualizarPartido(partido);
             }
         }
+        _auditoria.RegistrarSimulacion(semillaSimulacion);
     }
     private bool EsPartidoEliminatorioEmpatado(PartidoDTO partido)
     {

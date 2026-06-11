@@ -54,7 +54,7 @@ public class FixturePrimeraFaseServicioTest
         _auditoriaMock = new Mock<IServicioAuditoria>();
         _equipoServicios = new EquipoServicios(_equipoRepositorio, _auditoriaMock.Object);
         _estadioServicios = new EstadioServicios(_estadioRepositorio, _auditoriaMock.Object);
-        var rankingDinamico = new RankingDinamicoServicio(_equipoRepositorio);
+        var rankingDinamico = new RankingDinamicoServicio(_equipoRepositorio, _auditoriaMock.Object);
         _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object, rankingDinamico);
 
         _fixtureServicio = new FixturePrimeraFaseServicio(

@@ -28,61 +28,86 @@
 
         @if (partido != null)
         {
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Equipo local</label>
-                    <input class="form-control" value="@partido.equipoLocal.nombre" disabled />
+            <EditForm Model="partido" OnValidSubmit="GuardarCambios" FormName="editarPartidoForm">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="wcp-form-label">Equipo local</label>
+                        <input class="form-control" value="@partido.equipoLocal.nombre" disabled />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="wcp-form-label">Equipo visitante</label>
+                        <input class="form-control" value="@partido.equipoVisitante.nombre" disabled />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="wcp-form-label">Fecha</label>
+                        <InputDate @bind-Value="partido.Fecha" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="wcp-form-label">Estadio</label>
+                        <select class="form-control" @bind="nombreEstadioSeleccionado">
+                            @foreach (var estadio in estadios)
+                            {
+                                <option value="@estadio.Nombre">@estadio.Nombre</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="wcp-form-label">Goles local</label>
+                        <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="wcp-form-label">Goles visitante</label>
+                        <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="wcp-form-label">Semilla Simulación</label>
+                        <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Amarillas @partido.equipoLocal.nombre</label>
+                        <InputNumber @bind-Value="amarillasLocal" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Rojas @partido.equipoLocal.nombre</label>
+                        <InputNumber @bind-Value="rojasLocal" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Amarillas @partido.equipoVisitante.nombre</label>
+                        <InputNumber @bind-Value="amarillasVisitante" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="wcp-form-label">Rojas @partido.equipoVisitante.nombre</label>
+                        <InputNumber @bind-Value="rojasVisitante" class="form-control" />
+                    </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="wcp-form-label">Equipo visitante</label>
-                    <input class="form-control" value="@partido.equipoVisitante.nombre" disabled />
+                <div class="wcp-actions">
+                    <button type="submit" class="wcp-btn-primary">
+                        Guardar Cambios
+                    </button>
+
+                    <button type="button" class="wcp-btn-secondary" @onclick="SimularResultado">
+                        Simular Resultado
+                    </button>
+
+                    <NavLink href="/partidos" class="wcp-btn-secondary">
+                        Volver
+                    </NavLink>
                 </div>
 
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Fecha</label>
-                    <InputDate @bind-Value="partido.Fecha" class="form-control" />
-                </div>
-
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Estadio</label>
-                    <select class="form-control" @bind="nombreEstadioSeleccionado">
-                        @foreach (var estadio in estadios)
-                        {
-                            <option value="@estadio.Nombre">@estadio.Nombre</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="col-md-2">
-                    <label class="wcp-form-label">Goles local</label>
-                    <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
-                </div>
-
-                <div class="col-md-2">
-                    <label class="wcp-form-label">Goles visitante</label>
-                    <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
-                </div>
-                
-                <div class="col-md-4">
-                    <label class="wcp-form-label">Semilla Simulación</label>
-                    <InputNumber @bind-Value="semillaSimulacion" class="form-control" />
-                </div>
-            </div>
-
-            <div class="wcp-actions">
-                <button class="wcp-btn-primary" @onclick="GuardarCambios">
-                    Guardar Cambios
-                </button>
-                
-                <button class="wcp-btn-secondary" @onclick="SimularResultado">
-                    Simular Resultado
-                </button>
-
-                <NavLink href="/partidos" class="wcp-btn-secondary">
-                    Volver
-                </NavLink>
-            </div>
+            </EditForm>
         }
     </div>
 </div>
@@ -96,6 +121,11 @@
     private string nombreEstadioSeleccionado = "";
 
     private int semillaSimulacion = 123;
+
+    private int amarillasLocal = 0;
+    private int rojasLocal = 0;
+    private int amarillasVisitante = 0;
+    private int rojasVisitante = 0;
 
     private string mensajeError = "";
     private string mensajeExito = "";
@@ -116,12 +146,22 @@
             {
                 nombreEstadioSeleccionado = partido.Estadio.Nombre;
             }
+
+            CargarContadoresIncidencias();
         }
         catch (Exception ex)
         {
             mensajeError = ex.Message;
             mensajeExito = "";
         }
+    }
+
+    private void CargarContadoresIncidencias()
+    {
+        amarillasLocal = partido.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaAmarilla);
+        rojasLocal = partido.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
+        amarillasVisitante = partido.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaAmarilla);
+        rojasVisitante = partido.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
     }
 
     private void GuardarCambios()
@@ -147,6 +187,13 @@
 
             partido.Estadio = estadioSeleccionado;
             partido.estadoPartido = EstadoPartido.Jugado;
+
+            partido.incidenciaEquipoLocal = Enumerable.Repeat(TipoIncidencia.TarjetaAmarilla, amarillasLocal)
+                .Concat(Enumerable.Repeat(TipoIncidencia.TarjetaRoja, rojasLocal))
+                .ToList();
+            partido.incidenciaEquipoVisitante = Enumerable.Repeat(TipoIncidencia.TarjetaAmarilla, amarillasVisitante)
+                .Concat(Enumerable.Repeat(TipoIncidencia.TarjetaRoja, rojasVisitante))
+                .ToList();
 
             ServicioPartido.ActualizarPartido(partido);
             ServicioCruces.ProcesarAvanceDelTorneo();
@@ -177,10 +224,18 @@
             ServicioPartido.SimularResultado(partido, semillaSimulacion);
 
             mensajeExito = "Resultado simulado. Revisá los goles y guardá los cambios.";
+
+            CargarContadoresIncidencias();
+
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             mensajeError = ex.Message;
+            mensajeExito = "";
+        }
+        catch (Exception)
+        {
+            mensajeError = "Ocurrió un error inesperado. Intente nuevamente.";
             mensajeExito = "";
         }
     }

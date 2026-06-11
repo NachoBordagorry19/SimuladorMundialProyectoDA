@@ -9,50 +9,54 @@
         <h1 class="wcp-title">Agregar Equipo</h1>
         <p class="wcp-subtitle">Registrar un nuevo equipo.</p>
         
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="wcp-form-label">Nombre</label>
-                <input @bind="equipo.nombre" type="text" class="form-control" />
+        <EditForm Model="equipo" OnValidSubmit="Guardar" FormName="agregarEquipoForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Nombre</label>
+                    <InputText @bind-Value="equipo.nombre" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Confederacion</label>
+                    <select @bind="confederacionSeleccionada" class="form-control">
+                        <option value="">Seleccionar confederación</option>
+                        <option value="UEFA">UEFA</option>
+                        <option value="CONMEBOL">CONMEBOL</option>
+                        <option value="CONCACAF">CONCACAF</option>
+                        <option value="CAF">CAF</option>
+                        <option value="AFC">AFC</option>
+                        <option value="OFC">OFC</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Ranking FIFA</label>
+                    <InputNumber @bind-Value="equipo.rankingFifa" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="wcp-form-label">Bandera del país</label>
+                    <InputFile OnChange="CargarBandera" accept="image/*" class="form-control" />
+                    @if (!string.IsNullOrEmpty(equipo.banderaBase64))
+                    {
+                        <img src="data:image/*;base64,@equipo.banderaBase64" style="height:40px; margin-top:8px;" />
+                    }
+                </div>
             </div>
 
-            <div class="col-md-6">
-                <label class="wcp-form-label">Confederacion</label>
-                <select @bind="confederacionSeleccionada" class="form-control">
-                    <option value="">Seleccionar confederación</option>
-                    <option value="UEFA">UEFA</option>
-                    <option value="CONMEBOL">CONMEBOL</option>
-                    <option value="CONCACAF">CONCACAF</option>
-                    <option value="CAF">CAF</option>
-                    <option value="AFC">AFC</option>
-                    <option value="OFC">OFC</option>
-                </select>
+            <div class="wcp-actions mt-3">
+                <button type="submit" class="wcp-btn-primary">Guardar</button>
+                <NavLink href="/equipos" class="wcp-btn-secondary">Volver</NavLink>
             </div>
 
-            <div class="col-md-6">
-                <label class="wcp-form-label">Ranking FIFA</label>
-                <input @bind="equipo.rankingFifa" type="number" class="form-control" />
-            </div>
-            <div class="col-md-6">
-                <label class="wcp-form-label">Bandera del país</label>
-                <InputFile OnChange="CargarBandera" accept="image/*" class="form-control" />
-                @if (!string.IsNullOrEmpty(equipo.banderaBase64))
-                {
-                    <img src="data:image/*;base64,@equipo.banderaBase64" style="height:40px; margin-top:8px;" />
-                }
-            </div>
-        </div>
-
-        <div class="wcp-actions mt-3">
-            <button @onclick="Guardar" class="wcp-btn-primary">Guardar</button>
-            <NavLink href="/equipos" class="wcp-btn-secondary">Volver</NavLink>
-        </div>
-
-        @if (!string.IsNullOrEmpty(mensaje))
-        {
-            <div class="alert alert-@(esError ? "danger" : "success") mt-3">
-                @mensaje
-            </div>
-        }
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <div class="alert alert-@(esError ? "danger" : "success") mt-3">
+                    @mensaje
+                </div>
+            }
+        </EditForm>
     </div>
 </div>
 
@@ -94,9 +98,14 @@
             equipo = new EquipoDTO();
             confederacionSeleccionada = "";
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             mensaje = ex.Message;
+            esError = true;
+        }
+        catch (Exception)
+        {
+            mensaje = "Ocurrió un error inesperado. Intente nuevamente.";
             esError = true;
         }
     }

@@ -242,5 +242,20 @@ public class AuditoriaServicioTest
         Assert.IsTrue(log.Contains(usuario));
         Assert.IsTrue(log.Contains(mensaje));
         Assert.IsTrue(log.Contains("Generación de Notificaciones"));
+    
+    [TestMethod]
+    public void RegistrarSimulacion_DebeGuardarRegistroCorrectamente()
+    {
+        _servicio.RegistrarSimulacion(781);
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Generación de simulación completada correctamente"));
+    }
+
+    [TestMethod]
+    public void RegistrarCalculosDeCambioDeRanking_DebeGuardarCorrectamente()
+    {
+        _servicio.RegistrarCalculosDeCambioDeRanking(300,315);
+        var log = _servicio.ObtenerRegistrosFormateados()[0];
+        Assert.IsTrue(log.Contains("Cambio de ranking completado correctamente"));
     }
 }

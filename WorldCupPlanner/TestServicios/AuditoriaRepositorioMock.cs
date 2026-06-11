@@ -15,4 +15,9 @@ public class AuditoriaRepositorioMock : IAuditoriaRepositorio
     {
         return _datos;
     }
+
+    public List<Auditoria> ObtenerPorRango(DateTime desde, DateTime hasta)
+    {
+        return _datos.Where(a => a.FechaHora >= desde && a.FechaHora <= hasta).ToList();
+    }
 }

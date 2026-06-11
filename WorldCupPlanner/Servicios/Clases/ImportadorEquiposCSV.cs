@@ -3,7 +3,7 @@ using Dominio.Enums;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 
-namespace Repositorio;
+namespace Servicios.Clases;
 
 public class ImportadorEquiposCSV : IImportadorEquiposCSV 
 {

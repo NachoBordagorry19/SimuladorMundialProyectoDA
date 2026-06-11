@@ -27,7 +27,7 @@ public class CrucesSegundaFaseServicioTest
         _partidoRepositorio = new PartidoRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         var equipoRepositorio = new EquipoRepositorioSql(_contexto);
-        var rankingDinamico = new RankingDinamicoServicio(equipoRepositorio);
+        var rankingDinamico = new RankingDinamicoServicio(equipoRepositorio, _auditoriaMock.Object);
         _partidoServicios = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object, rankingDinamico);
         _crucesServicio = new CrucesSegundaFaseServicio(_partidoServicios, _auditoriaMock.Object);
     }

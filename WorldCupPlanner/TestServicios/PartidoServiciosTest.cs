@@ -35,7 +35,7 @@ public class PartidoServiciosTest
         _partidoRepositorio = new PartidoRepositorioSql(_contexto);
         _auditoriaMock = new Mock<IServicioAuditoria>();
         var equipoRepositorio = new EquipoRepositorioSql(_contexto);
-        var rankingDinamico = new RankingDinamicoServicio(equipoRepositorio);
+        var rankingDinamico = new RankingDinamicoServicio(equipoRepositorio, _auditoriaMock.Object);
         _servicioPartido = new PartidoServicios(_partidoRepositorio, _auditoriaMock.Object, rankingDinamico);
 
         estadioDTO = new EstadioDTO()
@@ -337,5 +337,31 @@ public class PartidoServiciosTest
         _partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>();
         _partidoDTO.incidenciaEquipoVisitante.Add(TipoIncidencia.TarjetaAmarilla);
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+    }
+
+    [TestMethod]
+    public void SimularResultado_GeneraIncidenciasParaAmbosEquipos()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        Assert.IsTrue(partidoSimulado.incidenciaEquipoLocal.Count >= 0 && partidoSimulado.incidenciaEquipoLocal.Count <= 10);
+        Assert.IsTrue(partidoSimulado.incidenciaEquipoVisitante.Count >= 0 && partidoSimulado.incidenciaEquipoVisitante.Count <= 10);
+    }
+
+    [TestMethod]
+    public void SimularResultado_GeneraTarjetasRojasEnRangoValido()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularResultado(_partidoDTO, 12345);
+
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        int rojasLocal = partidoSimulado.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
+        int rojasVisitante = partidoSimulado.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
+        Assert.IsTrue(rojasLocal >= 0 && rojasLocal <= 5);
+        Assert.IsTrue(rojasVisitante >= 0 && rojasVisitante <= 5);
     }
 }

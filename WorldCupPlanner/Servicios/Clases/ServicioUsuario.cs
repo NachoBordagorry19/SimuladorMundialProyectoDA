@@ -187,7 +187,7 @@ public class ServicioUsuario : IServicioUsuario
 
         if (usuario == null)
         {
-            throw new ArgumentException("El usuario no existe, porfavor ingrese un usuario que exista");
+            throw new ArgumentException("No se encontró ningún usuario con ese email");
         }
 
         return usuario;
@@ -265,7 +265,7 @@ public class ServicioUsuario : IServicioUsuario
     {
         if (string.IsNullOrWhiteSpace(email))
         {
-            throw new ArgumentException("El email debe tener un formato válido");
+            throw new ArgumentException("El email es obligatorio");
         }
 
         int cantidadDeArrobas = email.Count(caracter => caracter == '@');
