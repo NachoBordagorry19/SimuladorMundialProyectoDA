@@ -22,6 +22,8 @@ public interface IServicioAuditoria
 
     void RegistrarSimulacion(int semilla);
     void RegistrarCalculosDeCambioDeRanking(int valorAnterior, int valorNuevo);
+    
+    void RegistrarExportacionArchivos(string nombreArchivo);
 
     List<string> ObtenerRegistrosFormateados();
 }

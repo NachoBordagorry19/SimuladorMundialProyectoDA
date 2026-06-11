@@ -120,6 +120,12 @@ public class ServicioAuditoria : IServicioAuditoria
         Registrar("Cambio de ranking completado correctamente", "El valor anterior era: " + valorAnterior + ", el valor actual es ahora: " + valorNuevo);
     }
     
+    public void RegistrarExportacionArchivos(string nombreArchivo)
+    {
+        Registrar("Exportación de Archivo", $"Archivo: {nombreArchivo}");
+    }
+
+    
     public List<string> ObtenerRegistrosFormateados()
     {
         var logs = _auditoriaRepo.ObtenerTodosLosRegistros();

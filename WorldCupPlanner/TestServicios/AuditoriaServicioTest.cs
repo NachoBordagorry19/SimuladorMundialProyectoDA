@@ -259,4 +259,20 @@ public class AuditoriaServicioTest
         var log = _servicio.ObtenerRegistrosFormateados()[0];
         Assert.IsTrue(log.Contains("Cambio de ranking completado correctamente"));
     }
+
+    [TestMethod]
+    public void ExportoArchivos_SeRegistraCorrectamente()
+    {
+        string nombreArchivo = "auditoria_2026.csv";
+        _servicio.RegistrarExportacionArchivos(nombreArchivo);
+        var registros = _servicio.ObtenerRegistrosFormateados();
+
+        Assert.AreEqual(1, registros.Count);
+        string log = registros[0];
+        Assert.IsTrue(log.Contains("Exportación de Archivo"));
+        Assert.IsTrue(log.Contains(nombreArchivo));
+        Assert.IsTrue(log.Contains("admin@gmail.com"));
+        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+        Assert.IsTrue(log.StartsWith(fechaHoy));
+    }
 }
