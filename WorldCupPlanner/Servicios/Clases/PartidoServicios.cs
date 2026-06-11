@@ -401,6 +401,7 @@ public class PartidoServicios : IServicioPartido
         partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
         partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
+        partidoDTO.estadoPartido = EstadoPartido.Jugado;
         _auditoria.RegistrarSimulacion(semillaSimulacion);
     }
 

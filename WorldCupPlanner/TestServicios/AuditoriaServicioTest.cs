@@ -242,7 +242,8 @@ public class AuditoriaServicioTest
         Assert.IsTrue(log.Contains(usuario));
         Assert.IsTrue(log.Contains(mensaje));
         Assert.IsTrue(log.Contains("Generación de Notificaciones"));
-    
+    }
+
     [TestMethod]
     public void RegistrarSimulacion_DebeGuardarRegistroCorrectamente()
     {
