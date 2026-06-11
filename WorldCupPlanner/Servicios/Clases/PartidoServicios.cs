@@ -397,6 +397,7 @@ public class PartidoServicios : IServicioPartido
 
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
+
         partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
         partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
@@ -443,6 +444,7 @@ public class PartidoServicios : IServicioPartido
             if (partido.estadoPartido != EstadoPartido.Jugado || EsPartidoEliminatorioEmpatado(partido))
             {
                 SimularResultado(partido, semillaSimulacion + partido.idPartido);
+                ActualizarPartido(partido);
             }
         }
         _auditoria.RegistrarSimulacion(semillaSimulacion);

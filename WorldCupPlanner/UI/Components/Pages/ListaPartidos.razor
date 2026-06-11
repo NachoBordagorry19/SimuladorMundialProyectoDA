@@ -6,6 +6,7 @@
 @using Servicios.Modelo
 @inject IServicioPartido ServicioPartido
 @inject IServicioCrucesSegundaFase ServicioCruces
+@inject IServicioNotificacion ServicioNotificacion
 @inject UsuarioSesion Sesion
 
 <div class="wcp-page" style="max-width: 1400px">
@@ -262,11 +263,18 @@
             mensajeError = "";
             mensajeExito = "";
 
+            var pendientes = partidos.Where(p => p.estadoPartido == EstadoPartido.Pendiente).ToList();
+
             ServicioPartido.SimularTodosLosPartidos(semillaSimulacion);
-
             ServicioCruces.ProcesarAvanceDelTorneo();
-
             CargarDatos();
+
+            var etiqueta = $"simulacion-{DateTime.Now:yyyyMMddHHmmss}";
+            foreach (var anterior in pendientes)
+            {
+                var simulado = partidos.First(p => p.idPartido == anterior.idPartido);
+                ServicioNotificacion.GenerarNotificaciones($"{simulado.equipoLocal.nombre} {simulado.golesLocal} - {simulado.golesVisitante} {simulado.equipoVisitante.nombre}", etiqueta);
+            }
 
             mensajeExito = "Partidos pendientes simulados correctamente.";
         }

@@ -85,6 +85,16 @@ public class ServicioAuditoria : IServicioAuditoria
         Registrar($"Importación de Equipos ({etiqueta})", mensaje);
     }
 
+    public void RegistrarGeneracionNotificacion(string usuario, string mensaje)
+    {
+        Registrar("Generación de Notificaciones", $"Usuario: {usuario}, Mensaje: {mensaje}");
+    }
+
+    public void RegistrarLecturaNotificacion(string mensajeNotificacion)
+    {
+        Registrar("Lectura de Notificación", $"Mensaje: {mensajeNotificacion}");
+    }
+
     public void RegistrarGeneracionAutomaticaEquipos(int cantidad)
     {
         Registrar("Generación automática de equipos", $"Cantidad: {cantidad}");
