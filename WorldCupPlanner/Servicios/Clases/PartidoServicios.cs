@@ -368,7 +368,7 @@ public class PartidoServicios : IServicioPartido
 
         partidoDTO.golesLocal = golesLocal;
         partidoDTO.golesVisitante = golesVisitante;
-        ActualizarPartido(partidoDTO);
+        partidoDTO.estadoPartido = EstadoPartido.Jugado;
     }
 
 
@@ -411,6 +411,7 @@ public class PartidoServicios : IServicioPartido
             if (partido.estadoPartido != EstadoPartido.Jugado || EsPartidoEliminatorioEmpatado(partido))
             {
                 SimularResultado(partido, semillaSimulacion + partido.idPartido);
+                ActualizarPartido(partido);
             }
         }
     }

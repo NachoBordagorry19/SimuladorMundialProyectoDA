@@ -175,18 +175,8 @@
             }
 
             ServicioPartido.SimularResultado(partido, semillaSimulacion);
-            ServicioCruces.ProcesarAvanceDelTorneo();
 
-            partido = ServicioPartido.ObtenerPartido(IdPartido);
-
-            if (partido.Estadio != null)
-            {
-                nombreEstadioSeleccionado = partido.Estadio.Nombre;
-            }
-
-            ServicioNotificacion.GenerarNotificaciones($"{partido.equipoLocal.nombre} {partido.golesLocal} - {partido.golesVisitante} {partido.equipoVisitante.nombre}");
-
-            mensajeExito = "Resultado simulado correctamente.";
+            mensajeExito = "Resultado simulado. Revisá los goles y guardá los cambios.";
         }
         catch (Exception ex)
         {
