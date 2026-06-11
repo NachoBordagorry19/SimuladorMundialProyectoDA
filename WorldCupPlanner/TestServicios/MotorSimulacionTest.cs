@@ -30,6 +30,20 @@ public class MotorSimulacionTest
     }
 
     [TestMethod]
+    public void MotorAleatorioPuro_Simular_IgnoraElRanking()
+    {
+        var motor = new MotorAleatorioPuro();
+        var partidoConLocalSuperior = CrearPartidoDTO(rankingLocal: 2500, rankingVisitante: 300);
+        var partidoConVisitanteSuperior = CrearPartidoDTO(rankingLocal: 300, rankingVisitante: 2500);
+
+        motor.Simular(partidoConLocalSuperior, new Random(42));
+        motor.Simular(partidoConVisitanteSuperior, new Random(42));
+
+        Assert.AreEqual(partidoConLocalSuperior.golesLocal, partidoConVisitanteSuperior.golesLocal);
+        Assert.AreEqual(partidoConLocalSuperior.golesVisitante, partidoConVisitanteSuperior.golesVisitante);
+    }
+
+    [TestMethod]
     public void MotorProbabilistico_Nombre_EsElCorrecto()
     {
         var motor = new MotorProbabilistico();
