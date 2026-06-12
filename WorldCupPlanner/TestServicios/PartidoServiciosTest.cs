@@ -364,4 +364,14 @@ public class PartidoServiciosTest
         Assert.IsTrue(rojasLocal >= 0 && rojasLocal <= 5);
         Assert.IsTrue(rojasVisitante >= 0 && rojasVisitante <= 5);
     }
+
+    [TestMethod]
+    public void SimularResultado_ConMotor_PartidoQuedaJugado()
+    {
+        _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
+
+        _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorAleatorioPuro());
+
+        Assert.AreEqual(EstadoPartido.Jugado, _partidoDTO.estadoPartido);
+    }
 }
