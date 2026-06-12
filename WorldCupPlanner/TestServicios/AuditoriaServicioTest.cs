@@ -204,13 +204,14 @@ public class AuditoriaServicioTest
     public void RegistrarGeneracionAutomaticaEquipos_DebeGuardarRegistroCorrectamente()
     {
         int cantidad = 32;
-        _servicio.RegistrarGeneracionAutomaticaEquipos(cantidad);
+        _servicio.RegistrarGeneracionAutomaticaEquipos(cantidad, 123, 300, 2500);
         var registros = _servicio.ObtenerRegistrosFormateados();
 
         Assert.AreEqual(1, registros.Count);
         string log = registros[0];
         Assert.IsTrue(log.Contains("Generación automática de equipos"));
         Assert.IsTrue(log.Contains(cantidad.ToString()));
+        Assert.IsTrue(log.Contains("300-2500"));
         Assert.IsTrue(log.Contains("admin@gmail.com"));
     }
 

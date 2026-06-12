@@ -95,9 +95,9 @@ public class ServicioAuditoria : IServicioAuditoria
         Registrar("Lectura de Notificación", $"Mensaje: {mensajeNotificacion}");
     }
 
-    public void RegistrarGeneracionAutomaticaEquipos(int cantidad)
+    public void RegistrarGeneracionAutomaticaEquipos(int cantidad, int semilla, int rankingMin, int rankingMax)
     {
-        Registrar("Generación automática de equipos", $"Cantidad: {cantidad}");
+        Registrar("Generación automática de equipos", $"Cantidad: {cantidad}, Semilla: {semilla}, Rango Ranking FIFA: {rankingMin}-{rankingMax}");
     }
 
     public void RegistrarGeneracionFixture()

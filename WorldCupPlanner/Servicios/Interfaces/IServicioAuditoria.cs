@@ -11,7 +11,7 @@ public interface IServicioAuditoria
     void RegistrarAltaEquipo(string nombre);
     void RegistrarEdicionEquipo(string nombre);
     void RegistrarEliminacionEquipo(string nombre);
-    void RegistrarGeneracionAutomaticaEquipos(int cantidad);
+    void RegistrarGeneracionAutomaticaEquipos(int cantidad, int semilla, int rankingMin, int rankingMax);
     void RegistrarGeneracionFixture();
     void RegistrarModificacionPartido(string detalle);
     void RegistrarSorteoCruces();

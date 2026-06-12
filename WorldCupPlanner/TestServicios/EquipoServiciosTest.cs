@@ -326,7 +326,7 @@ public class EquipoServiciosTest
     public void GenerarEquiposAutomaticamente_DebeLlamarAuditoria()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _auditoriaMock.Verify(a => a.RegistrarGeneracionAutomaticaEquipos(48), Times.Once);
+        _auditoriaMock.Verify(a => a.RegistrarGeneracionAutomaticaEquipos(48, 123, 300, 2500), Times.Once);
     }
     
     [TestMethod]
