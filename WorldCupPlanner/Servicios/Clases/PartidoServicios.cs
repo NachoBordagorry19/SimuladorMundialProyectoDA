@@ -11,10 +11,6 @@ public class PartidoServicios : IServicioPartido
     private const int MaxTarjetasAmarillas = 6;
     private const int ProbabilidadTarjetaRoja = 30;
     private const int MaxTarjetasRojas = 3;
-    private const double EloDivisor = 400.0;
-    private const int ProbabilidadGanadorGol1 = 50;
-    private const int ProbabilidadGanadorGol2 = 80;
-    private const int ProbabilidadPerdedorGol0 = 70;
 
     private readonly IPartidoRepositorio _partidoRepositorio;
     private readonly IServicioAuditoria _auditoria;
@@ -330,7 +326,7 @@ public class PartidoServicios : IServicioPartido
         return partido;
     }
 
-    public void SimularResultado(PartidoDTO partidoDTO, int semillaSimulacion)
+    public void SimularResultado(PartidoDTO partidoDTO, int semillaSimulacion, IMotorSimulacion motor)
     {
         if (partidoDTO == null)
         {
@@ -345,38 +341,11 @@ public class PartidoServicios : IServicioPartido
 
         Random random = new Random(semillaSimulacion);
 
-        int rankingLocal = partidoExistente.Local.RankingFifa;
-        int rankingVisitante = partidoExistente.Visitante.RankingFifa;
+        motor.Simular(partidoDTO, random);
 
-        double probabilidadLocal = CalcularProbabilidad(rankingLocal, rankingVisitante);
-        double numeroAleatorio = random.NextDouble() * 100;
-
-        int golesLocal;
-        int golesVisitante;
-
-        bool ganaLocal = numeroAleatorio < probabilidadLocal;
-
-        if (ganaLocal)
+        if (partidoExistente.Fase != Fase.Grupos && partidoDTO.golesLocal == partidoDTO.golesVisitante)
         {
-            golesLocal = GenerarGolesAleatorios(random, true);
-            golesVisitante = GenerarGolesAleatorios(random, false);
-        }
-        else
-        {
-            golesLocal = GenerarGolesAleatorios(random, false);
-            golesVisitante = GenerarGolesAleatorios(random, true);
-        }
-
-        if (partidoExistente.Fase != Fase.Grupos && golesLocal == golesVisitante)
-        {
-            if (ganaLocal)
-            {
-                golesLocal++;
-            }
-            else
-            {
-                golesVisitante++;
-            }
+            partidoDTO.golesLocal++;
         }
 
         int tarjetasAmarillasLocal = random.Next(0, MaxTarjetasAmarillas);
@@ -395,9 +364,6 @@ public class PartidoServicios : IServicioPartido
         for (int i = 0; i < tarjetasRojasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
 
-        partidoDTO.golesLocal = golesLocal;
-        partidoDTO.golesVisitante = golesVisitante;
-
         partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
         partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
@@ -406,37 +372,7 @@ public class PartidoServicios : IServicioPartido
     }
 
 
-    private double CalcularProbabilidad(int rankingLocal, int rankingVisitante)
-    {
-        double diferencia = rankingVisitante - rankingLocal;
-        double probabilidadLocal = (1.0 / (1.0 + Math.Pow(10, diferencia / EloDivisor))) * 100;
-        return probabilidadLocal;
-    }
-
-
-    private int GenerarGolesAleatorios(Random random, bool esEquipoGanador)
-    {
-        if (esEquipoGanador)
-        {
-            int numeroAleatorio = random.Next(0, 100);
-            if (numeroAleatorio < ProbabilidadGanadorGol1)
-                return 1;
-            else if (numeroAleatorio < ProbabilidadGanadorGol2)
-                return 2;
-            else
-                return 3;
-        }
-        else
-        {
-            int numeroAleatorio = random.Next(0, 100);
-            if (numeroAleatorio < ProbabilidadPerdedorGol0)
-                return 0;
-            else
-                return 1;
-        }
-    }
-
-    public void SimularTodosLosPartidos(int semillaSimulacion)
+    public void SimularTodosLosPartidos(int semillaSimulacion, IMotorSimulacion motor)
     {
         List<PartidoDTO> partidos = ObtenerPartidos();
 
@@ -444,7 +380,7 @@ public class PartidoServicios : IServicioPartido
         {
             if (partido.estadoPartido != EstadoPartido.Jugado || EsPartidoEliminatorioEmpatado(partido))
             {
-                SimularResultado(partido, semillaSimulacion + partido.idPartido);
+                SimularResultado(partido, semillaSimulacion + partido.idPartido, motor);
                 ActualizarPartido(partido);
             }
         }
