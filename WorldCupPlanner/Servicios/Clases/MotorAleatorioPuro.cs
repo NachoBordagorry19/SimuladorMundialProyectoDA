@@ -15,8 +15,8 @@ public class MotorAleatorioPuro : IMotorSimulacion
     {
         bool ganaLocal = random.Next(0, 2) == 0;
 
-        partidoDto.golesLocal = GenerarGoles(random, ganaLocal);
-        partidoDto.golesVisitante = GenerarGoles(random, !ganaLocal);
+        partidoDto.GolesLocal = GenerarGoles(random, ganaLocal);
+        partidoDto.GolesVisitante = GenerarGoles(random, !ganaLocal);
     }
 
     private int GenerarGoles(Random random, bool esGanador)

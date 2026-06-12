@@ -15,7 +15,7 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="wcp-form-label">Nombre</label>
-                    <InputText @bind-Value="equipo.nombre" class="form-control" />
+                    <InputText @bind-Value="equipo.Nombre" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
@@ -33,14 +33,14 @@
 
                 <div class="col-md-6">
                     <label class="wcp-form-label">Ranking FIFA</label>
-                    <InputNumber @bind-Value="equipo.rankingFifa" class="form-control" />
+                    <InputNumber @bind-Value="equipo.RankingFifa" class="form-control" />
                 </div>
                 <div class="col-md-6">
                     <label class="wcp-form-label">Bandera del país</label>
                     <InputFile OnChange="CargarBandera" accept="image/*" class="form-control" />
-                    @if (!string.IsNullOrEmpty(equipo.banderaBase64))
+                    @if (!string.IsNullOrEmpty(equipo.BanderaBase64))
                     {
-                        <img src="data:image/*;base64,@equipo.banderaBase64" style="height:40px; margin-top:8px;" />
+                        <img src="data:image/*;base64,@equipo.BanderaBase64" style="height:40px; margin-top:8px;" />
                     }
                 </div>
             </div>
@@ -83,7 +83,7 @@
             // Convertir string a enum
             if (Enum.TryParse<Confederacion>(confederacionSeleccionada, out var confederacion))
             {
-                equipo.confederacion = confederacion;
+                equipo.Confederacion = confederacion;
             }
             else
             {
@@ -115,7 +115,7 @@
         using var stream = archivo.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024);
         var buffer = new byte[archivo.Size];
         await stream.ReadAsync(buffer);
-        equipo.banderaBase64 = Convert.ToBase64String(buffer);
+        equipo.BanderaBase64 = Convert.ToBase64String(buffer);
     }
 
 }

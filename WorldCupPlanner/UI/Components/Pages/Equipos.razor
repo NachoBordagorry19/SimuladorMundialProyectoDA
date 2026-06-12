@@ -71,21 +71,21 @@
                     @foreach (var equipo in equipos)
                     {
                         <tr>
-                            <td>@equipo.nombre</td>
-                            <td>@equipo.confederacion</td>
-                            <td>@equipo.rankingFifa</td>
+                            <td>@equipo.Nombre</td>
+                            <td>@equipo.Confederacion</td>
+                            <td>@equipo.RankingFifa</td>
                             <td>
-                                @if (!string.IsNullOrEmpty(equipo.banderaBase64))
+                                @if (!string.IsNullOrEmpty(equipo.BanderaBase64))
                                 {
-                                    <img src="data:image/*;base64,@equipo.banderaBase64" style="height:30px;" />
+                                    <img src="data:image/*;base64,@equipo.BanderaBase64" style="height:30px;" />
                                 }
                             </td>
 
                             <td>
                                 @if (Sesion.UsuarioActual.Roles.Contains(Rol.Administrador))
                                 {
-                                    <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
-                                    <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
+                                    <NavLink href="@($"/ActualizarEquipo?nombre={Uri.EscapeDataString(equipo.Nombre)}")" class="wcp-action-link wcp-action-edit">Editar</NavLink>
+                                    <NavLink href="@($"/EliminarEquipo?nombre={Uri.EscapeDataString(equipo.Nombre)}")" class="wcp-action-link wcp-action-delete">Eliminar</NavLink>
                                 }
                             </td>
                         </tr>

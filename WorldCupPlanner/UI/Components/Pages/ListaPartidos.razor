@@ -128,22 +128,22 @@
                     <tr>
                         <td>@partido.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
                         <td>@partido.Grupo</td>
-                        <td>@partido.fase</td>
-                        <td>@partido.equipoLocal.nombre</td>
-                        <td>@partido.equipoVisitante.nombre</td>
+                        <td>@partido.Fase</td>
+                        <td>@partido.EquipoLocal.Nombre</td>
+                        <td>@partido.EquipoVisitante.Nombre</td>
                         <td>@partido.Estadio.Nombre</td>
-                        <td>@partido.estadoPartido</td>
-                        <td>@partido.golesLocal - @partido.golesVisitante</td>
+                        <td>@partido.EstadoPartido</td>
+                        <td>@partido.GolesLocal - @partido.GolesVisitante</td>
                         <td>
-                            @if (partido.estadoPartido == EstadoPartido.Jugado)
+                            @if (partido.EstadoPartido == EstadoPartido.Jugado)
                             {
-                                var amarillasLocal = partido.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaAmarilla);
-                                var rojasLocal = partido.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
-                                var amarillasVisitante = partido.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaAmarilla);
-                                var rojasVisitante = partido.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
+                                var amarillasLocal = partido.IncidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaAmarilla);
+                                var rojasLocal = partido.IncidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
+                                var amarillasVisitante = partido.IncidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaAmarilla);
+                                var rojasVisitante = partido.IncidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
                                 <small>
-                                    @partido.equipoLocal.nombre: @amarillasLocal am. @rojasLocal roj.<br />
-                                    @partido.equipoVisitante.nombre: @amarillasVisitante am. @rojasVisitante roj.
+                                    @partido.EquipoLocal.Nombre: @amarillasLocal am. @rojasLocal roj.<br />
+                                    @partido.EquipoVisitante.Nombre: @amarillasVisitante am. @rojasVisitante roj.
                                 </small>
                             }
                             else
@@ -154,7 +154,7 @@
                         <td>
                             @if (Sesion.UsuarioActual.Roles.Contains(Rol.Editor))
                             {
-                                <NavLink href="@($"/EditarPartido/{partido.idPartido}")" class="wcp-action-link wcp-action-edit">
+                                <NavLink href="@($"/EditarPartido/{partido.IdPartido}")" class="wcp-action-link wcp-action-edit">
                                     Editar
                                 </NavLink>
                             }
@@ -267,7 +267,7 @@
             mensajeError = "";
             mensajeExito = "";
 
-            var pendientes = partidos.Where(p => p.estadoPartido == EstadoPartido.Pendiente).ToList();
+            var pendientes = partidos.Where(p => p.EstadoPartido == EstadoPartido.Pendiente).ToList();
 
             IMotorSimulacion motor = EstadoFixture.NombreMotorSimulacion == "Aleatorio Puro" ? MotorAleatorioPuro : MotorProbabilistico;
             ServicioPartido.SimularTodosLosPartidos(semillaSimulacion, motor);
@@ -277,8 +277,8 @@
             var etiqueta = $"simulacion-{DateTime.Now:yyyyMMddHHmmss}";
             foreach (var anterior in pendientes)
             {
-                var simulado = partidos.First(p => p.idPartido == anterior.idPartido);
-                ServicioNotificacion.GenerarNotificaciones($"{simulado.equipoLocal.nombre} {simulado.golesLocal} - {simulado.golesVisitante} {simulado.equipoVisitante.nombre}", etiqueta);
+                var simulado = partidos.First(p => p.IdPartido == anterior.IdPartido);
+                ServicioNotificacion.GenerarNotificaciones($"{simulado.EquipoLocal.Nombre} {simulado.GolesLocal} - {simulado.GolesVisitante} {simulado.EquipoVisitante.Nombre}", etiqueta);
             }
 
             mensajeExito = "Partidos pendientes simulados correctamente.";

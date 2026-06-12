@@ -12,12 +12,12 @@ public class MotorSimulacionTest
     {
         return new PartidoDTO
         {
-            equipoLocal = new EquipoDTO { nombre = "LocalFC", rankingFifa = rankingLocal, confederacion = Confederacion.UEFA },
-            equipoVisitante = new EquipoDTO { nombre = "VisitanteFC", rankingFifa = rankingVisitante, confederacion = Confederacion.CONMEBOL },
+            EquipoLocal = new EquipoDTO { Nombre = "LocalFC", RankingFifa = rankingLocal, Confederacion = Confederacion.UEFA },
+            EquipoVisitante = new EquipoDTO { Nombre = "VisitanteFC", RankingFifa = rankingVisitante, Confederacion = Confederacion.CONMEBOL },
             Fecha = DateTime.Now,
             Estadio = new EstadioDTO { Nombre = "Estadio", Ciudad = "Ciudad", Descripcion = "Desc", CapacidadLocativa = 50000 },
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Pendiente
+            Fase = Fase.Grupos,
+            EstadoPartido = EstadoPartido.Pendiente
         };
     }
 
@@ -39,8 +39,8 @@ public class MotorSimulacionTest
         motor.Simular(partidoConLocalSuperior, new Random(42));
         motor.Simular(partidoConVisitanteSuperior, new Random(42));
 
-        Assert.AreEqual(partidoConLocalSuperior.golesLocal, partidoConVisitanteSuperior.golesLocal);
-        Assert.AreEqual(partidoConLocalSuperior.golesVisitante, partidoConVisitanteSuperior.golesVisitante);
+        Assert.AreEqual(partidoConLocalSuperior.GolesLocal, partidoConVisitanteSuperior.GolesLocal);
+        Assert.AreEqual(partidoConLocalSuperior.GolesVisitante, partidoConVisitanteSuperior.GolesVisitante);
     }
 
     [TestMethod]
@@ -59,7 +59,7 @@ public class MotorSimulacionTest
 
         motor.Simular(partidoDto, new Random(42));
 
-        Assert.IsTrue(partidoDto.golesLocal >= 1 && partidoDto.golesLocal <= 3);
-        Assert.IsTrue(partidoDto.golesVisitante >= 0 && partidoDto.golesVisitante <= 1);
+        Assert.IsTrue(partidoDto.GolesLocal >= 1 && partidoDto.GolesLocal <= 3);
+        Assert.IsTrue(partidoDto.GolesVisitante >= 0 && partidoDto.GolesVisitante <= 1);
     }
 }

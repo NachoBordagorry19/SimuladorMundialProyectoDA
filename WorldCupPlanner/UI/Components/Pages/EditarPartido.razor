@@ -38,12 +38,12 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="wcp-form-label">Equipo local</label>
-                        <input class="form-control" value="@partido.equipoLocal.nombre" disabled />
+                        <input class="form-control" value="@partido.EquipoLocal.Nombre" disabled />
                     </div>
 
                     <div class="col-md-6">
                         <label class="wcp-form-label">Equipo visitante</label>
-                        <input class="form-control" value="@partido.equipoVisitante.nombre" disabled />
+                        <input class="form-control" value="@partido.EquipoVisitante.Nombre" disabled />
                     </div>
 
                     <div class="col-md-4">
@@ -63,12 +63,12 @@
 
                     <div class="col-md-2">
                         <label class="wcp-form-label">Goles local</label>
-                        <InputNumber @bind-Value="partido.golesLocal" class="form-control" />
+                        <InputNumber @bind-Value="partido.GolesLocal" class="form-control" />
                     </div>
 
                     <div class="col-md-2">
                         <label class="wcp-form-label">Goles visitante</label>
-                        <InputNumber @bind-Value="partido.golesVisitante" class="form-control" />
+                        <InputNumber @bind-Value="partido.GolesVisitante" class="form-control" />
                     </div>
 
                     <div class="col-md-4">
@@ -77,22 +77,22 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label class="wcp-form-label">Amarillas @partido.equipoLocal.nombre</label>
+                        <label class="wcp-form-label">Amarillas @partido.EquipoLocal.Nombre</label>
                         <InputNumber @bind-Value="amarillasLocal" class="form-control" />
                     </div>
 
                     <div class="col-md-3">
-                        <label class="wcp-form-label">Rojas @partido.equipoLocal.nombre</label>
+                        <label class="wcp-form-label">Rojas @partido.EquipoLocal.Nombre</label>
                         <InputNumber @bind-Value="rojasLocal" class="form-control" />
                     </div>
 
                     <div class="col-md-3">
-                        <label class="wcp-form-label">Amarillas @partido.equipoVisitante.nombre</label>
+                        <label class="wcp-form-label">Amarillas @partido.EquipoVisitante.Nombre</label>
                         <InputNumber @bind-Value="amarillasVisitante" class="form-control" />
                     </div>
 
                     <div class="col-md-3">
-                        <label class="wcp-form-label">Rojas @partido.equipoVisitante.nombre</label>
+                        <label class="wcp-form-label">Rojas @partido.EquipoVisitante.Nombre</label>
                         <InputNumber @bind-Value="rojasVisitante" class="form-control" />
                     </div>
                 </div>
@@ -162,10 +162,10 @@
 
     private void CargarContadoresIncidencias()
     {
-        amarillasLocal = partido.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaAmarilla);
-        rojasLocal = partido.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
-        amarillasVisitante = partido.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaAmarilla);
-        rojasVisitante = partido.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
+        amarillasLocal = partido.IncidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaAmarilla);
+        rojasLocal = partido.IncidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
+        amarillasVisitante = partido.IncidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaAmarilla);
+        rojasVisitante = partido.IncidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
     }
 
     private void GuardarCambios()
@@ -190,18 +190,18 @@
             }
 
             partido.Estadio = estadioSeleccionado;
-            partido.estadoPartido = EstadoPartido.Jugado;
+            partido.EstadoPartido = EstadoPartido.Jugado;
 
-            partido.incidenciaEquipoLocal = Enumerable.Repeat(TipoIncidencia.TarjetaAmarilla, amarillasLocal)
+            partido.IncidenciaEquipoLocal = Enumerable.Repeat(TipoIncidencia.TarjetaAmarilla, amarillasLocal)
                 .Concat(Enumerable.Repeat(TipoIncidencia.TarjetaRoja, rojasLocal))
                 .ToList();
-            partido.incidenciaEquipoVisitante = Enumerable.Repeat(TipoIncidencia.TarjetaAmarilla, amarillasVisitante)
+            partido.IncidenciaEquipoVisitante = Enumerable.Repeat(TipoIncidencia.TarjetaAmarilla, amarillasVisitante)
                 .Concat(Enumerable.Repeat(TipoIncidencia.TarjetaRoja, rojasVisitante))
                 .ToList();
 
             ServicioPartido.ActualizarPartido(partido);
             ServicioCruces.ProcesarAvanceDelTorneo();
-            ServicioNotificacion.GenerarNotificaciones($"{partido.equipoLocal.nombre} {partido.golesLocal} - {partido.golesVisitante} {partido.equipoVisitante.nombre}");
+            ServicioNotificacion.GenerarNotificaciones($"{partido.EquipoLocal.Nombre} {partido.GolesLocal} - {partido.GolesVisitante} {partido.EquipoVisitante.Nombre}");
 
             mensajeExito = "Partido actualizado correctamente.";
         }

@@ -14,11 +14,11 @@ public class MotorProbabilistico : IMotorSimulacion
 
     public void Simular(PartidoDTO partidoDto, Random random)
     {
-        double probabilidadLocal = CalcularProbabilidad(partidoDto.equipoLocal.rankingFifa, partidoDto.equipoVisitante.rankingFifa);
+        double probabilidadLocal = CalcularProbabilidad(partidoDto.EquipoLocal.RankingFifa, partidoDto.EquipoVisitante.RankingFifa);
         bool ganaLocal = random.NextDouble() * 100 < probabilidadLocal;
 
-        partidoDto.golesLocal = GenerarGoles(random, ganaLocal);
-        partidoDto.golesVisitante = GenerarGoles(random, !ganaLocal);
+        partidoDto.GolesLocal = GenerarGoles(random, ganaLocal);
+        partidoDto.GolesVisitante = GenerarGoles(random, !ganaLocal);
     }
 
     private double CalcularProbabilidad(int rankingLocal, int rankingVisitante)
