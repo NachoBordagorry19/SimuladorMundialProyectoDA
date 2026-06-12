@@ -46,7 +46,8 @@ public class EquipoServicios : IServicioEquipo
 
         List<EquipoDTO> todosLosExistentes = ObtenerEquipos();
 
-        if (todosLosExistentes.Count >= 48)
+        int equiposACompletar = 48;
+        if (todosLosExistentes.Count >= equiposACompletar)
         {
             return;
         }
@@ -80,7 +81,10 @@ public class EquipoServicios : IServicioEquipo
                 this.AgregarEquipo(nuevoEquipo);
             }
         }
-        _auditoria.RegistrarGeneracionAutomaticaEquipos(48, semillaCompletar, 300, 2500);
+
+        int rankingFifaMinimo = 300;
+        int rankingFifaMaximo = 2500;
+        _auditoria.RegistrarGeneracionAutomaticaEquipos(equiposACompletar, semillaCompletar, rankingFifaMinimo, rankingFifaMaximo);
     }
     public int ObtenerCupo(Confederacion confederacion)
     {
