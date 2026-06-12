@@ -17,4 +17,6 @@ public class ResultadoFixture
     public int SemillaFixture { get; set; }
 
     public DateTime FechaGeneracion { get; set; } = DateTime.UtcNow;
+
+    public string NombreMotorSimulacion { get; set; } = string.Empty;
 }

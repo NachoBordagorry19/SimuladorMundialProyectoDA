@@ -21,9 +21,9 @@ public interface IServicioPartido
 
     void ActualizarPartido(PartidoDTO partidoDTO);
 
-    void SimularResultado(PartidoDTO partidoDTO, int semillaSimulacion);
+    void SimularResultado(PartidoDTO partidoDTO, int semillaSimulacion, IMotorSimulacion motor);
 
-    void SimularTodosLosPartidos(int semillaSimulacion);
+    void SimularTodosLosPartidos(int semillaSimulacion, IMotorSimulacion motor);
 
     void BloquearEdicionFase(Fase fase);
 }

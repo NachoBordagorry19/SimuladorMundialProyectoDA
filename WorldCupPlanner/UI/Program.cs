@@ -45,6 +45,8 @@ builder.Services.AddScoped<INotificacionRepositorio, NotificacionRepositorioSql>
 builder.Services.AddScoped<IServicioNotificacion, ServicioNotificacion>();
 
 builder.Services.AddScoped<IServicioExportacion, ServicioExportacion>();
+builder.Services.AddScoped<MotorProbabilistico>();
+builder.Services.AddScoped<MotorAleatorioPuro>();
 
 
 builder.Services.AddScoped<UsuarioSesion>();

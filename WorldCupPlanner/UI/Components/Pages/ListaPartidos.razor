@@ -1,6 +1,7 @@
 @page "/partidos"
 @rendermode InteractiveServer
 @using Dominio.Enums
+@using Servicios.Clases
 @using Servicios.Interfaces
 @using UI.Estado
 @using Servicios.Modelo
@@ -8,6 +9,9 @@
 @inject IServicioCrucesSegundaFase ServicioCruces
 @inject IServicioNotificacion ServicioNotificacion
 @inject UsuarioSesion Sesion
+@inject FixtureEstado EstadoFixture
+@inject MotorProbabilistico MotorProbabilistico
+@inject MotorAleatorioPuro MotorAleatorioPuro
 
 <div class="wcp-page" style="max-width: 1400px">
     <div class="wcp-card">
@@ -265,7 +269,8 @@
 
             var pendientes = partidos.Where(p => p.estadoPartido == EstadoPartido.Pendiente).ToList();
 
-            ServicioPartido.SimularTodosLosPartidos(semillaSimulacion);
+            IMotorSimulacion motor = EstadoFixture.NombreMotorSimulacion == "Aleatorio Puro" ? MotorAleatorioPuro : MotorProbabilistico;
+            ServicioPartido.SimularTodosLosPartidos(semillaSimulacion, motor);
             ServicioCruces.ProcesarAvanceDelTorneo();
             CargarDatos();
 

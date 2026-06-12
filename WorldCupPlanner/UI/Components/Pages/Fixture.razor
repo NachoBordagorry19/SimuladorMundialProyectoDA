@@ -1,6 +1,7 @@
 @page "/fixture"
 @rendermode InteractiveServer
 @using Dominio.Enums
+@using Servicios.Clases
 @using Servicios.Interfaces
 @using Servicios.Modelo
 @using UI.Estado
@@ -9,6 +10,8 @@
 @inject IServicioFixturePrimeraFase ServicioFixture
 @inject IServicioCrucesSegundaFase ServicioCruces
 @inject UsuarioSesion Sesion
+@inject MotorProbabilistico MotorProbabilistico
+@inject MotorAleatorioPuro MotorAleatorioPuro
 
 <div class="wcp-page">
     <div class="wcp-card">
@@ -39,6 +42,14 @@
             <div class="col-md-4">
                 <label class="wcp-form-label">Semilla Cruces Fase</label>
                 <InputNumber @bind-Value="semillaCrucesFase" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="wcp-form-label">Motor de Simulación</label>
+                <select class="form-control" @bind="nombreMotorElegido">
+                    <option value="Probabilístico">Probabilístico</option>
+                    <option value="Aleatorio Puro">Aleatorio Puro</option>
+                </select>
             </div>
         </div>
 
@@ -73,6 +84,7 @@
         <div class="wcp-card mt-4">
             <h2 class="wcp-title">Grupos</h2>
             <p class="wcp-subtitle">Seleccione un grupo para ver sus equipos y partidos.</p>
+            <p class="wcp-subtitle">Motor de simulación: <strong>@EstadoFixture.ResultadoFixture.NombreMotorSimulacion</strong></p>
 
             <div class="wcp-actions">
                 @foreach (var grupo in EstadoFixture.ResultadoFixture.Grupos)
@@ -316,6 +328,7 @@
     private int semillaFixture = 123;
     private int semillaCrucesFase = 456;
     private DateTime fechaInicioTorneo = new DateTime(2026, 06, 01);
+    private string nombreMotorElegido = "Probabilístico";
 
     private string mensajeError = "";
     private string mensajeExito = "";
@@ -331,6 +344,8 @@
                 semillaFixture,
                 fechaInicioTorneo);
 
+            EstadoFixture.ResultadoFixture.NombreMotorSimulacion = nombreMotorElegido;
+            EstadoFixture.NombreMotorSimulacion = nombreMotorElegido;
             EstadoFixture.GrupoSeleccionado = EstadoFixture.ResultadoFixture.Grupos.First().Nombre;
             EstadoFixture.CuadroSegundaFase = null;
             EstadoFixture.Campeon = null;

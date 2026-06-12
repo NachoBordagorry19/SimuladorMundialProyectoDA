@@ -11,4 +11,6 @@ public class FixtureEstado
     public string? GrupoSeleccionado { get; set; }
 
     public EquipoDTO? Campeon { get; set; }
+
+    public string NombreMotorSimulacion { get; set; } = string.Empty;
 }
