@@ -54,17 +54,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         posicionVisitante.GolesAFavor += partido.GolesVisitante;
         posicionVisitante.GolesEnContra += partido.GolesLocal;
 
+        int puntosPorVictoria = 3;
         if (partido.GolesLocal > partido.GolesVisitante)
         {
             posicionLocal.Ganados++;
-            posicionLocal.Puntos += 3;
+            posicionLocal.Puntos += puntosPorVictoria;
 
             posicionVisitante.Perdidos++;
         }
         else if (partido.GolesVisitante > partido.GolesLocal)
         {
             posicionVisitante.Ganados++;
-            posicionVisitante.Puntos += 3;
+            posicionVisitante.Puntos += puntosPorVictoria;
 
             posicionLocal.Perdidos++;
         }
@@ -157,6 +158,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         var primeros = new List<PosicionEquipoDTO>();
         var segundos = new List<PosicionEquipoDTO>();
         var terceros = new List<PosicionEquipoDTO>();
+        int partidosMinimosPorGrupo = 6;
 
         for (char letraGrupo = 'A'; letraGrupo <= 'L'; letraGrupo++)
         {
@@ -166,8 +168,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                 .Count(p => p.Grupo == grupo &&
                             p.Fase == Fase.Grupos &&
                             p.EstadoPartido == EstadoPartido.Jugado);
-
-            if (partidosJugados < 6)
+            
+            if (partidosJugados < partidosMinimosPorGrupo)
             {
                 throw new ArgumentException(
                     "No se pueden generar cruces hasta que todos los grupos tengan sus partidos jugados.");
