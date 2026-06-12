@@ -28,6 +28,14 @@ public class SqlContexto: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        ConfigurarUsuario(modelBuilder);
+        ConfigurarEquipo(modelBuilder);
+        ConfigurarPartido(modelBuilder);
+        ConfigurarAuditoria(modelBuilder);
+    }
+
+    private void ConfigurarUsuario(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Usuario>()
             .Property(u => u.Roles)
             .HasConversion(
@@ -36,12 +44,17 @@ public class SqlContexto: DbContext
                     .Select(r => Enum.Parse<Rol>(r))
                     .ToList()
             );
+    }
 
+    private void ConfigurarEquipo(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Equipo>()
             .Property(e => e.Confederacion)
             .HasConversion<string>();
+    }
 
-
+    private void ConfigurarPartido(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Partido>()
             .Ignore(p => p.Vencedor);
 
@@ -70,7 +83,10 @@ public class SqlContexto: DbContext
             .WithMany()
             .HasForeignKey("EstadioId")
             .OnDelete(DeleteBehavior.Restrict);
-        
+    }
+
+    private void ConfigurarAuditoria(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Auditoria>(entity =>
         {
             entity.HasKey(a => a.Id);
