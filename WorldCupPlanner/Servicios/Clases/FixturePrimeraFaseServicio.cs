@@ -226,16 +226,16 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
 
         var partido = new PartidoDTO
         {
-            idPartido = numeroPartido,
-            equipoLocal = equipoLocal,
-            equipoVisitante = equipoVisitante,
+            IdPartido = numeroPartido,
+            EquipoLocal = equipoLocal,
+            EquipoVisitante = equipoVisitante,
             Grupo = grupo,
             Fecha = fechaPartido,
             Estadio = estadio,
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Pendiente,
-            golesLocal = 0,
-            golesVisitante = 0
+            Fase = Fase.Grupos,
+            EstadoPartido = EstadoPartido.Pendiente,
+            GolesLocal = 0,
+            GolesVisitante = 0
         };
 
         _partidoServicios.AgregarPartido(partido, equipoLocal, equipoVisitante, estadio);

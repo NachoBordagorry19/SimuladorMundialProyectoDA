@@ -53,12 +53,12 @@ public class ServicioExportacionTest
         {
             new PartidoDTO
             {
-                equipoLocal = new EquipoDTO { nombre = "Uruguay" },
-                equipoVisitante = new EquipoDTO { nombre = "Brasil" },
-                golesLocal = 2,
-                golesVisitante = 1,
-                estadoPartido = EstadoPartido.Jugado,
-                fase = Fase.Grupos
+                EquipoLocal = new EquipoDTO { Nombre = "Uruguay" },
+                EquipoVisitante = new EquipoDTO { Nombre = "Brasil" },
+                GolesLocal = 2,
+                GolesVisitante = 1,
+                EstadoPartido = EstadoPartido.Jugado,
+                Fase = Fase.Grupos
             }
         });
         byte[] resultado = _servicio.ExportarFixtureCsv();
@@ -72,12 +72,12 @@ public class ServicioExportacionTest
         {
             new PartidoDTO
             {
-                equipoLocal = new EquipoDTO { nombre = "Uruguay" },
-                equipoVisitante = new EquipoDTO { nombre = "Brasil" },
-                golesLocal = 2,
-                golesVisitante = 1,
-                estadoPartido = EstadoPartido.Jugado,
-                fase = Fase.Grupos
+                EquipoLocal = new EquipoDTO { Nombre = "Uruguay" },
+                EquipoVisitante = new EquipoDTO { Nombre = "Brasil" },
+                GolesLocal = 2,
+                GolesVisitante = 1,
+                EstadoPartido = EstadoPartido.Jugado,
+                Fase = Fase.Grupos
             }
         });
         byte[] resultado = _servicio.ExportarFixtureXlsx();

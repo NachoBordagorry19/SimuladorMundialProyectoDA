@@ -25,8 +25,8 @@ public class FixturePrimeraFaseServicioTest
 
     private bool PartidoPerteneceAlGrupo(PartidoDTO partido, Grupo grupo)
     {
-        return EquipoPerteneceAlGrupo(partido.equipoLocal.nombre, grupo) &&
-               EquipoPerteneceAlGrupo(partido.equipoVisitante.nombre, grupo);
+        return EquipoPerteneceAlGrupo(partido.EquipoLocal.Nombre, grupo) &&
+               EquipoPerteneceAlGrupo(partido.EquipoVisitante.Nombre, grupo);
     }
 
     private bool EquipoPerteneceAlGrupo(string nombreEquipo, Grupo grupo)
@@ -37,8 +37,8 @@ public class FixturePrimeraFaseServicioTest
     private bool ExistePartidoEntre(List<PartidoDTO> partidos, Equipo equipoA, Equipo equipoB)
     {
         return partidos.Any(p =>
-            p.equipoLocal.nombre == equipoA.Nombre && p.equipoVisitante.nombre == equipoB.Nombre ||
-            p.equipoLocal.nombre == equipoB.Nombre && p.equipoVisitante.nombre == equipoA.Nombre);
+            p.EquipoLocal.Nombre == equipoA.Nombre && p.EquipoVisitante.Nombre == equipoB.Nombre ||
+            p.EquipoLocal.Nombre == equipoB.Nombre && p.EquipoVisitante.Nombre == equipoA.Nombre);
     }
 
     [TestInitialize]

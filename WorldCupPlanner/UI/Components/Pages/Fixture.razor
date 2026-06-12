@@ -172,10 +172,10 @@
                     {
                         <tr>
                             <td>@partido.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
-                            <td>@partido.equipoLocal.nombre</td>
-                            <td>@partido.equipoVisitante.nombre</td>
+                            <td>@partido.EquipoLocal.Nombre</td>
+                            <td>@partido.EquipoVisitante.Nombre</td>
                             <td>@partido.Estadio.Nombre</td>
-                            <td>@partido.fase</td>
+                            <td>@partido.Fase</td>
                         </tr>
                     }
                     </tbody>
@@ -310,7 +310,7 @@
                 <div class="mt-4">
                     <h3>Campeón del torneo</h3>
                     <div class="wcp-card">
-                        <h2 class="wcp-title mb-0">🏆 @EstadoFixture.Campeon.nombre</h2>
+                        <h2 class="wcp-title mb-0">🏆 @EstadoFixture.Campeon.Nombre</h2>
                     </div>
                 </div>
             }
@@ -412,7 +412,7 @@
         }
 
         return ServicioPartido.ObtenerPartidos()
-            .Where(p => p.Grupo == EstadoFixture.GrupoSeleccionado && p.fase == Fase.Grupos)
+            .Where(p => p.Grupo == EstadoFixture.GrupoSeleccionado && p.Fase == Fase.Grupos)
             .OrderBy(p => p.Fecha)
             .ToList();
     }

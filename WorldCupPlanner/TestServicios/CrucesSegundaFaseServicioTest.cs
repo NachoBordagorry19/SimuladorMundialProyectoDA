@@ -69,9 +69,9 @@ public class CrucesSegundaFaseServicioTest
     {
         return new EquipoDTO
         {
-            nombre = nombre,
-            confederacion = Confederacion.UEFA,
-            rankingFifa = 1500
+            Nombre = nombre,
+            Confederacion = Confederacion.UEFA,
+            RankingFifa = 1500
         };
     }
 
@@ -100,13 +100,13 @@ public class CrucesSegundaFaseServicioTest
         {
             Fecha = new DateTime(2026, 06, 01),
             Estadio = estadio,
-            equipoLocal = local,
-            equipoVisitante = visitante,
+            EquipoLocal = local,
+            EquipoVisitante = visitante,
             Grupo = grupo,
-            fase = fase,
-            estadoPartido = estado,
-            golesLocal = golesLocal,
-            golesVisitante = golesVisitante
+            Fase = fase,
+            EstadoPartido = estado,
+            GolesLocal = golesLocal,
+            GolesVisitante = golesVisitante
         };
 
         _partidoServicios.AgregarPartido(partido, local, visitante, estadio);
@@ -255,12 +255,12 @@ public class CrucesSegundaFaseServicioTest
             Grupo = "A",
             Fecha = new DateTime(2026, 06, 01),
             Estadio = estadio,
-            equipoLocal = equipoA,
-            equipoVisitante = equipoB,
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Jugado,
-            golesLocal = 1,
-            golesVisitante = 0
+            EquipoLocal = equipoA,
+            EquipoVisitante = equipoB,
+            Fase = Fase.Grupos,
+            EstadoPartido = EstadoPartido.Jugado,
+            GolesLocal = 1,
+            GolesVisitante = 0
         };
 
         _partidoServicios.AgregarPartido(partido, equipoA, equipoB, estadio);
@@ -319,30 +319,30 @@ public class CrucesSegundaFaseServicioTest
 
             var equipo1 = new EquipoDTO
             {
-                nombre = grupo + " Equipo 1",
-                confederacion = Confederacion.UEFA,
-                rankingFifa = 2000
+                Nombre = grupo + " Equipo 1",
+                Confederacion = Confederacion.UEFA,
+                RankingFifa = 2000
             };
 
             var equipo2 = new EquipoDTO
             {
-                nombre = grupo + " Equipo 2",
-                confederacion = Confederacion.CONMEBOL,
-                rankingFifa = 1900
+                Nombre = grupo + " Equipo 2",
+                Confederacion = Confederacion.CONMEBOL,
+                RankingFifa = 1900
             };
 
             var equipo3 = new EquipoDTO
             {
-                nombre = grupo + " Equipo 3",
-                confederacion = Confederacion.CAF,
-                rankingFifa = 1800
+                Nombre = grupo + " Equipo 3",
+                Confederacion = Confederacion.CAF,
+                RankingFifa = 1800
             };
 
             var equipo4 = new EquipoDTO
             {
-                nombre = grupo + " Equipo 4",
-                confederacion = Confederacion.AFC,
-                rankingFifa = 1700
+                Nombre = grupo + " Equipo 4",
+                Confederacion = Confederacion.AFC,
+                RankingFifa = 1700
             };
 
             var partido1 = new PartidoDTO
@@ -350,12 +350,12 @@ public class CrucesSegundaFaseServicioTest
                 Grupo = grupo,
                 Fecha = new DateTime(2026, 06, 01),
                 Estadio = estadio,
-                equipoLocal = equipo1,
-                equipoVisitante = equipo2,
-                fase = Fase.Grupos,
-                estadoPartido = EstadoPartido.Jugado,
-                golesLocal = 3,
-                golesVisitante = 0
+                EquipoLocal = equipo1,
+                EquipoVisitante = equipo2,
+                Fase = Fase.Grupos,
+                EstadoPartido = EstadoPartido.Jugado,
+                GolesLocal = 3,
+                GolesVisitante = 0
             };
             _partidoServicios.AgregarPartido(partido1, equipo1, equipo2, estadio);
 
@@ -364,12 +364,12 @@ public class CrucesSegundaFaseServicioTest
                 Grupo = grupo,
                 Fecha = new DateTime(2026, 06, 01),
                 Estadio = estadio,
-                equipoLocal = equipo1,
-                equipoVisitante = equipo3,
-                fase = Fase.Grupos,
-                estadoPartido = EstadoPartido.Jugado,
-                golesLocal = tercerEquipoDebeClasificar ? 3 : 5,
-                golesVisitante = 0
+                EquipoLocal = equipo1,
+                EquipoVisitante = equipo3,
+                Fase = Fase.Grupos,
+                EstadoPartido = EstadoPartido.Jugado,
+                GolesLocal = tercerEquipoDebeClasificar ? 3 : 5,
+                GolesVisitante = 0
             };
             _partidoServicios.AgregarPartido(partido2, equipo1, equipo3, estadio);
 
@@ -378,12 +378,12 @@ public class CrucesSegundaFaseServicioTest
                 Grupo = grupo,
                 Fecha = new DateTime(2026, 06, 01),
                 Estadio = estadio,
-                equipoLocal = equipo1,
-                equipoVisitante = equipo4,
-                fase = Fase.Grupos,
-                estadoPartido = EstadoPartido.Jugado,
-                golesLocal = tercerEquipoDebeClasificar ? 3 : 1,
-                golesVisitante = 0
+                EquipoLocal = equipo1,
+                EquipoVisitante = equipo4,
+                Fase = Fase.Grupos,
+                EstadoPartido = EstadoPartido.Jugado,
+                GolesLocal = tercerEquipoDebeClasificar ? 3 : 1,
+                GolesVisitante = 0
             };
             _partidoServicios.AgregarPartido(partido3, equipo1, equipo4, estadio);
 
@@ -392,12 +392,12 @@ public class CrucesSegundaFaseServicioTest
                 Grupo = grupo,
                 Fecha = new DateTime(2026, 06, 01),
                 Estadio = estadio,
-                equipoLocal = equipo2,
-                equipoVisitante = equipo3,
-                fase = Fase.Grupos,
-                estadoPartido = EstadoPartido.Jugado,
-                golesLocal = tercerEquipoDebeClasificar ? 2 : 4,
-                golesVisitante = 0
+                EquipoLocal = equipo2,
+                EquipoVisitante = equipo3,
+                Fase = Fase.Grupos,
+                EstadoPartido = EstadoPartido.Jugado,
+                GolesLocal = tercerEquipoDebeClasificar ? 2 : 4,
+                GolesVisitante = 0
             };
             _partidoServicios.AgregarPartido(partido4, equipo2, equipo3, estadio);
 
@@ -406,12 +406,12 @@ public class CrucesSegundaFaseServicioTest
                 Grupo = grupo,
                 Fecha = new DateTime(2026, 06, 01),
                 Estadio = estadio,
-                equipoLocal = equipo2,
-                equipoVisitante = equipo4,
-                fase = Fase.Grupos,
-                estadoPartido = EstadoPartido.Jugado,
-                golesLocal = tercerEquipoDebeClasificar ? 2 : 1,
-                golesVisitante = 0
+                EquipoLocal = equipo2,
+                EquipoVisitante = equipo4,
+                Fase = Fase.Grupos,
+                EstadoPartido = EstadoPartido.Jugado,
+                GolesLocal = tercerEquipoDebeClasificar ? 2 : 1,
+                GolesVisitante = 0
             };
             _partidoServicios.AgregarPartido(partido5, equipo2, equipo4, estadio);
 
@@ -420,12 +420,12 @@ public class CrucesSegundaFaseServicioTest
                 Grupo = grupo,
                 Fecha = new DateTime(2026, 06, 01),
                 Estadio = estadio,
-                equipoLocal = equipo3,
-                equipoVisitante = equipo4,
-                fase = Fase.Grupos,
-                estadoPartido = EstadoPartido.Jugado,
-                golesLocal = tercerEquipoDebeClasificar ? 1 : 0,
-                golesVisitante = 0
+                EquipoLocal = equipo3,
+                EquipoVisitante = equipo4,
+                Fase = Fase.Grupos,
+                EstadoPartido = EstadoPartido.Jugado,
+                GolesLocal = tercerEquipoDebeClasificar ? 1 : 0,
+                GolesVisitante = 0
             };
             _partidoServicios.AgregarPartido(partido6, equipo3, equipo4, estadio);
         }
@@ -868,16 +868,16 @@ public class CrucesSegundaFaseServicioTest
     {
         var equipoLocal = new EquipoDTO
         {
-            nombre = "Uruguay",
-            confederacion = Confederacion.CONMEBOL,
-            rankingFifa = 2000
+            Nombre = "Uruguay",
+            Confederacion = Confederacion.CONMEBOL,
+            RankingFifa = 2000
         };
 
         var equipoVisitante = new EquipoDTO
         {
-            nombre = "Brasil",
-            confederacion = Confederacion.CONMEBOL,
-            rankingFifa = 2100
+            Nombre = "Brasil",
+            Confederacion = Confederacion.CONMEBOL,
+            RankingFifa = 2100
         };
 
         var estadio = new EstadioDTO
@@ -892,17 +892,17 @@ public class CrucesSegundaFaseServicioTest
         {
             Fecha = new DateTime(2026, 07, 19),
             Estadio = estadio,
-            equipoLocal = equipoLocal,
-            equipoVisitante = equipoVisitante,
-            fase = Fase.Final,
-            estadoPartido = EstadoPartido.Jugado,
-            golesLocal = 2,
-            golesVisitante = 1
+            EquipoLocal = equipoLocal,
+            EquipoVisitante = equipoVisitante,
+            Fase = Fase.Final,
+            EstadoPartido = EstadoPartido.Jugado,
+            GolesLocal = 2,
+            GolesVisitante = 1
         };
 
         var campeon = _crucesServicio.ObtenerCampeon(final);
 
-        Assert.AreEqual("Uruguay", campeon.nombre);
+        Assert.AreEqual("Uruguay", campeon.Nombre);
     }
     
     [TestMethod]
@@ -924,10 +924,10 @@ public class CrucesSegundaFaseServicioTest
             Grupo = "A",
             Fecha = new DateTime(2026, 06, 01),
             Estadio = estadio,
-            equipoLocal = equipoA,
-            equipoVisitante = equipoB,
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Pendiente
+            EquipoLocal = equipoA,
+            EquipoVisitante = equipoB,
+            Fase = Fase.Grupos,
+            EstadoPartido = EstadoPartido.Pendiente
         };
 
         _partidoServicios.AgregarPartido(partido, equipoA, equipoB, estadio);
@@ -959,17 +959,17 @@ public class CrucesSegundaFaseServicioTest
     {
         var final = new PartidoDTO
         {
-            equipoLocal = CrearEquipo("Uruguay"),
-            equipoVisitante = CrearEquipo("Brasil"),
-            fase = Fase.Final,
-            estadoPartido = EstadoPartido.Jugado,
-            golesLocal = 1,
-            golesVisitante = 2
+            EquipoLocal = CrearEquipo("Uruguay"),
+            EquipoVisitante = CrearEquipo("Brasil"),
+            Fase = Fase.Final,
+            EstadoPartido = EstadoPartido.Jugado,
+            GolesLocal = 1,
+            GolesVisitante = 2
         };
 
         var campeon = _crucesServicio.ObtenerCampeon(final);
 
-        Assert.AreEqual("Brasil", campeon.nombre);
+        Assert.AreEqual("Brasil", campeon.Nombre);
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
@@ -977,12 +977,12 @@ public class CrucesSegundaFaseServicioTest
     {
         var final = new PartidoDTO
         {
-            equipoLocal = CrearEquipo("Uruguay"),
-            equipoVisitante = CrearEquipo("Brasil"),
-            fase = Fase.Final,
-            estadoPartido = EstadoPartido.Jugado,
-            golesLocal = 1,
-            golesVisitante = 1
+            EquipoLocal = CrearEquipo("Uruguay"),
+            EquipoVisitante = CrearEquipo("Brasil"),
+            Fase = Fase.Final,
+            EstadoPartido = EstadoPartido.Jugado,
+            GolesLocal = 1,
+            GolesVisitante = 1
         };
 
         _crucesServicio.ObtenerCampeon(final);
@@ -994,12 +994,12 @@ public class CrucesSegundaFaseServicioTest
     {
         var partido = new PartidoDTO
         {
-            equipoLocal = CrearEquipo("Uruguay"),
-            equipoVisitante = CrearEquipo("Brasil"),
-            fase = Fase.Semifinal,
-            estadoPartido = EstadoPartido.Jugado,
-            golesLocal = 2,
-            golesVisitante = 1
+            EquipoLocal = CrearEquipo("Uruguay"),
+            EquipoVisitante = CrearEquipo("Brasil"),
+            Fase = Fase.Semifinal,
+            EstadoPartido = EstadoPartido.Jugado,
+            GolesLocal = 2,
+            GolesVisitante = 1
         };
 
         _crucesServicio.ObtenerCampeon(partido);
@@ -1011,12 +1011,12 @@ public class CrucesSegundaFaseServicioTest
     {
         var final = new PartidoDTO
         {
-            equipoLocal = CrearEquipo("Uruguay"),
-            equipoVisitante = CrearEquipo("Brasil"),
-            fase = Fase.Final,
-            estadoPartido = EstadoPartido.Pendiente,
-            golesLocal = 0,
-            golesVisitante = 0
+            EquipoLocal = CrearEquipo("Uruguay"),
+            EquipoVisitante = CrearEquipo("Brasil"),
+            Fase = Fase.Final,
+            EstadoPartido = EstadoPartido.Pendiente,
+            GolesLocal = 0,
+            GolesVisitante = 0
         };
 
         _crucesServicio.ObtenerCampeon(final);
@@ -1048,10 +1048,10 @@ public class CrucesSegundaFaseServicioTest
         {
             Fecha = new DateTime(2026, 07, 19),
             Estadio = estadio,
-            equipoLocal = local,
-            equipoVisitante = visitante,
-            fase = Fase.Final,
-            estadoPartido = EstadoPartido.Pendiente
+            EquipoLocal = local,
+            EquipoVisitante = visitante,
+            Fase = Fase.Final,
+            EstadoPartido = EstadoPartido.Pendiente
         };
 
         _partidoServicios.AgregarPartido(final, local, visitante, estadio);
@@ -1072,19 +1072,19 @@ public class CrucesSegundaFaseServicioTest
         {
             Fecha = new DateTime(2026, 07, 19),
             Estadio = estadio,
-            equipoLocal = local,
-            equipoVisitante = visitante,
-            fase = Fase.Final,
-            estadoPartido = EstadoPartido.Jugado,
-            golesLocal = 3,
-            golesVisitante = 1
+            EquipoLocal = local,
+            EquipoVisitante = visitante,
+            Fase = Fase.Final,
+            EstadoPartido = EstadoPartido.Jugado,
+            GolesLocal = 3,
+            GolesVisitante = 1
         };
 
         _partidoServicios.AgregarPartido(final, local, visitante, estadio);
 
         var campeon = _crucesServicio.ObtenerCampeonActual();
 
-        Assert.AreEqual("Uruguay", campeon.nombre);
+        Assert.AreEqual("Uruguay", campeon.Nombre);
     }
     [TestMethod]
     public void ProcesarAvanceDelTorneo_SiNoHayPartidos_NoGeneraNada()
@@ -1121,12 +1121,12 @@ public class CrucesSegundaFaseServicioTest
         var cuadro = _crucesServicio.GenerarCuadroSegundaFase(123);
 
         var partidosDieciseisavos = _partidoServicios.ObtenerPartidos()
-            .Where(p => p.fase == Fase.Dieciseisavos)
+            .Where(p => p.Fase == Fase.Dieciseisavos)
             .ToList();
 
         Assert.AreEqual(16, cuadro.Dieciseisavos.Count);
         Assert.AreEqual(16, partidosDieciseisavos.Count);
-        Assert.IsTrue(partidosDieciseisavos.All(p => p.estadoPartido == EstadoPartido.Pendiente));
+        Assert.IsTrue(partidosDieciseisavos.All(p => p.EstadoPartido == EstadoPartido.Pendiente));
     }
     
     [TestMethod]
@@ -1158,55 +1158,55 @@ public void ProcesarAvanceDelTorneo_SiFasesEstanJugadas_GeneraFinalYTercerPuesto
     _crucesServicio.ProcesarAvanceDelTorneo();
 
     var octavos = _partidoServicios.ObtenerPartidos()
-        .Where(p => p.fase == Fase.Octavos)
+        .Where(p => p.Fase == Fase.Octavos)
         .ToList();
 
     Assert.AreEqual(8, octavos.Count);
 
     foreach (var partido in octavos)
     {
-        partido.golesLocal = 2;
-        partido.golesVisitante = 1;
-        partido.estadoPartido = EstadoPartido.Jugado;
+        partido.GolesLocal = 2;
+        partido.GolesVisitante = 1;
+        partido.EstadoPartido = EstadoPartido.Jugado;
         _partidoServicios.ActualizarPartido(partido);
     }
 
     _crucesServicio.ProcesarAvanceDelTorneo();
 
     var cuartos = _partidoServicios.ObtenerPartidos()
-        .Where(p => p.fase == Fase.Cuartos)
+        .Where(p => p.Fase == Fase.Cuartos)
         .ToList();
 
     Assert.AreEqual(4, cuartos.Count);
 
     foreach (var partido in cuartos)
     {
-        partido.golesLocal = 2;
-        partido.golesVisitante = 1;
-        partido.estadoPartido = EstadoPartido.Jugado;
+        partido.GolesLocal = 2;
+        partido.GolesVisitante = 1;
+        partido.EstadoPartido = EstadoPartido.Jugado;
         _partidoServicios.ActualizarPartido(partido);
     }
 
     _crucesServicio.ProcesarAvanceDelTorneo();
 
     var semifinales = _partidoServicios.ObtenerPartidos()
-        .Where(p => p.fase == Fase.Semifinal)
+        .Where(p => p.Fase == Fase.Semifinal)
         .ToList();
 
     Assert.AreEqual(2, semifinales.Count);
 
     foreach (var partido in semifinales)
     {
-        partido.golesLocal = 2;
-        partido.golesVisitante = 1;
-        partido.estadoPartido = EstadoPartido.Jugado;
+        partido.GolesLocal = 2;
+        partido.GolesVisitante = 1;
+        partido.EstadoPartido = EstadoPartido.Jugado;
         _partidoServicios.ActualizarPartido(partido);
     }
 
     _crucesServicio.ProcesarAvanceDelTorneo();
 
     var partidosFinales = _partidoServicios.ObtenerPartidos()
-        .Where(p => p.fase == Fase.Final || p.fase == Fase.Tercero)
+        .Where(p => p.Fase == Fase.Final || p.Fase == Fase.Tercero)
         .ToList();
 
     Assert.AreEqual(2, partidosFinales.Count);

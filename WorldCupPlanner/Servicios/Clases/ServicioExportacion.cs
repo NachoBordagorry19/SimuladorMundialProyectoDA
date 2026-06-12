@@ -54,19 +54,19 @@ public class ServicioExportacion : IServicioExportacion
     public byte[] ExportarFixtureCsv()
     {
         List<PartidoDTO> partidos = _servicioPartido.ObtenerPartidos()
-            .Where(p => p.estadoPartido == EstadoPartido.Jugado)
+            .Where(p => p.EstadoPartido == EstadoPartido.Jugado)
             .ToList();
         StringBuilder sb = new StringBuilder();
         sb.AppendLine("Fecha,Fase,EquipoLocal,GolesLocal,GolesVisitante,EquipoVisitante,Estadio");
         foreach (PartidoDTO p in partidos)
-            sb.AppendLine($"{p.Fecha:yyyy-MM-dd},{p.fase},{p.equipoLocal.nombre},{p.golesLocal},{p.golesVisitante},{p.equipoVisitante.nombre},{p.Estadio.Nombre}");
+            sb.AppendLine($"{p.Fecha:yyyy-MM-dd},{p.Fase},{p.EquipoLocal.Nombre},{p.GolesLocal},{p.GolesVisitante},{p.EquipoVisitante.Nombre},{p.Estadio.Nombre}");
         return Encoding.UTF8.GetBytes(sb.ToString());
     }
 
     public byte[] ExportarFixtureXlsx()
     {
         List<PartidoDTO> partidos = _servicioPartido.ObtenerPartidos()
-            .Where(p => p.estadoPartido == EstadoPartido.Jugado)
+            .Where(p => p.EstadoPartido == EstadoPartido.Jugado)
             .ToList();
         using XLWorkbook workbook = new XLWorkbook();
         IXLWorksheet hoja = workbook.Worksheets.Add("Fixture");
@@ -81,11 +81,11 @@ public class ServicioExportacion : IServicioExportacion
         {
             PartidoDTO p = partidos[i];
             hoja.Cell(i + 2, 1).Value = p.Fecha.ToString("yyyy-MM-dd");
-            hoja.Cell(i + 2, 2).Value = p.fase.ToString();
-            hoja.Cell(i + 2, 3).Value = p.equipoLocal.nombre;
-            hoja.Cell(i + 2, 4).Value = p.golesLocal;
-            hoja.Cell(i + 2, 5).Value = p.golesVisitante;
-            hoja.Cell(i + 2, 6).Value = p.equipoVisitante.nombre;
+            hoja.Cell(i + 2, 2).Value = p.Fase.ToString();
+            hoja.Cell(i + 2, 3).Value = p.EquipoLocal.Nombre;
+            hoja.Cell(i + 2, 4).Value = p.GolesLocal;
+            hoja.Cell(i + 2, 5).Value = p.GolesVisitante;
+            hoja.Cell(i + 2, 6).Value = p.EquipoVisitante.Nombre;
             hoja.Cell(i + 2, 7).Value = p.Estadio.Nombre;
         }
         using MemoryStream ms = new MemoryStream();

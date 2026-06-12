@@ -37,34 +37,34 @@ public class PartidoServicios : IServicioPartido
         var visitanteEntidad = EquipoDTOAEntidad(equipoVisitante);
         var fecha = partidoDto.Fecha == default ? DateTime.UtcNow : partidoDto.Fecha;
         
-        var partido = new Partido(fecha, estadioEntidad, localEntidad, visitanteEntidad, partidoDto.fase, partidoDto.golesLocal, partidoDto.golesVisitante);
+        var partido = new Partido(fecha, estadioEntidad, localEntidad, visitanteEntidad, partidoDto.Fase, partidoDto.GolesLocal, partidoDto.GolesVisitante);
         
         partido.Grupo = partidoDto.Grupo;
         
-        if (partidoDto.incidenciaEquipoLocal != null && partidoDto.incidenciaEquipoLocal.Count > 0)
+        if (partidoDto.IncidenciaEquipoLocal != null && partidoDto.IncidenciaEquipoLocal.Count > 0)
         {
-            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDto.incidenciaEquipoLocal);
+            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDto.IncidenciaEquipoLocal);
         }
-        if (partidoDto.incidenciaEquipoVisitante != null && partidoDto.incidenciaEquipoVisitante.Count > 0)
+        if (partidoDto.IncidenciaEquipoVisitante != null && partidoDto.IncidenciaEquipoVisitante.Count > 0)
         {
-            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDto.incidenciaEquipoVisitante);
+            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDto.IncidenciaEquipoVisitante);
         }
 
-        if (partidoDto.estadoPartido == EstadoPartido.Jugado)
+        if (partidoDto.EstadoPartido == EstadoPartido.Jugado)
         {
             partido.MarcarComoJugado();
         }
 
         _partidoRepositorio.AgregarPartido(partido);
-        partidoDto.idPartido = partido.Id;
+        partidoDto.IdPartido = partido.Id;
     }
 
     public Equipo EquipoDTOAEntidad(EquipoDTO equipoDto)
     {
         return new Equipo(
-            equipoDto.nombre,
-            equipoDto.confederacion,
-            equipoDto.rankingFifa
+            equipoDto.Nombre,
+            equipoDto.Confederacion,
+            equipoDto.RankingFifa
         );
     }
 
@@ -130,7 +130,7 @@ public class PartidoServicios : IServicioPartido
                 cumpleFiltros = false;
             }
 
-            if (!string.IsNullOrWhiteSpace(fase) && partido.fase.ToString() != fase)
+            if (!string.IsNullOrWhiteSpace(fase) && partido.Fase.ToString() != fase)
             {
                 cumpleFiltros = false;
             }
@@ -189,7 +189,7 @@ public class PartidoServicios : IServicioPartido
 
         foreach (PartidoDTO partido in partidos)
         {
-            string fase = partido.fase.ToString();
+            string fase = partido.Fase.ToString();
 
             if (!fases.Contains(fase))
             {
@@ -204,11 +204,11 @@ public class PartidoServicios : IServicioPartido
 
     public void EliminarPartido(PartidoDTO partidoDTO)
     {
-        if (_partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido) == null)
+        if (_partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido) == null)
         {
             throw new ArgumentException("El partido a buscar no existe, porfavor busque uno valido");
         }
-        var partidoPorId = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
+        var partidoPorId = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido);
         if (partidoPorId != null)
         {
             _partidoRepositorio.EliminarPartido(partidoPorId);
@@ -231,7 +231,7 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido no puede ser nulo");
         }
 
-        Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
+        Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido);
         if (partidoExistente == null)
         {
             throw new ArgumentException("El partido a actualizar no existe");
@@ -252,21 +252,21 @@ public class PartidoServicios : IServicioPartido
             partidoExistente.Estadio = EstadioDTOAEntidad(partidoDTO.Estadio);
         }
 
-        if (partidoDTO.golesLocal >= 0 || partidoDTO.golesVisitante >= 0)
+        if (partidoDTO.GolesLocal >= 0 || partidoDTO.GolesVisitante >= 0)
         {
             bool eraPendiente = partidoExistente.Estado == EstadoPartido.Pendiente;
-            partidoExistente.GolesLocal = partidoDTO.golesLocal;
-            partidoExistente.GolesVisitante = partidoDTO.golesVisitante;
+            partidoExistente.GolesLocal = partidoDTO.GolesLocal;
+            partidoExistente.GolesVisitante = partidoDTO.GolesVisitante;
             partidoExistente.MarcarComoJugado();
             if (eraPendiente)
                 _rankingDinamico.ActualizarRanking(PartidoEntidadADto(partidoExistente));
         }
-        if (partidoDTO.incidenciaEquipoLocal != null)
-            partidoExistente.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoLocal);
-        if (partidoDTO.incidenciaEquipoVisitante != null)
-            partidoExistente.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.incidenciaEquipoVisitante);
+        if (partidoDTO.IncidenciaEquipoLocal != null)
+            partidoExistente.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.IncidenciaEquipoLocal);
+        if (partidoDTO.IncidenciaEquipoVisitante != null)
+            partidoExistente.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.IncidenciaEquipoVisitante);
 
-        string detalle = $"{partidoDTO.equipoLocal.nombre} vs {partidoDTO.equipoVisitante.nombre}";
+        string detalle = $"{partidoDTO.EquipoLocal.Nombre} vs {partidoDTO.EquipoVisitante.Nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
         _partidoRepositorio.ActualizarPartido(partidoExistente);
     }
@@ -276,7 +276,7 @@ public class PartidoServicios : IServicioPartido
 
         return new PartidoDTO
         {
-            idPartido = partido.Id,
+            IdPartido = partido.Id,
             Fecha = partido.Fecha,
             Estadio = new EstadioDTO
             {
@@ -285,43 +285,43 @@ public class PartidoServicios : IServicioPartido
                 Descripcion = partido.Estadio.Descripcion,
                 CapacidadLocativa = partido.Estadio.CapacidadLocativa
             },
-            equipoLocal = new EquipoDTO
+            EquipoLocal = new EquipoDTO
             {
-                nombre = partido.Local.Nombre,
-                confederacion = partido.Local.Confederacion,
-                rankingFifa = partido.Local.RankingFifa
+                Nombre = partido.Local.Nombre,
+                Confederacion = partido.Local.Confederacion,
+                RankingFifa = partido.Local.RankingFifa
             },
-            equipoVisitante = new EquipoDTO
+            EquipoVisitante = new EquipoDTO
             {
-                nombre = partido.Visitante.Nombre,
-                confederacion = partido.Visitante.Confederacion,
-                rankingFifa = partido.Visitante.RankingFifa
+                Nombre = partido.Visitante.Nombre,
+                Confederacion = partido.Visitante.Confederacion,
+                RankingFifa = partido.Visitante.RankingFifa
             },
             Grupo = partido.Grupo,
-            fase = partido.Fase,
-            estadoPartido = partido.Estado,
-            golesLocal = partido.GolesLocal,
-            golesVisitante = partido.GolesVisitante,
-            incidenciaEquipoLocal = new List<TipoIncidencia>(partido.incidenciaEquipoLocal ?? new List<TipoIncidencia>()),
-            incidenciaEquipoVisitante = new List<TipoIncidencia>(partido.incidenciaEquipoVisitante ?? new List<TipoIncidencia>())
+            Fase = partido.Fase,
+            EstadoPartido = partido.Estado,
+            GolesLocal = partido.GolesLocal,
+            GolesVisitante = partido.GolesVisitante,
+            IncidenciaEquipoLocal = new List<TipoIncidencia>(partido.incidenciaEquipoLocal ?? new List<TipoIncidencia>()),
+            IncidenciaEquipoVisitante = new List<TipoIncidencia>(partido.incidenciaEquipoVisitante ?? new List<TipoIncidencia>())
         };
     }
 
     private Partido PartidoDTOAEntidad(PartidoDTO dto)
     {
         var estadio = EstadioDTOAEntidad(dto.Estadio);
-        var local = EquipoDTOAEntidad(dto.equipoLocal);
-        var visitante = EquipoDTOAEntidad(dto.equipoVisitante);
+        var local = EquipoDTOAEntidad(dto.EquipoLocal);
+        var visitante = EquipoDTOAEntidad(dto.EquipoVisitante);
         var fecha = dto.Fecha == default ? DateTime.UtcNow : dto.Fecha;
-        var partido = new Partido(fecha, estadio, local, visitante, dto.fase, dto.golesLocal, dto.golesVisitante);
+        var partido = new Partido(fecha, estadio, local, visitante, dto.Fase, dto.GolesLocal, dto.GolesVisitante);
         partido.Grupo = dto.Grupo;
-        if (dto.incidenciaEquipoLocal != null)
+        if (dto.IncidenciaEquipoLocal != null)
         {
-            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(dto.incidenciaEquipoLocal);
+            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(dto.IncidenciaEquipoLocal);
         }
-        if (dto.incidenciaEquipoVisitante != null)
+        if (dto.IncidenciaEquipoVisitante != null)
         {
-            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(dto.incidenciaEquipoVisitante);
+            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(dto.IncidenciaEquipoVisitante);
         }
         return partido;
     }
@@ -333,7 +333,7 @@ public class PartidoServicios : IServicioPartido
             throw new ArgumentException("El partido recibido no puede ser nulo");
         }
 
-        Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.idPartido);
+        Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido);
         if (partidoExistente == null)
         {
             throw new ArgumentException("El partido no existe, porfavor ingrese un partido existente");
@@ -343,9 +343,9 @@ public class PartidoServicios : IServicioPartido
 
         motor.Simular(partidoDTO, random);
 
-        if (partidoExistente.Fase != Fase.Grupos && partidoDTO.golesLocal == partidoDTO.golesVisitante)
+        if (partidoExistente.Fase != Fase.Grupos && partidoDTO.GolesLocal == partidoDTO.GolesVisitante)
         {
-            partidoDTO.golesLocal++;
+            partidoDTO.GolesLocal++;
         }
 
         int tarjetasAmarillasLocal = random.Next(0, MaxTarjetasAmarillas);
@@ -364,10 +364,10 @@ public class PartidoServicios : IServicioPartido
         for (int i = 0; i < tarjetasRojasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
 
-        partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
-        partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
+        partidoDTO.IncidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
+        partidoDTO.IncidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
-        partidoDTO.estadoPartido = EstadoPartido.Jugado;
+        partidoDTO.EstadoPartido = EstadoPartido.Jugado;
         _auditoria.RegistrarSimulacion(semillaSimulacion);
     }
 
@@ -378,9 +378,9 @@ public class PartidoServicios : IServicioPartido
 
         foreach (PartidoDTO partido in partidos)
         {
-            if (partido.estadoPartido != EstadoPartido.Jugado || EsPartidoEliminatorioEmpatado(partido))
+            if (partido.EstadoPartido != EstadoPartido.Jugado || EsPartidoEliminatorioEmpatado(partido))
             {
-                SimularResultado(partido, semillaSimulacion + partido.idPartido, motor);
+                SimularResultado(partido, semillaSimulacion + partido.IdPartido, motor);
                 ActualizarPartido(partido);
             }
         }
@@ -388,9 +388,9 @@ public class PartidoServicios : IServicioPartido
     }
     private bool EsPartidoEliminatorioEmpatado(PartidoDTO partido)
     {
-        return partido.fase != Fase.Grupos &&
-               partido.estadoPartido == EstadoPartido.Jugado &&
-               partido.golesLocal == partido.golesVisitante;
+        return partido.Fase != Fase.Grupos &&
+               partido.EstadoPartido == EstadoPartido.Jugado &&
+               partido.GolesLocal == partido.GolesVisitante;
     }
 
 

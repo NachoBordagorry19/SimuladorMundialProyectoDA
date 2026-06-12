@@ -51,16 +51,16 @@ public class PartidoServiciosTest
 
         equipoLocalDTO = new EquipoDTO()
         {
-            nombre = "Bayern Munich",
-            confederacion = _confederacion,
-            rankingFifa = 2000
+            Nombre = "Bayern Munich",
+            Confederacion = _confederacion,
+            RankingFifa = 2000
         };
 
         equipoVisitanteDTO = new EquipoDTO()
         {
-            nombre = "Real Madrid",
-            confederacion = _confederacion,
-            rankingFifa = 1900
+            Nombre = "Real Madrid",
+            Confederacion = _confederacion,
+            RankingFifa = 1900
         };
 
         _partidoDTO = new PartidoDTO
@@ -68,12 +68,12 @@ public class PartidoServiciosTest
 
             Fecha = new DateTime(2026, 6, 1),
             Estadio = estadioDTO,
-            equipoLocal = equipoLocalDTO,
-            equipoVisitante = equipoVisitanteDTO,
-            fase = Fase.Grupos,
-            estadoPartido = EstadoPartido.Pendiente,
-            golesLocal = 0,
-            golesVisitante = 0
+            EquipoLocal = equipoLocalDTO,
+            EquipoVisitante = equipoVisitanteDTO,
+            Fase = Fase.Grupos,
+            EstadoPartido = EstadoPartido.Pendiente,
+            GolesLocal = 0,
+            GolesVisitante = 0
         };
 
     }
@@ -116,8 +116,8 @@ public class PartidoServiciosTest
         Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
         int id = partido.Id;
         PartidoDTO partidoPrueba = _servicioPartido.ObtenerPartido(id);
-        Assert.AreEqual(partidoPrueba.equipoLocal.nombre, _partidoDTO.equipoLocal.nombre);
-        Assert.AreEqual(partidoPrueba.equipoVisitante.nombre, _partidoDTO.equipoVisitante.nombre);
+        Assert.AreEqual(partidoPrueba.EquipoLocal.Nombre, _partidoDTO.EquipoLocal.Nombre);
+        Assert.AreEqual(partidoPrueba.EquipoVisitante.Nombre, _partidoDTO.EquipoVisitante.Nombre);
         Assert.AreEqual(partidoPrueba.Fecha, _partidoDTO.Fecha);
     }
 
@@ -181,14 +181,14 @@ public class PartidoServiciosTest
         Partido partido = _partidoRepositorio.ObtenerPartidos().FirstOrDefault();
         int id = partido.Id;
 
-        _partidoDTO.golesLocal = 3;
-        _partidoDTO.golesVisitante = 2;
+        _partidoDTO.GolesLocal = 3;
+        _partidoDTO.GolesVisitante = 2;
         _servicioPartido.ActualizarPartido(_partidoDTO);
 
         PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(id);
-        Assert.AreEqual(3, partidoActualizado.golesLocal);
-        Assert.AreEqual(2, partidoActualizado.golesVisitante);
-        Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.estadoPartido);
+        Assert.AreEqual(3, partidoActualizado.GolesLocal);
+        Assert.AreEqual(2, partidoActualizado.GolesVisitante);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoActualizado.EstadoPartido);
     }
 
     [TestMethod]
@@ -196,7 +196,7 @@ public class PartidoServiciosTest
     {
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
 
-        _partidoDTO.golesLocal = 2;
+        _partidoDTO.GolesLocal = 2;
         _servicioPartido.ActualizarPartido(_partidoDTO);
 
         string detalleEsperado = "Bayern Munich vs Real Madrid";
@@ -210,9 +210,9 @@ public class PartidoServiciosTest
 
         _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorProbabilistico());
 
-        Assert.IsTrue(_partidoDTO.golesLocal >= 0);
-        Assert.IsTrue(_partidoDTO.golesVisitante >= 0);
-        Assert.AreEqual(EstadoPartido.Jugado, _partidoDTO.estadoPartido);
+        Assert.IsTrue(_partidoDTO.GolesLocal >= 0);
+        Assert.IsTrue(_partidoDTO.GolesVisitante >= 0);
+        Assert.AreEqual(EstadoPartido.Jugado, _partidoDTO.EstadoPartido);
     }
 
     [TestMethod]
@@ -228,19 +228,19 @@ public class PartidoServiciosTest
     [ExpectedException(typeof(ArgumentException))]
     public void SimularResultado_SiPartidoNoExiste_LanzaExcepcion()
     {
-        _partidoDTO.idPartido = -1;
+        _partidoDTO.IdPartido = -1;
         _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorProbabilistico());
     }
     
     [TestMethod]
     public void AgregarPartido_SiEstadoEsJugado_SeGuardaJugado()
     {
-        _partidoDTO.estadoPartido = EstadoPartido.Jugado;
+        _partidoDTO.EstadoPartido = EstadoPartido.Jugado;
 
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
 
-        PartidoDTO partidoGuardado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
-        Assert.AreEqual(EstadoPartido.Jugado, partidoGuardado.estadoPartido);
+        PartidoDTO partidoGuardado = _servicioPartido.ObtenerPartido(_partidoDTO.IdPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoGuardado.EstadoPartido);
     }
     
     [TestMethod]
@@ -285,7 +285,7 @@ public class PartidoServiciosTest
 
         _servicioPartido.ActualizarPartido(_partidoDTO);
 
-        PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
+        PartidoDTO partidoActualizado = _servicioPartido.ObtenerPartido(_partidoDTO.IdPartido);
         Assert.AreEqual("Nuevo Estadio", partidoActualizado.Estadio.Nombre);
     }
     
@@ -304,12 +304,12 @@ public class PartidoServiciosTest
     [TestMethod]
     public void SimularResultado_SiEsEliminatorio_NoQuedaEmpatado()
     {
-        _partidoDTO.fase = Fase.Dieciseisavos;
+        _partidoDTO.Fase = Fase.Dieciseisavos;
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
 
         _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorProbabilistico());
 
-        Assert.AreNotEqual(_partidoDTO.golesLocal, _partidoDTO.golesVisitante);
+        Assert.AreNotEqual(_partidoDTO.GolesLocal, _partidoDTO.GolesVisitante);
     }
     
     [TestMethod]
@@ -319,23 +319,23 @@ public class PartidoServiciosTest
 
         _servicioPartido.SimularTodosLosPartidos(12345, new MotorProbabilistico());
 
-        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
-        Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.estadoPartido);
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.IdPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, partidoSimulado.EstadoPartido);
     }
 
     [TestMethod]
     public void AgregarPartido_SeAgregaPartidoConIncidenciaLocal()
     {
-        _partidoDTO.incidenciaEquipoLocal = new List<TipoIncidencia>();
-        _partidoDTO.incidenciaEquipoLocal.Add(TipoIncidencia.TarjetaAmarilla);
+        _partidoDTO.IncidenciaEquipoLocal = new List<TipoIncidencia>();
+        _partidoDTO.IncidenciaEquipoLocal.Add(TipoIncidencia.TarjetaAmarilla);
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
     }
 
     [TestMethod]
     public void AgregarPartido_SeAgregaPartidoConIncidenciaVisitante()
     {
-        _partidoDTO.incidenciaEquipoVisitante = new List<TipoIncidencia>();
-        _partidoDTO.incidenciaEquipoVisitante.Add(TipoIncidencia.TarjetaAmarilla);
+        _partidoDTO.IncidenciaEquipoVisitante = new List<TipoIncidencia>();
+        _partidoDTO.IncidenciaEquipoVisitante.Add(TipoIncidencia.TarjetaAmarilla);
         _servicioPartido.AgregarPartido(_partidoDTO, equipoLocalDTO, equipoVisitanteDTO, estadioDTO);
     }
 
@@ -346,9 +346,9 @@ public class PartidoServiciosTest
 
         _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorProbabilistico());
 
-        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
-        Assert.IsTrue(partidoSimulado.incidenciaEquipoLocal.Count >= 0 && partidoSimulado.incidenciaEquipoLocal.Count <= 10);
-        Assert.IsTrue(partidoSimulado.incidenciaEquipoVisitante.Count >= 0 && partidoSimulado.incidenciaEquipoVisitante.Count <= 10);
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.IdPartido);
+        Assert.IsTrue(partidoSimulado.IncidenciaEquipoLocal.Count >= 0 && partidoSimulado.IncidenciaEquipoLocal.Count <= 10);
+        Assert.IsTrue(partidoSimulado.IncidenciaEquipoVisitante.Count >= 0 && partidoSimulado.IncidenciaEquipoVisitante.Count <= 10);
     }
 
     [TestMethod]
@@ -358,9 +358,9 @@ public class PartidoServiciosTest
 
         _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorProbabilistico());
 
-        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.idPartido);
-        int rojasLocal = partidoSimulado.incidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
-        int rojasVisitante = partidoSimulado.incidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
+        PartidoDTO partidoSimulado = _servicioPartido.ObtenerPartido(_partidoDTO.IdPartido);
+        int rojasLocal = partidoSimulado.IncidenciaEquipoLocal.Count(i => i == TipoIncidencia.TarjetaRoja);
+        int rojasVisitante = partidoSimulado.IncidenciaEquipoVisitante.Count(i => i == TipoIncidencia.TarjetaRoja);
         Assert.IsTrue(rojasLocal >= 0 && rojasLocal <= 5);
         Assert.IsTrue(rojasVisitante >= 0 && rojasVisitante <= 5);
     }
@@ -372,6 +372,6 @@ public class PartidoServiciosTest
 
         _servicioPartido.SimularResultado(_partidoDTO, 12345, new MotorAleatorioPuro());
 
-        Assert.AreEqual(EstadoPartido.Jugado, _partidoDTO.estadoPartido);
+        Assert.AreEqual(EstadoPartido.Jugado, _partidoDTO.EstadoPartido);
     }
 }

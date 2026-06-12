@@ -19,17 +19,17 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     public List<PosicionEquipoDTO> ObtenerRankingGrupo(string grupo, int semillaCrucesFase)
     {
         List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos()
-            .Where(p => p.Grupo == grupo && p.fase == Fase.Grupos)
+            .Where(p => p.Grupo == grupo && p.Fase == Fase.Grupos)
             .ToList();
 
         var posiciones = new List<PosicionEquipoDTO>();
 
         foreach (var partido in partidos)
         {
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoLocal, grupo);
-            AgregarEquipoSiNoExiste(posiciones, partido.equipoVisitante, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.EquipoLocal, grupo);
+            AgregarEquipoSiNoExiste(posiciones, partido.EquipoVisitante, grupo);
 
-            if (partido.estadoPartido != EstadoPartido.Jugado)
+            if (partido.EstadoPartido != EstadoPartido.Jugado)
             {
                 continue;
             }
@@ -42,26 +42,26 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private void ProcesarResultadoPartido(List<PosicionEquipoDTO> posiciones, PartidoDTO partido)
     {
-        PosicionEquipoDTO posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
-        PosicionEquipoDTO posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
+        PosicionEquipoDTO posicionLocal = BuscarPosicion(posiciones, partido.EquipoLocal.Nombre);
+        PosicionEquipoDTO posicionVisitante = BuscarPosicion(posiciones, partido.EquipoVisitante.Nombre);
 
         posicionLocal.PartidosJugados++;
         posicionVisitante.PartidosJugados++;
 
-        posicionLocal.GolesAFavor += partido.golesLocal;
-        posicionLocal.GolesEnContra += partido.golesVisitante;
+        posicionLocal.GolesAFavor += partido.GolesLocal;
+        posicionLocal.GolesEnContra += partido.GolesVisitante;
 
-        posicionVisitante.GolesAFavor += partido.golesVisitante;
-        posicionVisitante.GolesEnContra += partido.golesLocal;
+        posicionVisitante.GolesAFavor += partido.GolesVisitante;
+        posicionVisitante.GolesEnContra += partido.GolesLocal;
 
-        if (partido.golesLocal > partido.golesVisitante)
+        if (partido.GolesLocal > partido.GolesVisitante)
         {
             posicionLocal.Ganados++;
             posicionLocal.Puntos += 3;
 
             posicionVisitante.Perdidos++;
         }
-        else if (partido.golesVisitante > partido.golesLocal)
+        else if (partido.GolesVisitante > partido.GolesLocal)
         {
             posicionVisitante.Ganados++;
             posicionVisitante.Puntos += 3;
@@ -83,14 +83,14 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, EquipoDTO equipo, string grupo)
     {
-        if (posiciones.Any(p => p.EquipoNombre == equipo.nombre))
+        if (posiciones.Any(p => p.EquipoNombre == equipo.Nombre))
         {
             return;
         }
 
         posiciones.Add(new PosicionEquipoDTO
         {
-            EquipoNombre = equipo.nombre,
+            EquipoNombre = equipo.Nombre,
             Grupo = grupo,
             Equipo = equipo
         });
@@ -164,8 +164,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
             int partidosJugados = _partidoServicios.ObtenerPartidos()
                 .Count(p => p.Grupo == grupo &&
-                            p.fase == Fase.Grupos &&
-                            p.estadoPartido == EstadoPartido.Jugado);
+                            p.Fase == Fase.Grupos &&
+                            p.EstadoPartido == EstadoPartido.Jugado);
 
             if (partidosJugados < 6)
             {
@@ -430,24 +430,24 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             throw new ArgumentException("La final no puede ser nula");
         }
 
-        if (partidoFinal.fase != Fase.Final)
+        if (partidoFinal.Fase != Fase.Final)
         {
             throw new ArgumentException("El partido debe ser la final");
         }
 
-        if (partidoFinal.estadoPartido != EstadoPartido.Jugado)
+        if (partidoFinal.EstadoPartido != EstadoPartido.Jugado)
         {
             throw new ArgumentException("La final debe estar jugada");
         }
 
-        if (partidoFinal.golesLocal > partidoFinal.golesVisitante)
+        if (partidoFinal.GolesLocal > partidoFinal.GolesVisitante)
         {
-            return partidoFinal.equipoLocal;
+            return partidoFinal.EquipoLocal;
         }
 
-        if (partidoFinal.golesVisitante > partidoFinal.golesLocal)
+        if (partidoFinal.GolesVisitante > partidoFinal.GolesLocal)
         {
-            return partidoFinal.equipoVisitante;
+            return partidoFinal.EquipoVisitante;
         }
 
         throw new ArgumentException("La final no puede terminar empatada");
@@ -457,14 +457,14 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
 
-        PartidoDTO final = partidos.FirstOrDefault(p => p.fase == Fase.Final);
+        PartidoDTO final = partidos.FirstOrDefault(p => p.Fase == Fase.Final);
 
         if (final == null)
         {
             return null;
         }
 
-        if (final.estadoPartido != EstadoPartido.Jugado)
+        if (final.EstadoPartido != EstadoPartido.Jugado)
         {
             return null;
         }
@@ -487,7 +487,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     {
         List<PartidoDTO> partidos = _partidoServicios.ObtenerPartidos();
 
-        if (partidos.Any(p => p.fase == Fase.Dieciseisavos))
+        if (partidos.Any(p => p.Fase == Fase.Dieciseisavos))
         {
             return;
         }
@@ -499,8 +499,8 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         {
             var cruce = dieciseisavos[i];
 
-            if (string.IsNullOrWhiteSpace(cruce.EquipoLocal.Equipo.nombre) ||
-                string.IsNullOrWhiteSpace(cruce.EquipoVisitante.Equipo.nombre))
+            if (string.IsNullOrWhiteSpace(cruce.EquipoLocal.Equipo.Nombre) ||
+                string.IsNullOrWhiteSpace(cruce.EquipoVisitante.Equipo.Nombre))
             {
                 continue;
             }
@@ -512,18 +512,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                 Grupo = cruce.Codigo,
                 Fecha = fechaInicio.AddHours(i * 4),
                 Estadio = estadio,
-                equipoLocal = cruce.EquipoLocal.Equipo,
-                equipoVisitante = cruce.EquipoVisitante.Equipo,
-                fase = Fase.Dieciseisavos,
-                estadoPartido = EstadoPartido.Pendiente,
-                golesLocal = 0,
-                golesVisitante = 0
+                EquipoLocal = cruce.EquipoLocal.Equipo,
+                EquipoVisitante = cruce.EquipoVisitante.Equipo,
+                Fase = Fase.Dieciseisavos,
+                EstadoPartido = EstadoPartido.Pendiente,
+                GolesLocal = 0,
+                GolesVisitante = 0
             };
 
             _partidoServicios.AgregarPartido(
                 partido,
-                partido.equipoLocal,
-                partido.equipoVisitante,
+                partido.EquipoLocal,
+                partido.EquipoVisitante,
                 partido.Estadio);
         }
     }
@@ -551,7 +551,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     private DateTime ObtenerFechaInicioDieciseisavos(List<PartidoDTO> partidos)
     {
         List<PartidoDTO> partidosGrupos = partidos
-            .Where(p => p.fase == Fase.Grupos)
+            .Where(p => p.Fase == Fase.Grupos)
             .ToList();
 
         if (partidosGrupos.Count == 0)
@@ -597,36 +597,36 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     private bool PuedeGenerarOctavos(List<PartidoDTO> partidos)
     {
         return FaseCompleta(partidos, Fase.Dieciseisavos, 16)
-               && !partidos.Any(p => p.fase == Fase.Octavos);
+               && !partidos.Any(p => p.Fase == Fase.Octavos);
     }
 
     private bool PuedeGenerarCuartos(List<PartidoDTO> partidos)
     {
         return FaseCompleta(partidos, Fase.Octavos, 8)
-               && !partidos.Any(p => p.fase == Fase.Cuartos);
+               && !partidos.Any(p => p.Fase == Fase.Cuartos);
     }
 
     private bool PuedeGenerarSemifinales(List<PartidoDTO> partidos)
     {
         return FaseCompleta(partidos, Fase.Cuartos, 4)
-               && !partidos.Any(p => p.fase == Fase.Semifinal);
+               && !partidos.Any(p => p.Fase == Fase.Semifinal);
     }
 
     private bool PuedeGenerarTercerPuestoYFinal(List<PartidoDTO> partidos)
     {
         return FaseCompleta(partidos, Fase.Semifinal, 2)
-               && !partidos.Any(p => p.fase == Fase.Tercero)
-               && !partidos.Any(p => p.fase == Fase.Final);
+               && !partidos.Any(p => p.Fase == Fase.Tercero)
+               && !partidos.Any(p => p.Fase == Fase.Final);
     }
 
     private bool FaseCompleta(List<PartidoDTO> partidos, Fase fase, int cantidadEsperada)
     {
         List<PartidoDTO> partidosFase = partidos
-            .Where(p => p.fase == fase)
+            .Where(p => p.Fase == fase)
             .ToList();
 
         return partidosFase.Count == cantidadEsperada &&
-               partidosFase.All(p => p.estadoPartido == EstadoPartido.Jugado);
+               partidosFase.All(p => p.EstadoPartido == EstadoPartido.Jugado);
     }
     private void GenerarPartidosOctavos(List<PartidoDTO> partidos)
     {
@@ -721,19 +721,19 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     }
     private PartidoDTO ObtenerPartidoPorCodigo(List<PartidoDTO> partidos, Fase fase, string codigo)
     {
-        return partidos.First(p => p.fase == fase && p.Grupo == codigo);
+        return partidos.First(p => p.Fase == fase && p.Grupo == codigo);
     }
 
     private EquipoDTO ObtenerGanador(PartidoDTO partido)
     {
-        if (partido.golesLocal > partido.golesVisitante)
+        if (partido.GolesLocal > partido.GolesVisitante)
         {
-            return partido.equipoLocal;
+            return partido.EquipoLocal;
         }
 
-        if (partido.golesVisitante > partido.golesLocal)
+        if (partido.GolesVisitante > partido.GolesLocal)
         {
-            return partido.equipoVisitante;
+            return partido.EquipoVisitante;
         }
 
         throw new ArgumentException("Un partido eliminatorio no puede terminar empatado.");
@@ -741,14 +741,14 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
 
     private EquipoDTO ObtenerPerdedor(PartidoDTO partido)
     {
-        if (partido.golesLocal > partido.golesVisitante)
+        if (partido.GolesLocal > partido.GolesVisitante)
         {
-            return partido.equipoVisitante;
+            return partido.EquipoVisitante;
         }
 
-        if (partido.golesVisitante > partido.golesLocal)
+        if (partido.GolesVisitante > partido.GolesLocal)
         {
-            return partido.equipoLocal;
+            return partido.EquipoLocal;
         }
 
         throw new ArgumentException("Un partido eliminatorio no puede terminar empatado.");
@@ -757,7 +757,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     private DateTime ObtenerFechaInicioSiguienteFase(List<PartidoDTO> partidos, Fase faseAnterior)
     {
         DateTime ultimaFecha = partidos
-            .Where(p => p.fase == faseAnterior)
+            .Where(p => p.Fase == faseAnterior)
             .OrderByDescending(p => p.Fecha)
             .First()
             .Fecha;
@@ -778,18 +778,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             Grupo = codigo,
             Fecha = fecha,
             Estadio = estadio,
-            equipoLocal = local,
-            equipoVisitante = visitante,
-            fase = fase,
-            estadoPartido = EstadoPartido.Pendiente,
-            golesLocal = 0,
-            golesVisitante = 0
+            EquipoLocal = local,
+            EquipoVisitante = visitante,
+            Fase = fase,
+            EstadoPartido = EstadoPartido.Pendiente,
+            GolesLocal = 0,
+            GolesVisitante = 0
         };
 
         _partidoServicios.AgregarPartido(
             partido,
-            partido.equipoLocal,
-            partido.equipoVisitante,
+            partido.EquipoLocal,
+            partido.EquipoVisitante,
             partido.Estadio);
     }
     public CuadroSegundaFaseDTO ObtenerCuadroActual()
@@ -809,7 +809,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     private List<CruceDTO> ConvertirPartidosACruces(List<PartidoDTO> partidos, Fase fase)
     {
         List<PartidoDTO> partidosFase = partidos
-            .Where(p => p.fase == fase)
+            .Where(p => p.Fase == fase)
             .OrderBy(p => p.Fecha)
             .ToList();
 
@@ -826,7 +826,7 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
     private List<CruceDTO> ConvertirPartidosFinalesACruces(List<PartidoDTO> partidos)
     {
         List<PartidoDTO> partidosFinales = partidos
-            .Where(p => p.fase == Fase.Tercero || p.fase == Fase.Final)
+            .Where(p => p.Fase == Fase.Tercero || p.Fase == Fase.Final)
             .OrderBy(p => p.Fecha)
             .ToList();
 
@@ -845,18 +845,18 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
         return new CruceDTO
         {
             Codigo = partido.Grupo,
-            Fase = partido.fase,
+            Fase = partido.Fase,
             EquipoLocal = new PosicionEquipoDTO
             {
-                EquipoNombre = partido.equipoLocal.nombre,
+                EquipoNombre = partido.EquipoLocal.Nombre,
                 Grupo = partido.Grupo,
-                Equipo = partido.equipoLocal
+                Equipo = partido.EquipoLocal
             },
             EquipoVisitante = new PosicionEquipoDTO
             {
-                EquipoNombre = partido.equipoVisitante.nombre,
+                EquipoNombre = partido.EquipoVisitante.Nombre,
                 Grupo = partido.Grupo,
-                Equipo = partido.equipoVisitante
+                Equipo = partido.EquipoVisitante
             }
         };
     }

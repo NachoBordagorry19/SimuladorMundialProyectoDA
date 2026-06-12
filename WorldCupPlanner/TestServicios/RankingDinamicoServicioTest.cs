@@ -38,11 +38,11 @@ public class RankingDinamicoServicioTest
     {
         return new PartidoDTO
         {
-            equipoLocal = new EquipoDTO { nombre = nombreLocal },
-            equipoVisitante = new EquipoDTO { nombre = nombreVisitante },
-            golesLocal = golesLocal,
-            golesVisitante = golesVisitante,
-            fase = fase
+            EquipoLocal = new EquipoDTO { Nombre = nombreLocal },
+            EquipoVisitante = new EquipoDTO { Nombre = nombreVisitante },
+            GolesLocal = golesLocal,
+            GolesVisitante = golesVisitante,
+            Fase = fase
         };
     }
 

@@ -19,12 +19,12 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
 
     public void ActualizarRanking(PartidoDTO partidoDto)
     {
-        Equipo? local = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == partidoDto.equipoLocal.nombre);
+        Equipo? local = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == partidoDto.EquipoLocal.Nombre);
         if (local == null)
         {
             throw new ArgumentException("El equipo local no existe");
         }
-        Equipo? visitante = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == partidoDto.equipoVisitante.nombre);
+        Equipo? visitante = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == partidoDto.EquipoVisitante.Nombre);
         if (visitante == null)
         {
             throw new ArgumentException("El equio visitante no existe");
@@ -36,11 +36,11 @@ public class RankingDinamicoServicio:IServicioRankingDinamico
         double probabilidadLocal = 1.0 / (1.0 + Math.Pow(10, (visitante.RankingFifa - local.RankingFifa) / 1000.0));
         double probabilidadVisitante = 1.0 - probabilidadLocal;
 
-        double resultadoLocal = partidoDto.golesLocal > partidoDto.golesVisitante ? 1.0 :
-            partidoDto.golesLocal < partidoDto.golesVisitante ? 0.0 : 0.5;
+        double resultadoLocal = partidoDto.GolesLocal > partidoDto.GolesVisitante ? 1.0 :
+            partidoDto.GolesLocal < partidoDto.GolesVisitante ? 0.0 : 0.5;
         double resultadoVisitante = 1.0 - resultadoLocal;
 
-        double multiplicador = partidoDto.fase == Fase.Grupos ? 1.0 : 1.5;
+        double multiplicador = partidoDto.Fase == Fase.Grupos ? 1.0 : 1.5;
         double deltaLocal = 30 * (resultadoLocal - probabilidadLocal) * multiplicador;
         double deltaVisitante = 30 * (resultadoVisitante - probabilidadVisitante) * multiplicador;
 

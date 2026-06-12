@@ -24,19 +24,19 @@ public class EquipoServicios : IServicioEquipo
 
     public void AgregarEquipo(EquipoDTO equipoDTO)
     {
-        int cupo = ObtenerCupo(equipoDTO.confederacion);
+        int cupo = ObtenerCupo(equipoDTO.Confederacion);
         if (cupo > 0)
         {
-            int cantidadActual = _equipoRepositorio.ObtenerEquipos().Count(e => e.Confederacion == equipoDTO.confederacion);
+            int cantidadActual = _equipoRepositorio.ObtenerEquipos().Count(e => e.Confederacion == equipoDTO.Confederacion);
             if (cantidadActual >= cupo)
             {
-                throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDTO.confederacion}");
+                throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDTO.Confederacion}");
             }
         }
-        ValidarNombreNoExiste(equipoDTO.nombre);
+        ValidarNombreNoExiste(equipoDTO.Nombre);
         Equipo equipo = EquipoDTOAEntidad(equipoDTO);
         _equipoRepositorio.AgregarEquipo(equipo);
-        _auditoria.RegistrarAltaEquipo(equipoDTO.nombre);
+        _auditoria.RegistrarAltaEquipo(equipoDTO.Nombre);
     }
 
     public void GenerarEquiposAutomaticamente(int semillaCompletar)
@@ -59,7 +59,7 @@ public class EquipoServicios : IServicioEquipo
             int cantidadActual = 0;
             foreach (EquipoDTO equipo in todosLosEquipos)
             {
-                if (equipo.confederacion == conf)
+                if (equipo.Confederacion == conf)
                 {
                     cantidadActual++;
                 }
@@ -73,9 +73,9 @@ public class EquipoServicios : IServicioEquipo
                 string nombreFormateado = conf.ToString() + "_" + numeroEquipo.ToString("D2");
 
                 EquipoDTO nuevoEquipo = new EquipoDTO();
-                nuevoEquipo.nombre = nombreFormateado;
-                nuevoEquipo.confederacion = conf;
-                nuevoEquipo.rankingFifa = random.Next(300, 2501);
+                nuevoEquipo.Nombre = nombreFormateado;
+                nuevoEquipo.Confederacion = conf;
+                nuevoEquipo.RankingFifa = random.Next(300, 2501);
 
                 this.AgregarEquipo(nuevoEquipo);
             }
@@ -106,11 +106,11 @@ public class EquipoServicios : IServicioEquipo
     public Equipo EquipoDTOAEntidad(EquipoDTO equipoDto)
     {
         var equipo = new Equipo(
-            equipoDto.nombre,
-            equipoDto.confederacion,
-            equipoDto.rankingFifa
+            equipoDto.Nombre,
+            equipoDto.Confederacion,
+            equipoDto.RankingFifa
         );
-        equipo.BanderaBase64 = equipoDto.banderaBase64;
+        equipo.BanderaBase64 = equipoDto.BanderaBase64;
         return equipo;
     }
 
@@ -132,10 +132,10 @@ public class EquipoServicios : IServicioEquipo
     {
         return new EquipoDTO()
         {
-            nombre = equipo.Nombre,
-            confederacion = equipo.Confederacion,
-            rankingFifa = equipo.RankingFifa,
-            banderaBase64 = equipo.BanderaBase64
+            Nombre = equipo.Nombre,
+            Confederacion = equipo.Confederacion,
+            RankingFifa = equipo.RankingFifa,
+            BanderaBase64 = equipo.BanderaBase64
         };
     }
 
@@ -168,16 +168,16 @@ public class EquipoServicios : IServicioEquipo
 
     public void EliminarEquipo(EquipoDTO equipoDto)
     {
-        ValidarNombreExiste(equipoDto.nombre);
-        Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.nombre);
+        ValidarNombreExiste(equipoDto.Nombre);
+        Equipo? equipoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == equipoDto.Nombre);
         if (equipoExistente == null) throw new ArgumentException("El equipo a eliminar no existe");
         _equipoRepositorio.EliminarEquipo(equipoExistente);
-        _auditoria.RegistrarEliminacionEquipo(equipoDto.nombre);
+        _auditoria.RegistrarEliminacionEquipo(equipoDto.Nombre);
     }
 
     public void ActualizarEquipo(EquipoDTO equipoDto)
     {
-        ActualizarEquipo(equipoDto.nombre, equipoDto);
+        ActualizarEquipo(equipoDto.Nombre, equipoDto);
     }
 
     public void ActualizarEquipo(string nombreOriginal, EquipoDTO equipoDto)
@@ -187,29 +187,29 @@ public class EquipoServicios : IServicioEquipo
         Equipo? equipoOriginal = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombreOriginal);
         if (equipoOriginal == null) throw new ArgumentException("El equipo original no existe");
 
-        if (nombreOriginal != equipoDto.nombre)
+        if (nombreOriginal != equipoDto.Nombre)
         {
-            ValidarNombreNoExiste(equipoDto.nombre);
+            ValidarNombreNoExiste(equipoDto.Nombre);
         }
 
-        if (equipoOriginal.Confederacion != equipoDto.confederacion)
+        if (equipoOriginal.Confederacion != equipoDto.Confederacion)
         {
-            int cupo = ObtenerCupo(equipoDto.confederacion);
+            int cupo = ObtenerCupo(equipoDto.Confederacion);
             int cantidadActual = _equipoRepositorio.ObtenerEquipos()
-                .Count(e => e.Confederacion == equipoDto.confederacion);
+                .Count(e => e.Confederacion == equipoDto.Confederacion);
 
             if (cantidadActual >= cupo)
             {
-                throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDto.confederacion}");
+                throw new ArgumentException($"Cupo máximo alcanzado para la confederación {equipoDto.Confederacion}");
             }
         }
         
-        equipoOriginal.Nombre = equipoDto.nombre;
-        equipoOriginal.Confederacion = equipoDto.confederacion;
-        equipoOriginal.RankingFifa = equipoDto.rankingFifa;
-        equipoOriginal.BanderaBase64 = equipoDto.banderaBase64;
+        equipoOriginal.Nombre = equipoDto.Nombre;
+        equipoOriginal.Confederacion = equipoDto.Confederacion;
+        equipoOriginal.RankingFifa = equipoDto.RankingFifa;
+        equipoOriginal.BanderaBase64 = equipoDto.BanderaBase64;
         _equipoRepositorio.ActualizarEquipo(equipoOriginal);
-        _auditoria.RegistrarEdicionEquipo(equipoDto.nombre);
+        _auditoria.RegistrarEdicionEquipo(equipoDto.Nombre);
     }
 
     public ResultadoFixture ResolverEmpatesYOrdenar(List<EquipoDTO> equipos, int semillaFixture)
@@ -223,7 +223,7 @@ public class EquipoServicios : IServicioEquipo
 
         var generadorDeNumerosPrincipal = new Random(semillaFixture);
 
-        var grupos = ordenBase.GroupBy(e => e.rankingFifa).OrderByDescending(g => g.Key);
+        var grupos = ordenBase.GroupBy(e => e.RankingFifa).OrderByDescending(g => g.Key);
         foreach (var grupo in grupos)
         {
             List<EquipoDTO> listaGrupo = grupo.ToList();
@@ -233,7 +233,7 @@ public class EquipoServicios : IServicioEquipo
                 continue;
             }
 
-            var ordenOriginal = listaGrupo.Select(x => x.nombre).ToList();
+            var ordenOriginal = listaGrupo.Select(x => x.Nombre).ToList();
 
             int semillaGrupo = generadorDeNumerosPrincipal.Next();
             var generadorDeNumerosGrupo = new Random(semillaGrupo);
@@ -247,7 +247,7 @@ public class EquipoServicios : IServicioEquipo
                 copiaGrupo[j] = copiaTemporal;
             }
 
-            var ordenResuelto = copiaGrupo.Select(e => e.nombre).ToList();
+            var ordenResuelto = copiaGrupo.Select(e => e.Nombre).ToList();
 
             auditoria.Add(new EntradaAuditoria
             {
@@ -288,8 +288,8 @@ public class EquipoServicios : IServicioEquipo
     {
         if (equipos == null) return new List<EquipoDTO>();
         List<EquipoDTO> ordenBase = equipos
-            .OrderByDescending(e => e.rankingFifa)
-            .ThenBy(e => e.nombre, StringComparer.OrdinalIgnoreCase)
+            .OrderByDescending(e => e.RankingFifa)
+            .ThenBy(e => e.Nombre, StringComparer.OrdinalIgnoreCase)
             .ToList();
         return ordenBase;
     }
