@@ -83,23 +83,7 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
             }
         }
 
-        DateTime fechaBase = fechaInicio ?? new DateTime(2026, 06, 01);
-        var partidos = new List<PartidoDTO>();
-        List<EstadioDTO> estadiosDTO = _estadioServicios.ObtenerEstadios()
-            .OrderBy(e => NormalizarNombre(e.Nombre))
-            .ToList();
-
-        for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
-        {
-            var grupo = grupos[grupoIndex];
-            DateTime fechaInicioGrupo = fechaBase.AddDays(grupoIndex * DiasEntreGrupos);
-
-            AgregarPartidosDelGrupo(
-                grupo,
-                fechaInicioGrupo,
-                estadiosDTO,
-                partidos);
-        }
+        List<PartidoDTO> partidos = GenerarPartidosGrupos(grupos, fechaInicio ?? new DateTime(2026, 06, 01));
 
         var resultado = new ResultadoFixture
         {
@@ -114,6 +98,28 @@ public class FixturePrimeraFaseServicio : IServicioFixturePrimeraFase
         _auditoria.RegistrarGeneracionFixture();
 
         return resultado;
+    }
+
+    private List<PartidoDTO> GenerarPartidosGrupos(List<Grupo> grupos, DateTime fechaBase)
+    {
+        var partidos = new List<PartidoDTO>();
+        List<EstadioDTO> estadiosDto = _estadioServicios.ObtenerEstadios()
+            .OrderBy(e => NormalizarNombre(e.Nombre))
+            .ToList();
+
+        for (int grupoIndex = 0; grupoIndex < grupos.Count; grupoIndex++)
+        {
+            var grupo = grupos[grupoIndex];
+            DateTime fechaInicioGrupo = fechaBase.AddDays(grupoIndex * DiasEntreGrupos);
+
+            AgregarPartidosDelGrupo(
+                grupo,
+                fechaInicioGrupo,
+                estadiosDto,
+                partidos);
+        }
+
+        return partidos;
     }
 
     private List<Grupo> CrearGruposVacios()

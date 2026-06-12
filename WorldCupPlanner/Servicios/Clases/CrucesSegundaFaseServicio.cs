@@ -34,46 +34,51 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
                 continue;
             }
 
-            PosicionEquipoDTO posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
-            PosicionEquipoDTO posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
-
-            posicionLocal.PartidosJugados++;
-            posicionVisitante.PartidosJugados++;
-
-            posicionLocal.GolesAFavor += partido.golesLocal;
-            posicionLocal.GolesEnContra += partido.golesVisitante;
-
-            posicionVisitante.GolesAFavor += partido.golesVisitante;
-            posicionVisitante.GolesEnContra += partido.golesLocal;
-
-            if (partido.golesLocal > partido.golesVisitante)
-            {
-                posicionLocal.Ganados++;
-                posicionLocal.Puntos += 3;
-
-                posicionVisitante.Perdidos++;
-            }
-            else if (partido.golesVisitante > partido.golesLocal)
-            {
-                posicionVisitante.Ganados++;
-                posicionVisitante.Puntos += 3;
-
-                posicionLocal.Perdidos++;
-            }
-            else
-            {
-                posicionLocal.Empatados++;
-                posicionVisitante.Empatados++;
-
-                posicionLocal.Puntos++;
-                posicionVisitante.Puntos++;
-            }
-
-            posicionLocal.Diferencia = posicionLocal.GolesAFavor - posicionLocal.GolesEnContra;
-            posicionVisitante.Diferencia = posicionVisitante.GolesAFavor - posicionVisitante.GolesEnContra;
+            ProcesarResultadoPartido(posiciones, partido);
         }
 
         return OrdenarPosiciones(posiciones, semillaCrucesFase);
+    }
+
+    private void ProcesarResultadoPartido(List<PosicionEquipoDTO> posiciones, PartidoDTO partido)
+    {
+        PosicionEquipoDTO posicionLocal = BuscarPosicion(posiciones, partido.equipoLocal.nombre);
+        PosicionEquipoDTO posicionVisitante = BuscarPosicion(posiciones, partido.equipoVisitante.nombre);
+
+        posicionLocal.PartidosJugados++;
+        posicionVisitante.PartidosJugados++;
+
+        posicionLocal.GolesAFavor += partido.golesLocal;
+        posicionLocal.GolesEnContra += partido.golesVisitante;
+
+        posicionVisitante.GolesAFavor += partido.golesVisitante;
+        posicionVisitante.GolesEnContra += partido.golesLocal;
+
+        if (partido.golesLocal > partido.golesVisitante)
+        {
+            posicionLocal.Ganados++;
+            posicionLocal.Puntos += 3;
+
+            posicionVisitante.Perdidos++;
+        }
+        else if (partido.golesVisitante > partido.golesLocal)
+        {
+            posicionVisitante.Ganados++;
+            posicionVisitante.Puntos += 3;
+
+            posicionLocal.Perdidos++;
+        }
+        else
+        {
+            posicionLocal.Empatados++;
+            posicionVisitante.Empatados++;
+
+            posicionLocal.Puntos++;
+            posicionVisitante.Puntos++;
+        }
+
+        posicionLocal.Diferencia = posicionLocal.GolesAFavor - posicionLocal.GolesEnContra;
+        posicionVisitante.Diferencia = posicionVisitante.GolesAFavor - posicionVisitante.GolesEnContra;
     }
 
     private void AgregarEquipoSiNoExiste(List<PosicionEquipoDTO> posiciones, EquipoDTO equipo, string grupo)
@@ -263,6 +268,16 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             "A",
             semillaCrucesFase);
 
+        cruces.AddRange(GenerarCrucesGrupoB(clasificados, semillaCrucesFase));
+
+        _partidoServicios.BloquearEdicionFase(Fase.Grupos);
+        _auditoria.RegistrarSorteoCruces();
+
+        return cruces;
+    }
+
+    private List<CruceDTO> GenerarCrucesGrupoB(ClasificadosDTO clasificados, int semillaCrucesFase)
+    {
         List<PosicionEquipoDTO> primerosRestantes = clasificados.Primeros
             .Skip(8)
             .Take(4)
@@ -278,8 +293,6 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             segundosMenorPuntaje,
             "B",
             semillaCrucesFase);
-
-        cruces.AddRange(crucesB1aB4);
 
         List<PosicionEquipoDTO> segundosRestantes = clasificados.Segundos
             .Where(s => !segundosMenorPuntaje.Any(m => m.EquipoNombre == s.EquipoNombre))
@@ -301,11 +314,9 @@ public class CrucesSegundaFaseServicio : IServicioCrucesSegundaFase
             semillaCrucesFase,
             5);
 
+        var cruces = new List<CruceDTO>();
+        cruces.AddRange(crucesB1aB4);
         cruces.AddRange(crucesB5aB8);
-
-        _partidoServicios.BloquearEdicionFase(Fase.Grupos);
-        _auditoria.RegistrarSorteoCruces();
-
         return cruces;
     }
 
