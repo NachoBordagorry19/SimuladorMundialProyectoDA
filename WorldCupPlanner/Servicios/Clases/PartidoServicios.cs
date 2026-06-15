@@ -11,6 +11,7 @@ public class PartidoServicios : IServicioPartido
     private const int MaxTarjetasAmarillas = 6;
     private const int ProbabilidadTarjetaRoja = 30;
     private const int MaxTarjetasRojas = 3;
+    private const int MaxPorcentaje = 100;
 
     private readonly IPartidoRepositorio _partidoRepositorio;
     private readonly IServicioAuditoria _auditoria;
@@ -356,11 +357,11 @@ public class PartidoServicios : IServicioPartido
         for (int i = 0; i < tarjetasAmarillasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, false);
 
-        int tarjetasRojasLocal = random.Next(0, 100) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
+        int tarjetasRojasLocal = random.Next(0, MaxPorcentaje) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
         for (int i = 0; i < tarjetasRojasLocal; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, true);
 
-        int tarjetasRojasVisitante = random.Next(0, 100) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
+        int tarjetasRojasVisitante = random.Next(0, MaxPorcentaje) < ProbabilidadTarjetaRoja ? random.Next(1, MaxTarjetasRojas + 1) : 0;
         for (int i = 0; i < tarjetasRojasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
 
