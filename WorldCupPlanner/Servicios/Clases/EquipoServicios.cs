@@ -52,6 +52,8 @@ public class EquipoServicios : IServicioEquipo
             return;
         }
 
+        var desglosePorConfederacion = new List<string>();
+
         foreach (Confederacion conf in valoresEnum)
         {
             int cupoMaximo = ObtenerCupo(conf);
@@ -67,6 +69,9 @@ public class EquipoServicios : IServicioEquipo
             }
 
             int faltantes = cupoMaximo - cantidadActual;
+
+            if (faltantes > 0)
+                desglosePorConfederacion.Add($"{conf}:{faltantes}");
 
             for (int i = 1; i <= faltantes; i++)
             {
@@ -84,7 +89,8 @@ public class EquipoServicios : IServicioEquipo
 
         int rankingFifaMinimo = 300;
         int rankingFifaMaximo = 2500;
-        _auditoria.RegistrarGeneracionAutomaticaEquipos(equiposACompletar, semillaCompletar, rankingFifaMinimo, rankingFifaMaximo);
+        string desgloseTexto = string.Join(", ", desglosePorConfederacion);
+        _auditoria.RegistrarGeneracionAutomaticaEquipos(equiposACompletar, semillaCompletar, rankingFifaMinimo, rankingFifaMaximo, desgloseTexto);
     }
     public int ObtenerCupo(Confederacion confederacion)
     {
