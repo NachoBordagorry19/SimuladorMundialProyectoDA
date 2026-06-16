@@ -187,4 +187,23 @@ public class EstadioServiciosTest
         _estadioServicios.ActualizarEstadio(estadioEditado);
         _auditoriaMock.Verify(a => a.RegistrarEdicionEstadio(estadioEditado.Nombre), Times.Once);
     }
+
+    [TestMethod]
+    public void ActualizarEstadio_CambioNombre_ActualizaCorrectamente()
+    {
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+
+        EstadioDTO estadioNombreNuevo = new EstadioDTO()
+        {
+            Nombre = "CDS Nuevo",
+            Ciudad = _estadioDTO.Ciudad,
+            Descripcion = _estadioDTO.Descripcion,
+            CapacidadLocativa = _estadioDTO.CapacidadLocativa
+        };
+
+        _estadioServicios.ActualizarEstadio("CDS", estadioNombreNuevo);
+        EstadioDTO obtenido = _estadioServicios.ObtenerEstadioPorNombre("CDS Nuevo");
+
+        Assert.AreEqual("CDS Nuevo", obtenido.Nombre);
+    }
 }
