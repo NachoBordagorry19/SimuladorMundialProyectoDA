@@ -206,4 +206,30 @@ public class EstadioServiciosTest
 
         Assert.AreEqual("CDS Nuevo", obtenido.Nombre);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ActualizarEstadio_CambioNombre_SiNombreYaExiste_LanzaExcepcion()
+    {
+        _estadioServicios.AgregarEstadio(_estadioDTO);
+
+        EstadioDTO estadio2 = new EstadioDTO()
+        {
+            Nombre = "Centenario",
+            Ciudad = "Montevideo",
+            Descripcion = "descripcion",
+            CapacidadLocativa = 60000
+        };
+        _estadioServicios.AgregarEstadio(estadio2);
+
+        EstadioDTO estadioNombreExistente = new EstadioDTO()
+        {
+            Nombre = "Centenario",
+            Ciudad = _estadioDTO.Ciudad,
+            Descripcion = _estadioDTO.Descripcion,
+            CapacidadLocativa = _estadioDTO.CapacidadLocativa
+        };
+
+        _estadioServicios.ActualizarEstadio("CDS", estadioNombreExistente);
+    }
 }
