@@ -9,4 +9,5 @@ public interface IServicioEstadio
     EstadioDTO ObtenerEstadioPorNombre(string nombre);
     void EliminarEstadio(EstadioDTO estadioDTO);
     void ActualizarEstadio(EstadioDTO estadioDTO);
+    void ActualizarEstadio(string nombreOriginal, EstadioDTO estadioDTO);
 }
