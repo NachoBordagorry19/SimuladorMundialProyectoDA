@@ -81,11 +81,23 @@ public class EstadioServicios : IServicioEstadio
 
     public void ActualizarEstadio(EstadioDTO estadioDTO)
     {
-        Estadio? existente = _estadioRepositorio.ObtenerEstadioPorNombre(estadioDTO.Nombre);
+        ActualizarEstadio(estadioDTO.Nombre, estadioDTO);
+    }
+
+    public void ActualizarEstadio(string nombreOriginal, EstadioDTO estadioDTO)
+    {
+        Estadio? existente = _estadioRepositorio.ObtenerEstadioPorNombre(nombreOriginal);
         if (existente == null)
         {
             throw new ArgumentException("El estadio no existe");
         }
+
+        if (nombreOriginal != estadioDTO.Nombre)
+        {
+            ValidarNombreNoExiste(estadioDTO.Nombre);
+        }
+
+        existente.Nombre = estadioDTO.Nombre;
         existente.Ciudad = estadioDTO.Ciudad;
         existente.Descripcion = estadioDTO.Descripcion;
         existente.CapacidadLocativa = estadioDTO.CapacidadLocativa;

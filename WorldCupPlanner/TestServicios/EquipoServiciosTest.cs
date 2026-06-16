@@ -323,10 +323,17 @@ public class EquipoServiciosTest
     }
 
     [TestMethod]
-    public void GenerarEquiposAutomaticamente_DebeLlamarAuditoria()
+    public void GenerarEquiposAutomaticamente_GeneraCantidadCorrectaPorConfederacion()
     {
         _equipoServicios.GenerarEquiposAutomaticamente(123);
-        _auditoriaMock.Verify(a => a.RegistrarGeneracionAutomaticaEquipos(48, 123, 300, 2500), Times.Once);
+        var equipos = _equipoServicios.ObtenerEquipos();
+
+        Assert.AreEqual(16, equipos.Count(e => e.Confederacion == Confederacion.UEFA));
+        Assert.AreEqual(7,  equipos.Count(e => e.Confederacion == Confederacion.CONMEBOL));
+        Assert.AreEqual(7,  equipos.Count(e => e.Confederacion == Confederacion.CONCACAF));
+        Assert.AreEqual(9,  equipos.Count(e => e.Confederacion == Confederacion.CAF));
+        Assert.AreEqual(8,  equipos.Count(e => e.Confederacion == Confederacion.AFC));
+        Assert.AreEqual(1,  equipos.Count(e => e.Confederacion == Confederacion.OFC));
     }
     
     [TestMethod]

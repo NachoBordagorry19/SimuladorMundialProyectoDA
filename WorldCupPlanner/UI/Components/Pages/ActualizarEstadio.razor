@@ -51,6 +51,7 @@
 
 @code {
     private EstadioDTO estadio = new EstadioDTO();
+    private string nombreOriginal = "";
     private string mensaje = "";
     private bool esError = false;
 
@@ -65,10 +66,11 @@
         {
             var queryParams = new Uri(Navigation.Uri).Query;
             var nombreParam = System.Web.HttpUtility.ParseQueryString(queryParams).Get("nombre");
-            
+
             if (!string.IsNullOrEmpty(nombreParam))
             {
                 estadio = ServicioEstadio.ObtenerEstadioPorNombre(nombreParam);
+                nombreOriginal = estadio.Nombre;
             }
         }
         catch (Exception ex)
@@ -85,7 +87,7 @@
             mensaje = "";
             esError = false;
 
-            ServicioEstadio.ActualizarEstadio(estadio);
+            ServicioEstadio.ActualizarEstadio(nombreOriginal, estadio);
             mensaje = "Estadio actualizado correctamente";
             esError = false;
             estadio = new EstadioDTO();
