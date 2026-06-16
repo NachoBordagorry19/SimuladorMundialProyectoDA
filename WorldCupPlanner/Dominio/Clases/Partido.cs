@@ -13,8 +13,8 @@ public class Partido
     private EstadoPartido _estado;
     private int _golesLocal;
     private int _golesVisitante;
-    public List<TipoIncidencia> incidenciaEquipoLocal;
-    public List<TipoIncidencia> incidenciaEquipoVisitante;
+    public List<TipoIncidencia> IncidenciaEquipoLocal { get; set; } = new List<TipoIncidencia>();
+    public List<TipoIncidencia> IncidenciaEquipoVisitante { get; set; } = new List<TipoIncidencia>();
 
     public Partido()
     {
@@ -120,9 +120,9 @@ public class Partido
     public void AgregarIncidencia(TipoIncidencia incidencia, bool esLocal)
     {
         if (esLocal)
-            incidenciaEquipoLocal.Add(incidencia);
+            IncidenciaEquipoLocal.Add(incidencia);
         else
-            incidenciaEquipoVisitante.Add(incidencia);
+            IncidenciaEquipoVisitante.Add(incidencia);
     }
 
     public int GolesLocal
@@ -162,7 +162,7 @@ public class Partido
         Estado = EstadoPartido.Pendiente;
         GolesLocal = golesLocal;
         GolesVisitante = golesVisitante;
-        incidenciaEquipoLocal = new List<TipoIncidencia>();
-        incidenciaEquipoVisitante = new List<TipoIncidencia>();
+        IncidenciaEquipoLocal = new List<TipoIncidencia>();
+        IncidenciaEquipoVisitante = new List<TipoIncidencia>();
     }
 }

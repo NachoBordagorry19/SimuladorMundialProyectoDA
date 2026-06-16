@@ -45,42 +45,42 @@ public class UsuarioTest
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContraseña_SiContraseñaEsVacia_TiroExcepcion()
+    public void InsertoContrasena_SiContrasenaEsVacia_TiroExcepcion()
     {
         Usuario usuarioPrueba = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 03, 20), "", Rol.Administrador);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContraseña_SiContraseñaNoTieneMayuscula_TiroExcepcion()
+    public void InsertoContrasena_SiContrasenaNoTieneMayuscula_TiroExcepcion()
     {
         Usuario usuarioPrueba = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "asdfg23455.", Rol.Administrador);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContraseña_SiContraseñaNoTieneMinuscula_TiroExcepcion()
+    public void InsertoContrasena_SiContrasenaNoTieneMinuscula_TiroExcepcion()
     {
         Usuario usuarioPrueba = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "ASDFGDS2344.", Rol.Administrador);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContraseña_SiContraseñaNoTieneNumero_TiroExcepcion()
+    public void InsertoContrasena_SiContrasenaNoTieneNumero_TiroExcepcion()
     {
         Usuario usuarioPrueba = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "AASDSAasddsa.", Rol.Administrador);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContraseña_SiContraseñaNoTieneCaracterEspecial_TiroExcepcion()
+    public void InsertoContrasena_SiContrasenaNoTieneCaracterEspecial_TiroExcepcion()
     {
         Usuario usuarioPrueba = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "ADDSSSDSAsdsa23", Rol.Administrador);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void InsertoContraseña_SiContraTieneMenosDe8Caracteres_TiroExcepcion()
+    public void InsertoContrasena_SiContraTieneMenosDe8Caracteres_TiroExcepcion()
     {
         Usuario usuario = new Usuario("Federico", "Gonzalez", "a@gmail.com", new DateTime(2005, 05, 20), "av34.A", Rol.Administrador);
     }
@@ -95,3 +95,4 @@ public class UsuarioTest
     }
 
 }
+

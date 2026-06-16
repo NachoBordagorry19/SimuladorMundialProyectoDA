@@ -156,7 +156,7 @@ public class PartidoTest
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
         Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
         Partido partido = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 1, 0);
-        partido.incidenciaEquipoLocal.Add(incidenciaLocal);
+        partido.IncidenciaEquipoLocal.Add(incidenciaLocal);
     }
     
     [TestMethod]
@@ -167,7 +167,7 @@ public class PartidoTest
         Equipo visitante = new Equipo("B", Confederacion.UEFA, 1100);
         Estadio estadio = new Estadio("Campeon del Siglo", "Montevideo", "Descripcion", 60000);
         Partido partido = new Partido(DateTime.Now, estadio, local, visitante, Fase.Grupos, 1, 0);
-        partido.incidenciaEquipoVisitante.Add(incidenciaVisitante);
+        partido.IncidenciaEquipoVisitante.Add(incidenciaVisitante);
     }
 
     [TestMethod]
@@ -180,7 +180,7 @@ public class PartidoTest
 
         partido.AgregarIncidencia(TipoIncidencia.TarjetaAmarilla, true);
 
-        Assert.AreEqual(1, partido.incidenciaEquipoLocal.Count);
-        Assert.AreEqual(TipoIncidencia.TarjetaAmarilla, partido.incidenciaEquipoLocal[0]);
+        Assert.AreEqual(1, partido.IncidenciaEquipoLocal.Count);
+        Assert.AreEqual(TipoIncidencia.TarjetaAmarilla, partido.IncidenciaEquipoLocal[0]);
     }
 }

@@ -1,4 +1,4 @@
-using Repositorio;
+﻿using Repositorio;
 using Repositorio.Interfaces;
 using Servicios.Interfaces;
 using Servicios.Modelo;
@@ -35,7 +35,7 @@ public class UsuarioServicioTest
             Apellido = "Rodriguez",
             Email = "a@gmail.com",
             FechaNacimiento = new DateTime(2000, 05, 15),
-            Contraseña = "Password123!",
+            Contrasena = "Password123!",
             Roles = new List<Rol> { Rol.Administrador }
         };
     }
@@ -81,7 +81,7 @@ public class UsuarioServicioTest
         usuario.Nombre = "Mateo";
         usuario.Apellido = "Roo";
         usuario.FechaNacimiento = new DateTime(2000, 05, 15);
-        usuario.Contraseña = "Password123!";
+        usuario.Contrasena = "Password123!";
         usuario.Email = "b@gmail.com";
         usuario.Roles = new List<Rol> { Rol.Editor };
         _servicioUsuario.AgregarUsuario(usuario);
@@ -122,14 +122,14 @@ public class UsuarioServicioTest
     }
 
     [TestMethod]
-    public void AgregarUsuario_GuardaContraseñaCifrada()
+    public void AgregarUsuario_GuardaContrasenaCifrada()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
 
         var usuarioGuardado = _usuarioRepositorio.ObtenerUsuario(u => u.Email == "a@gmail.com");
 
         Assert.IsNotNull(usuarioGuardado);
-        Assert.AreNotEqual("Password123!", usuarioGuardado.Contraseña);
+        Assert.AreNotEqual("Password123!", usuarioGuardado.Contrasena);
     }
 
     [TestMethod]
@@ -145,7 +145,7 @@ public class UsuarioServicioTest
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AutenticarUsuario_SiContraseñaEsIncorrecta_LanzaExcepcion()
+    public void AutenticarUsuario_SiContrasenaEsIncorrecta_LanzaExcepcion()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
 
@@ -173,7 +173,7 @@ public class UsuarioServicioTest
             Apellido = "Perez",
             Email = "a@gmail.com",
             FechaNacimiento = new DateTime(1999, 10, 10),
-            Contraseña = "",
+            Contrasena = "",
             Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
         };
 
@@ -199,7 +199,7 @@ public class UsuarioServicioTest
             Nombre = "Fede Editado",
             Apellido = "Rodriguez",
             Roles = new List<Rol> { Rol.Editor },
-            Contraseña = ""
+            Contrasena = ""
         };
 
         _servicioUsuario.ActualizarUsuario(usuarioEditado);
@@ -207,11 +207,11 @@ public class UsuarioServicioTest
     }
 
     [TestMethod]
-    public void ReiniciarContraseña_PermiteAutenticarConContraseñaPorDefecto()
+    public void ReiniciarContrasena_PermiteAutenticarConContrasenaPorDefecto()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
 
-        _servicioUsuario.ReiniciarContraseña("a@gmail.com");
+        _servicioUsuario.ReiniciarContrasena("a@gmail.com");
 
         UsuarioDTO usuarioAutenticado = _servicioUsuario.AutenticarUsuario("a@gmail.com", "Usuario123!");
 
@@ -219,10 +219,10 @@ public class UsuarioServicioTest
     }
 
     [TestMethod]
-    public void ReiniciarContraseña_DebeRegistrarAuditoria()
+    public void ReiniciarContrasena_DebeRegistrarAuditoria()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
-        _servicioUsuario.ReiniciarContraseña("a@gmail.com");
+        _servicioUsuario.ReiniciarContrasena("a@gmail.com");
         _auditoriaMock.Verify(a => a.RegistrarEdicionUsuario("a@gmail.com"), Times.AtLeast(1));
     }
     
@@ -285,9 +285,9 @@ public class UsuarioServicioTest
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AgregarUsuario_SiContraseñaNoEsValida_LanzaExcepcion()
+    public void AgregarUsuario_SiContrasenaNoEsValida_LanzaExcepcion()
     {
-        _usuarioDTO.Contraseña = "sinmayuscula1!";
+        _usuarioDTO.Contrasena = "sinmayuscula1!";
 
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
     }
@@ -323,7 +323,7 @@ public class UsuarioServicioTest
             Apellido = "Roo",
             Email = "b@gmail.com",
             FechaNacimiento = new DateTime(2000, 05, 15),
-            Contraseña = "Password123!",
+            Contrasena = "Password123!",
             Roles = new List<Rol> { Rol.Editor }
         };
 
@@ -384,7 +384,7 @@ public class UsuarioServicioTest
             Apellido = "Rodriguez",
             Email = "nuevo@gmail.com",
             FechaNacimiento = new DateTime(2000, 05, 15),
-            Contraseña = "",
+            Contrasena = "",
             Roles = new List<Rol> { Rol.Administrador }
         };
 
@@ -396,11 +396,11 @@ public class UsuarioServicioTest
     }
     
     [TestMethod]
-    public void ActualizarUsuario_SiCambiaContraseña_PermiteAutenticarConNueva()
+    public void ActualizarUsuario_SiCambiaContrasena_PermiteAutenticarConNueva()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
 
-        _usuarioDTO.Contraseña = "Nueva123!";
+        _usuarioDTO.Contrasena = "Nueva123!";
 
         _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
 
@@ -428,7 +428,7 @@ public class UsuarioServicioTest
             Apellido = "Roo",
             Email = "b@gmail.com",
             FechaNacimiento = new DateTime(2000, 05, 15),
-            Contraseña = "Password123!",
+            Contrasena = "Password123!",
             Roles = new List<Rol> { Rol.Editor }
         };
 
@@ -463,19 +463,20 @@ public class UsuarioServicioTest
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void ActualizarUsuario_SiNuevaContraseñaNoEsValida_LanzaExcepcion()
+    public void ActualizarUsuario_SiNuevaContrasenaNoEsValida_LanzaExcepcion()
     {
         _servicioUsuario.AgregarUsuario(_usuarioDTO);
 
-        _usuarioDTO.Contraseña = "invalida";
+        _usuarioDTO.Contrasena = "invalida";
 
         _servicioUsuario.ActualizarUsuario("a@gmail.com", _usuarioDTO);
     }
     
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void ReiniciarContraseña_SiUsuarioNoExiste_LanzaExcepcion()
+    public void ReiniciarContrasena_SiUsuarioNoExiste_LanzaExcepcion()
     {
-        _servicioUsuario.ReiniciarContraseña("noexiste@gmail.com");
+        _servicioUsuario.ReiniciarContrasena("noexiste@gmail.com");
     }
 }
+

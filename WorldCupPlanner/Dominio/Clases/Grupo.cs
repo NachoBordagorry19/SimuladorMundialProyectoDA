@@ -2,7 +2,7 @@ namespace Dominio.Clases;
 
 public class Grupo
 {
-    public int id { get; set; }
+    public int Id { get; set; }
     private string _nombre = string.Empty;
     private List<Equipo> _equipos = new List<Equipo>();
     private List<Partido> _partidos = new List<Partido>();

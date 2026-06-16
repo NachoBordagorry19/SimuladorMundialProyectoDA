@@ -172,7 +172,7 @@ public class EquipoServicios : IServicioEquipo
         Equipo? equipoNoExistente = _equipoRepositorio.ObtenerEquipo(e => e.Nombre == nombre);
         if (equipoNoExistente != null)
         {
-            throw new ArgumentException("El equipo a agregar ya existe porfavor ingrese otro");
+            throw new ArgumentException("El equipo a agregar ya existe por favor ingrese otro");
         }
     }
 
@@ -226,7 +226,7 @@ public class EquipoServicios : IServicioEquipo
     {
         VerificarListaDeEquiposSinNulo(equipos);
 
-        List<EquipoDTO> ordenBase = OrdenoPorRankinFifa(equipos);
+        List<EquipoDTO> ordenBase = OrdenarPorRankingFifa(equipos);
 
         var auditoria = new List<EntradaAuditoria>();
         var listaFinal = new List<EquipoDTO>();
@@ -294,7 +294,7 @@ public class EquipoServicios : IServicioEquipo
         }
     }
 
-    public List<EquipoDTO> OrdenoPorRankinFifa(List<EquipoDTO> equipos)
+    public List<EquipoDTO> OrdenarPorRankingFifa(List<EquipoDTO> equipos)
     {
         if (equipos == null) return new List<EquipoDTO>();
         List<EquipoDTO> ordenBase = equipos
