@@ -11,8 +11,8 @@ public interface IServicioUsuario
     public void EliminarUsuario(UsuarioDTO usuarioDto);
     public List<UsuarioDTO> ObtenerUsuariosEliminables(string emailUsuarioActual);
     public void EliminarUsuario(string emailSeleccionado, string emailConfirmado, string emailUsuarioActual);
-    public UsuarioDTO AutenticarUsuario(string email, string contrasena);
+    public UsuarioDTO AutenticarUsuario(string email, string contraseña);
     public void ActualizarUsuario(UsuarioDTO usuarioDto);
     public void ActualizarUsuario(string emailOriginal, UsuarioDTO usuarioDto);
-    public void ReiniciarContrasena(string email);
+    public void ReiniciarContraseña(string email);
 }

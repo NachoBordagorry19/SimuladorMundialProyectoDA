@@ -28,7 +28,7 @@
 
                 <div class="login-field">
                     <label>Contraseña</label>
-                    <InputText @bind-Value="login.Contrasena" type="password" class="form-control" />
+                    <InputText @bind-Value="login.Contraseña" type="password" class="form-control" />
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                 Apellido = "Prueba",
                 Email = "admin@admin.com",
                 FechaNacimiento = new DateTime(2000, 1, 1),
-                Contrasena = "Admin123!",
+                Contraseña = "Admin123!",
                 Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
             });
         }
@@ -83,13 +83,13 @@
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(login.Contrasena))
+            if (string.IsNullOrWhiteSpace(login.Contraseña))
             {
                 mensajeError = "Debe ingresar una contraseña.";
                 return;
             }
 
-            UsuarioDTO usuario = ServicioUsuario.AutenticarUsuario(login.Email, login.Contrasena);
+            UsuarioDTO usuario = ServicioUsuario.AutenticarUsuario(login.Email, login.Contraseña);
 
             Sesion.UsuarioActual = usuario;
 
@@ -115,6 +115,6 @@
     private class LoginModel
     {
         public string Email { get; set; } = "";
-        public string Contrasena { get; set; } = "";
+        public string Contraseña { get; set; } = "";
     }
 }

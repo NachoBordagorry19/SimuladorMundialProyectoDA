@@ -19,7 +19,7 @@ public class Usuario
     private string _apellido = string.Empty;
     private string _email = string.Empty;
     private DateTime _fechaNacimiento;
-    private string _contrasena = string.Empty;
+    private string _contraseña = string.Empty;
     public IReadOnlyList<Rol> Roles => _roles.AsReadOnly();
     private readonly List<Rol> _roles = new();
 
@@ -84,30 +84,30 @@ public class Usuario
         }
     }
 
-    public string Contrasena
+    public string Contraseña
     {
-        get => _contrasena;
+        get => _contraseña;
         set
         {
             if (EsVacio(value))
             {
-                throw new ArgumentException("La contrasena es obligatoria");
+                throw new ArgumentException("La contraseña es obligatoria");
             }
             else if (!value.Any(char.IsUpper))
             {
-                throw new ArgumentException("La contrasena debe contener al menos una letra mayúscula");
+                throw new ArgumentException("La contraseña debe contener al menos una letra mayúscula");
             }
             else if (!value.Any(char.IsLower))
             {
-                throw new ArgumentException("La contrasena debe contener al menos una letra minúscula");
+                throw new ArgumentException("La contraseña debe contener al menos una letra minúscula");
             }
             else if (!value.Any(char.IsDigit))
-                throw new ArgumentException("La contrasena debe contener al menos un número");
+                throw new ArgumentException("La contraseña debe contener al menos un número");
             else if (!value.Any(c => !char.IsLetterOrDigit(c)))
-                throw new ArgumentException("La contrasena debe contener al menos un carácter especial", nameof(value));
+                throw new ArgumentException("La contraseña debe contener al menos un carácter especial", nameof(value));
             else if (value.Length < 8)
-                throw new ArgumentException("La contrasena debe tener al menos 8 caracteres");
-            _contrasena = value;
+                throw new ArgumentException("La contraseña debe tener al menos 8 caracteres");
+            _contraseña = value;
         }
     }
 
@@ -127,23 +127,23 @@ public class Usuario
 
     }
 
-    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contrasena, Rol rol)
+    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, Rol rol)
     {
         Nombre = nombre;
         Apellido = apellido;
         Email = email;
         FechaNacimiento = fechaNacimiento;
-        Contrasena = contrasena;
+        Contraseña = contraseña;
         _roles.Add(rol);
     }
 
-    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contrasena, List<Rol> roles)
+    public Usuario(string nombre, string apellido, string email, DateTime fechaNacimiento, string contraseña, List<Rol> roles)
     {
         Nombre = nombre;
         Apellido = apellido;
         Email = email;
         FechaNacimiento = fechaNacimiento;
-        Contrasena = contrasena;
+        Contraseña = contraseña;
 
         foreach (Rol rol in roles)
         {
