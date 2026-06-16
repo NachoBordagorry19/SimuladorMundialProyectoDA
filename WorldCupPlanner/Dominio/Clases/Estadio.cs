@@ -2,7 +2,7 @@ namespace Dominio.Clases;
 
 public class Estadio
 {
-    public int id { get; set; }
+    public int Id { get; set; }
     private string _nombre = string.Empty;
     private string _ciudad = string.Empty;
     private string _descripcion = string.Empty;

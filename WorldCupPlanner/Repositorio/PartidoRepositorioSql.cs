@@ -39,7 +39,7 @@ public class PartidoRepositorioSql : IPartidoRepositorio
 
     public void ActualizarPartido(Partido partido)
     {
-        if (partido.Estadio.id == 0)
+        if (partido.Estadio.Id == 0)
         {
             var estadio = _contexto.Estadios.FirstOrDefault(e => e.Nombre == partido.Estadio.Nombre);
             if (estadio != null) partido.Estadio = estadio;

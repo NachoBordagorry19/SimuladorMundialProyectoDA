@@ -30,7 +30,7 @@ public class PartidoServicios : IServicioPartido
 
         if (partidoDto == null)
         {
-            throw new ArgumentException("El partido no puede ser nulo porfavor ingrese partido valido");
+            throw new ArgumentException("El partido no puede ser nulo por favor ingrese partido válido");
         }
 
         var estadioEntidad = EstadioDTOAEntidad(estadio);
@@ -44,11 +44,11 @@ public class PartidoServicios : IServicioPartido
         
         if (partidoDto.IncidenciaEquipoLocal != null && partidoDto.IncidenciaEquipoLocal.Count > 0)
         {
-            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDto.IncidenciaEquipoLocal);
+            partido.IncidenciaEquipoLocal = new List<TipoIncidencia>(partidoDto.IncidenciaEquipoLocal);
         }
         if (partidoDto.IncidenciaEquipoVisitante != null && partidoDto.IncidenciaEquipoVisitante.Count > 0)
         {
-            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDto.IncidenciaEquipoVisitante);
+            partido.IncidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDto.IncidenciaEquipoVisitante);
         }
 
         if (partidoDto.EstadoPartido == EstadoPartido.Jugado)
@@ -207,7 +207,7 @@ public class PartidoServicios : IServicioPartido
     {
         if (_partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido) == null)
         {
-            throw new ArgumentException("El partido a buscar no existe, porfavor busque uno valido");
+            throw new ArgumentException("El partido a buscar no existe, por favor busque uno válido");
         }
         var partidoPorId = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido);
         if (partidoPorId != null)
@@ -263,9 +263,9 @@ public class PartidoServicios : IServicioPartido
                 _rankingDinamico.ActualizarRanking(PartidoEntidadADto(partidoExistente));
         }
         if (partidoDTO.IncidenciaEquipoLocal != null)
-            partidoExistente.incidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.IncidenciaEquipoLocal);
+            partidoExistente.IncidenciaEquipoLocal = new List<TipoIncidencia>(partidoDTO.IncidenciaEquipoLocal);
         if (partidoDTO.IncidenciaEquipoVisitante != null)
-            partidoExistente.incidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.IncidenciaEquipoVisitante);
+            partidoExistente.IncidenciaEquipoVisitante = new List<TipoIncidencia>(partidoDTO.IncidenciaEquipoVisitante);
 
         string detalle = $"{partidoDTO.EquipoLocal.Nombre} vs {partidoDTO.EquipoVisitante.Nombre}";
         _auditoria.RegistrarModificacionPartido(detalle);
@@ -303,8 +303,8 @@ public class PartidoServicios : IServicioPartido
             EstadoPartido = partido.Estado,
             GolesLocal = partido.GolesLocal,
             GolesVisitante = partido.GolesVisitante,
-            IncidenciaEquipoLocal = new List<TipoIncidencia>(partido.incidenciaEquipoLocal ?? new List<TipoIncidencia>()),
-            IncidenciaEquipoVisitante = new List<TipoIncidencia>(partido.incidenciaEquipoVisitante ?? new List<TipoIncidencia>())
+            IncidenciaEquipoLocal = new List<TipoIncidencia>(partido.IncidenciaEquipoLocal ?? new List<TipoIncidencia>()),
+            IncidenciaEquipoVisitante = new List<TipoIncidencia>(partido.IncidenciaEquipoVisitante ?? new List<TipoIncidencia>())
         };
     }
 
@@ -318,11 +318,11 @@ public class PartidoServicios : IServicioPartido
         partido.Grupo = dto.Grupo;
         if (dto.IncidenciaEquipoLocal != null)
         {
-            partido.incidenciaEquipoLocal = new List<TipoIncidencia>(dto.IncidenciaEquipoLocal);
+            partido.IncidenciaEquipoLocal = new List<TipoIncidencia>(dto.IncidenciaEquipoLocal);
         }
         if (dto.IncidenciaEquipoVisitante != null)
         {
-            partido.incidenciaEquipoVisitante = new List<TipoIncidencia>(dto.IncidenciaEquipoVisitante);
+            partido.IncidenciaEquipoVisitante = new List<TipoIncidencia>(dto.IncidenciaEquipoVisitante);
         }
         return partido;
     }
@@ -337,7 +337,7 @@ public class PartidoServicios : IServicioPartido
         Partido? partidoExistente = _partidoRepositorio.ObtenerPartidoPorId(partidoDTO.IdPartido);
         if (partidoExistente == null)
         {
-            throw new ArgumentException("El partido no existe, porfavor ingrese un partido existente");
+            throw new ArgumentException("El partido no existe, por favor ingrese un partido existente");
         }
 
         Random random = new Random(semillaSimulacion);
@@ -365,8 +365,8 @@ public class PartidoServicios : IServicioPartido
         for (int i = 0; i < tarjetasRojasVisitante; i++)
             partidoExistente.AgregarIncidencia(TipoIncidencia.TarjetaRoja, false);
 
-        partidoDTO.IncidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoLocal);
-        partidoDTO.IncidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.incidenciaEquipoVisitante);
+        partidoDTO.IncidenciaEquipoLocal = new List<TipoIncidencia>(partidoExistente.IncidenciaEquipoLocal);
+        partidoDTO.IncidenciaEquipoVisitante = new List<TipoIncidencia>(partidoExistente.IncidenciaEquipoVisitante);
         ActualizarPartido(partidoDTO);
         partidoDTO.EstadoPartido = EstadoPartido.Jugado;
         _auditoria.RegistrarSimulacion(semillaSimulacion);

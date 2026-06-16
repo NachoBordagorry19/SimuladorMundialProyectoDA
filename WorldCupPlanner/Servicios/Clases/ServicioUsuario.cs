@@ -15,7 +15,7 @@ public class ServicioUsuario : IServicioUsuario
     private readonly IUsuarioRepositorio _usuarioRepositorio;
     private readonly IServicioAuditoria _auditoria;
 
-    private const string ContraseñaPorDefecto = "Usuario123!";
+    private const string ContrasenaPorDefecto = "Usuario123!";
 
     public ServicioUsuario(IUsuarioRepositorio usuarioRepositorio, IServicioAuditoria auditoria)
     {
@@ -29,7 +29,7 @@ public class ServicioUsuario : IServicioUsuario
 
         ValidarFormatoEmail(usuarioDto.Email);
         ValidarEmailExiste(usuarioDto.Email);
-        ValidarContraseña(usuarioDto.Contraseña);
+        ValidarContrasena(usuarioDto.Contrasena);
         ValidarRoles(usuarioDto);
 
         Usuario usuario = UsuarioDTOAEntidad(usuarioDto);
@@ -57,13 +57,13 @@ public class ServicioUsuario : IServicioUsuario
 
         if (usuarioExistente != null)
         {
-            throw new ArgumentException("El usuario ya existe, porfavor agrege un usuario que no exista");
+            throw new ArgumentException("El usuario ya existe, por favor agregue un usuario que no exista");
         }
     }
 
-    private void ValidarContraseña(string contraseña)
+    private void ValidarContrasena(string contrasena)
     {
-        var usuarioTemporal = new Usuario("temp", "temp", "temp@temp.com", DateTime.Today.AddYears(-18), contraseña, Rol.Editor);
+        var usuarioTemporal = new Usuario("temp", "temp", "temp@temp.com", DateTime.Today.AddYears(-18), contrasena, Rol.Editor);
     }
 
     private Usuario UsuarioDTOAEntidad(UsuarioDTO usuarioDto)
@@ -73,7 +73,7 @@ public class ServicioUsuario : IServicioUsuario
             usuarioDto.Apellido,
             usuarioDto.Email,
             usuarioDto.FechaNacimiento,
-            CifrarContraseña(usuarioDto.Contraseña),
+            CifrarContrasena(usuarioDto.Contrasena),
             usuarioDto.Roles
         );
 
@@ -117,7 +117,7 @@ public class ServicioUsuario : IServicioUsuario
 
         if (usuarioExistente == null)
         {
-            throw new ArgumentException("El usuario no existe, porfavor ingrese un usuario que exista");
+            throw new ArgumentException("El usuario no existe, por favor ingrese un usuario que exista");
         }
     }
 
@@ -171,9 +171,9 @@ public class ServicioUsuario : IServicioUsuario
         EliminarUsuario(new UsuarioDTO { Email = emailSeleccionado });
     }
 
-    private string CifrarContraseña(string contraseña)
+    private string CifrarContrasena(string contrasena)
     {
-        byte[] bytes = Encoding.UTF8.GetBytes(contraseña);
+        byte[] bytes = Encoding.UTF8.GetBytes(contrasena);
         byte[] hash = SHA256.HashData(bytes);
 
         return "Aa1!" + Convert.ToHexString(hash);
@@ -193,13 +193,13 @@ public class ServicioUsuario : IServicioUsuario
         return usuario;
     }
 
-    public UsuarioDTO AutenticarUsuario(string email, string contraseña)
+    public UsuarioDTO AutenticarUsuario(string email, string contrasena)
     {
         string emailNormalizado = email.Trim();
 
         Usuario usuario = ObtenerEntidadPorEmail(emailNormalizado);
 
-        if (usuario.Contraseña != CifrarContraseña(contraseña))
+        if (usuario.Contrasena != CifrarContrasena(contrasena))
         {
             throw new ArgumentException("Email o contraseña incorrectos");
         }
@@ -228,12 +228,12 @@ public class ServicioUsuario : IServicioUsuario
 
         ValidarRoles(usuarioDto);
 
-        string contraseña = usuarioExistente.Contraseña;
+        string contrasena = usuarioExistente.Contrasena;
 
-        if (!string.IsNullOrWhiteSpace(usuarioDto.Contraseña))
+        if (!string.IsNullOrWhiteSpace(usuarioDto.Contrasena))
         {
-            ValidarContraseña(usuarioDto.Contraseña);
-            contraseña = CifrarContraseña(usuarioDto.Contraseña);
+            ValidarContrasena(usuarioDto.Contrasena);
+            contrasena = CifrarContrasena(usuarioDto.Contrasena);
         }
 
         Usuario usuarioActualizado = new Usuario(
@@ -241,7 +241,7 @@ public class ServicioUsuario : IServicioUsuario
             usuarioDto.Apellido,
             usuarioDto.Email,
             usuarioDto.FechaNacimiento,
-            contraseña,
+            contrasena,
             usuarioDto.Roles
         );
 
@@ -251,11 +251,11 @@ public class ServicioUsuario : IServicioUsuario
         _auditoria.RegistrarEdicionUsuario(usuarioDto.Email);
     }
 
-    public void ReiniciarContraseña(string email)
+    public void ReiniciarContrasena(string email)
     {
         Usuario usuarioExistente = ObtenerEntidadPorEmail(email.Trim());
 
-        usuarioExistente.Contraseña = CifrarContraseña(ContraseñaPorDefecto);
+        usuarioExistente.Contrasena = CifrarContrasena(ContrasenaPorDefecto);
 
         _usuarioRepositorio.ActualizarUsuario(usuarioExistente);
         _auditoria.RegistrarEdicionUsuario(email);
