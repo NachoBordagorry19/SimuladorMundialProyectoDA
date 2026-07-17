@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: WorldCupPlanner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore WorldCupPlanner.sln
+      - run: dotnet build WorldCupPlanner.sln --configuration Release --no-restore
+      - run: dotnet test WorldCupPlanner.sln --configuration Release --no-build
