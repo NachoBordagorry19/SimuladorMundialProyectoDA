@@ -1,118 +1,121 @@
 # WorldCupPlanner
 
-## 1. Breve descripción de la solución
+Aplicación web para administrar y simular un campeonato mundial de fútbol: equipos, estadios, usuarios, fase de grupos y eliminatorias en un único sistema.
 
-**WorldCupPlanner** es una aplicación web interactiva diseñada para la planificación, administración y simulación de un campeonato mundial de fútbol. Su lógica de negocio gira en torno a la gestión integral de un torneo, permitiendo administrar equipos, estadios, usuarios y los partidos que componen tanto la fase de grupos como las etapas de eliminación directa.
+> Proyecto académico colaborativo desarrollado por un equipo de tres integrantes. Se construyó con un flujo de programación tradicional y prácticas orientadas a producción: arquitectura por capas, pruebas automatizadas, persistencia relacional y trabajo mediante ramas y pull requests.
 
-El sistema resuelve la problemática de automatizar la conformación de fixtures complejos y calcular dinámicamente las clasificaciones y cruces. A través de una semilla aleatoria de generación, el sistema distribuye los partidos de la primera fase (fase de grupos) de manera balanceada. Luego, provee motores de simulación (aleatorios y probabilísticos basados en el ranking FIFA) para jugar los partidos de forma individual o masiva. A medida que se obtienen o simulan los resultados de cada grupo, el sistema determina los equipos que avanzan a la segunda fase y genera dinámicamente los emparejamientos de octavos, cuartos, semifinales, tercer puesto y la gran final.
+## Qué permite hacer
 
-Adicionalmente, el proyecto incluye un robusto sistema de auditoría que registra de forma inalterable las acciones críticas del sistema, mecanismos de exportación de fixtures y auditorías a archivos CSV y hojas de cálculo de Excel (XLSX), un importador masivo de equipos a partir de archivos estructurados, y un módulo de notificaciones para comunicar eventos relevantes del torneo. Todo el sistema está protegido por un esquema de autenticación y autorización basado en roles específicos (Administrador, Editor, Periodista).
+- Administrar equipos, estadios y usuarios.
+- Generar fixtures de fase de grupos de forma reproducible mediante una semilla.
+- Calcular clasificaciones y cruces de octavos, cuartos, semifinales, tercer puesto y final.
+- Simular partidos de manera individual o masiva.
+- Elegir entre un motor aleatorio puro y otro probabilístico basado en ranking FIFA.
+- Importar equipos desde archivos estructurados.
+- Exportar fixtures y auditorías a CSV y Excel.
+- Registrar acciones críticas mediante auditorías.
+- Gestionar notificaciones y permisos por rol: Administrador, Editor y Periodista.
 
----
+## Tecnologías
 
-## 2. Tecnologías utilizadas
+- .NET 8 y ASP.NET Core Blazor Server
+- Entity Framework Core 8
+- SQL Server / Azure SQL Edge
+- MSTest y Coverlet
+- ClosedXML
+- Docker y Docker Compose
 
-El proyecto está desarrollado utilizando tecnologías modernas y consolidadas del ecosistema de Microsoft .NET:
+## Arquitectura
 
-- **Backend / Web Framework**:
-  - **.NET 8.0**: Plataforma principal de ejecución.
-  - **ASP.NET Core Blazor (Server Interactive Mode)**: Framework para la construcción de la interfaz de usuario interactiva y dinámica desde el lado del servidor.
-- **Acceso a Datos y Persistencia**:
-  - **Entity Framework Core 8.0.27**: ORM para la interacción con la base de datos y la administración de migraciones.
-  - **Microsoft.EntityFrameworkCore.SqlServer**: Proveedor de EF Core para la integración con Microsoft SQL Server.
-  - **Microsoft.EntityFrameworkCore.InMemory**: Proveedor en memoria utilizado para la ejecución rápida y aislada de las pruebas unitarias.
-- **Base de Datos**:
-  - **Microsoft SQL Server / Azure SQL Edge**: Motor de base de datos relacional para el almacenamiento persistente de la información.
-- **Herramientas y Librerías de Terceros**:
-  - **ClosedXML (0.105.0)**: Biblioteca utilizada para la generación y exportación dinámica de archivos en formato Microsoft Excel (XLSX).
-  - **Docker & Docker Compose**: Para la containerización y fácil despliegue de la instancia local de la base de datos SQL Server.
-- **Herramientas de Desarrollo y Testing**:
-  - **MSTest**: Framework oficial para el diseño y ejecución de pruebas unitarias.
-  - **Coverlet.Collector**: Herramienta de recolección de cobertura de código para los tests.
+La solución está separada en capas para mantener la lógica de negocio desacoplada de la persistencia y la interfaz:
 
----
-
-## 3. Estructura de la solución
-
-La aplicación sigue una arquitectura limpia estructurada en capas bien definidas, lo que promueve el desacoplamiento y facilita la mantenibilidad y testeabilidad:
-
-```
+```text
 WorldCupPlanner/
-├── Dominio/               # Capa de Dominio (Entidades de negocio y Enums)
-├── Repositorio/           # Capa de Persistencia (Contexto EF Core, Repositorios SQL y Migraciones)
-├── Servicios/             # Capa de Lógica de Negocio (Servicios, DTOs, Motores de Simulación, Importación/Exportación)
-├── UI/                    # Capa de Presentación (Aplicación Blazor Server, Páginas, Componentes y Assets)
-├── TestDominio/           # Proyecto de pruebas unitarias para la capa de Dominio
-├── TestRepositorio/       # Proyecto de pruebas unitarias para la capa de Persistencia
-├── TestServicios/         # Proyecto de pruebas unitarias para la capa de Servicios
-├── docker-compose.yml     # Orquestador para levantar localmente el contenedor de base de datos SQL Server
-├── global.json            # Configuración y versión del SDK de .NET
-└── WorldCupPlanner.sln    # Archivo de solución que engloba todos los proyectos
+├── Dominio/           # Entidades y reglas centrales
+├── Repositorio/       # EF Core, repositorios y migraciones
+├── Servicios/         # Casos de uso, DTO, simulación e importación/exportación
+├── UI/                # Aplicación Blazor Server
+├── TestDominio/       # Pruebas de dominio
+├── TestRepositorio/   # Pruebas de persistencia
+└── TestServicios/     # Pruebas de servicios
 ```
 
-### Detalle de las Capas:
-- **Dominio**: Contiene las entidades puras del negocio (`Equipo`, `Estadio`, `Partido`, `Usuario`, `Auditoria`, `Notificacion`) y las enumeraciones asociadas (`Fase`, `Rol`, `Confederacion`, `EstadoPartido`, `TipoIncidencia`). No posee dependencias externas ni de persistencia.
-- **Repositorio**: Se encarga de la persistencia de datos. Define el contexto de base de datos (`SqlContexto`) y los repositorios concretos utilizando EF Core. Alberga los scripts autogenerados de Migración para el control de versiones de la base de datos.
-- **Servicios**: Es el núcleo lógico de la aplicación. Convierte entidades a DTOs (`*DTO`), aplica reglas de validación de negocio, implementa la generación automática del fixture, los motores de simulación (`MotorProbabilistico` y `MotorAleatorioPuro`), y gestiona exportaciones mediante ClosedXML.
-- **UI**: Capa cliente/servidor construida con Blazor. Configura la inyección de dependencias en `Program.cs`, consume los servicios del negocio y define los componentes visuales (`.razor`) estructurados con estilos propios para la administración del campeonato.
+La suite contiene más de 200 pruebas automatizadas distribuidas entre dominio, servicios y repositorios.
 
----
+## Mi contribución
 
-## 4. Instrucciones para su ejecución
+Dentro del equipo de tres integrantes, **Nacho Bordagorry** trabajó principalmente en:
 
-Siga los pasos descritos a continuación para configurar y ejecutar la solución en su entorno de desarrollo local desde cero.
+- Diseño e implementación de las capas de dominio y servicios.
+- Persistencia, configuración de Entity Framework Core y trabajo con la base de datos.
+- Pruebas automatizadas y validación de reglas de negocio.
+- Integración transversal con componentes de UI, correcciones y refactorizaciones.
 
-### Requisitos Previos
-Asegúrese de tener instalados los siguientes componentes en su sistema:
-- **SDK de .NET 8.0** (o posterior).
-- **Docker Desktop** (para inicializar el motor de base de datos).
-- Un IDE compatible como **Visual Studio 2022**, **JetBrains Rider**, o **VS Code** (con la extensión C# Dev Kit).
+Aunque existió una división principal de responsabilidades, los tres integrantes colaboraron en distintas capas del sistema.
 
-### Paso 1: Levantar la Base de Datos con Docker
-El proyecto cuenta con un archivo `docker-compose.yml` que levanta una instancia liviana de SQL Server (Azure SQL Edge).
-Abra una terminal en la raíz del proyecto y ejecute:
+## Ejecución local
+
+### Requisitos
+
+- SDK de .NET 8
+- Docker Desktop
+- Visual Studio 2022, Rider o VS Code con C# Dev Kit
+
+### 1. Configurar el entorno
+
+Desde la carpeta `WorldCupPlanner`, cree el archivo local `.env` a partir del ejemplo:
+
 ```bash
-docker-compose up -d
+cp .env.example .env
 ```
-*Esto iniciará un contenedor de SQL Server expuesto en el puerto local `1433` con la contraseña configurada (`Passw1rd`).*
 
-### Paso 2: Restaurar Dependencias e Iniciar la Solución
-Desde la raíz del proyecto, ejecute los siguientes comandos en su terminal:
-1. **Restaurar paquetes NuGet**:
-   ```bash
-   dotnet restore
-   ```
-2. **Compilar la solución**:
-   ```bash
-   dotnet build
-   ```
-3. **Ejecutar las pruebas unitarias (Opcional)**:
-   ```bash
-   dotnet test
-   ```
-   *Esto comprobará el correcto funcionamiento de los 225 tests unitarios integrados.*
+Cambie el valor de `DB_PASSWORD` por una contraseña local segura. Luego configure la cadena de conexión sin guardarla en Git:
 
-### Paso 3: Configuración de Variables y Cadena de Conexión
-La configuración de acceso a datos se encuentra predeterminada en el archivo `UI/appsettings.json` en la raíz del proyecto `UI`.
-
-```json
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=WorldCupPlannerDB;User Id=sa;Password=Passw1rd;TrustServerCertificate=true;"
-  }
+```bash
+# Linux/macOS
+export ConnectionStrings__DefaultConnection="Server=localhost,1433;Database=WorldCupPlannerDB;User Id=sa;Password=TU_PASSWORD;TrustServerCertificate=true;"
 ```
-*Nota: Las migraciones de base de datos se ejecutan automáticamente en el arranque de la aplicación a través de la instrucción `Database.Migrate()` en el contexto, por lo que no es requerido ejecutar comandos adicionales de migración.*
 
-### Paso 4: Compilar y Ejecutar la Aplicación
-- **Desde la Terminal**: Navegue al directorio del proyecto `UI` y ejecute la aplicación:
-  ```bash
-  cd UI
-  dotnet run
-  ```
-- **Desde el IDE**: abra la solución `WorldCupPlanner.sln`, establezca el proyecto **UI** como proyecto de inicio (Startup Project) y presione `F5` o el botón de ejecución de su IDE.
+En PowerShell:
 
-### Acceso a la Aplicación
-Una vez que el servidor de desarrollo esté activo:
-1. Abra su navegador e ingrese a la dirección: **`http://localhost:5000`** (o **`https://localhost:7204`**).
-2. Para acceder con privilegios de administrador/editor y configurar el torneo, use el usuario de prueba preconfigurado:
-   - **Email**: `admin@admin.com`
-   - **Contraseña**: `Admin123!`
+```powershell
+$env:ConnectionStrings__DefaultConnection="Server=localhost,1433;Database=WorldCupPlannerDB;User Id=sa;Password=TU_PASSWORD;TrustServerCertificate=true;"
+```
+
+### 2. Iniciar SQL Server
+
+```bash
+docker compose up -d
+```
+
+### 3. Restaurar, probar y ejecutar
+
+```bash
+dotnet restore WorldCupPlanner.sln
+dotnet test WorldCupPlanner.sln
+dotnet run --project UI/UI.csproj
+```
+
+Las migraciones se aplican al iniciar la aplicación. La URL exacta se muestra en la terminal.
+
+## Credenciales de demostración
+
+El proyecto puede sembrar un administrador exclusivamente para desarrollo local si se configuran estas variables antes de ejecutar la aplicación:
+
+```bash
+export DemoAdmin__Email="demo@example.local"
+export DemoAdmin__Password="ELIJA_UNA_PASSWORD_LOCAL"
+```
+
+En PowerShell:
+
+```powershell
+$env:DemoAdmin__Email="demo@example.local"
+$env:DemoAdmin__Password="ELIJA_UNA_PASSWORD_LOCAL"
+```
+
+Si no se configuran ambas variables, la aplicación no crea ni muestra credenciales de demostración. No reutilice estos valores en un entorno público o productivo.
+
+## Estado
+
+Proyecto académico finalizado y conservado como muestra de arquitectura, testing, persistencia y trabajo colaborativo. No es un servicio en producción.

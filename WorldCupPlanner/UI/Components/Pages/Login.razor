@@ -8,6 +8,7 @@
 @inject IServicioUsuario ServicioUsuario
 @inject UsuarioSesion Sesion
 @inject NavigationManager Navigation
+@inject IConfiguration Configuration
 
 <div class="login-page">
     <div class="login-card">
@@ -38,34 +39,50 @@
             </div>
         </EditForm>
 
-        <div class="login-help">
-            Usuario de prueba:
-            <strong>admin@admin.com</strong>
-            /
-            <strong>Admin123!</strong>
-        </div>
+        @if (!string.IsNullOrWhiteSpace(demoEmail) && !string.IsNullOrWhiteSpace(demoPassword))
+        {
+            <div class="login-help">
+                Usuario de demostración configurado para este entorno:
+                <strong>@demoEmail</strong>
+                /
+                <strong>@demoPassword</strong>
+            </div>
+        }
     </div>
 </div>
 
 @code {
     private LoginModel login = new LoginModel();
     private string? mensajeError;
+    private string? demoEmail;
+    private string? demoPassword;
     
     protected override void OnInitialized()
     {
+        string? configuredEmail = Configuration["DemoAdmin:Email"];
+        string? configuredPassword = Configuration["DemoAdmin:Password"];
+
+        if (string.IsNullOrWhiteSpace(configuredEmail) || string.IsNullOrWhiteSpace(configuredPassword))
+        {
+            return;
+        }
+
+        demoEmail = configuredEmail;
+        demoPassword = configuredPassword;
+
         bool existeAdmin = ServicioUsuario
             .ObtenerUsuarios()
-            .Any(usuario => usuario.Email == "admin@admin.com");
+            .Any(usuario => usuario.Email == configuredEmail);
 
         if (!existeAdmin)
         {
             ServicioUsuario.AgregarUsuario(new UsuarioDTO()
             {
                 Nombre = "Admin",
-                Apellido = "Prueba",
-                Email = "admin@admin.com",
+                Apellido = "Demo",
+                Email = configuredEmail,
                 FechaNacimiento = new DateTime(2000, 1, 1),
-                Contraseña = "Admin123!",
+                Contraseña = configuredPassword,
                 Roles = new List<Rol> { Rol.Administrador, Rol.Editor }
             });
         }

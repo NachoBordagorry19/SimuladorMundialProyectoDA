@@ -489,3 +489,7 @@ fabric.properties
 **/.DS_Store
 .idea/
 **/.idea/
+
+# Local environment and secrets
+.env
+**/.env
