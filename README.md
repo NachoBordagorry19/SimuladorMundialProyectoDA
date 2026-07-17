@@ -105,4 +105,3 @@ El proyecto puede sembrar usuarios exclusivamente para desarrollo local. No reut
 ## Estado
 
 Proyecto académico finalizado y conservado como muestra de arquitectura, testing, persistencia y trabajo colaborativo. No es un servicio en producción.
-
