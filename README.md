@@ -100,7 +100,21 @@ Las migraciones se aplican al iniciar la aplicación. La URL exacta se muestra e
 
 ## Credenciales de demostración
 
-El proyecto puede sembrar usuarios exclusivamente para desarrollo local. No reutilice esas credenciales ni esta configuración en un entorno público o productivo.
+El proyecto puede sembrar un administrador exclusivamente para desarrollo local si se configuran estas variables antes de ejecutar la aplicación:
+
+```bash
+export DemoAdmin__Email="demo@example.local"
+export DemoAdmin__Password="ELIJA_UNA_PASSWORD_LOCAL"
+```
+
+En PowerShell:
+
+```powershell
+$env:DemoAdmin__Email="demo@example.local"
+$env:DemoAdmin__Password="ELIJA_UNA_PASSWORD_LOCAL"
+```
+
+Si no se configuran ambas variables, la aplicación no crea ni muestra credenciales de demostración. No reutilice estos valores en un entorno público o productivo.
 
 ## Estado
 
